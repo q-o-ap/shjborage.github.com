@@ -4,7 +4,7 @@
   <title><![CDATA[Category: test | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/test/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-05-27T16:44:56+08:00</updated>
+  <updated>2013-05-27T17:13:53+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,63 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[test sharing code snippets]]></title>
+    <link href="http://saick.net/blog/2013/05/27/test-sharing-code-snippets/"/>
+    <updated>2013-05-27T16:54:00+08:00</updated>
+    <id>http://saick.net/blog/2013/05/27/test-sharing-code-snippets</id>
+    <content type="html"><![CDATA[<p>Sharing Code Snippets</p>
+
+<p><em>Backtick Code Blocks</em></p>
+
+<p>Syntax:(insert enter before and after the two ``````)</p>
+
+<p><code>
+</code> [language] [title] [url] [link text]
+code snippet ```</p>
+
+<p>```</p>
+
+<p><strong>Example(plain):</strong>
+<code>
+</code> $ sudo make me a sandwich ```</p>
+
+<p>```</p>
+
+<p><code>
+$ sudo make me a sandwich
+</code></p>
+
+<p>Example With Syntax Highlighting a Caption and Link</p>
+
+<p><code>
+</code>ruby Discover if a number is prime <a href="http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/">http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/</a> Source Article
+class Fixnum
+  def prime?</p>
+
+<pre><code>('1' * self) !~ /^1?$|^(11+?)\1+$/
+</code></pre>
+
+<p>  end
+end<code>
+</code></p>
+
+<p>``` ruby Discover if a number is prime <a href="http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/">http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/</a> Source Article
+class Fixnum
+  def prime?</p>
+
+<pre><code>('1' * self) !~ /^1?$|^(11+?)\1+$/
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>More:
+<a href="http://octopress.org/docs/blogging/code/">http://octopress.org/docs/blogging/code/</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hello jekyll]]></title>
