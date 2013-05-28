@@ -54,4 +54,13 @@ More:
 http://octopress.org/docs/blogging/code/
 
 
+####Codeblock
+#####Syntax
+
+{% codeblock asdf lang:objc %}
+NSObject *obj = [NSObject new];
+NSObject *obj = [[]NSObject alloc] init];
+{% endcodeblock %}
+
+
 
