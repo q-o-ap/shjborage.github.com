@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-05-28T10:57:13+08:00</updated>
+  <updated>2013-05-28T11:07:19+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Property 使用注意事项]]></title>
+    <link href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/"/>
+    <updated>2013-05-28T11:04:00+08:00</updated>
+    <id>http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang</id>
+    <content type="html"><![CDATA[<ul>
+<li>NSString property的属性必须是copy</li>
+<li>delegate property的属性是assign</li>
+<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
+<li>init 和dealloc中不要用self.XX=;</li>
+</ul>
+
+
+<h4>NSCoping</h4>
+
+<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
+
+<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
+</span><span class='line'>    self = [super init];
+</span><span class='line'>    if (self) {
+</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
+</span><span class='line'>    }
+</span><span class='line'>    return self;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Category 巧用-调试程序]]></title>
