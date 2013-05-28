@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Property 使用注意事项 - Saick Blog</title>
+  <title>Flashlight(PowerSaving) 简介 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="NSString property的属性必须是copy
-delegate property的属性是assign
-dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
-init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
+  <meta name="description" content="PowerSaving Flashlight The best flashlight app to save you power and then protect you battery. Do you encounter such a situation: When you using the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang">
+  <link rel="canonical" href="http://saick.net/blog/2013/05/28/flashlight-powersaving-jian-jie">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -84,7 +81,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Property 使用注意事项</h1>
+      <h1 class="entry-title">Flashlight(PowerSaving) 简介</h1>
     
     
       <p class="meta">
@@ -100,7 +97,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-05-28T16:46:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -109,37 +106,43 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   </header>
 
 
-<div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
+<div class="entry-content"><p>PowerSaving Flashlight</p>
+
+<p>The best flashlight app to save you power and then protect you battery.</p>
+
+<p>Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked.
+PowerSaving Flashlight also solve this issue.</p>
+
+<p>Details:
+1.Saving you battery power automatic, and you can change it from settings(both in app setting and system setting)
+2.Stop using you torch when battery level is low
+3.Disable the system Auto-Lock
+4.Turn on the flashlight when app startup(You can set it to &ldquo;NO&rdquo;
+5.Fullscreen control, but you can only turn it off by press the button.
+6.Share the famous app to you friends.</p>
+
+<p>No matter what problem you have, just contact us by email or visit the develop&rsquo;s blog.</p>
+
+<p>史上最懂你的省电手电筒</p>
+
+<p>还在为找不到好用的手电筒发愁么？
+还在为那些“大而全”的工具启动慢、难用发愁么？
+还在为手电筒用着用着就黑了发愁么？
+还在为手电筒用着太费电发愁么？</p>
+
+<ol>
+<li>自动为你的手机省电</li>
+<li>当电池电量过低，自动切换到“白屏”模式</li>
+<li>可选择禁用系统锁屏功能</li>
+<li>启动可选择默认打开手电筒</li>
+<li>全屏控制功能，按任意位置打开，关闭按开关</li>
+<li>分享手电筒给好友</li>
+</ol>
 
 
-<h4>NSCoping</h4>
+<p>如果您遇到问题或者有好的建议，请直接与我们联系或者在程序中提交反馈，谢谢。</p>
 
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
+<h5>欢迎留言反馈！</h5>
 </div>
 
 
@@ -162,12 +165,12 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-05-28T16:46:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/flashlight/'>Flashlight</a>
   
 </span>
 
@@ -176,7 +179,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/flashlight-powersaving-jian-jie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/flashlight-powersaving-jian-jie/" >Tweet</a>
   
   
   
@@ -187,10 +190,8 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Previous Post: Category 巧用-调试程序">&laquo; Category 巧用-调试程序</a>
+        <a class="basic-alignment left" href="/blog/2013/05/28/isecret-jian-jie/" title="Previous Post: iSecret 简介">&laquo; iSecret 简介</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/isecret-jian-jie/" title="Next Post: iSecret 简介">iSecret 简介 &raquo;</a>
       
     </p>
   </footer>
@@ -304,8 +305,8 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/';
-        var disqus_url = 'http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/';
+        var disqus_identifier = 'http://saick.net/blog/2013/05/28/flashlight-powersaving-jian-jie/';
+        var disqus_url = 'http://saick.net/blog/2013/05/28/flashlight-powersaving-jian-jie/';
         var disqus_script = 'embed.js';
       
     (function () {

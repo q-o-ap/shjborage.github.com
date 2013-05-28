@@ -5,14 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Property 使用注意事项 - Saick Blog</title>
+  <title>iSecret 简介 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="NSString property的属性必须是copy
-delegate property的属性是assign
-dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
-init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
+  <meta name="description" content="iSecret is a program that save and manage your accounts and passwords.
+Now, everyone have many accounts and password, hard to remember them.
+So, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +20,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang">
+  <link rel="canonical" href="http://saick.net/blog/2013/05/28/isecret-jian-jie">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -84,7 +83,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Property 使用注意事项</h1>
+      <h1 class="entry-title">iSecret 简介</h1>
     
     
       <p class="meta">
@@ -100,7 +99,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -109,37 +108,26 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   </header>
 
 
-<div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
+<div class="entry-content"><p>iSecret is a program that save and manage your accounts and passwords.
+Now, everyone have many accounts and password, hard to remember them.
+So, iSecret could help you to manage them safely.
+iSecret&rsquo;s all file are encrypted at high level.
+iSecret does not require any network.</p>
 
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#115;&#x68;&#106;&#98;&#x6f;&#x72;&#97;&#103;&#101;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">&#115;&#104;&#106;&#x62;&#x6f;&#x72;&#x61;&#103;&#101;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a></p>
 
-<h4>NSCoping</h4>
+<p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
+现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
+所以i秘密帮您把这些帐号密码保管起来,并且全程高强度加密,确保信息安全。
+为了保证密码的安全,首先主密码是通过高强度的加密算法,保存到手机当中。
+即可手机被破解,也能保证数据的安全。
+对于保存的各类网站等的密码信息,全部通过加密文本保存到手机中,并且是全部纯文本解析,没有用
+任何XML、INI等配置文件,让安全性更升一级。
+i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
+<p>欢迎大家<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#115;&#x68;&#106;&#98;&#x6f;&#114;&#x61;&#x67;&#x65;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;&#xe6;&#x8f;&#144;&#229;&#135;&#186;&#xe5;&#xae;&#157;&#232;&#xb4;&#181;&#230;&#132;&#143;&#232;&#xa7;&#x81;&#x2c;&#229;&#133;&#177;&#229;&#x90;&#x8c;&#228;&#xb8;&#xba;&#xe5;&#xa5;&#xbd;&#228;&#186;&#xa7;&#229;&#147;&#x81;&#232;&#x80;&#x8c;&#229;&#138;&#170;&#229;&#138;&#155;&#227;&#x80;&#x82;">&#115;&#x68;&#106;&#98;&#x6f;&#x72;&#x61;&#x67;&#x65;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;&#230;&#143;&#x90;&#229;&#x87;&#xba;&#229;&#xae;&#157;&#232;&#xb4;&#xb5;&#230;&#132;&#x8f;&#232;&#167;&#x81;&#x2c;&#xe5;&#133;&#177;&#229;&#144;&#x8c;&#228;&#184;&#186;&#229;&#xa5;&#189;&#228;&#186;&#xa7;&#229;&#x93;&#x81;&#232;&#128;&#x8c;&#229;&#x8a;&#170;&#xe5;&#138;&#155;&#xe3;&#128;&#x82;</a></p>
 
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
+<h5>欢迎留言反馈！</h5>
 </div>
 
 
@@ -162,12 +150,12 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/isecret/'>iSecret</a>
   
 </span>
 
@@ -176,7 +164,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/isecret-jian-jie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/isecret-jian-jie/" >Tweet</a>
   
   
   
@@ -187,10 +175,10 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Previous Post: Category 巧用-调试程序">&laquo; Category 巧用-调试程序</a>
+        <a class="basic-alignment left" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" title="Previous Post: Property 使用注意事项">&laquo; Property 使用注意事项</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/05/28/isecret-jian-jie/" title="Next Post: iSecret 简介">iSecret 简介 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/05/28/flashlight-powersaving-jian-jie/" title="Next Post: Flashlight(PowerSaving) 简介">Flashlight(PowerSaving) 简介 &raquo;</a>
       
     </p>
   </footer>
@@ -304,8 +292,8 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/';
-        var disqus_url = 'http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/';
+        var disqus_identifier = 'http://saick.net/blog/2013/05/28/isecret-jian-jie/';
+        var disqus_url = 'http://saick.net/blog/2013/05/28/isecret-jian-jie/';
         var disqus_script = 'embed.js';
       
     (function () {
