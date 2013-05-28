@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-05-28T10:24:48+08:00</updated>
+  <updated>2013-05-28T10:55:22+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Category 巧用-调试程序]]></title>
+    <link href="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/"/>
+    <updated>2013-05-28T10:52:00+08:00</updated>
+    <id>http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu</id>
+    <content type="html"><![CDATA[<h3>Category可以用来调试</h3>
+
+<p>除了隐藏私有方法外，我主要用它截住函数。
+例1：测试时我想知道TableViewCell有没有释放，就可以这样写
+&#8220;`@implementation UITableViewCell(dealloc) &ndash;(void)dealloc {    NSLog(@&ldquo;%@&rdquo;,NSStringFromSelector(_cmd));     NSArray *array = allSubviews(self);        // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有    NSLog(@&ldquo;%@&rdquo;,array);     [super dealloc]; }@end</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>其它的类也可以这样写，你随便输出什么 
+</span><span class='line'>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：
+</span><span class='line'>``` @implementation UITableView(setframe) -(void)setFrame:(CGRect)frame {    NSLog(%"%@",self);     [super setFrame: frame]; } @end</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS 开发常见低级错误]]></title>
