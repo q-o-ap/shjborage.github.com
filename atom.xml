@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-05-28T09:52:17+08:00</updated>
+  <updated>2013-05-28T10:11:15+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS block 编程]]></title>
+    <link href="http://saick.net/blog/2013/05/28/ios-block-bian-cheng/"/>
+    <updated>2013-05-28T09:57:00+08:00</updated>
+    <id>http://saick.net/blog/2013/05/28/ios-block-bian-cheng</id>
+    <content type="html"><![CDATA[<h2>block</h2>
+
+<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
+
+<h4>声明block：</h4>
+
+<p><code>
+void (^simpleBlock)(void);</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Test sharing code snippets]]></title>
