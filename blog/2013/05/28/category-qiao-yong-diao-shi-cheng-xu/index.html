@@ -9,9 +9,16 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category可以用来调试 除了隐藏私有方法外，我主要用它截住函数。
-例1：测试时我想知道TableViewCell有没有释放，就可以这样写
-&#8220;`@implementation UITableViewCell(dealloc) &ndash;(void)dealloc { NSLog &hellip;">
+  <meta name="description" content="Category可以用来调试 除了隐藏私有方法外，我主要用它截住函数。 例1：测试时我想知道TableViewCell有没有释放，就可以这样写 1
+2
+3
+4
+5
+6
+7
+8
+9
+@implementation UITableViewCell(dealloc) -(void)dealloc { &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,16 +117,48 @@
 
 <div class="entry-content"><h3>Category可以用来调试</h3>
 
-<p>除了隐藏私有方法外，我主要用它截住函数。
-例1：测试时我想知道TableViewCell有没有释放，就可以这样写
-&#8220;`@implementation UITableViewCell(dealloc) &ndash;(void)dealloc {    NSLog(@&ldquo;%@&rdquo;,NSStringFromSelector(_cmd));     NSArray *array = allSubviews(self);        // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有    NSLog(@&ldquo;%@&rdquo;,array);     [super dealloc]; }@end</p>
+<p>除了隐藏私有方法外，我主要用它截住函数。</p>
+
+<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>其它的类也可以这样写，你随便输出什么 
-</span><span class='line'>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：
-</span><span class='line'>``` @implementation UITableView(setframe) -(void)setFrame:(CGRect)frame {    NSLog(%"%@",self);     [super setFrame: frame]; } @end</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UITableViewCell(dealloc) 
+</span><span class='line'>-(void)dealloc 
+</span><span class='line'>{ 
+</span><span class='line'>   NSLog(@"%@",NSStringFromSelector(_cmd)); 
+</span><span class='line'>    NSArray *array = allSubviews(self);       // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有
+</span><span class='line'>    NSLog(@"%@",array); 
+</span><span class='line'>    [super dealloc]; 
+</span><span class='line'>}
+</span><span class='line'>@end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>其它的类也可以这样写，你随便输出什么</p>
+
+<p>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> @implementation UITableView(setframe) 
+</span><span class='line'>-(void)setFrame:(CGRect)frame 
+</span><span class='line'>{ 
+</span><span class='line'>   NSLog(%"%@",self); 
+</span><span class='line'>    [super setFrame: frame]; 
+</span><span class='line'>} 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
 <p></p>
