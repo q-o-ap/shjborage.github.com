@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-05-28T10:16:53+08:00</updated>
+  <updated>2013-05-28T10:22:58+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 开发常见低级错误]]></title>
+    <link href="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/"/>
+    <updated>2013-05-28T10:19:00+08:00</updated>
+    <id>http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu</id>
+    <content type="html"><![CDATA[<ul>
+<li><h3>不要调用[super  release]</h3>
+
+<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS block 编程]]></title>
