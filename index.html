@@ -115,8 +115,158 @@
 
 <h4>声明block：</h4>
 
-<p><code>
-void (^simpleBlock)(void);</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void);</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>定义block：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock = ^{
+</span><span class='line'>        NSLog(@"This is a block");
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h4>声明和定义在一起：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void) = ^{
+</span><span class='line'>    NSLog(@"This is a block");
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>调用block：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock();</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h4>带返回值和参数的block:</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>double (^multiplyTwoValues)(double, double) =
+</span><span class='line'>                              ^(double firstValue, double secondValue) {
+</span><span class='line'>                                  return firstValue * secondValue;
+</span><span class='line'>                              };
+</span><span class='line'>    double result = multiplyTwoValues(2,4);
+</span><span class='line'>    NSLog(@"The result is %f", result);</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
+
+<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>__block int (^recursiveBlock)(int) = ^(int param) {
+</span><span class='line'>      if (param == 1) {
+</span><span class='line'>          return 1;
+</span><span class='line'>      }
+</span><span class='line'>      return (param--) * recursiveBlock(param);
+</span><span class='line'>};  
+</span><span class='line'>recursiveBlock(5);    // 计算5的阶乘</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>You Can Pass Blocks as Arguments to Methods or Functions
+&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
+The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {
+</span><span class='line'>    ...
+</span><span class='line'>    callbackBlock();
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>A Block Should Always Be the Last Argument to a Method
+Objects Use Properties to Keep Track of Blocks
+The syntax to define a property to keep track of a block is similar to a block variable:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface XYZObject : NSObject
+</span><span class='line'>@property (copy) void (^blockProperty)(void);
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
+A block property is set or invoked like any other block variable:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>self.blockProperty = ^{
+</span><span class='line'>    ...
+</span><span class='line'>};
+</span><span class='line'>self.blockProperty();
+</span><span class='line'>typedef void(^BlockCC)(void);</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>// e.g.更新myTableview并显示最后一行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (dataArray.count &gt; 0) {
+</span><span class='line'>      [myTableView reloadData];   
+</span><span class='line'>      // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
+</span><span class='line'>   // 所以要[NSObject performBlock: afterDelay:0];
+</span><span class='line'>      [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
+</span><span class='line'>      NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
+</span><span class='line'>      void (^scrollToBottom)(void) = ^{
+</span><span class='line'>          [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+</span><span class='line'>          [myTableView release];
+</span><span class='line'>      };
+</span><span class='line'>      //
+</span><span class='line'>      [NSObject performBlock:scrollToBottom afterDelay:0];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
 </div>
   
   

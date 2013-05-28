@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: iOS | Saick Blog]]></title>
+  <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://saick.net/"/>
+  <updated>2013-05-28T10:16:53+08:00</updated>
+  <id>http://saick.net/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS block 编程]]></title>
+    <link href="http://saick.net/blog/2013/05/28/ios-block-bian-cheng/"/>
+    <updated>2013-05-28T09:57:00+08:00</updated>
+    <id>http://saick.net/blog/2013/05/28/ios-block-bian-cheng</id>
+    <content type="html"><![CDATA[<h2>block</h2>
+
+<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
+
+<h4>声明block：</h4>
+
+<p><code>
+void (^simpleBlock)(void);
+</code></p>
+
+<h4>定义block：</h4>
+
+<p>```
+simpleBlock = ^{</p>
+
+<pre><code>    NSLog(@"This is a block");
+</code></pre>
+
+<p>};
+```</p>
+
+<h4>声明和定义在一起：</h4>
+
+<p>```
+void (^simpleBlock)(void) = ^{</p>
+
+<pre><code>NSLog(@"This is a block");
+</code></pre>
+
+<p>};
+```</p>
+
+<h4>调用block：</h4>
+
+<p><code>
+simpleBlock();
+</code></p>
+
+<h4>带返回值和参数的block:</h4>
+
+<p>```
+double (^multiplyTwoValues)(double, double) =</p>
+
+<pre><code>                          ^(double firstValue, double secondValue) {
+                              return firstValue * secondValue;
+                          };
+double result = multiplyTwoValues(2,4);
+NSLog(@"The result is %f", result);
+</code></pre>
+
+<p>```</p>
+
+<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
+
+<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
+
+<p>```
+__block int (^recursiveBlock)(int) = ^(int param) {</p>
+
+<pre><code>    if (param == 1) {
+        return 1;
+    }
+    return (param--) * recursiveBlock(param);
+</code></pre>
+
+<p>};<br/>
+recursiveBlock(5);  // 计算5的阶乘
+```</p>
+
+<p>You Can Pass Blocks as Arguments to Methods or Functions
+&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
+The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
+
+<p>```
+&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {</p>
+
+<pre><code>...
+callbackBlock();
+</code></pre>
+
+<p>}
+```</p>
+
+<p>A Block Should Always Be the Last Argument to a Method
+Objects Use Properties to Keep Track of Blocks
+The syntax to define a property to keep track of a block is similar to a block variable:</p>
+
+<p><code>
+@interface XYZObject : NSObject
+@property (copy) void (^blockProperty)(void);
+@end
+</code></p>
+
+<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
+A block property is set or invoked like any other block variable:</p>
+
+<p>```</p>
+
+<pre><code>self.blockProperty = ^{
+    ...
+};
+self.blockProperty();
+</code></pre>
+
+<p>typedef void(^BlockCC)(void);
+```</p>
+
+<p>// e.g.更新myTableview并显示最后一行</p>
+
+<p>```
+if (dataArray.count > 0) {</p>
+
+<pre><code>    [myTableView reloadData];   
+    // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
+ // 所以要[NSObject performBlock: afterDelay:0];
+    [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
+    NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
+    void (^scrollToBottom)(void) = ^{
+        [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [myTableView release];
+    };
+    //
+    [NSObject performBlock:scrollToBottom afterDelay:0];
+</code></pre>
+
+<p>}
+```</p>
+]]></content>
+  </entry>
+  
+</feed>
