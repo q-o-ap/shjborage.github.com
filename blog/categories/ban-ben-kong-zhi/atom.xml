@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 版本控制 | Saick Blog]]></title>
+  <link href="http://saick.net/blog/categories/ban-ben-kong-zhi/atom.xml" rel="self"/>
+  <link href="http://saick.net/"/>
+  <updated>2013-05-29T12:07:08+08:00</updated>
+  <id>http://saick.net/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Git基本使用与Dropbox配合使用]]></title>
+    <link href="http://saick.net/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/"/>
+    <updated>2013-05-29T11:43:00+08:00</updated>
+    <id>http://saick.net/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong</id>
+    <content type="html"><![CDATA[<h3>Git基本使用</h3>
+
+<h4>1.取得项目的Git仓库</h4>
+
+<h5>1.1从当前目录初始化</h5>
+
+<p><code>
+$ git init
+</code></p>
+
+<p>然后可以进行git add .. 进行文件添加。<br/>
+以及编写.gitignore文件，对本地文件进行忽略</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p> # Exclude the build directory
+</span><span class='line'> build/*&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p> # Exclude temp nibs and swap files
+</span><span class='line'> &lt;em>~.nib
+</span><span class='line'> &lt;/em>.swp
+</span><span class='line'> 18
+</span><span class='line'> # Exclude OS X folder attributes
+</span><span class='line'> .DS_Store&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p> # Exclude user-specific XCode 3 and 4 files
+</span><span class='line'> &lt;em>.mode1
+</span><span class='line'> &lt;/em>.mode1v3
+</span><span class='line'> &lt;em>.mode2v3
+</span><span class='line'> &lt;/em>.perspective
+</span><span class='line'> &lt;em>.perspectivev3
+</span><span class='line'> &lt;/em>.pbxuser
+</span><span class='line'> &lt;em>.xcworkspace
+</span><span class='line'> &lt;/em>.xcuserstate
+</span><span class='line'> xcuserdata&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h5>1.2 从现有仓库克隆</h5>
+
+<p><code>
+git clone git://github.com/aaaa/aa.git
+git clone file:::/Volumes/Data/xxx.git
+git clone /Volumes/Data/xxx.git
+git clone /Volumes/Data/xxx.git new_xxx_dir
+</code></p>
+
+<p>默认会创建xxx目录（xxx.git）,如果想指定目录的话用最后一种</p>
+
+<h5>1.3 其它常用</h5>
+
+<p><code>
+git commit
+git commit -a -m "asdf"
+git status
+git log
+git log -1
+git log -p
+</code></p>
+
+<p>注意看提示就好了。</p>
+
+<h4>2.远程仓库使用</h4>
+
+<h5>2.1 创建</h5>
+
+<p><code>
+git init --bare
+</code></p>
+
+<p>创建一个空的远程仓库（可在服务器上，也可在本地，也可以在Dropbox的目录中）</p>
+
+<h5>2.2 查看远程仓库</h5>
+
+<p>在本地执行以下命令
+<code>
+git remote -v
+</code></p>
+
+<h5>2.3 添加远程仓库</h5>
+
+<p><code>
+git remote add [shortanem] [url]
+</code></p>
+
+<h5>2.4 从远程抓取数据</h5>
+
+<p><code>
+git fetch [remote-name]
+</code></p>
+
+<h5>2.5 推送数据</h5>
+
+<p><code>
+git push [remote-name] [branchname]
+</code></p>
+
+<h5>2.6 其它</h5>
+
+<p><code>
+git remote show [remote-name]
+git remote rename old new
+git remote rm xxx
+</code></p>
+
+<h4>Dropbox 整合</h4>
+
+<p>把远程建在Dropbox上即可，哈哈</p>
+]]></content>
+  </entry>
+  
+</feed>
