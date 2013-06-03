@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JavaWeb | Saick Blog]]></title>
+  <link href="http://saick.net/blog/categories/javaweb/atom.xml" rel="self"/>
+  <link href="http://saick.net/"/>
+  <updated>2013-06-03T15:19:36+08:00</updated>
+  <id>http://saick.net/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JavaWeb开发 eclipse myEclipse JSP编辑卡死问题解决]]></title>
+    <link href="http://saick.net/blog/2013/06/03/javawebkai-fa-eclipse-myeclipse-jspbian-ji-qia-si-wen-ti-jie-jue/"/>
+    <updated>2013-06-03T15:16:00+08:00</updated>
+    <id>http://saick.net/blog/2013/06/03/javawebkai-fa-eclipse-myeclipse-jspbian-ji-qia-si-wen-ti-jie-jue</id>
+    <content type="html"><![CDATA[<p>这几天用lomboz3.3编辑JSP文件时，输入&lt;%@总是卡死，这是因为lomboz在我们输入&lt;%@时，lomboz在后台跟www.w3.org网站自动连接（IP：128.30.52.166：80），我是用WPE监听发现的。</p>
+
+<p>解决办法：</p>
+
+<h6>Windows:</h6>
+
+<p>打开C:\WINDOWS\system32\drivers\etc\下的hosts文件，</p>
+
+<h5>Linux等:</h5>
+
+<p>/etc/hosts</p>
+
+<p>在其中加入 127.0.0.1   www.w3.org
+OK,解决了。</p>
+]]></content>
+  </entry>
+  
+</feed>
