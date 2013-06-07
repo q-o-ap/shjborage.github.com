@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: SourceContorl | Saick Blog]]></title>
-  <link href="http://saick.net/blog/categories/sourcecontorl/atom.xml" rel="self"/>
+  <title><![CDATA[Category: SourceControl | Saick Blog]]></title>
+  <link href="http://saick.net/blog/categories/sourcecontrol/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-06-07T11:46:01+08:00</updated>
+  <updated>2013-06-07T18:12:43+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git no branch 解决方案]]></title>
+    <link href="http://saick.net/blog/2013/06/07/git-no-branch-jie-jue-fang-an/"/>
+    <updated>2013-06-07T18:03:00+08:00</updated>
+    <id>http://saick.net/blog/2013/06/07/git-no-branch-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
+
+<h5>事件经过：</h5>
+
+<ol>
+<li>正常开发，branch:master</li>
+<li>在Eclipse中，使用插件checkout某版本出来</li>
+<li>再checkout到最近一次提交的版本</li>
+<li>不断Commit多次，一直不能push，以为工具出了问题</li>
+<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
+</ol>
+
+
+<p>每次都提交，数据肯定不会丢，也没有担心。
+就找个问题的解决方案，果然有。</p>
+
+<p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>if you have already checked out to master,&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>you won&rsquo;t know the commit-ish of your &ldquo;no branch&rdquo;:&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>git fsck &mdash;lost-found # (to find your &lt;commit-ish>)
+</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>if you are still on your &ldquo;no branch&rdquo; commit:&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>git log # (the commit-ish will be on the first line)
+</span><span class='line'>git checkout master
+</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>or&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>git log | head -n 1 | cut -d &lsquo; &rsquo; -f 2 | pbcopy
+</span><span class='line'>git checkout master
+</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git基本使用与Dropbox配合使用]]></title>
