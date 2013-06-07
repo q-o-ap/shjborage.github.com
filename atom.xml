@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-06-03T15:19:36+08:00</updated>
+  <updated>2013-06-07T11:13:21+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,319 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mysql for MacOSX 安装和基本操作]]></title>
+    <link href="http://saick.net/blog/2013/06/07/mysql-for-macosx-an-zhuang-he-ji-ben-cao-zuo/"/>
+    <updated>2013-06-07T10:55:00+08:00</updated>
+    <id>http://saick.net/blog/2013/06/07/mysql-for-macosx-an-zhuang-he-ji-ben-cao-zuo</id>
+    <content type="html"><![CDATA[<h2>一.安装mysql</h2>
+
+<p>1.mysql下载地址<a href="http://dev.mysql.com/downloads/mysql/%E6%88%91%E7%9A%84%E6%9C%BA%E5%99%A8%E6%98%AFmac">http://dev.mysql.com/downloads/mysql/%E6%88%91%E7%9A%84%E6%9C%BA%E5%99%A8%E6%98%AFmac</a> 10.7的;使用mysql-5.1.52-osx10.6-x86.dmg安装包， 没有更新的，这个可用。（5.5也可以这样用，基本一致 MacOSX10.8.x目前都可以用）
+2.安装软件包位于硬盘映象(.dmg)文件中，必须首先双击搜索起中的图标来安装该文件。应当安装图像并显示其内容。</p>
+
+<p>注释：在继续安装前，一定要使用MySQL管理器应用程序(在Mac OS X服务器上)或通过命令行的mysqladmin shutdown关闭所有运行MySQL服务器实例。
+MySQL的Mac OS X PKG安装到/usr/local/mysql-VERSION，并且还会安装一个符号连接，/usr/local/mysql，指向新的位置。如果有/usr/local/mysql目录，首先将它改名为/usr/local/mysql.bak。安装完后，安装器执行mysql_install_db在MySQL数据库中创建授权表。</p>
+
+<p>安装布局与tar文件二进制分发版类似；所有MySQL二进制代码位于目录/usr/local/mysql/bin中。默认情况，MySQL套接字文件创建为/tmp/mysql.sock。
+如果你想在系统启动过程中自动启动MySQL，你还需要安装MySQL Startup Item。在MySQL 5.1中,它是Mac OS X安装盘映像的一部分，是一个独立的安装软件包。只需要双击MySQLStartupItem.图标并按照说明来安装。</p>
+
+<p>MySQL 5.1的Startup Item安装在/Library/StartupItems/MySQLCOM。Startup Item安装时在系统配置文件/etc/hostconfig中加入变量MySQLCOM=-YES-。如果你想要disable自动启动MySQL，只需要将该变量更改为MySQLCOM=-NO-。
+安装完后，可以在终端窗口运行下面的命令来启动MySQL。你必须具有管理员权限来执行该任务。</p>
+
+<p>如果你已经安装的Startup Item：</p>
+
+<p>shell> sudo /Library/StartupItems/MySQLCOM/MySQLCOM start</p>
+
+<p>(Enter your password, if necessary)</p>
+
+<p>(Press Control-D or enter &ldquo;exit&rdquo; to exit the shell)</p>
+
+<p>如果不使用Startup Item，输入下面的命令序列：</p>
+
+<p>shell> cd /usr/local/mysql</p>
+
+<p>shell> sudo ./bin/mysqld_safe</p>
+
+<p>(Enter your password, if necessary)</p>
+
+<p>(Press Control-Z)</p>
+
+<p>shell> bg</p>
+
+<p>(Press Control-D or enter &ldquo;exit&rdquo; to exit the shell)</p>
+
+<h2>二.创建用户 分配权限</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>grant all privileges on *.* to 'user'@'localhost' with grant option 
+</span><span class='line'>grant all privileges on *.* to 'user'@'localhost' identified by ‘123456′; 
+</span><span class='line'>flush privileges; </span></code></pre></td></tr></table></div></figure>
+
+
+<h5>1.新建用户。</h5>
+
+<p><em>如果mysql不识别的话，export PATH=$PATH:/usr/local/mysql/bin</em>
+默认密码为空，直接按回车即可。</p>
+
+<p>登录MYSQL</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@&gt;mysql -u root -p </span></code></pre></td></tr></table></div></figure>
+
+
+<p>@>密码
+创建用户
+mysql> insert into mysql.user(Host,User,Password) values(&ldquo;localhost&rdquo;,&ldquo;phplamp&rdquo;,password(&ldquo;1234&rdquo;));
+刷新系统权限表
+mysql>flush privileges;
+这样就创建了一个名为：phplamp  密码为：1234  的用户。</p>
+
+<p>然后登录一下。</p>
+
+<p>mysql>exit;
+@>mysql -u phplamp -p
+@>输入密码
+mysql>登录成功</p>
+
+<h5>2.为用户授权。</h5>
+
+<p>登录MYSQL（有ROOT权限）。我里我以ROOT身份登录.
+@>mysql -u root -p
+@>密码
+首先为用户创建一个数据库(phplampDB)
+mysql>create database phplampDB;
+授权phplamp用户拥有phplamp数据库的所有权限。 如果其它机器想访问的话，就把localhost改为&#8221;%&#8221;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;grant all privileges on phplampDB.* to phplamp@localhost identified by '1234'; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>刷新系统权限表
+mysql>flush privileges;
+mysql>其它操作</p>
+
+<p>如果想指定部分权限给一用户，可以这样来写:
+mysql>grant select,update on phplampDB.* to phplamp@localhost identified by &lsquo;1234&rsquo;;
+//刷新系统权限表。
+mysql>flush privileges;</p>
+
+<h5>3.删除用户。</h5>
+
+<p>@>mysql -u root -p
+@>密码
+mysql>DELETE FROM user WHERE User=&ldquo;phplamp&rdquo; and Host=&ldquo;localhost&rdquo;;
+mysql>flush privileges;
+//删除用户的数据库
+mysql>drop database phplampDB;</p>
+
+<h5>4.修改指定用户密码。</h5>
+
+<p>@>mysql -u root -p
+@>密码
+mysql>update mysql.user set password=password(&lsquo;新密码&rsquo;) where User=&ldquo;phplamp&rdquo; and Host=&ldquo;localhost&rdquo;;
+mysql>flush privileges;</p>
+
+<h2>三、使用后修改编码</h2>
+
+<p>修改my.ini文件
+加上
+default-character-set=gb2312
+设定数据库字符集
+alter database da_name default character set &lsquo;charset&rsquo;</p>
+
+<h5>1)设置数据库编码 /etc/my.cnf</h5>
+
+<p>[mysqld]
+default-character-set=gbk
+&hellip;
+[client]
+default-character-set=gbk
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－</p>
+
+<h5>2)按字符集导出</h5>
+
+<p>$mysqldump -u root -p dbname &mdash;default-character-set=gbk > a.sql;</p>
+
+<h5>3)查看SQL文件的编码</h5>
+
+<p>[root@localhost gethtml]# file a.sql
+   a.sql: UTF-8 Unicode &hellip;
+[root@localhost gethtml]# iconv -f utf-8 -t gbk a.sql > a2.sql
+[root@localhost gethtml]# file a2.sql
+   a2.sql: Non-ISO extended-ASCII English text 这时已经是gbk的编码了</p>
+
+<h5>3)导入</h5>
+
+<p>查看数据库服务和客户端字符集
+mysql> status;
+Server characterset:    gbk
+Db     characterset:      gbk
+Client characterset:      latin1
+Conn. characterset:     latin1</p>
+
+<p>mysql> set names &lsquo;gbk&rsquo;;   //这样
+mysql> status;
+Server characterset:   gbk
+Db     characterset:     gbk
+Client characterset:     gbk
+Conn. characterset:    gbk
+这时才能导数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; source a.sql;
+</span><span class='line'>----------------------------------------------------------------------------------</span></code></pre></td></tr></table></div></figure>
+
+
+<p>单独设置某个数据库：
+alter database testdb character set utf8;
+查看mysql支持的编码：
+show character set;</p>
+
+<p>查看系统的字符集和排序方式的设定可以通过下面的两条命令：
+mysql> SHOW VARIABLES LIKE &lsquo;&#8217;character_set_%&rsquo;&lsquo;;
+LINUX 如下:</p>
+
+<h5>1)导出数据</h5>
+
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#111;&#111;&#x74;&#x40;&#x77;&#119;&#x77;&#x2e;&#99;&#110;&#x73;&#99;&#110;&#x2e;&#111;&#x72;&#x67;">&#114;&#111;&#x6f;&#116;&#64;&#119;&#119;&#119;&#x2e;&#x63;&#110;&#115;&#99;&#x6e;&#x2e;&#111;&#114;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+
+<h5>2)查看导出的sql文件的编码</h5>
+
+<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#114;&#111;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#115;&#x63;&#110;&#46;&#x6f;&#114;&#103;">&#x72;&#x6f;&#x6f;&#x74;&#x40;&#119;&#119;&#x77;&#x2e;&#x63;&#x6e;&#x73;&#99;&#110;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ file base_user.sql
+　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
+
+<h5>3)转成要用的编码</h5>
+
+<p>[<a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x72;&#111;&#111;&#116;&#x40;&#x77;&#x77;&#119;&#46;&#99;&#110;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#x67;">&#114;&#x6f;&#111;&#x74;&#64;&#119;&#x77;&#119;&#46;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#111;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+
+<h5>4)连接数据库并查看当前库的编码</h5>
+
+<p>[<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#119;&#x2e;&#x63;&#110;&#115;&#99;&#110;&#46;&#111;&#x72;&#x67;">&#114;&#111;&#111;&#116;&#64;&#119;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#99;&#x6e;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ mysql -uroot
+　mysql> use testdb;
+mysql> status;</p>
+
+<pre><code>Server characterset:    latin1
+Db     characterset:    gbk
+Client characterset:    latin1
+Conn. characterset:    latin1
+</code></pre>
+
+<h5>5)设置成需要的编码</h5>
+
+<p>mysql>set names &lsquo;gbk&rsquo;;</p>
+
+<h5>6)查看现在的编码</h5>
+
+<p>mysql> status;</p>
+
+<pre><code>Server characterset:    latin1
+Db     characterset:    gbk
+Client characterset:    gbk
+Conn. characterset:    gbk
+</code></pre>
+
+<h5>7)导入我们转换成gbk后的文件</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; source base_user_gbk.sql;</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>四、导入、导出sql文件</h2>
+
+<p>步骤如下：</p>
+
+<p>一.MYSQL的命令行模式的设置：
+桌面->我的电脑->属性->环境变量->新建-></p>
+
+<p>PATH=“；path\mysql\bin;”其中path为MYSQL的安装路径。</p>
+
+<p>二.简单的介绍一下命令行进入MYSQL的方法：</p>
+
+<h5>1.C:>mysql -h hostname -u username -p</h5>
+
+<p>按ENTER键，等待然后输入密码。这里hostname为服务器的名称，如localhost，username为MYSQL的用户名，如root。
+进入命令行后可以直接操作MYSQL了。</p>
+
+<h5>2.简单介绍一下MYSQL命令：</h5>
+
+<p>mysql->CREATE DATABASE dbname;//创建数据库
+mysql->CREATE TABLE tablename;//创建表
+mysql->SHOW DATABASES;//显示数据库信息，有那些可用的数据库。
+mysql->USE dbname;//选择数据库
+mysql->SHOW TABLES;//显示表信息，有那些可用的表
+mysql->DESCRIBE tablename;//显示创建的表的信息</p>
+
+<h5>三.从数据库导出数据库文件：</h5>
+
+<p>1.将数据库mydb导出到e:\mysql\mydb.sql文件中：</p>
+
+<p>打开开始->运行->输入cmd 进入命令行模式
+c:>mysqldump -h localhost -u root -p mydb >e:\mysql\mydb.sql</p>
+
+<p>然后输入密码，等待一会导出就成功了，可以到目标文件中检查是否成功。</p>
+
+<p>2.将数据库mydb中的mytable导出到e:\mysql\mytable.sql文件中：
+c:>mysqldump -h localhost -u root -p mydb mytable>e:\mysql\mytable.sql</p>
+
+<p>3.将数据库mydb的结构导出到e:\mysql\mydb_stru.sql文件中：
+c:>mysqldump -h localhost -u root -p mydb &mdash;add-drop-table >e:\mysql\mydb_stru.sql</p>
+
+<p>//-h localhost可以省略，其一般在虚拟主机上用</p>
+
+<h5>四.从外部文件导入数据到数据库中：</h5>
+
+<p>从e:\mysql\mydb2.sql中将文件中的SQL语句导入数据库中：</p>
+
+<p>1.从命令行进入mysql，然后用命令CREATE DATABASE mydb2;创建数据库mydb2。</p>
+
+<p>2.退出mysql 可以输入命令exit；或者quit；</p>
+
+<p>3.在CMD中输入下列命令：
+c:>mysql -h localhost -u root -p mydb2 &lt; e:\mysql\mydb2.sql</p>
+
+<p>然后输入密码，就OK了。</p>
+
+<h5>五.下面谈一下关于导入文件大小限制问题的解决：</h5>
+
+<p>默认情况下：mysql 对导入文件大小有限制的，最大为2M，所以当文件很大时候，直接无法导入，下面就这个问题的解决列举如下：</p>
+
+<p>1.在php.ini中修改相关参数：</p>
+
+<p>影响mysql导入文件大小的参数有三个：</p>
+
+<p>memory_limit=128M,upload_max_filesize=2M,post_max_size=8M</p>
+
+<p>修改upload_max_filesize=200 M 这里修改满足你需要的大小，可以同时修改其他两项memory_limit=250M post_max_size=200M</p>
+
+<p>这样就可以导入200M以下的.sql文件了。</p>
+
+<p>上文中是把mysql放置在系统路径中，其实不妨也行。例如我的Mysql安装目录为D:\MySQL Server 5.0；</p>
+
+<p>则首先用cmd打开dos窗口，然后输入D:(没有&#8217;\&lsquo;)回车</p>
+
+<p>此时应该会出现D:>这样的标记，然后在其后面输入D:\MySQL Server 5.0\bin回车（顺序颠倒也行的）</p>
+
+<p>出现D:\MySQL Server 5.0\bin> 接着输入mysqldump -u用户名 -p 数据库名 > 数据库名.sql（也可以输入路径）；具体用法参照上文。</p>
+
+<p>导入文件同样，只是改了‘>’为‘&lt;’就行了。或者直接用source 也行：</p>
+
+<p>常用source 命令</p>
+
+<p>进入mysql数据库控制台</p>
+
+<p>如mysql -u root -p（没必要,省略）</p>
+
+<p>mysql>use 数据库</p>
+
+<p>然后使用source命令，后面参数为脚本文件(如这里用到的.sql)</p>
+
+<p>mysql>source d:wcnc_db.sql</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[JavaWeb开发 eclipse myEclipse JSP编辑卡死问题解决]]></title>
@@ -386,7 +699,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#115;&#104;&#x6a;&#98;&#x6f;&#x72;&#x61;&#103;&#x65;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;">&#x73;&#x68;&#x6a;&#98;&#111;&#114;&#97;&#103;&#101;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x73;&#x68;&#x6a;&#98;&#x6f;&#114;&#x61;&#x67;&#x65;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#x73;&#x68;&#x6a;&#x62;&#111;&#x72;&#97;&#103;&#101;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
