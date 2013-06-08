@@ -4,7 +4,7 @@
   <title><![CDATA[Category: CSS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/css/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-06-08T16:19:13+08:00</updated>
+  <updated>2013-06-08T16:21:50+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -24,9 +24,10 @@
 
 <p>CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。以下是几种常用的CSS+DIV的排版技术。</p>
 
-<p>纵向排列元素</p>
-
-<p>用 <div> 标签定义块对象，由于 <div> 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。</p>
+<p>纵向排列元素
+<code>
+用 &lt;div&gt; 标签定义块对象，由于 &lt;div&gt; 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。
+</code></p>
 
 <p>举例：
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -52,11 +53,11 @@
 </span><span class='line'>&lt;/div>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>用 <div> 标签定义块对象，用CSS的 float 属性设置对象的浮动。</p>
-
-<p>举例：
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div>
+<code>
+用 &lt;div&gt; 标签定义块对象，用CSS的 float 属性设置对象的浮动。
+</code>
+举例：
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
