@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Web Div+CSS排版 - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+
+  
+  <meta name="description" content="显示效果见源网页：http://www.java3z.com/cwbwebhome/article/article9/ht26.html 用DIV把元素定义为块对象，用CSS设置对象的格式和位置。 CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Saick Blog</a></h1>
+  
+    <h2>Safe&Quick iOS Dev Blog. Move from http://blog.sina.com.cn/shjborage</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:saick.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about.html">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Web Div+CSS排版</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-08T16:08:00+08:00" pubdate data-updated="true">Jun 8<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h6>显示效果见源网页：<a href="http://www.java3z.com/cwbwebhome/article/article9/ht26.html">http://www.java3z.com/cwbwebhome/article/article9/ht26.html</a></h6>
+
+<p>用DIV把元素定义为块对象，用CSS设置对象的格式和位置。</p>
+
+<p>CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。以下是几种常用的CSS+DIV的排版技术。</p>
+
+<p>纵向排列元素</p>
+
+<p>用 <div> 标签定义块对象，由于 <div> 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#menu {
+</span><span class='line'>   width: 100px; font-size: 15px;
+</span><span class='line'>}
+</span><span class='line'>.dd {
+</span><span class='line'>   border: 1px dotted #0000FF; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; margin-bottom: 3px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="menu">
+</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
+</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
+</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>用 <div> 标签定义块对象，用CSS的 float 属性设置对象的浮动。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#box {
+</span><span class='line'>   height: 110px;
+</span><span class='line'>}
+</span><span class='line'>#b1 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left;
+</span><span class='line'>}
+</span><span class='line'>#b2 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: none; margin-left: 5px; margin-right: 5px;
+</span><span class='line'>}
+</span><span class='line'>#b3 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: right;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="box">
+</span><span class='line'>&lt;div id="b1">&lt;/div>
+</span><span class='line'>&lt;div id="b2">&lt;/div>
+</span><span class='line'>&lt;div id="b3">&lt;/div>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>用列表排列元素</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;ul&gt; 或 &lt;ol&gt; 标签制作列表，用CSS设置列表项目的效果。这种方法主要用于规则排列的文本块、图片、控件等。</span></code></pre></td></tr></table></div></figure>
+
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>.list1 {
+</span><span class='line'>   height: 20px;
+</span><span class='line'>}
+</span><span class='line'>.list1 ul {
+</span><span class='line'>   list-style-type: none; margin: 0px;
+</span><span class='line'>}
+</span><span class='line'>.list1 li {
+</span><span class='line'>   float: left; margin-right: 5px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div class="list1">
+</span><span class='line'>&lt;ul>
+</span><span class='line'>&lt;li>[1]&lt;/li>
+</span><span class='line'>&lt;li>[2]&lt;/li>
+</span><span class='line'>&lt;li>[3]&lt;/li>
+</span><span class='line'>&lt;li>[4]&lt;/li>
+</span><span class='line'>&lt;/ul>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>[1] [2] [3] [4]
+用绝对坐标定位元素</p>
+
+<p>浏览器窗口的左上角坐标为 (0,0)，x 坐标向右，y 坐标向下。</p>
+
+<p>CSS提供了几个位置属性，可以设置对象在页面中的位置。</p>
+
+<p>position：当它取值为 absolute 时，表示对象使用绝对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>z-index：对象的层叠顺序。取值为一个整数。</p>
+
+<p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#m1 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 50px; top: 10px; z-index: 1;
+</span><span class='line'>}
+</span><span class='line'>#m2 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 185px; top: 10px; z-index: 2;
+</span><span class='line'>}
+</span><span class='line'>#m3 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 320px; top: 10px; z-index: 3;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="m1">&lt;/div>
+</span><span class='line'>&lt;div id="m2">&lt;/div>
+</span><span class='line'>&lt;div id="m3">&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
+
+<p>用相对坐标定位元素</p>
+
+<p>父对象的左上角坐标为 (0,0)，对象的坐标是相对于父对象的。</p>
+
+<p>position：当它取值为 relative 时，表示对象使用相对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>以上坐标也可理解为相对于父对象的左上角偏移的距离。</p>
+
+<p>注意：用相对坐标定位的对象不允许层叠。此时 z-index 属性无效。</p>
+
+<p>用相对坐标定位对象在实现一些不规则的排列或拼接时有很好的效果。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#area {
+</span><span class='line'>   width: 270px; height: 70px; border: 1px solid #0000FF;
+</span><span class='line'>}
+</span><span class='line'>#h1 {
+</span><span class='line'>   position: relative; left: 85px; top: 10px;
+</span><span class='line'>}
+</span><span class='line'>#h2 {
+</span><span class='line'>   position: relative; left: 15px; top: 32px;
+</span><span class='line'>}
+</span><span class='line'>#h3 {
+</span><span class='line'>   position: relative; left: 75px; top: 40px;
+</span><span class='line'>}
+</span><span class='line'>#h4 {
+</span><span class='line'>   position: relative; left: 115px; top: 25px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="area">
+</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-08T16:08:00+08:00" pubdate data-updated="true">Jun 8<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/css/'>CSS</a>, <a class='category' href='/blog/categories/web/'>Web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/" title="Previous Post: Git no branch 解决方案">&laquo; Git no branch 解决方案</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<section>
+  <h1>Famous Category</h1>
+  <ul id="Categorys">
+  	<li><a href="/blog/categories/ios/">iOS</a></li>
+    <li><a href="/blog/categories/isecret/">iSecret</a></li>
+  	<li><a href="/blog/categories/flashlight/">Flashlight</a></li>
+  </ul>
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/08/web-div-plus-csspai-ban/">Web Div+CSS排版</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Git No Branch 解决方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/07/mysql-for-macosx-an-zhuang-he-ji-ben-cao-zuo/">Mysql for MacOSX 安装和基本操作</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/03/javawebkai-fa-eclipse-myeclipse-jspbian-ji-qia-si-wen-ti-jie-jue/">JavaWeb开发 Eclipse myEclipse JSP编辑卡死问题解决</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/03/android-kai-fa-huan-jing-qiang-jian/">Android 开发环境抢建</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Saick Apps</h1>
+  <ul id="apps">
+    <li><a href="/apps/iSecret/info.html">iSecret</a></li>
+  	<li><a href="/apps/Flashlight/info.html">Flashlight</a></li>
+  </ul>
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/shjborage">@shjborage</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'shjborage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eric Shi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban/';
+        var disqus_url = 'http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

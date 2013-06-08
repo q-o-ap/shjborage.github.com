@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-06-07T18:12:43+08:00</updated>
+  <updated>2013-06-08T16:19:13+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,264 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Web Div+CSS排版]]></title>
+    <link href="http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban/"/>
+    <updated>2013-06-08T16:08:00+08:00</updated>
+    <id>http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban</id>
+    <content type="html"><![CDATA[<h6>显示效果见源网页：<a href="http://www.java3z.com/cwbwebhome/article/article9/ht26.html">http://www.java3z.com/cwbwebhome/article/article9/ht26.html</a></h6>
+
+<p>用DIV把元素定义为块对象，用CSS设置对象的格式和位置。</p>
+
+<p>CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。以下是几种常用的CSS+DIV的排版技术。</p>
+
+<p>纵向排列元素</p>
+
+<p>用 <div> 标签定义块对象，由于 <div> 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#menu {
+</span><span class='line'>   width: 100px; font-size: 15px;
+</span><span class='line'>}
+</span><span class='line'>.dd {
+</span><span class='line'>   border: 1px dotted #0000FF; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; margin-bottom: 3px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="menu">
+</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
+</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
+</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>用 <div> 标签定义块对象，用CSS的 float 属性设置对象的浮动。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#box {
+</span><span class='line'>   height: 110px;
+</span><span class='line'>}
+</span><span class='line'>#b1 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left;
+</span><span class='line'>}
+</span><span class='line'>#b2 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: none; margin-left: 5px; margin-right: 5px;
+</span><span class='line'>}
+</span><span class='line'>#b3 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: right;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="box">
+</span><span class='line'>&lt;div id="b1">&lt;/div>
+</span><span class='line'>&lt;div id="b2">&lt;/div>
+</span><span class='line'>&lt;div id="b3">&lt;/div>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>用列表排列元素</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;ul&gt; 或 &lt;ol&gt; 标签制作列表，用CSS设置列表项目的效果。这种方法主要用于规则排列的文本块、图片、控件等。</span></code></pre></td></tr></table></div></figure>
+
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>.list1 {
+</span><span class='line'>   height: 20px;
+</span><span class='line'>}
+</span><span class='line'>.list1 ul {
+</span><span class='line'>   list-style-type: none; margin: 0px;
+</span><span class='line'>}
+</span><span class='line'>.list1 li {
+</span><span class='line'>   float: left; margin-right: 5px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div class="list1">
+</span><span class='line'>&lt;ul>
+</span><span class='line'>&lt;li>[1]&lt;/li>
+</span><span class='line'>&lt;li>[2]&lt;/li>
+</span><span class='line'>&lt;li>[3]&lt;/li>
+</span><span class='line'>&lt;li>[4]&lt;/li>
+</span><span class='line'>&lt;/ul>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>[1] [2] [3] [4]
+用绝对坐标定位元素</p>
+
+<p>浏览器窗口的左上角坐标为 (0,0)，x 坐标向右，y 坐标向下。</p>
+
+<p>CSS提供了几个位置属性，可以设置对象在页面中的位置。</p>
+
+<p>position：当它取值为 absolute 时，表示对象使用绝对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>z-index：对象的层叠顺序。取值为一个整数。</p>
+
+<p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#m1 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 50px; top: 10px; z-index: 1;
+</span><span class='line'>}
+</span><span class='line'>#m2 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 185px; top: 10px; z-index: 2;
+</span><span class='line'>}
+</span><span class='line'>#m3 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 320px; top: 10px; z-index: 3;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="m1">&lt;/div>
+</span><span class='line'>&lt;div id="m2">&lt;/div>
+</span><span class='line'>&lt;div id="m3">&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
+
+<p>用相对坐标定位元素</p>
+
+<p>父对象的左上角坐标为 (0,0)，对象的坐标是相对于父对象的。</p>
+
+<p>position：当它取值为 relative 时，表示对象使用相对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>以上坐标也可理解为相对于父对象的左上角偏移的距离。</p>
+
+<p>注意：用相对坐标定位的对象不允许层叠。此时 z-index 属性无效。</p>
+
+<p>用相对坐标定位对象在实现一些不规则的排列或拼接时有很好的效果。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#area {
+</span><span class='line'>   width: 270px; height: 70px; border: 1px solid #0000FF;
+</span><span class='line'>}
+</span><span class='line'>#h1 {
+</span><span class='line'>   position: relative; left: 85px; top: 10px;
+</span><span class='line'>}
+</span><span class='line'>#h2 {
+</span><span class='line'>   position: relative; left: 15px; top: 32px;
+</span><span class='line'>}
+</span><span class='line'>#h3 {
+</span><span class='line'>   position: relative; left: 75px; top: 40px;
+</span><span class='line'>}
+</span><span class='line'>#h4 {
+</span><span class='line'>   position: relative; left: 115px; top: 25px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="area">
+</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git no branch 解决方案]]></title>
@@ -252,20 +510,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#119;&#x77;&#119;&#46;&#x63;&#x6e;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#x6f;&#111;&#116;&#x40;&#x77;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#114;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#114;&#x6f;&#111;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#99;&#x6e;&#46;&#111;&#114;&#103;">&#x72;&#111;&#111;&#116;&#64;&#x77;&#119;&#119;&#x2e;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#114;&#111;&#111;&#x74;&#64;&#x77;&#119;&#x77;&#46;&#99;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#114;&#103;">&#114;&#x6f;&#x6f;&#x74;&#x40;&#119;&#119;&#119;&#x2e;&#99;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x72;&#x6f;&#111;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#111;&#x72;&#103;">&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#114;&#111;&#x6f;&#x74;&#x40;&#x77;&#x77;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#103;">&#114;&#x6f;&#x6f;&#x74;&#64;&#119;&#119;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#110;&#x2e;&#111;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x72;&#111;&#111;&#x74;&#x40;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#103;">&#114;&#111;&#111;&#116;&#64;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x72;&#111;&#111;&#116;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#115;&#99;&#x6e;&#x2e;&#x6f;&#x72;&#103;">&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#x63;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#114;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#x2e;&#99;&#x6e;&#x73;&#99;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#111;&#x74;&#x40;&#x77;&#119;&#119;&#46;&#99;&#110;&#115;&#x63;&#110;&#46;&#111;&#114;&#x67;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -818,7 +1076,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x73;&#x68;&#x6a;&#98;&#x6f;&#x72;&#x61;&#103;&#x65;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#115;&#x68;&#x6a;&#x62;&#111;&#114;&#x61;&#x67;&#x65;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#115;&#x68;&#106;&#98;&#x6f;&#114;&#x61;&#x67;&#101;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#115;&#104;&#106;&#x62;&#x6f;&#114;&#97;&#x67;&#x65;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
