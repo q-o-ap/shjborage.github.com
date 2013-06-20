@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: iSecret - Saick Blog</title>
+  <title>让Apple TV直接收看中国视频 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category: iSecret">
+  <meta name="description" content="工作原理： 通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。 本程序给Apple tv访问的网址 : http://4.appletv3.sinaapp.com/index.php(其他设备浏览器无效) 此方法许多人都设想过， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.netblog/categories/isecret">
+  <link rel="canonical" href="http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -77,36 +77,137 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: iSecret</h1>
+    
+      <h1 class="entry-title">让Apple TV直接收看中国视频</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-20T14:09:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><h4>工作原理：</h4>
 
-  
-  <h2>2013</h2>
+<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
 
-<article>
-  
-<h1><a href="/blog/2013/05/28/isecret-jian-jie/">iSecret 简介</a></h1>
-<time datetime="2013-05-28T16:44:00+08:00" pubdate><span class='month'>May</span> <span class='day'>28</span> <span class='year'>2013</span></time>
+<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/isecret/'>iSecret</a></span>
-</footer>
+<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
+
+<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
+<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
+
+<h4>没有自己的DNS</h4>
+
+<p>　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，
+　　　即可将Apple TV内置网址指向一个新的网站，达到通过Apple TV直接收看贵国视频的愿望。
+修改DNS如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>180.153.225.136 电信服务器，适合于南方电信的用户使用。TTVast提供
+</span><span class='line'>210.129.145.150 适合部分联通用户，以及海外用户使用。TTVast提供</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>　　用私人DNS会轻易被他伪装的银行、淘宝等网站来欺骗你，为了安全，请ATV用户使用上面靠谱的。
+　　请勿用于Apple TV之外的任何设备（如：手机、PC、路由器等），否则后果自负。
+　　</p>
 
+<h4>拥有自己的DNS</h4>
+
+<p>将 <a href="http://trailers.apple.com/appletv/">http://trailers.apple.com/appletv/</a> 路径下的 index.xml 及 application.js转向下面网址的对应文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://180.153.225.136:8000/index.xml ttvas提供
+</span><span class='line'>http://210.129.145.150:8000/index.xml ttvas提供
+</span><span class='line'>http://4.appletv3.sinaapp.com/index.php Missde提供 - 目前测试中..</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本程序：Apple TV DNS PHP代码下载：
+<a href="https://code.google.com/p/appletv/downloads/list">https://code.google.com/p/appletv/downloads/list</a></p>
+
+<p>获取音悦台MV下载地址 <a href="http://huoqu.sinaapp.com/video/">http://huoqu.sinaapp.com/video/</a></p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-20T14:09:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/appletv/'>AppleTV</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/" title="Previous Post: JSP中java代码与js之间的传值">&laquo; JSP中java代码与js之间的传值</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -209,7 +310,10 @@
       var disqus_shortname = 'saick';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/';
+        var disqus_url = 'http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

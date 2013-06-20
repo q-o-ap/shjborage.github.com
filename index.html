@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="java &mdash;&mdash;> js: List的传递：直接赋值就行，如下： Js代码 1
-var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为js中var赋java变量值（同样适用于el表达式和struts2标签等）时 &hellip;">
+  <meta name="description" content="工作原理： 通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。 本程序给Apple tv访问的网址 : http://4.appletv3.sinaapp.com/index.php(其他设备浏览器无效) 此方法许多人都设想过， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,86 @@ var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/">让Apple TV直接收看中国视频</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-20T14:09:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>工作原理：</h4>
+
+<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
+
+<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
+
+<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
+
+<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
+<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
+
+<h4>没有自己的DNS</h4>
+
+<p>　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，
+　　　即可将Apple TV内置网址指向一个新的网站，达到通过Apple TV直接收看贵国视频的愿望。
+修改DNS如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>180.153.225.136 电信服务器，适合于南方电信的用户使用。TTVast提供
+</span><span class='line'>210.129.145.150 适合部分联通用户，以及海外用户使用。TTVast提供</span></code></pre></td></tr></table></div></figure>
+
+
+<p>　　用私人DNS会轻易被他伪装的银行、淘宝等网站来欺骗你，为了安全，请ATV用户使用上面靠谱的。
+　　请勿用于Apple TV之外的任何设备（如：手机、PC、路由器等），否则后果自负。
+　　</p>
+
+<h4>拥有自己的DNS</h4>
+
+<p>将 <a href="http://trailers.apple.com/appletv/">http://trailers.apple.com/appletv/</a> 路径下的 index.xml 及 application.js转向下面网址的对应文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://180.153.225.136:8000/index.xml ttvas提供
+</span><span class='line'>http://210.129.145.150:8000/index.xml ttvas提供
+</span><span class='line'>http://4.appletv3.sinaapp.com/index.php Missde提供 - 目前测试中..</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本程序：Apple TV DNS PHP代码下载：
+<a href="https://code.google.com/p/appletv/downloads/list">https://code.google.com/p/appletv/downloads/list</a></p>
+
+<p>获取音悦台MV下载地址 <a href="http://huoqu.sinaapp.com/video/">http://huoqu.sinaapp.com/video/</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -739,20 +818,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#114;&#111;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#114;&#x67;">&#x72;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#46;&#x63;&#x6e;&#115;&#99;&#x6e;&#46;&#111;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#114;&#111;&#x6f;&#116;&#64;&#119;&#119;&#119;&#46;&#99;&#110;&#115;&#x63;&#110;&#x2e;&#111;&#x72;&#x67;">&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#x6f;&#x6f;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#99;&#x6e;&#115;&#x63;&#x6e;&#46;&#111;&#114;&#x67;">&#x72;&#111;&#x6f;&#x74;&#64;&#x77;&#119;&#x77;&#46;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x72;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#x77;&#119;&#46;&#99;&#110;&#115;&#99;&#x6e;&#x2e;&#111;&#114;&#103;">&#114;&#111;&#111;&#116;&#64;&#x77;&#119;&#119;&#x2e;&#99;&#110;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#x77;&#119;&#x77;&#46;&#x63;&#x6e;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#x2e;&#x63;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#x72;&#x6f;&#111;&#116;&#x40;&#x77;&#119;&#119;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;">&#114;&#x6f;&#111;&#116;&#x40;&#x77;&#119;&#119;&#46;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#111;&#114;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#114;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#119;&#46;&#x63;&#x6e;&#x73;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;">&#114;&#111;&#x6f;&#x74;&#x40;&#x77;&#x77;&#119;&#x2e;&#x63;&#x6e;&#x73;&#x63;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#114;&#111;&#111;&#116;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#110;&#46;&#111;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#64;&#x77;&#119;&#x77;&#46;&#x63;&#x6e;&#x73;&#99;&#x6e;&#46;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -1450,7 +1529,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#115;&#x68;&#x6a;&#x62;&#111;&#114;&#x61;&#103;&#101;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;">&#115;&#104;&#106;&#x62;&#x6f;&#x72;&#x61;&#103;&#x65;&#64;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#115;&#x68;&#106;&#x62;&#111;&#114;&#97;&#x67;&#101;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#104;&#106;&#x62;&#111;&#114;&#97;&#x67;&#101;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -1536,74 +1615,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1629,6 +1640,10 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/">让Apple TV直接收看中国视频</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">JSP中java代码与js之间的传值</a>
       </li>
     
@@ -1642,10 +1657,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
       <li class="post">
         <a href="/blog/2013/06/07/mysql-for-macosx-an-zhuang-he-ji-ben-cao-zuo/">Mysql for MacOSX 安装和基本操作</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/03/javawebkai-fa-eclipse-myeclipse-jspbian-ji-qia-si-wen-ti-jie-jue/">JavaWeb开发 Eclipse myEclipse JSP编辑卡死问题解决</a>
       </li>
     
   </ul>
