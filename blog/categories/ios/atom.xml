@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-08-01T17:36:58+08:00</updated>
+  <updated>2013-08-05T14:57:22+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -245,6 +245,15 @@ NSLog(@"%@",array);
     <updated>2013-05-28T10:19:00+08:00</updated>
     <id>http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu</id>
     <content type="html"><![CDATA[<p><strong><em>不断更新中。。。</em></strong></p>
+
+<p>Aug 5, 2013</p>
+
+<ul>
+<li><h3>如果使用C++代码混编，找不到iostream等</h3>
+
+<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
+</ul>
+
 
 <p>May 28, 2013</p>
 
