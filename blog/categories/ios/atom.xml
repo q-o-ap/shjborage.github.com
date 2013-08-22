@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-08-22T11:25:41+08:00</updated>
+  <updated>2013-08-22T15:15:48+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ iOS 权限管理-Best Practices for Maintaining User Privacy]]></title>
+    <link href="http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/"/>
+    <updated>2013-08-22T14:58:00+08:00</updated>
+    <id>http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy</id>
+    <content type="html"><![CDATA[<p>从Notification的开关入手，发现了统一给出的入口。
+从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）</p>
+
+<p>来正文</p>
+
+<h4>Best Practices for Maintaining User Privacy</h4>
+
+<p>Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.</p>
+
+<p>You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:</p>
+
+<p>Review guidelines from government or industry sources, including the following documents:</p>
+
+<p>The Federal Trade Commission’s report on mobile privacy: Mobile Privacy Disclosures: Building Trust Through Transparency.</p>
+
+<p>The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: <a href="http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf">http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf</a></p>
+
+<p>The California State Attorney General’s recommendations for mobile privacy: Privacy on the Go: Recommendations for the Mobile Ecosystem</p>
+
+<p>These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
+Request access to user or device data that is protected by the iOS system authorization settings at the time the data is needed. Consider supplying a usage description string in your app’s Info.plist file explaining why your app needs that data. Data protected by iOS system authorization settings includes location data, contacts, calendar events, reminders, photos, and media; see Table 1-1. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.</p>
+
+<p>Be transparent with users about how their data is going to be used. For example, you should specify a URL for your privacy policy or statement with your iTunes Connect metadata when you submit your app, and you might also want to summarize that policy in your app description.
+For more information about providing your app’s privacy policy in iTunes Connect, see “Adding New Apps” in iTunes Connect Developer Guide</p>
+
+<p>Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
+Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
+Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in “Protecting Data Using On-Disk Encryption”) to store it in an encrypted format. And try to use HTTPS when sending user or device data over the network.</p>
+
+<p>If your app uses the ASIdentifierManager class, you must respect the value of its advertisingTrackingEnabled property. And if that property is set to NO by the user, then use the ASIdentifierManager class only for the following purposes: frequency capping, conversion events, estimating the number of unique users, security and fraud detection, and debugging. Remember the ASIdentifierManager class is to be used only for the purposes of serving advertising. Do not use it as a general advertising cookie or for any other purposes.</p>
+
+<p>If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the UIDevice class. That property was deprecated in iOS 5.0, and starting May 1, 2013 the App Store will no longer accept new apps or app updates that use that identifier. Instead, apps should use the identifierForVendor property of the UIDevice class or the advertisingIdentifier property of the ASIdentifierManager class, as appropriate.</p>
+
+<p>Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.</p>
+
+<p>Table 1-1  Data protected by system authorization settings</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cocoa 自省机制]]></title>
@@ -263,141 +307,6 @@ NSLog(@"%@",array);
 <p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS block 编程]]></title>
-    <link href="http://saick.net/blog/2013/05/28/ios-block-bian-cheng/"/>
-    <updated>2013-05-28T09:57:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/ios-block-bian-cheng</id>
-    <content type="html"><![CDATA[<h2>block</h2>
-
-<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
-
-<h4>声明block：</h4>
-
-<p><code>
-void (^simpleBlock)(void);
-</code></p>
-
-<h4>定义block：</h4>
-
-<p>```
-simpleBlock = ^{</p>
-
-<pre><code>    NSLog(@"This is a block");
-</code></pre>
-
-<p>};
-```</p>
-
-<h4>声明和定义在一起：</h4>
-
-<p>```
-void (^simpleBlock)(void) = ^{</p>
-
-<pre><code>NSLog(@"This is a block");
-</code></pre>
-
-<p>};
-```</p>
-
-<h4>调用block：</h4>
-
-<p><code>
-simpleBlock();
-</code></p>
-
-<h4>带返回值和参数的block:</h4>
-
-<p>```
-double (^multiplyTwoValues)(double, double) =</p>
-
-<pre><code>                          ^(double firstValue, double secondValue) {
-                              return firstValue * secondValue;
-                          };
-double result = multiplyTwoValues(2,4);
-NSLog(@"The result is %f", result);
-</code></pre>
-
-<p>```</p>
-
-<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
-
-<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
-
-<p>```
-__block int (^recursiveBlock)(int) = ^(int param) {</p>
-
-<pre><code>    if (param == 1) {
-        return 1;
-    }
-    return (param--) * recursiveBlock(param);
-</code></pre>
-
-<p>};<br/>
-recursiveBlock(5);  // 计算5的阶乘
-```</p>
-
-<p>You Can Pass Blocks as Arguments to Methods or Functions
-&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
-The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
-
-<p>```
-&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {</p>
-
-<pre><code>...
-callbackBlock();
-</code></pre>
-
-<p>}
-```</p>
-
-<p>A Block Should Always Be the Last Argument to a Method
-Objects Use Properties to Keep Track of Blocks
-The syntax to define a property to keep track of a block is similar to a block variable:</p>
-
-<p><code>
-@interface XYZObject : NSObject
-@property (copy) void (^blockProperty)(void);
-@end
-</code></p>
-
-<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
-A block property is set or invoked like any other block variable:</p>
-
-<p>```</p>
-
-<pre><code>self.blockProperty = ^{
-    ...
-};
-self.blockProperty();
-</code></pre>
-
-<p>typedef void(^BlockCC)(void);
-```</p>
-
-<p>// e.g.更新myTableview并显示最后一行</p>
-
-<p>```
-if (dataArray.count > 0) {</p>
-
-<pre><code>    [myTableView reloadData];   
-    // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
- // 所以要[NSObject performBlock: afterDelay:0];
-    [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
-    NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
-    void (^scrollToBottom)(void) = ^{
-        [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-        [myTableView release];
-    };
-    //
-    [NSObject performBlock:scrollToBottom afterDelay:0];
-</code></pre>
-
-<p>}
-```</p>
 ]]></content>
   </entry>
   

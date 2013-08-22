@@ -4,7 +4,7 @@
   <title><![CDATA[Category: CSS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/css/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-08-22T11:25:41+08:00</updated>
+  <updated>2013-08-22T15:15:48+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -30,58 +30,34 @@
 </code></p>
 
 <p>举例：
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;div id="menu">
-</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
-</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
-</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
-</span><span class='line'>&lt;/div>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div>
+{% codeblock %}</p>
+
+
+
+<div id="menu">
+<div class="dd">HTML</div>
+<div class="dd">CSS</div>
+<div class="dd">JavaScript</div>
+</div>
+
+
+<p>{% endcodeblock %}
 <code>
 用 &lt;div&gt; 标签定义块对象，用CSS的 float 属性设置对象的浮动。
 </code>
 举例：
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;div id="box">
-</span><span class='line'>&lt;div id="b1">&lt;/div>
-</span><span class='line'>&lt;div id="b2">&lt;/div>
-</span><span class='line'>&lt;div id="b3">&lt;/div>
-</span><span class='line'>&lt;/div>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock %}</p>
+
+
+
+<div id="box">
+<div id="b1"></div>
+<div id="b2"></div>
+<div id="b3"></div>
+</div>
+
+
+<p>{% endcodeblock %}</p>
 
 <p>用列表排列元素</p>
 
@@ -90,36 +66,21 @@
 </code></p>
 
 <p>举例：
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;div class="list1">
-</span><span class='line'>&lt;ul>
-</span><span class='line'>&lt;li>[1]&lt;/li>
-</span><span class='line'>&lt;li>[2]&lt;/li>
-</span><span class='line'>&lt;li>[3]&lt;/li>
-</span><span class='line'>&lt;li>[4]&lt;/li>
-</span><span class='line'>&lt;/ul>
-</span><span class='line'>&lt;/div>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock %}</p>
+
+
+
+<div class="list1">
+<ul>
+<li>[1]</li>
+<li>[2]</li>
+<li>[3]</li>
+<li>[4]</li>
+</ul>
+</div>
+
+
+<p>{% endcodeblock %}</p>
 
 <p>[1] [2] [3] [4]
 用绝对坐标定位元素</p>
@@ -139,34 +100,20 @@
 <p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
 
 <p>举例：
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;div id="m1">&lt;/div>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;div id="m2">&lt;/div>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;div id="m3">&lt;/div>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock %}</p>
+
+
+
+<div id="m1"></div>
+
+
+<div id="m2"></div>
+
+
+<div id="m3"></div>
+
+
+<p>{% endcodeblock %}</p>
 
 <p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
 
@@ -188,32 +135,19 @@
 
 <p>举例：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;div id="area">
-</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
-</span><span class='line'>&lt;/div>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock %}</p>
+
+
+
+<div id="area">
+<img id="h1" src="./image/face19.gif" />
+<img id="h2" src="./image/face19.gif" />
+<img id="h3" src="./image/face19.gif" />
+<img id="h4" src="./image/face19.gif" />
+</div>
+
+
+<p>{% endcodeblock %}</p>
 ]]></content>
   </entry>
   
