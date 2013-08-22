@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-08-22T15:15:48+08:00</updated>
+  <updated>2013-08-22T15:18:55+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -54,6 +54,8 @@ Take reasonable steps to protect the user and device data that you collect in yo
 <p>Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.</p>
 
 <p>Table 1-1  Data protected by system authorization settings</p>
+
+<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png">http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png</a>"></p>
 ]]></content>
   </entry>
   

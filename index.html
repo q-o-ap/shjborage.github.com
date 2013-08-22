@@ -9,11 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Octopress是使用ruby语言编写的一套建立在jekyll之上的博客系统，它有一些很独特的特点： 使用静态页面；
-不使用数据库；
-使用markdown标记语言编写文章；
-可以与git紧密集成，方便地进行博客的版本管理；
-可以于Github Pages集成，不需要单独的web hosting， &hellip;">
+  <meta name="description" content="从Notification的开关入手，发现了统一给出的入口。
+从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有） 来正文 Best Practices for Maintaining User Privacy Maintaining user privacy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +81,81 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-22T14:58:00+08:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
+        
+         | <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>从Notification的开关入手，发现了统一给出的入口。
+从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）</p>
+
+<p>来正文</p>
+
+<h4>Best Practices for Maintaining User Privacy</h4>
+
+<p>Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.</p>
+
+<p>You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:</p>
+
+<p>Review guidelines from government or industry sources, including the following documents:</p>
+
+<p>The Federal Trade Commission’s report on mobile privacy: Mobile Privacy Disclosures: Building Trust Through Transparency.</p>
+
+<p>The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: <a href="http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf">http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf</a></p>
+
+<p>The California State Attorney General’s recommendations for mobile privacy: Privacy on the Go: Recommendations for the Mobile Ecosystem</p>
+
+<p>These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
+Request access to user or device data that is protected by the iOS system authorization settings at the time the data is needed. Consider supplying a usage description string in your app’s Info.plist file explaining why your app needs that data. Data protected by iOS system authorization settings includes location data, contacts, calendar events, reminders, photos, and media; see Table 1-1. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.</p>
+
+<p>Be transparent with users about how their data is going to be used. For example, you should specify a URL for your privacy policy or statement with your iTunes Connect metadata when you submit your app, and you might also want to summarize that policy in your app description.
+For more information about providing your app’s privacy policy in iTunes Connect, see “Adding New Apps” in iTunes Connect Developer Guide</p>
+
+<p>Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
+Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
+Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in “Protecting Data Using On-Disk Encryption”) to store it in an encrypted format. And try to use HTTPS when sending user or device data over the network.</p>
+
+<p>If your app uses the ASIdentifierManager class, you must respect the value of its advertisingTrackingEnabled property. And if that property is set to NO by the user, then use the ASIdentifierManager class only for the following purposes: frequency capping, conversion events, estimating the number of unique users, security and fraud detection, and debugging. Remember the ASIdentifierManager class is to be used only for the purposes of serving advertising. Do not use it as a general advertising cookie or for any other purposes.</p>
+
+<p>If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the UIDevice class. That property was deprecated in iOS 5.0, and starting May 1, 2013 the App Store will no longer accept new apps or app updates that use that identifier. Instead, apps should use the identifierForVendor property of the UIDevice class or the advertisingIdentifier property of the ASIdentifierManager class, as appropriate.</p>
+
+<p>Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.</p>
+
+<p>Table 1-1  Data protected by system authorization settings</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png"></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1175,20 +1247,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#116;&#64;&#x77;&#x77;&#x77;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#114;&#x67;">&#x72;&#x6f;&#111;&#116;&#64;&#119;&#x77;&#119;&#46;&#x63;&#x6e;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#114;&#x6f;&#111;&#x74;&#64;&#x77;&#119;&#x77;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#114;&#111;&#111;&#116;&#64;&#x77;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#110;&#x2e;&#111;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x72;&#x6f;&#111;&#x74;&#x40;&#119;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#111;&#114;&#x67;">&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#x73;&#99;&#110;&#46;&#x6f;&#x72;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#119;&#x77;&#46;&#99;&#110;&#x73;&#99;&#110;&#x2e;&#111;&#114;&#x67;">&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#x63;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#114;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#114;&#111;&#111;&#116;&#x40;&#x77;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#103;">&#x72;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#119;&#x2e;&#x63;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#111;&#111;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#99;&#x6e;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#103;">&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#x6f;&#111;&#116;&#64;&#119;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#119;&#119;&#46;&#99;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#x67;">&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#119;&#119;&#x2e;&#x63;&#110;&#115;&#x63;&#110;&#46;&#111;&#x72;&#x67;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -1590,180 +1662,6 @@ Application Name: 一个易读的标题在你的应用程序上。
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/">Git基本使用与Dropbox配合使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-29T11:43:00+08:00" pubdate data-updated="true">May 29<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Git基本使用</h3>
-
-<h4>1.取得项目的Git仓库</h4>
-
-<h5>1.1从当前目录初始化</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git init</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后可以进行git add .. 进行文件添加。<br/>
-以及编写.gitignore文件，对本地文件进行忽略</p>
-
-<figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Exclude the build directory
-</span><span class='line'> build/*
-</span><span class='line'> 
-</span><span class='line'> # Exclude temp nibs and swap files
-</span><span class='line'> *~.nib
-</span><span class='line'> *.swp
-</span><span class='line'> 18 
-</span><span class='line'> # Exclude OS X folder attributes
-</span><span class='line'> .DS_Store
-</span><span class='line'> 
-</span><span class='line'> # Exclude user-specific XCode 3 and 4 files
-</span><span class='line'> *.mode1
-</span><span class='line'> *.mode1v3
-</span><span class='line'> *.mode2v3
-</span><span class='line'> *.perspective
-</span><span class='line'> *.perspectivev3
-</span><span class='line'> *.pbxuser
-</span><span class='line'> *.xcworkspace
-</span><span class='line'> *.xcuserstate
-</span><span class='line'> xcuserdata</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>1.2 从现有仓库克隆</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/aaaa/aa.git
-</span><span class='line'>git clone file:::/Volumes/Data/xxx.git
-</span><span class='line'>git clone /Volumes/Data/xxx.git
-</span><span class='line'>git clone /Volumes/Data/xxx.git new_xxx_dir</span></code></pre></td></tr></table></div></figure>
-
-
-<p>默认会创建xxx目录（xxx.git）,如果想指定目录的话用最后一种</p>
-
-<h5>1.3 其它常用</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git commit
-</span><span class='line'>git commit -a -m "asdf"
-</span><span class='line'>git status
-</span><span class='line'>git log
-</span><span class='line'>git log -1
-</span><span class='line'>git log -p</span></code></pre></td></tr></table></div></figure>
-
-
-<p>注意看提示就好了。</p>
-
-<h4>2.远程仓库使用</h4>
-
-<h5>2.1 创建</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git init --bare</span></code></pre></td></tr></table></div></figure>
-
-
-<p>创建一个空的远程仓库（可在服务器上，也可在本地，也可以在Dropbox的目录中）</p>
-
-<h5>2.2 查看远程仓库</h5>
-
-<p>在本地执行以下命令</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote -v</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.3 添加远程仓库</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote add [shortanem] [url]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.4 从远程抓取数据</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch [remote-name]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.5 推送数据</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git push [remote-name] [branchname]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.6 其它</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote show [remote-name]
-</span><span class='line'>git remote rename old new
-</span><span class='line'>git remote rm xxx</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Dropbox 整合</h4>
-
-<p>把远程建在Dropbox上即可，哈哈</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1787,7 +1685,7 @@ Application Name: 一个易读的标题在你的应用程序上。
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
 <li class='category'><a href='/blog/categories/web/'>Web (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (5)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (6)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (1)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -1798,6 +1696,10 @@ Application Name: 一个易读的标题在你的应用程序上。
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/22/zai-githubshang-shi-yong-octopress/">在github上使用octopress</a>
@@ -1813,10 +1715,6 @@ Application Name: 一个易读的标题在你的应用程序上。
     
       <li class="post">
         <a href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">JSP中java代码与js之间的传值</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/08/web-div-plus-csspai-ban/">Web Div+CSS排版</a>
       </li>
     
   </ul>

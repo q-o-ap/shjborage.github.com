@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Database | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-08-22T15:15:48+08:00</updated>
+  <updated>2013-08-22T15:18:55+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -184,20 +184,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#114;&#x6f;&#111;&#x74;&#x40;&#x77;&#119;&#119;&#46;&#x63;&#110;&#115;&#99;&#x6e;&#46;&#111;&#114;&#103;">&#x72;&#111;&#111;&#116;&#64;&#119;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#114;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;">&#x72;&#x6f;&#x6f;&#x74;&#x40;&#119;&#x77;&#119;&#x2e;&#x63;&#110;&#x73;&#99;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#x72;&#111;&#111;&#x74;&#64;&#119;&#119;&#119;&#x2e;&#99;&#110;&#x73;&#99;&#x6e;&#46;&#x6f;&#114;&#103;">&#114;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#119;&#x77;&#x2e;&#99;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x72;&#111;&#111;&#x74;&#x40;&#119;&#119;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#110;&#x2e;&#x6f;&#x72;&#103;">&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#114;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#114;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#x77;&#119;&#46;&#x63;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#114;&#x67;">&#x72;&#x6f;&#x6f;&#x74;&#64;&#119;&#119;&#119;&#46;&#x63;&#110;&#115;&#99;&#110;&#x2e;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#119;&#46;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;">&#114;&#111;&#x6f;&#116;&#64;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#114;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#x77;&#119;&#46;&#99;&#x6e;&#115;&#99;&#x6e;&#46;&#111;&#x72;&#103;">&#114;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#114;&#x6f;&#111;&#116;&#64;&#119;&#119;&#119;&#46;&#99;&#110;&#115;&#99;&#110;&#x2e;&#x6f;&#114;&#103;">&#x72;&#x6f;&#x6f;&#x74;&#64;&#x77;&#x77;&#119;&#46;&#99;&#110;&#115;&#x63;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -340,25 +340,42 @@ ERROR 1045 (28000): Access denied for user &lsquo;root&rsquo;@&lsquo;localhost&r
 <p>设置了root的密码。</p>
 
 <p>方法2
-{% codeblock %}</p>
-
-<h1>/etc/init.d/mysql stop</h1>
-
-<h1>mysqld_safe &mdash;user=mysql &mdash;skip-grant-tables &mdash;skip-networking &amp;</h1>
-
-<h1>mysql -u root mysql</h1>
-
-<p>mysql> UPDATE user SET Password=PASSWORD(&lsquo;123456&rsquo;) where USER=&lsquo;root&rsquo;;
-mysql> FLUSH PRIVILEGES;
-mysql> quit</p>
-
-<h1>/etc/init.d/mysql restart</h1>
-
-<h1>mysql -uroot -p</h1>
-
-<p>Enter password: &lt;输入新设的密码newpassword>
-mysql>　
-{% endcodeblock %}</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>/etc/init.d/mysql stop&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>mysqld_safe &mdash;user=mysql &mdash;skip-grant-tables &mdash;skip-networking &amp;&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>mysql -u root mysql&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>mysql> UPDATE user SET Password=PASSWORD(&lsquo;123456&rsquo;) where USER=&lsquo;root&rsquo;;
+</span><span class='line'>mysql> FLUSH PRIVILEGES;
+</span><span class='line'>mysql> quit&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>/etc/init.d/mysql restart&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>mysql -uroot -p&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>Enter password: &lt;输入新设的密码newpassword>
+</span><span class='line'>mysql>　</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>方法3：
 MySQL安装之后，root的密码是空的。为了提高安全性有必要给root加上密码。

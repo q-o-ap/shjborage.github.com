@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-08-22T11:25:41+08:00</updated>
+  <updated>2013-08-22T15:18:55+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ iOS 权限管理-Best Practices for Maintaining User Privacy]]></title>
+    <link href="http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/"/>
+    <updated>2013-08-22T14:58:00+08:00</updated>
+    <id>http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy</id>
+    <content type="html"><![CDATA[<p>从Notification的开关入手，发现了统一给出的入口。
+从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）</p>
+
+<p>来正文</p>
+
+<h4>Best Practices for Maintaining User Privacy</h4>
+
+<p>Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.</p>
+
+<p>You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:</p>
+
+<p>Review guidelines from government or industry sources, including the following documents:</p>
+
+<p>The Federal Trade Commission’s report on mobile privacy: Mobile Privacy Disclosures: Building Trust Through Transparency.</p>
+
+<p>The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: <a href="http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf">http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf</a></p>
+
+<p>The California State Attorney General’s recommendations for mobile privacy: Privacy on the Go: Recommendations for the Mobile Ecosystem</p>
+
+<p>These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
+Request access to user or device data that is protected by the iOS system authorization settings at the time the data is needed. Consider supplying a usage description string in your app’s Info.plist file explaining why your app needs that data. Data protected by iOS system authorization settings includes location data, contacts, calendar events, reminders, photos, and media; see Table 1-1. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.</p>
+
+<p>Be transparent with users about how their data is going to be used. For example, you should specify a URL for your privacy policy or statement with your iTunes Connect metadata when you submit your app, and you might also want to summarize that policy in your app description.
+For more information about providing your app’s privacy policy in iTunes Connect, see “Adding New Apps” in iTunes Connect Developer Guide</p>
+
+<p>Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
+Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
+Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in “Protecting Data Using On-Disk Encryption”) to store it in an encrypted format. And try to use HTTPS when sending user or device data over the network.</p>
+
+<p>If your app uses the ASIdentifierManager class, you must respect the value of its advertisingTrackingEnabled property. And if that property is set to NO by the user, then use the ASIdentifierManager class only for the following purposes: frequency capping, conversion events, estimating the number of unique users, security and fraud detection, and debugging. Remember the ASIdentifierManager class is to be used only for the purposes of serving advertising. Do not use it as a general advertising cookie or for any other purposes.</p>
+
+<p>If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the UIDevice class. That property was deprecated in iOS 5.0, and starting May 1, 2013 the App Store will no longer accept new apps or app updates that use that identifier. Instead, apps should use the identifierForVendor property of the UIDevice class or the advertisingIdentifier property of the ASIdentifierManager class, as appropriate.</p>
+
+<p>Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.</p>
+
+<p>Table 1-1  Data protected by system authorization settings</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在github上使用octopress]]></title>
@@ -904,20 +950,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#116;&#64;&#x77;&#x77;&#x77;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#114;&#x67;">&#x72;&#x6f;&#111;&#116;&#64;&#119;&#x77;&#119;&#46;&#x63;&#x6e;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#114;&#x6f;&#111;&#x74;&#64;&#x77;&#119;&#x77;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#114;&#111;&#111;&#116;&#64;&#x77;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#110;&#x2e;&#111;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x72;&#x6f;&#111;&#x74;&#x40;&#119;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#111;&#114;&#x67;">&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#x73;&#99;&#110;&#46;&#x6f;&#x72;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#119;&#x77;&#46;&#99;&#110;&#x73;&#99;&#110;&#x2e;&#111;&#114;&#x67;">&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#x63;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#114;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#114;&#111;&#111;&#116;&#x40;&#x77;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#103;">&#x72;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#119;&#x2e;&#x63;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#111;&#111;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#99;&#x6e;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#103;">&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#x6f;&#111;&#116;&#64;&#119;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#119;&#119;&#46;&#99;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#x67;">&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#119;&#119;&#x2e;&#x63;&#110;&#115;&#x63;&#110;&#46;&#111;&#x72;&#x67;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -1470,7 +1516,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#115;&#104;&#106;&#x62;&#111;&#x72;&#x61;&#103;&#101;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#115;&#x68;&#x6a;&#98;&#x6f;&#x72;&#97;&#x67;&#x65;&#64;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#115;&#104;&#x6a;&#x62;&#111;&#x72;&#97;&#x67;&#x65;&#64;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#115;&#x68;&#x6a;&#98;&#x6f;&#x72;&#97;&#103;&#101;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
