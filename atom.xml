@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-08-22T15:38:15+08:00</updated>
+  <updated>2013-08-22T15:42:41+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[ iOS 权限管理-Best Practices for Maintaining User Privacy]]></title>
+    <title type="html"><![CDATA[ iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究]]></title>
     <link href="http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/"/>
     <updated>2013-08-22T14:58:00+08:00</updated>
     <id>http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy</id>
@@ -56,6 +56,36 @@ Take reasonable steps to protect the user and device data that you collect in yo
 <p>Table 1-1  Data protected by system authorization settings</p>
 
 <p><img src="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png"></p>
+
+<h4>本地与Push通知检测研究</h4>
+
+<p>enabledRemoteNotificationTypes
+Returns the types of notifications the application accepts.</p>
+
+<p><em>&ndash; (UIRemoteNotificationType)enabledRemoteNotificationTypes</em></p>
+
+<p>Return Value
+A bit mask whose values indicate the types of notifications the user has requested for the application. See UIRemoteNotificationType for valid bit-mask values.</p>
+
+<p>Discussion
+The values in the returned bit mask indicate the types of notifications currently enabled for the application. These types are first set when the application calls the registerForRemoteNotificationTypes: method to register itself with Apple Push Notification Service. Thereafter, the user may modify these accepted notification types in the Notifications preference of the Settings application. This method returns those initial or modified values. iOS does not display or play notification types specified in the notification payload that are not one of the enabled types. For example, the application might accept icon-badging as a form of notification, but might reject sounds and alert messages, even if they are specified in the notification payload.</p>
+
+<p>Availability
+Available in iOS 3.0 and later.
+See Also
+– unregisterForRemoteNotifications
+Declared In
+UIApplication.h</p>
+
+<p>返回结果强调，用位与判断某个功能是否打开。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+</span><span class='line'>
+</span><span class='line'>BOOL isBadge = rntypes & UIRemoteNotificationTypeBadge;</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
@@ -950,20 +980,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#x72;&#111;&#111;&#x74;&#64;&#x77;&#x77;&#119;&#46;&#x63;&#110;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#x67;">&#114;&#x6f;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#x2e;&#99;&#x6e;&#115;&#x63;&#110;&#46;&#111;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#114;&#111;&#x6f;&#x74;&#64;&#x77;&#x77;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#110;&#x2e;&#111;&#x72;&#103;">&#x72;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#x77;&#x2e;&#x63;&#110;&#115;&#x63;&#110;&#46;&#x6f;&#x72;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x72;&#x6f;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#x6f;&#114;&#x67;">&#114;&#111;&#x6f;&#116;&#x40;&#119;&#119;&#x77;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x72;&#x6f;&#111;&#x74;&#64;&#119;&#x77;&#119;&#46;&#x63;&#110;&#115;&#99;&#x6e;&#x2e;&#111;&#114;&#x67;">&#x72;&#111;&#111;&#116;&#64;&#x77;&#119;&#x77;&#46;&#99;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#x6f;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#114;&#x67;">&#x72;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#114;&#111;&#x6f;&#116;&#64;&#119;&#x77;&#119;&#46;&#99;&#110;&#x73;&#99;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#x6f;&#x6f;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#99;&#110;&#115;&#99;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#114;&#111;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -1516,7 +1546,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#115;&#x68;&#x6a;&#x62;&#x6f;&#x72;&#97;&#x67;&#x65;&#x40;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#x73;&#104;&#106;&#98;&#x6f;&#114;&#x61;&#x67;&#101;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x73;&#104;&#x6a;&#x62;&#111;&#x72;&#x61;&#103;&#x65;&#x40;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x73;&#104;&#106;&#x62;&#x6f;&#x72;&#97;&#x67;&#101;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。

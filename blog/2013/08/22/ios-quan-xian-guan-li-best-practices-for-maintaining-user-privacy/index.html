@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title> iOS 权限管理-Best Practices for Maintaining User Privacy - Saick Blog</title>
+  <title> iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
@@ -84,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS 权限管理-Best Practices for Maintaining User Privacy</h1>
+      <h1 class="entry-title">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</h1>
     
     
       <p class="meta">
@@ -147,6 +147,36 @@ Take reasonable steps to protect the user and device data that you collect in yo
 <p>Table 1-1  Data protected by system authorization settings</p>
 
 <p><img src="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png"></p>
+
+<h4>本地与Push通知检测研究</h4>
+
+<p>enabledRemoteNotificationTypes
+Returns the types of notifications the application accepts.</p>
+
+<p><em>&ndash; (UIRemoteNotificationType)enabledRemoteNotificationTypes</em></p>
+
+<p>Return Value
+A bit mask whose values indicate the types of notifications the user has requested for the application. See UIRemoteNotificationType for valid bit-mask values.</p>
+
+<p>Discussion
+The values in the returned bit mask indicate the types of notifications currently enabled for the application. These types are first set when the application calls the registerForRemoteNotificationTypes: method to register itself with Apple Push Notification Service. Thereafter, the user may modify these accepted notification types in the Notifications preference of the Settings application. This method returns those initial or modified values. iOS does not display or play notification types specified in the notification payload that are not one of the enabled types. For example, the application might accept icon-badging as a form of notification, but might reject sounds and alert messages, even if they are specified in the notification payload.</p>
+
+<p>Availability
+Available in iOS 3.0 and later.
+See Also
+– unregisterForRemoteNotifications
+Declared In
+UIApplication.h</p>
+
+<p>返回结果强调，用位与判断某个功能是否打开。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+</span><span class='line'>
+</span><span class='line'>BOOL isBadge = rntypes & UIRemoteNotificationTypeBadge;</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
@@ -253,7 +283,7 @@ Take reasonable steps to protect the user and device data that you collect in yo
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy</a>
+        <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a>
       </li>
     
       <li class="post">
