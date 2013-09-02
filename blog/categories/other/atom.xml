@@ -4,7 +4,7 @@
   <title><![CDATA[Category: other | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/other/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-02T09:07:15+08:00</updated>
+  <updated>2013-09-02T11:09:55+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -115,6 +115,255 @@ git push origin source
 —–EOF—–</li>
 </ol>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[让Apple TV直接收看中国视频]]></title>
+    <link href="http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/"/>
+    <updated>2013-06-20T14:09:00+08:00</updated>
+    <id>http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin</id>
+    <content type="html"><![CDATA[<h4>工作原理：</h4>
+
+<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
+
+<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
+
+<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
+
+<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
+<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
+
+<h4>没有自己的DNS</h4>
+
+<p>　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，
+　　　即可将Apple TV内置网址指向一个新的网站，达到通过Apple TV直接收看贵国视频的愿望。
+修改DNS如下：
+<code>
+180.153.225.136 电信服务器，适合于南方电信的用户使用。TTVast提供
+210.129.145.150 适合部分联通用户，以及海外用户使用。TTVast提供
+</code>
+　　用私人DNS会轻易被他伪装的银行、淘宝等网站来欺骗你，为了安全，请ATV用户使用上面靠谱的。
+　　请勿用于Apple TV之外的任何设备（如：手机、PC、路由器等），否则后果自负。
+　　</p>
+
+<h4>拥有自己的DNS</h4>
+
+<p>将 <a href="http://trailers.apple.com/appletv/">http://trailers.apple.com/appletv/</a> 路径下的 index.xml 及 application.js转向下面网址的对应文件
+<code>
+http://180.153.225.136:8000/index.xml ttvas提供
+http://210.129.145.150:8000/index.xml ttvas提供
+http://4.appletv3.sinaapp.com/index.php Missde提供 - 目前测试中..
+</code></p>
+
+<p>本程序：Apple TV DNS PHP代码下载：
+<a href="https://code.google.com/p/appletv/downloads/list">https://code.google.com/p/appletv/downloads/list</a></p>
+
+<p>获取音悦台MV下载地址 <a href="http://huoqu.sinaapp.com/video/">http://huoqu.sinaapp.com/video/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Web Div+CSS排版]]></title>
+    <link href="http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban/"/>
+    <updated>2013-06-08T16:08:00+08:00</updated>
+    <id>http://saick.net/blog/2013/06/08/web-div-plus-csspai-ban</id>
+    <content type="html"><![CDATA[<h6>显示效果见源网页：<a href="http://www.java3z.com/cwbwebhome/article/article9/ht26.html">http://www.java3z.com/cwbwebhome/article/article9/ht26.html</a></h6>
+
+<p>用DIV把元素定义为块对象，用CSS设置对象的格式和位置。</p>
+
+<p>CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。以下是几种常用的CSS+DIV的排版技术。</p>
+
+<p>纵向排列元素
+<code>
+用 &lt;div&gt; 标签定义块对象，由于 &lt;div&gt; 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。
+</code></p>
+
+<p>举例：
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;div id="menu">
+</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
+</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
+</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
+</span><span class='line'>&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div>
+<code>
+用 &lt;div&gt; 标签定义块对象，用CSS的 float 属性设置对象的浮动。
+</code>
+举例：
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;div id="box">
+</span><span class='line'>&lt;div id="b1">&lt;/div>
+</span><span class='line'>&lt;div id="b2">&lt;/div>
+</span><span class='line'>&lt;div id="b3">&lt;/div>
+</span><span class='line'>&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>用列表排列元素</p>
+
+<p><code>
+用 &lt;ul&gt; 或 &lt;ol&gt; 标签制作列表，用CSS设置列表项目的效果。这种方法主要用于规则排列的文本块、图片、控件等。
+</code></p>
+
+<p>举例：
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;div class="list1">
+</span><span class='line'>&lt;ul>
+</span><span class='line'>&lt;li>[1]&lt;/li>
+</span><span class='line'>&lt;li>[2]&lt;/li>
+</span><span class='line'>&lt;li>[3]&lt;/li>
+</span><span class='line'>&lt;li>[4]&lt;/li>
+</span><span class='line'>&lt;/ul>
+</span><span class='line'>&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>[1] [2] [3] [4]
+用绝对坐标定位元素</p>
+
+<p>浏览器窗口的左上角坐标为 (0,0)，x 坐标向右，y 坐标向下。</p>
+
+<p>CSS提供了几个位置属性，可以设置对象在页面中的位置。</p>
+
+<p>position：当它取值为 absolute 时，表示对象使用绝对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>z-index：对象的层叠顺序。取值为一个整数。</p>
+
+<p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
+
+<p>举例：
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;div id="m1">&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;div id="m2">&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;div id="m3">&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
+
+<p>用相对坐标定位元素</p>
+
+<p>父对象的左上角坐标为 (0,0)，对象的坐标是相对于父对象的。</p>
+
+<p>position：当它取值为 relative 时，表示对象使用相对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>以上坐标也可理解为相对于父对象的左上角偏移的距离。</p>
+
+<p>注意：用相对坐标定位的对象不允许层叠。此时 z-index 属性无效。</p>
+
+<p>用相对坐标定位对象在实现一些不规则的排列或拼接时有很好的效果。</p>
+
+<p>举例：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;div id="area">
+</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
+</span><span class='line'>&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   

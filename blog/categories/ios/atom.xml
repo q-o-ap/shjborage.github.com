@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-02T09:07:15+08:00</updated>
+  <updated>2013-09-02T11:09:55+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CocoaPods的使用]]></title>
+    <link href="http://saick.net/blog/2013/09/02/cocoapodsde-shi-yong/"/>
+    <updated>2013-09-02T11:00:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/02/cocoapodsde-shi-yong</id>
+    <content type="html"><![CDATA[<h5>问题来源：</h5>
+
+<p>在开发iOS的app时，我们时常需要引用第三方Open Source套件来简化开发，一般情况下，我们可以采用Add Files to的方式将其加入到目前的工程中，但也存在一些问题，比如版本演进的控制问题，当前工程引用的第三方库的清单等。</p>
+
+<h4>什么是CocoaPods？</h4>
+
+<p>CocoaPods是一个依赖关系管理工具，用于管理Objective-C工程项目中各种Library。</p>
+
+<h4>安装CocoaPods</h4>
+
+<p>由于CocoaPods是ruby的gem，需要首先安装RubyGems，mac电脑一般都已经安装好了ruby，但可能需要更新一下你的RubyGems（注意system前面是两个横线）
+<code>
+[plain] view plaincopy
+sudo gem update --system  
+</code>
+安装command line工具
+确保Xcode中安装了Command Line Tools，打开Xcode->Preferences->Downloads->Components，点一下“Install”按钮
+安装CocoaPods</p>
+
+<p>命令行输入：
+<code>
+[plain] view plaincopy
+sudo gem install cocoapods  
+pod setup  
+</code></p>
+
+<p>然后就可以开始使用了。</p>
+
+<p>用pod search Github上的套件名称就可以找到相应的说明，如
+<code>
+[plain] view plaincopy
+pod search nimbus  
+</code></p>
+
+<p>会输出</p>
+
+<p>```
+[plain] view plaincopy
+&ndash;> Nimbus (1.0.0)<br/>
+   An iOS framework whose growth is bounded by O(documentation).<br/>
+   &ndash; Homepage: <a href="http://docs.nimbuskit.info/index.html  ">http://docs.nimbuskit.info/index.html  </a>
+   &ndash; Source:   <a href="https://github.com/jverkoey/nimbus.git  ">https://github.com/jverkoey/nimbus.git  </a>
+   &ndash; Versions: 1.0.0, 0.9.3, 0.9.2, 0.9.1, 0.9.0 [master repo]<br/>
+   &ndash; Sub specs:</p>
+
+<pre><code>     - Nimbus/Core (1.0.0)  
+     - Nimbus/Badge (1.0.0)  
+     - Nimbus/CSS (1.0.0)  
+     - Nimbus/AttributedLabel (1.0.0)  
+     - Nimbus/Interapp (1.0.0)  
+     - Nimbus/Launcher (1.0.0)  
+     - Nimbus/Models (1.0.0)  
+     - Nimbus/NetworkControllers (1.0.0)  
+     - Nimbus/NetworkImage (1.0.0)  
+     - Nimbus/Overview (1.0.0)  
+     - Nimbus/PagingScrollView (1.0.0)  
+     - Nimbus/Photos (1.0.0)  
+     - Nimbus/Operations (1.0.0)  
+     - Nimbus/Operations/JSON (1.0.0)  
+     - Nimbus/WebController (1.0.0)  
+</code></pre>
+
+<p>```</p>
+
+<h3>使用CocoaPods管理第三方库</h3>
+
+<p>在工程目录下，新建一个空白的Podfile文档，然后在里面添加内容</p>
+
+<p><code>
+[plain] view plaincopy
+platform:ios  
+pod 'AFNetworking', '1.1.0'  
+</code></p>
+
+<p>保存时候，开始配置你的工程，终端中输入</p>
+
+<p><code>
+[plain] view plaincopy
+pod install  
+</code></p>
+
+<p>执行完后，CocoaPods在工程目录创建了一个文件夹“Pods”，这个文件夹存放所有依赖的库，另外还创建了一个.workspace文件
+注意：配置好之后必须用.workspace文件打开工程，而不是.xcodeproj.
+后续：</p>
+
+<p>在使用过程中，有可能会遇到类似下面的问题：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>Resolving dependencies for target `default' (iOS 4.3)&lt;br/>
+</span><span class='line'>[!] AFNetworking (1.1.0) is not compatible with iOS 4.3.&lt;br/></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>解决方法，修改Podfile文档
+<code>
+[plain] view plaincopy
+platform:ios, '5.0'  
+</code></p>
+
+<p>以上可参考stackoverflow
+转自：<a href="http://blog.csdn.net/numbbuaa/article/details/8549018">http://blog.csdn.net/numbbuaa/article/details/8549018</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[自定义UITabbarController引发的血案]]></title>
@@ -331,40 +441,6 @@ isEqual:方法首先检查指针的等同性，然后是类的等同性，最后
 
 
 <p>在Cocoa框架的所有isEqualToType:方法中，nil都不是正当的参数，这些方法的实现在接收到nil参数时会抛出例外。然而为了向后兼容，Cocoa框架中的isEqual:方法可以接收nil值，在这种情况下返回NO。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Property 使用注意事项]]></title>
-    <link href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/"/>
-    <updated>2013-05-28T11:04:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang</id>
-    <content type="html"><![CDATA[<ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
-
-<p>```
-&ndash; (id)initWithSomeOriginalString:(NSString *)aString {</p>
-
-<pre><code>self = [super init];
-if (self) {
-    _instanceVariableForCopyProperty = [aString copy];
-}
-return self;
-</code></pre>
-
-<p>}
-```</p>
 ]]></content>
   </entry>
   
