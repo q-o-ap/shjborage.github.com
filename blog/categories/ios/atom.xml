@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-03T12:45:20+08:00</updated>
+  <updated>2013-09-03T13:47:30+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SQLite使用 iOS平台]]></title>
+    <link href="http://saick.net/blog/2013/09/03/sqliteshi-yong-iosping-tai/"/>
+    <updated>2013-09-03T13:35:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/03/sqliteshi-yong-iosping-tai</id>
+    <content type="html"><![CDATA[<h3>不太常用，但很关键命令</h3>
+
+<h4>1.整理数据库：vacuum</h4>
+
+<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
+
+<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
+
+<p>当数据库中的一个对象(表，索引或触发器)被撤销，会留下空白的空间。它使数据库比需要的大小更大，但能加快插入速度。实时的插入和删除会使得数据库文件结构混乱，减慢对数据库内容访问的速度。 VACUUM命令复制主数据库文件到临时数据库并从临时数据库重新载入主数据库，以整理数据库文件。这将除去空白页，使表数据彼此相邻排列，并整理数据库文件结构。不能对附加数据库文件进行以上操作。</p>
+
+<p>若当前有活动事务，该命令无法起作用。对于in-memory数据库，该命令无效。</p>
+
+<p>SQLite3.1中，可以通过使用auto-vacuum模式取代VACUUM命令，使用auto_vacuum pragma开启该模式。
+扩展阅读：<a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+
+<h4>2.导出数据库：.dump</h4>
+
+<p>.output file.sql</p>
+
+<p>.dump</p>
+
+<p>.output stdout</p>
+
+<h4>3.导入数据库：.read 和.import</h4>
+
+<p>.read file.sql</p>
+
+<p>.import [file][table]</p>
+
+<h3>SQLite不支持的常用操作</h3>
+
+<ul>
+<li>1 高级联结：SQlite支持“左外部联结（LEFT OUTER JOIN）”，不支持“右外部联结（RIGHT OUTER JOIN）”和“全外部联结（FULL OUTER JOIN）”。</li>
+<li>2 修改表操作：SQlite支持“重命名表（RENAME TABLE）”，使用“ALTER TABLE给表添加新列”。不支持使用“ALTER TABLE”进行“删除列（DROP COLUMN）”，“修改列（ALTER COLUMN）”，“添加约束（ADD CONSTRAINT）”等。</li>
+<li>3 触发器支持不完整：SQlite支持“行级触发器（FOR EACH ROW）”，不支持“语句级触发器（FOR EACH STATEMENT）”。</li>
+<li>4 视图只能读不能写：SQlite不能在一个视图上使用“删除（DELETE）”，“插入（INSERT）”和“更新（UPDATE）”语句。但是可以创建一个触发器，当对表进行“DELETE”，“INSERT”或者“UPDATE”操作时激活该触发器，在该触发器的body部分做所需的操作。</li>
+<li>5 不支持GRANT和REVOKE语句：因为SQlite只是去读写普通的磁盘文件，所以唯一可以应用到SQlite数据库的访问权限（控制），只有底层操作系统的普通的文件访问权限。所以那些client/server模式的数据库上通常具有的GRANT和REVOKE命令，SQlite并不支持，因为它们对于“嵌入式的数据库引擎（embedded database engine）”毫无意义。</li>
+</ul>
+
+
+<h4>官方SQL语法</h4>
+
+<p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用CocoaPods进行iOS程序的开源库依懒管理]]></title>
@@ -389,80 +440,6 @@ platform:ios, '5.0'
 <a href="http://www.cnblogs.com/mofish/archive/2011/07/18/2109565.html">http://www.cnblogs.com/mofish/archive/2011/07/18/2109565.html</a></p>
 
 <p>国内领先的Hybrid App框架 AppCan:   <a href="http://www.appcan.cn/">http://www.appcan.cn/</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究]]></title>
-    <link href="http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/"/>
-    <updated>2013-08-22T14:58:00+08:00</updated>
-    <id>http://saick.net/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy</id>
-    <content type="html"><![CDATA[<p>从Notification的开关入手，发现了统一给出的入口。
-从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）</p>
-
-<p>来正文</p>
-
-<h4>Best Practices for Maintaining User Privacy</h4>
-
-<p>Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.</p>
-
-<p>You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:</p>
-
-<p>Review guidelines from government or industry sources, including the following documents:</p>
-
-<p>The Federal Trade Commission’s report on mobile privacy: Mobile Privacy Disclosures: Building Trust Through Transparency.</p>
-
-<p>The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: <a href="http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf">http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf</a></p>
-
-<p>The California State Attorney General’s recommendations for mobile privacy: Privacy on the Go: Recommendations for the Mobile Ecosystem</p>
-
-<p>These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
-Request access to user or device data that is protected by the iOS system authorization settings at the time the data is needed. Consider supplying a usage description string in your app’s Info.plist file explaining why your app needs that data. Data protected by iOS system authorization settings includes location data, contacts, calendar events, reminders, photos, and media; see Table 1-1. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.</p>
-
-<p>Be transparent with users about how their data is going to be used. For example, you should specify a URL for your privacy policy or statement with your iTunes Connect metadata when you submit your app, and you might also want to summarize that policy in your app description.
-For more information about providing your app’s privacy policy in iTunes Connect, see “Adding New Apps” in iTunes Connect Developer Guide</p>
-
-<p>Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
-Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
-Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in “Protecting Data Using On-Disk Encryption”) to store it in an encrypted format. And try to use HTTPS when sending user or device data over the network.</p>
-
-<p>If your app uses the ASIdentifierManager class, you must respect the value of its advertisingTrackingEnabled property. And if that property is set to NO by the user, then use the ASIdentifierManager class only for the following purposes: frequency capping, conversion events, estimating the number of unique users, security and fraud detection, and debugging. Remember the ASIdentifierManager class is to be used only for the purposes of serving advertising. Do not use it as a general advertising cookie or for any other purposes.</p>
-
-<p>If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the UIDevice class. That property was deprecated in iOS 5.0, and starting May 1, 2013 the App Store will no longer accept new apps or app updates that use that identifier. Instead, apps should use the identifierForVendor property of the UIDevice class or the advertisingIdentifier property of the ASIdentifierManager class, as appropriate.</p>
-
-<p>Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.</p>
-
-<p>Table 1-1  Data protected by system authorization settings</p>
-
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png">http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png</a>"></p>
-
-<h4>本地与Push通知检测研究</h4>
-
-<p>enabledRemoteNotificationTypes
-Returns the types of notifications the application accepts.</p>
-
-<p><em>&ndash; (UIRemoteNotificationType)enabledRemoteNotificationTypes</em></p>
-
-<p>Return Value
-A bit mask whose values indicate the types of notifications the user has requested for the application. See UIRemoteNotificationType for valid bit-mask values.</p>
-
-<p>Discussion
-The values in the returned bit mask indicate the types of notifications currently enabled for the application. These types are first set when the application calls the registerForRemoteNotificationTypes: method to register itself with Apple Push Notification Service. Thereafter, the user may modify these accepted notification types in the Notifications preference of the Settings application. This method returns those initial or modified values. iOS does not display or play notification types specified in the notification payload that are not one of the enabled types. For example, the application might accept icon-badging as a form of notification, but might reject sounds and alert messages, even if they are specified in the notification payload.</p>
-
-<p>Availability
-Available in iOS 3.0 and later.
-See Also
-– unregisterForRemoteNotifications
-Declared In
-UIApplication.h</p>
-
-<p>返回结果强调，用位与判断某个功能是否打开。</p>
-
-<p>```
-NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];</p>
-
-<p>BOOL isBadge = rntypes &amp; UIRemoteNotificationTypeBadge;
-```</p>
 ]]></content>
   </entry>
   

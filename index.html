@@ -9,10 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="前言 每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如 Java: maven，Ivy
-Ruby: gems
-Python: pip, easy_install
-Nodejs: npm 随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫： &hellip;">
+  <meta name="description" content="不太常用，但很关键命令 1.整理数据库：vacuum VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize() &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,6 +80,86 @@ Nodejs: npm 随着iOS开发者的增多，业界也出现了为iOS程序提供�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-03T13:35:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
+        
+         | <a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>不太常用，但很关键命令</h3>
+
+<h4>1.整理数据库：vacuum</h4>
+
+<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
+
+<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
+
+<p>当数据库中的一个对象(表，索引或触发器)被撤销，会留下空白的空间。它使数据库比需要的大小更大，但能加快插入速度。实时的插入和删除会使得数据库文件结构混乱，减慢对数据库内容访问的速度。 VACUUM命令复制主数据库文件到临时数据库并从临时数据库重新载入主数据库，以整理数据库文件。这将除去空白页，使表数据彼此相邻排列，并整理数据库文件结构。不能对附加数据库文件进行以上操作。</p>
+
+<p>若当前有活动事务，该命令无法起作用。对于in-memory数据库，该命令无效。</p>
+
+<p>SQLite3.1中，可以通过使用auto-vacuum模式取代VACUUM命令，使用auto_vacuum pragma开启该模式。
+扩展阅读：<a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+
+<h4>2.导出数据库：.dump</h4>
+
+<p>.output file.sql</p>
+
+<p>.dump</p>
+
+<p>.output stdout</p>
+
+<h4>3.导入数据库：.read 和.import</h4>
+
+<p>.read file.sql</p>
+
+<p>.import [file][table]</p>
+
+<h3>SQLite不支持的常用操作</h3>
+
+<ul>
+<li>1 高级联结：SQlite支持“左外部联结（LEFT OUTER JOIN）”，不支持“右外部联结（RIGHT OUTER JOIN）”和“全外部联结（FULL OUTER JOIN）”。</li>
+<li>2 修改表操作：SQlite支持“重命名表（RENAME TABLE）”，使用“ALTER TABLE给表添加新列”。不支持使用“ALTER TABLE”进行“删除列（DROP COLUMN）”，“修改列（ALTER COLUMN）”，“添加约束（ADD CONSTRAINT）”等。</li>
+<li>3 触发器支持不完整：SQlite支持“行级触发器（FOR EACH ROW）”，不支持“语句级触发器（FOR EACH STATEMENT）”。</li>
+<li>4 视图只能读不能写：SQlite不能在一个视图上使用“删除（DELETE）”，“插入（INSERT）”和“更新（UPDATE）”语句。但是可以创建一个触发器，当对表进行“DELETE”，“INSERT”或者“UPDATE”操作时激活该触发器，在该触发器的body部分做所需的操作。</li>
+<li>5 不支持GRANT和REVOKE语句：因为SQlite只是去读写普通的磁盘文件，所以唯一可以应用到SQlite数据库的访问权限（控制），只有底层操作系统的普通的文件访问权限。所以那些client/server模式的数据库上通常具有的GRANT和REVOKE命令，SQlite并不支持，因为它们对于“嵌入式的数据库引擎（embedded database engine）”毫无意义。</li>
+</ul>
+
+
+<h4>官方SQL语法</h4>
+
+<p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1239,299 +1316,6 @@ JSP代码</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/08/web-div-plus-csspai-ban/">Web Div+CSS排版</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-08T16:08:00+08:00" pubdate data-updated="true">Jun 8<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/06/08/web-div-plus-csspai-ban/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h6>显示效果见源网页：<a href="http://www.java3z.com/cwbwebhome/article/article9/ht26.html">http://www.java3z.com/cwbwebhome/article/article9/ht26.html</a></h6>
-
-<p>用DIV把元素定义为块对象，用CSS设置对象的格式和位置。</p>
-
-<p>CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。以下是几种常用的CSS+DIV的排版技术。</p>
-
-<p>纵向排列元素</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，由于 &lt;div&gt; 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#menu {
-</span><span class='line'>   width: 100px; font-size: 15px;
-</span><span class='line'>}
-</span><span class='line'>.dd {
-</span><span class='line'>   border: 1px dotted #0000FF; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; margin-bottom: 3px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="menu">
-</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
-</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
-</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，用CSS的 float 属性设置对象的浮动。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#box {
-</span><span class='line'>   height: 110px;
-</span><span class='line'>}
-</span><span class='line'>#b1 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left;
-</span><span class='line'>}
-</span><span class='line'>#b2 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: none; margin-left: 5px; margin-right: 5px;
-</span><span class='line'>}
-</span><span class='line'>#b3 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: right;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="box">
-</span><span class='line'>&lt;div id="b1">&lt;/div>
-</span><span class='line'>&lt;div id="b2">&lt;/div>
-</span><span class='line'>&lt;div id="b3">&lt;/div>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>用列表排列元素</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;ul&gt; 或 &lt;ol&gt; 标签制作列表，用CSS设置列表项目的效果。这种方法主要用于规则排列的文本块、图片、控件等。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>.list1 {
-</span><span class='line'>   height: 20px;
-</span><span class='line'>}
-</span><span class='line'>.list1 ul {
-</span><span class='line'>   list-style-type: none; margin: 0px;
-</span><span class='line'>}
-</span><span class='line'>.list1 li {
-</span><span class='line'>   float: left; margin-right: 5px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div class="list1">
-</span><span class='line'>&lt;ul>
-</span><span class='line'>&lt;li>[1]&lt;/li>
-</span><span class='line'>&lt;li>[2]&lt;/li>
-</span><span class='line'>&lt;li>[3]&lt;/li>
-</span><span class='line'>&lt;li>[4]&lt;/li>
-</span><span class='line'>&lt;/ul>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>[1] [2] [3] [4]
-用绝对坐标定位元素</p>
-
-<p>浏览器窗口的左上角坐标为 (0,0)，x 坐标向右，y 坐标向下。</p>
-
-<p>CSS提供了几个位置属性，可以设置对象在页面中的位置。</p>
-
-<p>position：当它取值为 absolute 时，表示对象使用绝对坐标定位。</p>
-
-<p>left、top：对象的左上角坐标。</p>
-
-<p>right、bottom：对象的右下角坐标。</p>
-
-<p>z-index：对象的层叠顺序。取值为一个整数。</p>
-
-<p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#m1 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 50px; top: 10px; z-index: 1;
-</span><span class='line'>}
-</span><span class='line'>#m2 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 185px; top: 10px; z-index: 2;
-</span><span class='line'>}
-</span><span class='line'>#m3 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 320px; top: 10px; z-index: 3;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="m1">&lt;/div>
-</span><span class='line'>&lt;div id="m2">&lt;/div>
-</span><span class='line'>&lt;div id="m3">&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
-
-<p>用相对坐标定位元素</p>
-
-<p>父对象的左上角坐标为 (0,0)，对象的坐标是相对于父对象的。</p>
-
-<p>position：当它取值为 relative 时，表示对象使用相对坐标定位。</p>
-
-<p>left、top：对象的左上角坐标。</p>
-
-<p>right、bottom：对象的右下角坐标。</p>
-
-<p>以上坐标也可理解为相对于父对象的左上角偏移的距离。</p>
-
-<p>注意：用相对坐标定位的对象不允许层叠。此时 z-index 属性无效。</p>
-
-<p>用相对坐标定位对象在实现一些不规则的排列或拼接时有很好的效果。</p>
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#area {
-</span><span class='line'>   width: 270px; height: 70px; border: 1px solid #0000FF;
-</span><span class='line'>}
-</span><span class='line'>#h1 {
-</span><span class='line'>   position: relative; left: 85px; top: 10px;
-</span><span class='line'>}
-</span><span class='line'>#h2 {
-</span><span class='line'>   position: relative; left: 15px; top: 32px;
-</span><span class='line'>}
-</span><span class='line'>#h3 {
-</span><span class='line'>   position: relative; left: 75px; top: 40px;
-</span><span class='line'>}
-</span><span class='line'>#h4 {
-</span><span class='line'>   position: relative; left: 115px; top: 25px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="area">
-</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1547,12 +1331,12 @@ JSP代码</p>
   <h1>Categories</h1>
   <ul id="categories">
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
-<li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (2)</a></li>
 <li class='category'><a href='/blog/categories/flashlight/'>Flashlight (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (10)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (11)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -1563,6 +1347,10 @@ JSP代码</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a>
@@ -1578,10 +1366,6 @@ JSP代码</p>
     
       <li class="post">
         <a href="/blog/2013/09/02/hybird-appyan-jiu/">Hybird App研究</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a>
       </li>
     
   </ul>

@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发 事件经过： 正常开发，branch:master
-在Eclipse中，使用插件checkout某版本出来 &hellip;">
+  <meta name="description" content="显示效果见源网页：http://www.java3z.com/cwbwebhome/article/article9/ht26.html 用DIV把元素定义为块对象，用CSS设置对象的格式和位置。 CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +80,299 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/08/web-div-plus-csspai-ban/">Web Div+CSS排版</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-08T16:08:00+08:00" pubdate data-updated="true">Jun 8<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/08/web-div-plus-csspai-ban/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h6>显示效果见源网页：<a href="http://www.java3z.com/cwbwebhome/article/article9/ht26.html">http://www.java3z.com/cwbwebhome/article/article9/ht26.html</a></h6>
+
+<p>用DIV把元素定义为块对象，用CSS设置对象的格式和位置。</p>
+
+<p>CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。以下是几种常用的CSS+DIV的排版技术。</p>
+
+<p>纵向排列元素</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，由于 &lt;div&gt; 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。</span></code></pre></td></tr></table></div></figure>
+
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#menu {
+</span><span class='line'>   width: 100px; font-size: 15px;
+</span><span class='line'>}
+</span><span class='line'>.dd {
+</span><span class='line'>   border: 1px dotted #0000FF; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; margin-bottom: 3px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="menu">
+</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
+</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
+</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，用CSS的 float 属性设置对象的浮动。</span></code></pre></td></tr></table></div></figure>
+
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#box {
+</span><span class='line'>   height: 110px;
+</span><span class='line'>}
+</span><span class='line'>#b1 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left;
+</span><span class='line'>}
+</span><span class='line'>#b2 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: none; margin-left: 5px; margin-right: 5px;
+</span><span class='line'>}
+</span><span class='line'>#b3 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: right;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="box">
+</span><span class='line'>&lt;div id="b1">&lt;/div>
+</span><span class='line'>&lt;div id="b2">&lt;/div>
+</span><span class='line'>&lt;div id="b3">&lt;/div>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>用列表排列元素</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;ul&gt; 或 &lt;ol&gt; 标签制作列表，用CSS设置列表项目的效果。这种方法主要用于规则排列的文本块、图片、控件等。</span></code></pre></td></tr></table></div></figure>
+
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>.list1 {
+</span><span class='line'>   height: 20px;
+</span><span class='line'>}
+</span><span class='line'>.list1 ul {
+</span><span class='line'>   list-style-type: none; margin: 0px;
+</span><span class='line'>}
+</span><span class='line'>.list1 li {
+</span><span class='line'>   float: left; margin-right: 5px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div class="list1">
+</span><span class='line'>&lt;ul>
+</span><span class='line'>&lt;li>[1]&lt;/li>
+</span><span class='line'>&lt;li>[2]&lt;/li>
+</span><span class='line'>&lt;li>[3]&lt;/li>
+</span><span class='line'>&lt;li>[4]&lt;/li>
+</span><span class='line'>&lt;/ul>
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>[1] [2] [3] [4]
+用绝对坐标定位元素</p>
+
+<p>浏览器窗口的左上角坐标为 (0,0)，x 坐标向右，y 坐标向下。</p>
+
+<p>CSS提供了几个位置属性，可以设置对象在页面中的位置。</p>
+
+<p>position：当它取值为 absolute 时，表示对象使用绝对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>z-index：对象的层叠顺序。取值为一个整数。</p>
+
+<p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#m1 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 50px; top: 10px; z-index: 1;
+</span><span class='line'>}
+</span><span class='line'>#m2 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 185px; top: 10px; z-index: 2;
+</span><span class='line'>}
+</span><span class='line'>#m3 {
+</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 320px; top: 10px; z-index: 3;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="m1">&lt;/div>
+</span><span class='line'>&lt;div id="m2">&lt;/div>
+</span><span class='line'>&lt;div id="m3">&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
+
+<p>用相对坐标定位元素</p>
+
+<p>父对象的左上角坐标为 (0,0)，对象的坐标是相对于父对象的。</p>
+
+<p>position：当它取值为 relative 时，表示对象使用相对坐标定位。</p>
+
+<p>left、top：对象的左上角坐标。</p>
+
+<p>right、bottom：对象的右下角坐标。</p>
+
+<p>以上坐标也可理解为相对于父对象的左上角偏移的距离。</p>
+
+<p>注意：用相对坐标定位的对象不允许层叠。此时 z-index 属性无效。</p>
+
+<p>用相对坐标定位对象在实现一些不规则的排列或拼接时有很好的效果。</p>
+
+<p>举例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
+</span><span class='line'>#area {
+</span><span class='line'>   width: 270px; height: 70px; border: 1px solid #0000FF;
+</span><span class='line'>}
+</span><span class='line'>#h1 {
+</span><span class='line'>   position: relative; left: 85px; top: 10px;
+</span><span class='line'>}
+</span><span class='line'>#h2 {
+</span><span class='line'>   position: relative; left: 15px; top: 32px;
+</span><span class='line'>}
+</span><span class='line'>#h3 {
+</span><span class='line'>   position: relative; left: 75px; top: 40px;
+</span><span class='line'>}
+</span><span class='line'>#h4 {
+</span><span class='line'>   position: relative; left: 115px; top: 25px;
+</span><span class='line'>}
+</span><span class='line'>&lt;/style>
+</span><span class='line'>&lt;div id="area">
+</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
+</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
+</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -375,20 +667,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#x72;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#114;&#x6f;&#111;&#x74;&#64;&#x77;&#x77;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#114;&#103;">&#114;&#x6f;&#111;&#x74;&#64;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#114;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#111;&#111;&#116;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#x6f;&#x74;&#64;&#x77;&#x77;&#x77;&#46;&#99;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#110;&#x73;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#111;&#116;&#x40;&#119;&#119;&#x77;&#46;&#x63;&#110;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#x67;">&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#110;&#46;&#111;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x72;&#x6f;&#x6f;&#116;&#64;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;">&#x72;&#111;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -1086,7 +1378,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#115;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#103;&#x65;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#x67;&#101;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x73;&#104;&#106;&#98;&#111;&#x72;&#97;&#103;&#101;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#104;&#x6a;&#98;&#x6f;&#114;&#97;&#103;&#x65;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -1324,62 +1616,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">iOS 开发常见低级错误</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
-
-<p>Aug 5, 2013</p>
-
-<ul>
-<li><h3>如果使用C++代码混编，找不到iostream等</h3>
-
-<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
-</ul>
-
-
-<p>May 28, 2013</p>
-
-<ul>
-<li><h3>不要调用[super  release]</h3>
-
-<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1397,12 +1633,12 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
   <h1>Categories</h1>
   <ul id="categories">
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
-<li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (2)</a></li>
 <li class='category'><a href='/blog/categories/flashlight/'>Flashlight (1)</a></li>
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (10)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (11)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -1413,6 +1649,10 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a>
@@ -1428,10 +1668,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
       <li class="post">
         <a href="/blog/2013/09/02/hybird-appyan-jiu/">Hybird App研究</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a>
       </li>
     
   </ul>

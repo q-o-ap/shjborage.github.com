@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-03T12:45:20+08:00</updated>
+  <updated>2013-09-03T13:47:30+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SQLite使用 iOS平台]]></title>
+    <link href="http://saick.net/blog/2013/09/03/sqliteshi-yong-iosping-tai/"/>
+    <updated>2013-09-03T13:35:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/03/sqliteshi-yong-iosping-tai</id>
+    <content type="html"><![CDATA[<h3>不太常用，但很关键命令</h3>
+
+<h4>1.整理数据库：vacuum</h4>
+
+<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
+
+<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
+
+<p>当数据库中的一个对象(表，索引或触发器)被撤销，会留下空白的空间。它使数据库比需要的大小更大，但能加快插入速度。实时的插入和删除会使得数据库文件结构混乱，减慢对数据库内容访问的速度。 VACUUM命令复制主数据库文件到临时数据库并从临时数据库重新载入主数据库，以整理数据库文件。这将除去空白页，使表数据彼此相邻排列，并整理数据库文件结构。不能对附加数据库文件进行以上操作。</p>
+
+<p>若当前有活动事务，该命令无法起作用。对于in-memory数据库，该命令无效。</p>
+
+<p>SQLite3.1中，可以通过使用auto-vacuum模式取代VACUUM命令，使用auto_vacuum pragma开启该模式。
+扩展阅读：<a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+
+<h4>2.导出数据库：.dump</h4>
+
+<p>.output file.sql</p>
+
+<p>.dump</p>
+
+<p>.output stdout</p>
+
+<h4>3.导入数据库：.read 和.import</h4>
+
+<p>.read file.sql</p>
+
+<p>.import [file][table]</p>
+
+<h3>SQLite不支持的常用操作</h3>
+
+<ul>
+<li>1 高级联结：SQlite支持“左外部联结（LEFT OUTER JOIN）”，不支持“右外部联结（RIGHT OUTER JOIN）”和“全外部联结（FULL OUTER JOIN）”。</li>
+<li>2 修改表操作：SQlite支持“重命名表（RENAME TABLE）”，使用“ALTER TABLE给表添加新列”。不支持使用“ALTER TABLE”进行“删除列（DROP COLUMN）”，“修改列（ALTER COLUMN）”，“添加约束（ADD CONSTRAINT）”等。</li>
+<li>3 触发器支持不完整：SQlite支持“行级触发器（FOR EACH ROW）”，不支持“语句级触发器（FOR EACH STATEMENT）”。</li>
+<li>4 视图只能读不能写：SQlite不能在一个视图上使用“删除（DELETE）”，“插入（INSERT）”和“更新（UPDATE）”语句。但是可以创建一个触发器，当对表进行“DELETE”，“INSERT”或者“UPDATE”操作时激活该触发器，在该触发器的body部分做所需的操作。</li>
+<li>5 不支持GRANT和REVOKE语句：因为SQlite只是去读写普通的磁盘文件，所以唯一可以应用到SQlite数据库的访问权限（控制），只有底层操作系统的普通的文件访问权限。所以那些client/server模式的数据库上通常具有的GRANT和REVOKE命令，SQlite并不支持，因为它们对于“嵌入式的数据库引擎（embedded database engine）”毫无意义。</li>
+</ul>
+
+
+<h4>官方SQL语法</h4>
+
+<p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用CocoaPods进行iOS程序的开源库依懒管理]]></title>
@@ -1410,20 +1461,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#x72;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#114;&#x6f;&#111;&#x74;&#64;&#x77;&#x77;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#114;&#103;">&#114;&#x6f;&#111;&#x74;&#64;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#114;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#111;&#111;&#116;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#x6f;&#x74;&#64;&#x77;&#x77;&#x77;&#46;&#99;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#110;&#x73;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#111;&#116;&#x40;&#119;&#119;&#x77;&#46;&#x63;&#110;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#x67;">&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#110;&#46;&#111;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x72;&#x6f;&#x6f;&#116;&#64;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;">&#x72;&#111;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -1976,7 +2027,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#115;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#103;&#x65;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#x67;&#101;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x73;&#104;&#106;&#98;&#111;&#x72;&#97;&#103;&#101;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#104;&#x6a;&#98;&#x6f;&#114;&#97;&#103;&#x65;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -2149,33 +2200,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
 
 <p></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS 开发常见低级错误]]></title>
-    <link href="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/"/>
-    <updated>2013-05-28T10:19:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu</id>
-    <content type="html"><![CDATA[<p><strong><em>不断更新中。。。</em></strong></p>
-
-<p>Aug 5, 2013</p>
-
-<ul>
-<li><h3>如果使用C++代码混编，找不到iostream等</h3>
-
-<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
-</ul>
-
-
-<p>May 28, 2013</p>
-
-<ul>
-<li><h3>不要调用[super  release]</h3>
-
-<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
-</ul>
-
 ]]></content>
   </entry>
   
