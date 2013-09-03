@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-02T11:09:55+08:00</updated>
+  <updated>2013-09-03T12:45:20+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,194 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用CocoaPods进行iOS程序的开源库依懒管理]]></title>
+    <link href="http://saick.net/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/"/>
+    <updated>2013-09-03T11:49:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li</id>
+    <content type="html"><![CDATA[<h3>前言</h3>
+
+<p>每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如</p>
+
+<ul>
+<li>Java: maven，Ivy</li>
+<li>Ruby: gems</li>
+<li>Python: pip, easy_install</li>
+<li>Nodejs: npm</li>
+</ul>
+
+
+<p>随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫：CocoaPods。</p>
+
+<h3>CocoaPods简介</h3>
+
+<p>CocoaPods是一个负责管理iOS项目中第三方开源代码的工具。CocoaPods项目的源码在Github上管理。该项目开始于2011年8月12日，经过一年多的发展，现在已经超过1000次提交，并且持续保持活跃更新。开发iOS项目不可避免地要使用第三方开源库，CocoaPods的出现使得我们可以节省设置和更新第三方开源库的时间。</p>
+
+<p>拿我之前开发的粉笔网iPhone客户端为例，其使用了14个第三方开源库。在没有使用CocoaPods以前，我需要：</p>
+
+<p>把这些第三方开源库的相关文件复制到项目中，或者设置成git的submodule，然后这些开源库通常需要依赖系统的一些framework，我需要手工地将这些framework一一增加到项目依赖中，比如ASI网络库就需要增加以下framework: CFNetwork, SystemConfiguration, MobileCoreServices, CoreGraphics and zlib。</p>
+
+<p>对于RegexKitLite这个正则表达式库，我还需要设置-licucore的编译参数
+手工管理这些依赖包的更新。</p>
+
+<p>这些体力活虽然简单，但毫无技术含量并且浪费时间。在使用CocoaPods之后，我只需要将用到的第三方开源库放到一个名为Podfile的文件中，然后执行pod install。CocoaPods就会自动将这些第三方开源库的源码下载下来，并且为我的工程设置好相应的系统依赖和编译参数。</p>
+
+<h3>CocoaPods的安装和使用介绍</h3>
+
+<h4>安装</h4>
+
+<p>安装方式异常简单, Mac下都自带ruby，使用ruby的gem命令即可下载安装：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install cocoapods
+</span><span class='line'>$ pod setup</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>使用</h4>
+
+<p>使用时需要新建一个名为Podfile的文件，以如下格式，将依赖的库名字依次列在文件中即可</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>eachability',  '~&gt; 3.0.0'
+</span><span class='line'>pod 'ASIHTTPRequest'
+</span><span class='line'>pod 'RegexKitLite'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后你将编辑好的Podfile文件放到你的项目根目录中，执行如下命令即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd "your project home"
+</span><span class='line'>pod install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在，你的所有第三方库都已经下载完成并且设置好了编译参数和依赖，你只需要记住如下2点即可：</p>
+
+<p>使用CocoaPods生成的 .xcworkspace 文件来打开工程，而不是以前的 .xcodeproj 文件。
+每次更改了Podfile文件，你需要重新执行一次pod install命令。</p>
+
+<h4>查找第三方库</h4>
+
+<p>你如果不知道cocoaPods管理的库中，是否有你想要的库，那么你可以通过pod search命令进行查找，以下是我用pod search json查找到的所有可用的库：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod search json
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> AnyJSON (0.0.1)
+</span><span class='line'>   Encode / Decode JSON by any means possible.
+</span><span class='line'>   - Homepage: https://github.com/mattt/AnyJSON
+</span><span class='line'>   - Source:   https://github.com/mattt/AnyJSON.git
+</span><span class='line'>   - Versions: 0.0.1 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> JSONKit (1.5pre)
+</span><span class='line'>   A Very High Performance Objective-C JSON Library.
+</span><span class='line'>   - Homepage: https://github.com/johnezang/JSONKit
+</span><span class='line'>   - Source:   git://github.com/johnezang/JSONKit.git
+</span><span class='line'>   - Versions: 1.5pre, 1.4 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> MTJSONDictionary (0.0.4)
+</span><span class='line'>   An NSDictionary category for when you're working with it converting to/from JSON. DEPRECATED, use MTJSONUtils
+</span><span class='line'>   instead.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Versions: 0.0.4, 0.0.3, 0.0.2 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> MTJSONUtils (0.1.0)
+</span><span class='line'>   An NSObject category for working with JSON.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Versions: 0.1.0, 0.0.1 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> SBJson (3.1.1)
+</span><span class='line'>   This library implements strict JSON parsing and generation in Objective-C.
+</span><span class='line'>   - Homepage: http://stig.github.com/json-framework/
+</span><span class='line'>   - Source:   https://github.com/stig/json-framework.git
+</span><span class='line'>   - Versions: 3.1.1, 3.1, 3.0.4, 2.2.3 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> TouchJSON (1.0)
+</span><span class='line'>   TouchJSON is an Objective-C based parser and generator for JSON encoded data.
+</span><span class='line'>   - Homepage: https://github.com/TouchCode/TouchJSON
+</span><span class='line'>   - Source:   https://github.com/TouchCode/TouchJSON.git
+</span><span class='line'>   - Versions: 1.0 [master repo]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>生成第三方库的帮助文档</p>
+
+<p>如果你想让CococaPods帮你生成第三方库的帮助文档，并集成到XCode中，那么用brew安装appledoc即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install appledoc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关于appledoc，我在今年初的另一篇博客《使用Objective-C的文档生成工具:appledoc》中有专门介绍。它最大的优点是可以将帮助文档集成到XCode中，这样你在敲代码的时候，按住opt键单击类名或方法名，就可以显示出相应的帮助文档。</p>
+
+<h3>原理</h3>
+
+<p>大概研究了一下CocoaPods的原理，它是将所有的依赖库都放到另一个名为Pods项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。发现的一些技术细节有：</p>
+
+<p>Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。
+对于资源文件，CocoaPods提供了一个名为Pods-resources.sh的bash脚本，该脚本在每次项目编译的时候都会执行，将第三方库的各种资源文件复制到目标目录中。
+CocoaPods通过一个名为Pods.xcconfig的文件来在编译时设置所有的依赖和参数。
+Have fun!</p>
+
+<p>转自：
+Posted by 唐巧 Dec 2nd, 2012   iOS
+自由转载-非商用-非衍生-保持署名 | Creative Commons BY-NC-ND 3.0</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CocoaPods的使用]]></title>
@@ -1222,20 +1410,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#114;&#x6f;&#x6f;&#116;&#x40;&#119;&#x77;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#x72;&#x67;">&#x72;&#111;&#x6f;&#x74;&#64;&#x77;&#x77;&#119;&#x2e;&#x63;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#x72;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#x2e;&#99;&#x6e;&#115;&#x63;&#110;&#x2e;&#x6f;&#x72;&#103;">&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#x2e;&#99;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#114;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#114;&#x6f;&#111;&#x74;&#64;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;">&#x72;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#119;&#46;&#99;&#110;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#110;&#x73;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#111;&#116;&#x40;&#119;&#119;&#x77;&#46;&#x63;&#110;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#119;&#x77;&#46;&#99;&#x6e;&#x73;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#x72;&#111;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#114;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#110;&#46;&#111;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -1788,7 +1976,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x73;&#104;&#106;&#x62;&#x6f;&#114;&#x61;&#103;&#101;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x73;&#x68;&#106;&#x62;&#111;&#x72;&#x61;&#x67;&#101;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#115;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#103;&#x65;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#x67;&#101;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -1987,172 +2175,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
 <p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
 </ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS block 编程]]></title>
-    <link href="http://saick.net/blog/2013/05/28/ios-block-bian-cheng/"/>
-    <updated>2013-05-28T09:57:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/ios-block-bian-cheng</id>
-    <content type="html"><![CDATA[<h2>block</h2>
-
-<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
-
-<h4>声明block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>定义block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock = ^{
-</span><span class='line'>        NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>声明和定义在一起：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void) = ^{
-</span><span class='line'>    NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>调用block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock();</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>带返回值和参数的block:</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>double (^multiplyTwoValues)(double, double) =
-</span><span class='line'>                              ^(double firstValue, double secondValue) {
-</span><span class='line'>                                  return firstValue * secondValue;
-</span><span class='line'>                              };
-</span><span class='line'>    double result = multiplyTwoValues(2,4);
-</span><span class='line'>    NSLog(@"The result is %f", result);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
-
-<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>__block int (^recursiveBlock)(int) = ^(int param) {
-</span><span class='line'>      if (param == 1) {
-</span><span class='line'>          return 1;
-</span><span class='line'>      }
-</span><span class='line'>      return (param--) * recursiveBlock(param);
-</span><span class='line'>};  
-</span><span class='line'>recursiveBlock(5);    // 计算5的阶乘</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>You Can Pass Blocks as Arguments to Methods or Functions
-&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
-The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {
-</span><span class='line'>    ...
-</span><span class='line'>    callbackBlock();
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>A Block Should Always Be the Last Argument to a Method
-Objects Use Properties to Keep Track of Blocks
-The syntax to define a property to keep track of a block is similar to a block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface XYZObject : NSObject
-</span><span class='line'>@property (copy) void (^blockProperty)(void);
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
-A block property is set or invoked like any other block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>self.blockProperty = ^{
-</span><span class='line'>    ...
-</span><span class='line'>};
-</span><span class='line'>self.blockProperty();
-</span><span class='line'>typedef void(^BlockCC)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>// e.g.更新myTableview并显示最后一行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (dataArray.count &gt; 0) {
-</span><span class='line'>      [myTableView reloadData];   
-</span><span class='line'>      // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
-</span><span class='line'>   // 所以要[NSObject performBlock: afterDelay:0];
-</span><span class='line'>      [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
-</span><span class='line'>      NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
-</span><span class='line'>      void (^scrollToBottom)(void) = ^{
-</span><span class='line'>          [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-</span><span class='line'>          [myTableView release];
-</span><span class='line'>      };
-</span><span class='line'>      //
-</span><span class='line'>      [NSObject performBlock:scrollToBottom afterDelay:0];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
 
 ]]></content>
   </entry>

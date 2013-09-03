@@ -9,7 +9,10 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="问题来源： 在开发iOS的app时，我们时常需要引用第三方Open Source套件来简化开发，一般情况下，我们可以采用Add Files to的方式将其加入到目前的工程中，但也存在一些问题，比如版本演进的控制问题，当前工程引用的第三方库的清单等。 什么是CocoaPods？ &hellip;">
+  <meta name="description" content="前言 每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如 Java: maven，Ivy
+Ruby: gems
+Python: pip, easy_install
+Nodejs: npm 随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫： &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +83,223 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-03T11:49:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
+        
+         | <a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>前言</h3>
+
+<p>每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如</p>
+
+<ul>
+<li>Java: maven，Ivy</li>
+<li>Ruby: gems</li>
+<li>Python: pip, easy_install</li>
+<li>Nodejs: npm</li>
+</ul>
+
+
+<p>随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫：CocoaPods。</p>
+
+<h3>CocoaPods简介</h3>
+
+<p>CocoaPods是一个负责管理iOS项目中第三方开源代码的工具。CocoaPods项目的源码在Github上管理。该项目开始于2011年8月12日，经过一年多的发展，现在已经超过1000次提交，并且持续保持活跃更新。开发iOS项目不可避免地要使用第三方开源库，CocoaPods的出现使得我们可以节省设置和更新第三方开源库的时间。</p>
+
+<p>拿我之前开发的粉笔网iPhone客户端为例，其使用了14个第三方开源库。在没有使用CocoaPods以前，我需要：</p>
+
+<p>把这些第三方开源库的相关文件复制到项目中，或者设置成git的submodule，然后这些开源库通常需要依赖系统的一些framework，我需要手工地将这些framework一一增加到项目依赖中，比如ASI网络库就需要增加以下framework: CFNetwork, SystemConfiguration, MobileCoreServices, CoreGraphics and zlib。</p>
+
+<p>对于RegexKitLite这个正则表达式库，我还需要设置-licucore的编译参数
+手工管理这些依赖包的更新。</p>
+
+<p>这些体力活虽然简单，但毫无技术含量并且浪费时间。在使用CocoaPods之后，我只需要将用到的第三方开源库放到一个名为Podfile的文件中，然后执行pod install。CocoaPods就会自动将这些第三方开源库的源码下载下来，并且为我的工程设置好相应的系统依赖和编译参数。</p>
+
+<h3>CocoaPods的安装和使用介绍</h3>
+
+<h4>安装</h4>
+
+<p>安装方式异常简单, Mac下都自带ruby，使用ruby的gem命令即可下载安装：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install cocoapods
+</span><span class='line'>$ pod setup</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>使用</h4>
+
+<p>使用时需要新建一个名为Podfile的文件，以如下格式，将依赖的库名字依次列在文件中即可</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>eachability',  '~&gt; 3.0.0'
+</span><span class='line'>pod 'ASIHTTPRequest'
+</span><span class='line'>pod 'RegexKitLite'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后你将编辑好的Podfile文件放到你的项目根目录中，执行如下命令即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd "your project home"
+</span><span class='line'>pod install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在，你的所有第三方库都已经下载完成并且设置好了编译参数和依赖，你只需要记住如下2点即可：</p>
+
+<p>使用CocoaPods生成的 .xcworkspace 文件来打开工程，而不是以前的 .xcodeproj 文件。
+每次更改了Podfile文件，你需要重新执行一次pod install命令。</p>
+
+<h4>查找第三方库</h4>
+
+<p>你如果不知道cocoaPods管理的库中，是否有你想要的库，那么你可以通过pod search命令进行查找，以下是我用pod search json查找到的所有可用的库：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod search json
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> AnyJSON (0.0.1)
+</span><span class='line'>   Encode / Decode JSON by any means possible.
+</span><span class='line'>   - Homepage: https://github.com/mattt/AnyJSON
+</span><span class='line'>   - Source:   https://github.com/mattt/AnyJSON.git
+</span><span class='line'>   - Versions: 0.0.1 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> JSONKit (1.5pre)
+</span><span class='line'>   A Very High Performance Objective-C JSON Library.
+</span><span class='line'>   - Homepage: https://github.com/johnezang/JSONKit
+</span><span class='line'>   - Source:   git://github.com/johnezang/JSONKit.git
+</span><span class='line'>   - Versions: 1.5pre, 1.4 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> MTJSONDictionary (0.0.4)
+</span><span class='line'>   An NSDictionary category for when you're working with it converting to/from JSON. DEPRECATED, use MTJSONUtils
+</span><span class='line'>   instead.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Versions: 0.0.4, 0.0.3, 0.0.2 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> MTJSONUtils (0.1.0)
+</span><span class='line'>   An NSObject category for working with JSON.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Versions: 0.1.0, 0.0.1 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> SBJson (3.1.1)
+</span><span class='line'>   This library implements strict JSON parsing and generation in Objective-C.
+</span><span class='line'>   - Homepage: http://stig.github.com/json-framework/
+</span><span class='line'>   - Source:   https://github.com/stig/json-framework.git
+</span><span class='line'>   - Versions: 3.1.1, 3.1, 3.0.4, 2.2.3 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> TouchJSON (1.0)
+</span><span class='line'>   TouchJSON is an Objective-C based parser and generator for JSON encoded data.
+</span><span class='line'>   - Homepage: https://github.com/TouchCode/TouchJSON
+</span><span class='line'>   - Source:   https://github.com/TouchCode/TouchJSON.git
+</span><span class='line'>   - Versions: 1.0 [master repo]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>生成第三方库的帮助文档</p>
+
+<p>如果你想让CococaPods帮你生成第三方库的帮助文档，并集成到XCode中，那么用brew安装appledoc即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install appledoc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关于appledoc，我在今年初的另一篇博客《使用Objective-C的文档生成工具:appledoc》中有专门介绍。它最大的优点是可以将帮助文档集成到XCode中，这样你在敲代码的时候，按住opt键单击类名或方法名，就可以显示出相应的帮助文档。</p>
+
+<h3>原理</h3>
+
+<p>大概研究了一下CocoaPods的原理，它是将所有的依赖库都放到另一个名为Pods项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。发现的一些技术细节有：</p>
+
+<p>Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。
+对于资源文件，CocoaPods提供了一个名为Pods-resources.sh的bash脚本，该脚本在每次项目编译的时候都会执行，将第三方库的各种资源文件复制到目标目录中。
+CocoaPods通过一个名为Pods.xcconfig的文件来在编译时设置所有的依赖和参数。
+Have fun!</p>
+
+<p>转自：
+Posted by 唐巧 Dec 2nd, 2012   iOS
+自由转载-非商用-非衍生-保持署名 | Creative Commons BY-NC-ND 3.0</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1312,96 +1532,6 @@ JSP代码</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Git No Branch 解决方案</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-07T18:03:00+08:00" pubdate data-updated="true">Jun 7<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
-
-<h5>事件经过：</h5>
-
-<ol>
-<li>正常开发，branch:master</li>
-<li>在Eclipse中，使用插件checkout某版本出来</li>
-<li>再checkout到最近一次提交的版本</li>
-<li>不断Commit多次，一直不能push，以为工具出了问题</li>
-<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
-</ol>
-
-
-<p>每次都提交，数据肯定不会丢，也没有担心。
-就找个问题的解决方案，果然有。</p>
-
-<p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># if you have already checked out to master, 
-</span><span class='line'># you won't know the commit-ish of your "no branch":
-</span><span class='line'>
-</span><span class='line'>git fsck --lost-found # (to find your &lt;commit-ish>)
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># if you are still on your "no branch" commit:
-</span><span class='line'>
-</span><span class='line'>git log # (the commit-ish will be on the first line)
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># or
-</span><span class='line'>
-</span><span class='line'>git log | head -n 1 | cut -d ' ' -f 2 | pbcopy
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish></span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1422,7 +1552,7 @@ JSP代码</p>
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (9)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (10)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -1433,6 +1563,10 @@ JSP代码</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a>
@@ -1448,10 +1582,6 @@ JSP代码</p>
     
       <li class="post">
         <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/22/zai-githubshang-shi-yong-octopress/">在github上使用octopress</a>
       </li>
     
   </ul>

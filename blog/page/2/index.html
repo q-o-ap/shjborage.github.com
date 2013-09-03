@@ -9,8 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="一.安装mysql 1.mysql下载地址http://dev.mysql.com/downloads/mysql/
-我的机器是mac 10.7的;使用mysql-5.1.52-osx10.6-x86.dmg安装包， 没有更新的，这个可用。（5.5也可以这样用，基本一致 MacOSX10.8. &hellip;">
+  <meta name="description" content="Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发 事件经过： 正常开发，branch:master
+在Eclipse中，使用插件checkout某版本出来 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,96 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Git No Branch 解决方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-07T18:03:00+08:00" pubdate data-updated="true">Jun 7<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
+
+<h5>事件经过：</h5>
+
+<ol>
+<li>正常开发，branch:master</li>
+<li>在Eclipse中，使用插件checkout某版本出来</li>
+<li>再checkout到最近一次提交的版本</li>
+<li>不断Commit多次，一直不能push，以为工具出了问题</li>
+<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
+</ol>
+
+
+<p>每次都提交，数据肯定不会丢，也没有担心。
+就找个问题的解决方案，果然有。</p>
+
+<p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># if you have already checked out to master, 
+</span><span class='line'># you won't know the commit-ish of your "no branch":
+</span><span class='line'>
+</span><span class='line'>git fsck --lost-found # (to find your &lt;commit-ish>)
+</span><span class='line'>git merge &lt;commit-ish>
+</span><span class='line'>
+</span><span class='line'># if you are still on your "no branch" commit:
+</span><span class='line'>
+</span><span class='line'>git log # (the commit-ish will be on the first line)
+</span><span class='line'>git checkout master
+</span><span class='line'>git merge &lt;commit-ish>
+</span><span class='line'>
+</span><span class='line'># or
+</span><span class='line'>
+</span><span class='line'>git log | head -n 1 | cut -d ' ' -f 2 | pbcopy
+</span><span class='line'>git checkout master
+</span><span class='line'>git merge &lt;commit-ish></span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -285,20 +375,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#114;&#x6f;&#x6f;&#116;&#x40;&#119;&#x77;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#x72;&#x67;">&#x72;&#111;&#x6f;&#x74;&#64;&#x77;&#x77;&#119;&#x2e;&#x63;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#115;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#x72;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#114;&#x6f;&#x6f;&#116;&#64;&#119;&#x77;&#x77;&#x2e;&#99;&#x6e;&#115;&#x63;&#110;&#x2e;&#x6f;&#x72;&#103;">&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#x2e;&#99;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#114;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#114;&#x6f;&#111;&#x74;&#64;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;">&#x72;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#119;&#46;&#99;&#110;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#110;&#x73;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#111;&#116;&#x40;&#119;&#119;&#x77;&#46;&#x63;&#110;&#115;&#99;&#x6e;&#46;&#x6f;&#x72;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#119;&#x77;&#46;&#99;&#x6e;&#x73;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#x72;&#111;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#114;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#110;&#46;&#111;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -996,7 +1086,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x73;&#104;&#106;&#x62;&#x6f;&#114;&#x61;&#103;&#101;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x73;&#x68;&#106;&#x62;&#111;&#x72;&#x61;&#x67;&#101;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#115;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#103;&#x65;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#x68;&#106;&#x62;&#x6f;&#114;&#x61;&#x67;&#101;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -1290,201 +1380,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-block-bian-cheng/">iOS Block 编程</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T09:57:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/ios-block-bian-cheng/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>block</h2>
-
-<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
-
-<h4>声明block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>定义block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock = ^{
-</span><span class='line'>        NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>声明和定义在一起：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void) = ^{
-</span><span class='line'>    NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>调用block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock();</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>带返回值和参数的block:</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>double (^multiplyTwoValues)(double, double) =
-</span><span class='line'>                              ^(double firstValue, double secondValue) {
-</span><span class='line'>                                  return firstValue * secondValue;
-</span><span class='line'>                              };
-</span><span class='line'>    double result = multiplyTwoValues(2,4);
-</span><span class='line'>    NSLog(@"The result is %f", result);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
-
-<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>__block int (^recursiveBlock)(int) = ^(int param) {
-</span><span class='line'>      if (param == 1) {
-</span><span class='line'>          return 1;
-</span><span class='line'>      }
-</span><span class='line'>      return (param--) * recursiveBlock(param);
-</span><span class='line'>};  
-</span><span class='line'>recursiveBlock(5);    // 计算5的阶乘</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>You Can Pass Blocks as Arguments to Methods or Functions
-&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
-The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {
-</span><span class='line'>    ...
-</span><span class='line'>    callbackBlock();
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>A Block Should Always Be the Last Argument to a Method
-Objects Use Properties to Keep Track of Blocks
-The syntax to define a property to keep track of a block is similar to a block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface XYZObject : NSObject
-</span><span class='line'>@property (copy) void (^blockProperty)(void);
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
-A block property is set or invoked like any other block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>self.blockProperty = ^{
-</span><span class='line'>    ...
-</span><span class='line'>};
-</span><span class='line'>self.blockProperty();
-</span><span class='line'>typedef void(^BlockCC)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>// e.g.更新myTableview并显示最后一行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (dataArray.count &gt; 0) {
-</span><span class='line'>      [myTableView reloadData];   
-</span><span class='line'>      // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
-</span><span class='line'>   // 所以要[NSObject performBlock: afterDelay:0];
-</span><span class='line'>      [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
-</span><span class='line'>      NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
-</span><span class='line'>      void (^scrollToBottom)(void) = ^{
-</span><span class='line'>          [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-</span><span class='line'>          [myTableView release];
-</span><span class='line'>      };
-</span><span class='line'>      //
-</span><span class='line'>      [NSObject performBlock:scrollToBottom afterDelay:0];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1507,7 +1402,7 @@ A block property is set or invoked like any other block variable:</p>
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (9)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (10)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -1518,6 +1413,10 @@ A block property is set or invoked like any other block variable:</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a>
@@ -1533,10 +1432,6 @@ A block property is set or invoked like any other block variable:</p>
     
       <li class="post">
         <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/22/zai-githubshang-shi-yong-octopress/">在github上使用octopress</a>
       </li>
     
   </ul>
