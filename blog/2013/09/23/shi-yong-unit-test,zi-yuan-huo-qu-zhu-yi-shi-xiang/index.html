@@ -134,14 +134,13 @@
 
 <h4>1，访问被测类</h4>
 
-<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置)
-　　比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：
-　　
-　　1，#import ”FundManager.h&#8221;
-　　
-　　2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。
-　　
-　　否则会在链接阶段找不到FundManager接口。
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置) 比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：</p>
+
+<pre><code>1，#import ”FundManager.h"    
+2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。  
+</code></pre>
+
+<p>　　否则会在链接阶段找不到FundManager接口。
 　　</p>
 
 <h4>2，向单元测试目标中添加资源</h4>
@@ -243,6 +242,8 @@
         <a class="basic-alignment left" href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/" title="Previous Post: SQLite使用 iOS平台">&laquo; SQLite使用 iOS平台</a>
       
       
+        <a class="basic-alignment right" href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/" title="Next Post: Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别)">Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别) &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -267,7 +268,7 @@
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (12)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (13)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -278,6 +279,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a>
@@ -293,10 +298,6 @@
     
       <li class="post">
         <a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/">自定义UITabbarController引发的血案</a>
       </li>
     
   </ul>

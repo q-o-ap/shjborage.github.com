@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: test - Saick Blog</title>
+  <title>Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别) - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category: test">
+  <meta name="description" content="XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
+来上图看下吧 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
+1. group 和 folder的区别 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.netblog/categories/test">
+  <link rel="canonical" href="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -79,50 +81,139 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Test</h1>
+    
+      <h1 class="entry-title">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T23:58:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
+
+
+<div class="entry-content"><p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
+来上图看下吧</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-1.png"></p>
+
+<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
+1. group 和 folder的区别
+group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
+folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。
+2. 以folder的形式引用文件
+我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
+会弹出对话框，如图</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-2.png"></p>
+
+<p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
+这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-3.png"></p>
+
+<ol>
+<li>以group的形式引用文件
+回到1的第一步，选中 create groups for any added folders ，点击完成，则如下图所示，文件夹是黄色的，并且编译文件列表里面神奇的存在了 webviewjavascriptBridge.m这个文件</li>
+</ol>
+
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-4.png"></p>
+
+<p>现在，终于明白了 folder和 group的区别了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <div id="blog-archives" class="category">
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
 
 
 
   
-  <h2>2013</h2>
 
-<article>
+
+<time datetime="2013-09-23T23:58:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
   
-<h1><a href="/blog/2013/05/27/test-sharing-code-snippets/">Test sharing code snippets</a></h1>
-<time datetime="2013-05-27T16:54:00+08:00" pubdate><span class='month'>May</span> <span class='day'>27</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/test/'>test</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
   
-<h1><a href="/blog/2013/05/27/hello-jekyll/">Hello jekyll</a></h1>
-<time datetime="2013-05-27T16:32:00+08:00" pubdate><span class='month'>May</span> <span class='day'>27</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/test/'>test</a></span>
-</footer>
+</span>
 
 
-</article>
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
 
 </div>
 
-  
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/" title="Previous Post: 使用unit test，资源获取注意事项">&laquo; 使用unit test，资源获取注意事项</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -213,7 +304,10 @@
       var disqus_shortname = 'saick';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/';
+        var disqus_url = 'http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

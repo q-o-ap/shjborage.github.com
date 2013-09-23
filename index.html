@@ -9,7 +9,9 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="引言 使用XCode4.5 下使用unit test时，发现直接使用 UIImage *imgA = [UIImage imageNamed:@"asdf"]; NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@” &hellip;">
+  <meta name="description" content="XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
+来上图看下吧 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
+1. group 和 folder的区别 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -86,6 +88,72 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T23:58:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+         | <a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
+来上图看下吧</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-1.png"></p>
+
+<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
+1. group 和 folder的区别
+group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
+folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。
+2. 以folder的形式引用文件
+我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
+会弹出对话框，如图</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-2.png"></p>
+
+<p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
+这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-3.png"></p>
+
+<ol>
+<li>以group的形式引用文件
+回到1的第一步，选中 create groups for any added folders ，点击完成，则如下图所示，文件夹是黄色的，并且编译文件列表里面神奇的存在了 webviewjavascriptBridge.m这个文件</li>
+</ol>
+
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-4.png"></p>
+
+<p>现在，终于明白了 folder和 group的区别了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a></h1>
     
     
@@ -137,14 +205,13 @@
 
 <h4>1，访问被测类</h4>
 
-<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置)
-　　比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：
-　　
-　　1，#import ”FundManager.h&#8221;
-　　
-　　2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。
-　　
-　　否则会在链接阶段找不到FundManager接口。
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置) 比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：</p>
+
+<pre><code>1，#import ”FundManager.h"    
+2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。  
+</code></pre>
+
+<p>　　否则会在链接阶段找不到FundManager接口。
 　　</p>
 
 <h4>2，向单元测试目标中添加资源</h4>
@@ -1269,86 +1336,6 @@ rake new_post[&ldquo;Your Title of Your Article&rdquo;]
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/">让Apple TV直接收看中国视频</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-20T14:09:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h4>工作原理：</h4>
-
-<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
-
-<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
-
-<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
-
-<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
-<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
-
-<h4>没有自己的DNS</h4>
-
-<p>　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，
-　　　即可将Apple TV内置网址指向一个新的网站，达到通过Apple TV直接收看贵国视频的愿望。
-修改DNS如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>180.153.225.136 电信服务器，适合于南方电信的用户使用。TTVast提供
-</span><span class='line'>210.129.145.150 适合部分联通用户，以及海外用户使用。TTVast提供</span></code></pre></td></tr></table></div></figure>
-
-
-<p>　　用私人DNS会轻易被他伪装的银行、淘宝等网站来欺骗你，为了安全，请ATV用户使用上面靠谱的。
-　　请勿用于Apple TV之外的任何设备（如：手机、PC、路由器等），否则后果自负。
-　　</p>
-
-<h4>拥有自己的DNS</h4>
-
-<p>将 <a href="http://trailers.apple.com/appletv/">http://trailers.apple.com/appletv/</a> 路径下的 index.xml 及 application.js转向下面网址的对应文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>http://180.153.225.136:8000/index.xml ttvas提供
-</span><span class='line'>http://210.129.145.150:8000/index.xml ttvas提供
-</span><span class='line'>http://4.appletv3.sinaapp.com/index.php Missde提供 - 目前测试中..</span></code></pre></td></tr></table></div></figure>
-
-
-<p>本程序：Apple TV DNS PHP代码下载：
-<a href="https://code.google.com/p/appletv/downloads/list">https://code.google.com/p/appletv/downloads/list</a></p>
-
-<p>获取音悦台MV下载地址 <a href="http://huoqu.sinaapp.com/video/">http://huoqu.sinaapp.com/video/</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1369,7 +1356,7 @@ rake new_post[&ldquo;Your Title of Your Article&rdquo;]
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (12)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (13)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -1380,6 +1367,10 @@ rake new_post[&ldquo;Your Title of Your Article&rdquo;]
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a>
@@ -1395,10 +1386,6 @@ rake new_post[&ldquo;Your Title of Your Article&rdquo;]
     
       <li class="post">
         <a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/">自定义UITabbarController引发的血案</a>
       </li>
     
   </ul>

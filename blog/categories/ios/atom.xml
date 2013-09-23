@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-23T23:55:47+08:00</updated>
+  <updated>2013-09-24T00:02:12+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,43 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别)]]></title>
+    <link href="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/"/>
+    <updated>2013-09-23T23:58:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie</id>
+    <content type="html"><![CDATA[<p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
+来上图看下吧</p>
+
+<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-1.png">http://www.saick.net/images/blog/2013-09-23-1.png</a>"></p>
+
+<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
+1. group 和 folder的区别
+group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
+folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。
+2. 以folder的形式引用文件
+我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
+会弹出对话框，如图</p>
+
+<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-2.png">http://www.saick.net/images/blog/2013-09-23-2.png</a>"></p>
+
+<p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
+这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
+
+<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-3.png">http://www.saick.net/images/blog/2013-09-23-3.png</a>"></p>
+
+<ol>
+<li>以group的形式引用文件
+回到1的第一步，选中 create groups for any added folders ，点击完成，则如下图所示，文件夹是黄色的，并且编译文件列表里面神奇的存在了 webviewjavascriptBridge.m这个文件</li>
+</ol>
+
+
+<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-4.png">http://www.saick.net/images/blog/2013-09-23-4.png</a>"></p>
+
+<p>现在，终于明白了 folder和 group的区别了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用unit test，资源获取注意事项]]></title>
@@ -44,14 +81,13 @@
 
 <h4>1，访问被测类</h4>
 
-<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置)
-　　比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：
-　　
-　　1，#import ”FundManager.h"
-　　
-　　2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。
-　　
-　　否则会在链接阶段找不到FundManager接口。
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置) 比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：</p>
+
+<pre><code>1，#import ”FundManager.h"    
+2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。  
+</code></pre>
+
+<p>　　否则会在链接阶段找不到FundManager接口。
 　　</p>
 
 <h4>2，向单元测试目标中添加资源</h4>
@@ -405,30 +441,6 @@ platform:ios, '5.0'
 
 <p>以上可参考stackoverflow
 转自：<a href="http://blog.csdn.net/numbbuaa/article/details/8549018">http://blog.csdn.net/numbbuaa/article/details/8549018</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[自定义UITabbarController引发的血案]]></title>
-    <link href="http://saick.net/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/"/>
-    <updated>2013-09-02T09:05:00+08:00</updated>
-    <id>http://saick.net/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an</id>
-    <content type="html"><![CDATA[<p>转自：<a href="http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html">http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html</a></p>
-
-<p>nested push animation can result in corrupted navigation bar 嵌套的navigation动画会造成 navigation bar 错误， 具体表现为上一层的titleview 和这一层重叠， navigationbaritem 维持上一层的左按钮， 右按钮 、、、系统警告提示nested push animation can result in corrupted navigation bar ， 大家遇到过这种情况吗？？
-嵌套的动画， 是什么意思呢， 为什么会这样， 要怎么解决</p>
-
-<p>结贴~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
-
-<p>有一天，从头到尾分析了整个项目的代码， 最后确认问题根源——自定义UITabbarController引发的血案
-项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，
-整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，
-导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</p>
-
-<p>扩展阅读：
-<a href="http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga">http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga</a></p>
-
-<p>其实主要还是在用户看不到的时候，多次使用Animate=YES</p>
 ]]></content>
   </entry>
   

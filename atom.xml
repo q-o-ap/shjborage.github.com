@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-23T23:55:47+08:00</updated>
+  <updated>2013-09-24T00:02:12+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,43 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别)]]></title>
+    <link href="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/"/>
+    <updated>2013-09-23T23:58:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie</id>
+    <content type="html"><![CDATA[<p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
+来上图看下吧</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-1.png"></p>
+
+<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
+1. group 和 folder的区别
+group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
+folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。
+2. 以folder的形式引用文件
+我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
+会弹出对话框，如图</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-2.png"></p>
+
+<p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
+这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-3.png"></p>
+
+<ol>
+<li>以group的形式引用文件
+回到1的第一步，选中 create groups for any added folders ，点击完成，则如下图所示，文件夹是黄色的，并且编译文件列表里面神奇的存在了 webviewjavascriptBridge.m这个文件</li>
+</ol>
+
+
+<p><img src="http://www.saick.net/images/blog/2013-09-23-4.png"></p>
+
+<p>现在，终于明白了 folder和 group的区别了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用unit test，资源获取注意事项]]></title>
@@ -44,14 +81,13 @@
 
 <h4>1，访问被测类</h4>
 
-<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置)
-　　比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：
-　　
-　　1，#import ”FundManager.h&#8221;
-　　
-　　2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。
-　　
-　　否则会在链接阶段找不到FundManager接口。
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置) 比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：</p>
+
+<pre><code>1，#import ”FundManager.h"    
+2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。  
+</code></pre>
+
+<p>　　否则会在链接阶段找不到FundManager接口。
 　　</p>
 
 <h4>2，向单元测试目标中添加资源</h4>
@@ -1538,20 +1574,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#114;&#x6f;&#111;&#x74;&#x40;&#x77;&#119;&#119;&#46;&#99;&#110;&#115;&#x63;&#110;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#111;&#x6f;&#116;&#64;&#x77;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#114;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#x77;&#x77;&#46;&#99;&#110;&#115;&#x63;&#110;&#46;&#111;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x72;&#x6f;&#x6f;&#x74;&#x40;&#119;&#119;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#x72;&#103;">&#114;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#119;&#x2e;&#99;&#110;&#115;&#x63;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#116;&#64;&#x77;&#x77;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#99;&#x6e;&#x73;&#99;&#110;&#46;&#111;&#114;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#x74;&#64;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;">&#114;&#x6f;&#x6f;&#x74;&#64;&#x77;&#119;&#x77;&#x2e;&#x63;&#110;&#115;&#x63;&#110;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#x74;&#x40;&#119;&#119;&#119;&#x2e;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#111;&#x72;&#103;">&#114;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#114;&#x6f;&#111;&#116;&#64;&#x77;&#119;&#x77;&#46;&#x63;&#x6e;&#115;&#x63;&#110;&#x2e;&#111;&#114;&#x67;">&#114;&#x6f;&#111;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#99;&#x6e;&#115;&#99;&#x6e;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#111;&#111;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#111;&#x72;&#103;">&#114;&#111;&#x6f;&#x74;&#x40;&#119;&#119;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -2104,7 +2140,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#x73;&#x68;&#106;&#98;&#x6f;&#x72;&#x61;&#103;&#x65;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">&#115;&#x68;&#x6a;&#x62;&#111;&#x72;&#97;&#103;&#101;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#115;&#104;&#x6a;&#98;&#111;&#114;&#x61;&#103;&#x65;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#104;&#x6a;&#x62;&#111;&#114;&#x61;&#103;&#101;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -2183,45 +2219,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
 
 <h3>欢迎留言反馈！</h3>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Property 使用注意事项]]></title>
-    <link href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/"/>
-    <updated>2013-05-28T11:04:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang</id>
-    <content type="html"><![CDATA[<ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
 ]]></content>
   </entry>
   
