@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-24T00:02:12+08:00</updated>
+  <updated>2013-09-24T00:09:04+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,154 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[group_concat函数详解]]></title>
+    <link href="http://saick.net/blog/2013/09/24/group-concathan-shu-xiang-jie/"/>
+    <updated>2013-09-24T00:06:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/24/group-concathan-shu-xiang-jie</id>
+    <content type="html"><![CDATA[<p>问了好多人，都不知道group_concat这个函数。
+这个函数好啊，能将相同的行组合起来，省老事了。
+MySQL中group_concat函数(SQLite或其它数据亦可)</p>
+
+<p>完整的语法如下：</p>
+
+<p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
+
+<h4>基本查询</h4>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select * from aa;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>| id| name |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10|</p>
+
+<p>|1 | 20|</p>
+
+<p>|1 | 20|</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 200 |</p>
+
+<p>|3 | 500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>6 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，逗号分隔(默认)</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>| id| group_concat(name) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10,20,20|</p>
+
+<p>|2 | 20 |</p>
+
+<p>|3 | 200,500|</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，分号分隔</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name separator &lsquo;;&rsquo;) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>| id| group_concat(name separator &lsquo;;&rsquo;) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10;20;20 |</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 200;500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把去冗余的name字段的值打印在一行，</p>
+
+<h3>逗号分隔</h3>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(distinct name) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>| id| group_concat(distinct name) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>|1 | 10,20|</p>
+
+<p>|2 | 20 |</p>
+
+<p>|3 | 200,500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，逗号分隔，以name排倒序</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name order by name desc) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>| id| group_concat(name order by name desc) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>|1 | 20,20,10 |</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 500,200|</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别)]]></title>
@@ -1574,20 +1722,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#x77;&#119;&#x77;&#46;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#x77;&#x77;&#46;&#99;&#110;&#115;&#x63;&#110;&#46;&#111;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#114;&#111;&#x6f;&#116;&#x40;&#119;&#x77;&#x77;&#46;&#99;&#110;&#115;&#99;&#110;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#x6f;&#116;&#64;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#116;&#64;&#x77;&#x77;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#99;&#x6e;&#x73;&#99;&#110;&#46;&#111;&#114;&#103;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#x6f;&#111;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#x63;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;">&#x72;&#x6f;&#x6f;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#99;&#110;&#115;&#99;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#x74;&#x40;&#119;&#119;&#119;&#x2e;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#111;&#x72;&#103;">&#114;&#x6f;&#111;&#116;&#64;&#x77;&#x77;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#114;&#111;&#111;&#x74;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#x63;&#110;&#x2e;&#x6f;&#114;&#x67;">&#x72;&#111;&#111;&#116;&#x40;&#119;&#x77;&#119;&#46;&#99;&#110;&#x73;&#99;&#110;&#x2e;&#111;&#x72;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#111;&#111;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#111;&#x72;&#103;">&#114;&#111;&#x6f;&#x74;&#x40;&#119;&#119;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x72;&#111;&#x6f;&#116;&#64;&#119;&#119;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#114;&#103;">&#x72;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#46;&#111;&#114;&#x67;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -2122,103 +2270,6 @@ PowerSaving Flashlight also solve this issue.</p>
 <p><a href="http://app.tongbu.com/10001483_flashlight.html">http://app.tongbu.com/10001483_flashlight.html</a></p>
 
 <h5>欢迎留言反馈！</h5>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iSecret 简介]]></title>
-    <link href="http://saick.net/blog/2013/05/28/isecret-jian-jie/"/>
-    <updated>2013-05-28T16:44:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/isecret-jian-jie</id>
-    <content type="html"><![CDATA[<p>美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
-
-<p>中国区：<a href="https://itunes.apple.com/cn/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
-
-<p>iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them.
-So, iSecret could help you to manage them safely.
-iSecret&rsquo;s all file are encrypted at high level.
-iSecret does not require any network.</p>
-
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#115;&#104;&#x6a;&#98;&#111;&#114;&#x61;&#103;&#x65;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#104;&#x6a;&#x62;&#111;&#114;&#x61;&#103;&#101;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
-
-<p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
-现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
-所以i秘密帮您把这些帐号密码保管起来,并且全程高强度加密,确保信息安全。
-为了保证密码的安全,首先主密码是通过高强度的加密算法,保存到手机当中。
-即可手机被破解,也能保证数据的安全。
-对于保存的各类网站等的密码信息,全部通过加密文本保存到手机中,并且是全部纯文本解析,没有用
-任何XML、INI等配置文件,让安全性更升一级。
-i秘密不需要任何的网络访问,进一步加强安全性。</p>
-
-<p>欢迎大家提出宝贵意见,共同为好产品而努力。
-<a href="mailto:shjborage@gmail.com">shjborage@gmail.com</a></p>
-
-<h3>Release Note:</h3>
-
-<h5>v1.0  2012-02-22 10:08:28</h5>
-
-<ul>
-<li>第一版本，仅157kb大小。</li>
-<li>功能简单实用</li>
-</ul>
-
-
-<h5>v1.1  2012-08-15 10:16:20</h5>
-
-<ul>
-<li>在查看秘密时，可直接点击文本内容将其拷贝到剪贴板；</li>
-<li>应用需要输入密码时，如果您输入正确的密码，自动进入；</li>
-<li>当您添加新的秘密时，自动进入编辑模式；</li>
-<li>当您发送邮件时，加入一些提示信息；</li>
-<li>添加开发者博客以及用户评价体系；</li>
-<li><p>其它问题修复。</p></li>
-<li><p>In secret detail view, you can tap some text information to copy it to pasteboard;</p></li>
-<li>In the beginning of the app, when you enter the correct password, it will start working automatically;</li>
-<li>When you add new secret, edit it first;</li>
-<li>Add some presentations when you send emails;</li>
-<li>Add author&rsquo;s blog and user review interface;</li>
-<li>Some other bugs fixed.</li>
-</ul>
-
-
-<h5>v1.2  2012-09-24 14:58:31</h5>
-
-<ul>
-<li><p>随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率</p></li>
-<li><p>Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution</p></li>
-</ul>
-
-
-<h5>v1.3  2013-04-25 10:55:45</h5>
-
-<ul>
-<li>支持图形解锁以及简单数字密码，更加简单方便</li>
-<li>简化用户反馈功能，支持内部反馈</li>
-<li>加入程序版更新提示本</li>
-<li>解决各个版本系统上面UI细节问题</li>
-<li>推荐应用给好友圈</li>
-<li><p>禁用程序后台运行，更加安全稳定</p></li>
-<li><p>Support simple password and pattern, which is easy to use</p></li>
-<li>Simply the user feedback in the app without go to the AppStore</li>
-<li>Add new version prompt, you can&rsquo;t miss the new version</li>
-<li>Fix some bugs in the different iOS versions</li>
-<li>Share this app to your friends</li>
-<li>Stop running in the background, much safer</li>
-</ul>
-
-
-<h5>v1.4  2013-05-23 7:55:45</h5>
-
-<ul>
-<li>加强主密码安全性，强烈建议大家升级</li>
-<li><p>默认密码不显示的问题</p></li>
-<li><p>Improve the security of you main passcode, recommend you to update at once.</p></li>
-<li>Fix bug: the default passcode was not show.</li>
-</ul>
-
-
-<h3>欢迎留言反馈！</h3>
 ]]></content>
   </entry>
   
