@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-23T23:54:24+08:00</updated>
+  <updated>2013-09-23T23:55:47+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -46,9 +46,13 @@
 
 <p>(在Logic Unit Test模式的要求，Application Unit Test不必设置)
 　　比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：
+　　
 　　1，#import ”FundManager.h"
+　　
 　　2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。
-　　否则会在链接阶段找不到FundManager接口。</p>
+　　
+　　否则会在链接阶段找不到FundManager接口。
+　　</p>
 
 <h4>2，向单元测试目标中添加资源</h4>
 
