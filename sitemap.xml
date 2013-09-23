@@ -107,12 +107,18 @@
         <lastmod>2013-09-03T13:41:12+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/
+        </loc>
+        <lastmod>2013-09-23T23:53:35+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-08-01T16:56:55+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-09-03T13:41:12+08:00</lastmod>
+        <lastmod>2013-09-23T23:53:35+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -124,7 +130,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-09-03T13:41:12+08:00</lastmod>
+        <lastmod>2013-09-23T23:53:35+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

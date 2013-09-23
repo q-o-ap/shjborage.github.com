@@ -9,7 +9,16 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不断更新中。。。 Aug 5, 2013 如果使用C++代码混编，找不到iostream等 可能是.m中直接import的，这个需要注意改成mm或者修改编译方式 May 28, 2013 不要调用[super release] 在dealloc里要调用[super dealloc]，千万不要调用[ &hellip;">
+  <meta name="description" content="Category可以用来调试 除了隐藏私有方法外，我主要用它截住函数。 例1：测试时我想知道TableViewCell有没有释放，就可以这样写 1
+2
+3
+4
+5
+6
+7
+8
+9
+@implementation UITableViewCell(dealloc) -(void)dealloc { &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +89,90 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Category 巧用-调试程序</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Category可以用来调试</h3>
+
+<p>除了隐藏私有方法外，我主要用它截住函数。</p>
+
+<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UITableViewCell(dealloc) 
+</span><span class='line'>-(void)dealloc 
+</span><span class='line'>{ 
+</span><span class='line'>   NSLog(@"%@",NSStringFromSelector(_cmd)); 
+</span><span class='line'>    NSArray *array = allSubviews(self);       // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有
+</span><span class='line'>    NSLog(@"%@",array); 
+</span><span class='line'>    [super dealloc]; 
+</span><span class='line'>}
+</span><span class='line'>@end </span></code></pre></td></tr></table></div></figure>
+
+
+<p>其它的类也可以这样写，你随便输出什么</p>
+
+<p>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> @implementation UITableView(setframe) 
+</span><span class='line'>-(void)setFrame:(CGRect)frame 
+</span><span class='line'>{ 
+</span><span class='line'>   NSLog(%"%@",self); 
+</span><span class='line'>    [super setFrame: frame]; 
+</span><span class='line'>} 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -500,7 +593,7 @@ A block property is set or invoked like any other block variable:</p>
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (11)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (12)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -511,6 +604,10 @@ A block property is set or invoked like any other block variable:</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a>
@@ -526,10 +623,6 @@ A block property is set or invoked like any other block variable:</p>
     
       <li class="post">
         <a href="/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/">自定义UITabbarController引发的血案</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/02/hybird-appyan-jiu/">Hybird App研究</a>
       </li>
     
   </ul>

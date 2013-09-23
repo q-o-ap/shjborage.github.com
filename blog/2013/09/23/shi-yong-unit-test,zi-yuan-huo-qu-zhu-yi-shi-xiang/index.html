@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS 开发常见低级错误 - Saick Blog</title>
+  <title>使用unit test，资源获取注意事项 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不断更新中。。。 Aug 5, 2013 如果使用C++代码混编，找不到iostream等 可能是.m中直接import的，这个需要注意改成mm或者修改编译方式 May 28, 2013 不要调用[super release] 在dealloc里要调用[super dealloc]，千万不要调用[ &hellip;">
+  <meta name="description" content="引言 使用XCode4.5 下使用unit test时，发现直接使用 UIImage *imgA = [UIImage imageNamed:@"asdf"]; NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@” &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu">
+  <link rel="canonical" href="http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -83,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS 开发常见低级错误</h1>
+      <h1 class="entry-title">使用unit Test，资源获取注意事项</h1>
     
     
       <p class="meta">
@@ -99,7 +99,7 @@
   
 
 
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-09-23T23:42:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -108,24 +108,70 @@
   </header>
 
 
-<div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
+<div class="entry-content"><h3>引言</h3>
 
-<p>Aug 5, 2013</p>
+<p> 使用XCode4.5 下使用unit test时，发现直接使用
+ <code>
+ UIImage *imgA = [UIImage imageNamed:@"asdf"];
+ NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
+</code>
+ 得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
 
-<ul>
-<li><h3>如果使用C++代码混编，找不到iostream等</h3>
+<h3>一、基础知识</h3>
 
-<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
-</ul>
+<h4>1，官方教程</h4>
+
+<p>　　单元测试包含“逻辑测试”和“应用测试”两种类型，分别对应不同的配置方式：
+　　逻辑测试(Logic Unit Test):测试跟App运行过程无关的纯逻辑代码，比如随机数算法，数据结构一类的。
+　　应用测试(Application Unit test):测试跟App运行环境相关的代码，比如目录、文件操作，Core Data存取等。
+　　在Xcode4.5中，创建App时会自动创建Application Unit Test项目。</p>
+
+<h4>2，示例代码。</h4>
+
+<p>　　在Xcode documentation中，可以找到“iPhoneUnitTests”这个例子项目。这个项目会教你怎么写单元测试代码。</p>
+
+<h3>二、进阶问题</h3>
+
+<h4>1，访问被测类</h4>
+
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置)
+　　比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：
+　　1，#import ”FundManager.h&#8221;
+　　2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。
+　　否则会在链接阶段找不到FundManager接口。</p>
+
+<h4>2，向单元测试目标中添加资源</h4>
+
+<p>　　比如要测试的某个接口需要UIImage对象，需要一张图片来初始化UIImage对象，直接调用[UIImage imageNamed:@”xxx”]是不行的，因为这个接口要从App的main bundle中加载图像，不能直接访问添加到单元测试项目中的资源，下面代码演示了两个bundle目录的不同：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Resource Paths are Different!
+</span><span class='line'>Many assumptions that your bundle is the main bundle will cause problems when testing. (Especially when adding tests to existing code) Look at the difference in bundles, the main bundle isn’t what you’d expect in a unit test.
+</span><span class='line'>NSString *mainBundlePath = [[NSBundle mainBundle] resourcePath];
+</span><span class='line'>NSString *directBundlePath = [[NSBundle bundleForClass:[self class]] resourcePath];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundlePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundlePath);
+</span><span class='line'>NSString *mainBundleResourcePath = [[NSBundle mainBundle] pathForResource:@”Frame.png”ofType:nil];
+</span><span class='line'>NSString *directBundleResourcePath = [[NSBundle bundleForClass:[selfclass]] pathForResource:@”Frame.png” ofType:nil];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundleResourcePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundleResourcePath);</span></code></pre></td></tr></table></div></figure>
 
 
-<p>May 28, 2013</p>
+<p>解决方法：</p>
 
-<ul>
-<li><h3>不要调用[super  release]</h3>
-
-<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Load resources using the bundle for the current classNSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:theImageName ofType:nil]; 
+</span><span class='line'>UIImage *image = [UIImage imageWithContentsOfFile:imagePath];</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -149,7 +195,7 @@
   
 
 
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-09-23T23:42:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
       
 
 <span class="categories">
@@ -163,7 +209,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/" >Tweet</a>
   
   
   
@@ -190,10 +236,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/ios-block-bian-cheng/" title="Previous Post: iOS block 编程">&laquo; iOS block 编程</a>
+        <a class="basic-alignment left" href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/" title="Previous Post: SQLite使用 iOS平台">&laquo; SQLite使用 iOS平台</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Next Post: Category 巧用-调试程序">Category 巧用-调试程序 &raquo;</a>
       
     </p>
   </footer>
@@ -295,8 +339,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/';
-        var disqus_url = 'http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/';
+        var disqus_identifier = 'http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/';
+        var disqus_url = 'http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/';
         var disqus_script = 'embed.js';
       
     (function () {

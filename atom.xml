@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-09-03T13:47:30+08:00</updated>
+  <updated>2013-09-23T23:54:24+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,79 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用unit test，资源获取注意事项]]></title>
+    <link href="http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/"/>
+    <updated>2013-09-23T23:42:00+08:00</updated>
+    <id>http://saick.net/blog/2013/09/23/shi-yong-unit-test,zi-yuan-huo-qu-zhu-yi-shi-xiang</id>
+    <content type="html"><![CDATA[<h3>引言</h3>
+
+<p> 使用XCode4.5 下使用unit test时，发现直接使用
+ <code>
+ UIImage *imgA = [UIImage imageNamed:@"asdf"];
+ NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
+</code>
+ 得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
+
+<h3>一、基础知识</h3>
+
+<h4>1，官方教程</h4>
+
+<p>　　单元测试包含“逻辑测试”和“应用测试”两种类型，分别对应不同的配置方式：
+　　逻辑测试(Logic Unit Test):测试跟App运行过程无关的纯逻辑代码，比如随机数算法，数据结构一类的。
+　　应用测试(Application Unit test):测试跟App运行环境相关的代码，比如目录、文件操作，Core Data存取等。
+　　在Xcode4.5中，创建App时会自动创建Application Unit Test项目。</p>
+
+<h4>2，示例代码。</h4>
+
+<p>　　在Xcode documentation中，可以找到“iPhoneUnitTests”这个例子项目。这个项目会教你怎么写单元测试代码。</p>
+
+<h3>二、进阶问题</h3>
+
+<h4>1，访问被测类</h4>
+
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置)
+　　比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：
+　　1，#import ”FundManager.h&#8221;
+　　2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。
+　　否则会在链接阶段找不到FundManager接口。</p>
+
+<h4>2，向单元测试目标中添加资源</h4>
+
+<p>　　比如要测试的某个接口需要UIImage对象，需要一张图片来初始化UIImage对象，直接调用[UIImage imageNamed:@”xxx”]是不行的，因为这个接口要从App的main bundle中加载图像，不能直接访问添加到单元测试项目中的资源，下面代码演示了两个bundle目录的不同：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Resource Paths are Different!
+</span><span class='line'>Many assumptions that your bundle is the main bundle will cause problems when testing. (Especially when adding tests to existing code) Look at the difference in bundles, the main bundle isn’t what you’d expect in a unit test.
+</span><span class='line'>NSString *mainBundlePath = [[NSBundle mainBundle] resourcePath];
+</span><span class='line'>NSString *directBundlePath = [[NSBundle bundleForClass:[self class]] resourcePath];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundlePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundlePath);
+</span><span class='line'>NSString *mainBundleResourcePath = [[NSBundle mainBundle] pathForResource:@”Frame.png”ofType:nil];
+</span><span class='line'>NSString *directBundleResourcePath = [[NSBundle bundleForClass:[selfclass]] pathForResource:@”Frame.png” ofType:nil];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundleResourcePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundleResourcePath);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解决方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Load resources using the bundle for the current classNSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:theImageName ofType:nil]; 
+</span><span class='line'>UIImage *image = [UIImage imageWithContentsOfFile:imagePath];</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SQLite使用 iOS平台]]></title>
@@ -1461,20 +1534,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#114;&#x6f;&#111;&#x74;&#64;&#x77;&#x77;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#114;&#103;">&#114;&#x6f;&#111;&#x74;&#64;&#119;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#x74;&#64;&#119;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#x63;&#x6e;&#46;&#111;&#114;&#x67;">&#x72;&#x6f;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#114;&#111;&#111;&#116;&#x40;&#119;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#x6f;&#x74;&#64;&#x77;&#x77;&#x77;&#46;&#99;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#111;&#x74;&#x40;&#119;&#119;&#119;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#103;">&#x72;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#x77;&#119;&#x2e;&#99;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#x67;">&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#114;&#111;&#111;&#116;&#x40;&#x77;&#x77;&#x77;&#46;&#99;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#114;&#103;">&#x72;&#x6f;&#x6f;&#116;&#x40;&#119;&#119;&#x77;&#46;&#99;&#x6e;&#115;&#99;&#110;&#x2e;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x72;&#x6f;&#x6f;&#116;&#64;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;">&#x72;&#111;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x72;&#x6f;&#111;&#x74;&#x40;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;">&#114;&#111;&#111;&#x74;&#64;&#119;&#x77;&#119;&#46;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#x6f;&#114;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -2027,7 +2100,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x73;&#104;&#106;&#98;&#111;&#x72;&#97;&#103;&#101;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#104;&#x6a;&#98;&#x6f;&#114;&#97;&#103;&#x65;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x73;&#104;&#106;&#x62;&#111;&#x72;&#x61;&#103;&#101;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x73;&#104;&#x6a;&#98;&#x6f;&#114;&#97;&#103;&#x65;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -2145,61 +2218,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Category 巧用-调试程序]]></title>
-    <link href="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/"/>
-    <updated>2013-05-28T10:52:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu</id>
-    <content type="html"><![CDATA[<h3>Category可以用来调试</h3>
-
-<p>除了隐藏私有方法外，我主要用它截住函数。</p>
-
-<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UITableViewCell(dealloc) 
-</span><span class='line'>-(void)dealloc 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(@"%@",NSStringFromSelector(_cmd)); 
-</span><span class='line'>    NSArray *array = allSubviews(self);       // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有
-</span><span class='line'>    NSLog(@"%@",array); 
-</span><span class='line'>    [super dealloc]; 
-</span><span class='line'>}
-</span><span class='line'>@end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>其它的类也可以这样写，你随便输出什么</p>
-
-<p>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> @implementation UITableView(setframe) 
-</span><span class='line'>-(void)setFrame:(CGRect)frame 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(%"%@",self); 
-</span><span class='line'>    [super setFrame: frame]; 
-</span><span class='line'>} 
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
 ]]></content>
   </entry>
   
