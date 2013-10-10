@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-10T23:35:01+08:00</updated>
+  <updated>2013-10-10T23:39:39+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,79 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[遭遇SIGPIPE]]></title>
+    <link href="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/"/>
+    <updated>2013-10-10T23:35:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/10/zao-yu-sigpipe</id>
+    <content type="html"><![CDATA[<p>《转》</p>
+
+<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
+然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
+但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
+
+<p>用gdb执行程序, 退出时提示"Broken pipe".
+最后问题确定为, 对一个对端已经关闭的socket调用两次write,
+第二次将会生成SIGPIPE信号, 该信号默认结束进程.
+具体的分析可以结合TCP的"四次握手"关闭. TCP是全双工的信道,
+可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
+虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
+表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
+
+<p>也就是说, 因为TCP协议的限制,
+一个端点无法获知对端的socket是调用了close还是shutdown.
+对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
+这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
+会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
+因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
+第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
+
+<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
+给它设置SIG_IGN信号处理函数:
+<code>signal(SIGPIPE, SIG_IGN);</code>
+这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
+程序便能知道对端已经关闭.</p>
+
+<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
+
+<h5>忽略SIGPIPE信号的方法</h5>
+
+<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
+
+<p><code>
+struct sigaction sa;
+sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
+sa.sa_flags = 0;
+if (sigemptyset(&amp;sa.sa_mask) == -1 || //初始化信号集为空
+sigaction(SIGPIPE, &amp;sa, 0) == -1) { //屏蔽SIGPIPE信号
+perror("failed to ignore SIGPIPE; sigaction");
+exit(EXIT_FAILURE);
+}
+</code></p>
+
+<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
+
+<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
+<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
+
+<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
+pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
+
+<p>```</p>
+
+<h1>ifndef WIN32</h1>
+
+<p>sigset_t signal_mask;
+sigemptyset (&amp;signal_mask);
+sigaddset (&amp;signal_mask, SIGPIPE);
+int rc = pthread_sigmask (SIG_BLOCK, &amp;signal_mask, NULL);
+if (rc != 0) {
+printf(&ldquo;block sigpipe error\n&rdquo;);
+}
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[NaN问题 Not a Number]]></title>
@@ -192,175 +265,6 @@ UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
 <h4>官方SQL语法</h4>
 
 <p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用CocoaPods进行iOS程序的开源库依懒管理]]></title>
-    <link href="http://saick.net/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/"/>
-    <updated>2013-09-03T11:49:00+08:00</updated>
-    <id>http://saick.net/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li</id>
-    <content type="html"><![CDATA[<h3>前言</h3>
-
-<p>每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如</p>
-
-<ul>
-<li>Java: maven，Ivy</li>
-<li>Ruby: gems</li>
-<li>Python: pip, easy_install</li>
-<li>Nodejs: npm</li>
-</ul>
-
-
-<p>随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫：CocoaPods。</p>
-
-<h3>CocoaPods简介</h3>
-
-<p>CocoaPods是一个负责管理iOS项目中第三方开源代码的工具。CocoaPods项目的源码在Github上管理。该项目开始于2011年8月12日，经过一年多的发展，现在已经超过1000次提交，并且持续保持活跃更新。开发iOS项目不可避免地要使用第三方开源库，CocoaPods的出现使得我们可以节省设置和更新第三方开源库的时间。</p>
-
-<p>拿我之前开发的粉笔网iPhone客户端为例，其使用了14个第三方开源库。在没有使用CocoaPods以前，我需要：</p>
-
-<p>把这些第三方开源库的相关文件复制到项目中，或者设置成git的submodule，然后这些开源库通常需要依赖系统的一些framework，我需要手工地将这些framework一一增加到项目依赖中，比如ASI网络库就需要增加以下framework: CFNetwork, SystemConfiguration, MobileCoreServices, CoreGraphics and zlib。</p>
-
-<p>对于RegexKitLite这个正则表达式库，我还需要设置-licucore的编译参数
-手工管理这些依赖包的更新。</p>
-
-<p>这些体力活虽然简单，但毫无技术含量并且浪费时间。在使用CocoaPods之后，我只需要将用到的第三方开源库放到一个名为Podfile的文件中，然后执行pod install。CocoaPods就会自动将这些第三方开源库的源码下载下来，并且为我的工程设置好相应的系统依赖和编译参数。</p>
-
-<h3>CocoaPods的安装和使用介绍</h3>
-
-<h4>安装</h4>
-
-<p>安装方式异常简单, Mac下都自带ruby，使用ruby的gem命令即可下载安装：
-<code>
-$ gem install cocoapods
-$ pod setup
-</code></p>
-
-<h4>使用</h4>
-
-<p>使用时需要新建一个名为Podfile的文件，以如下格式，将依赖的库名字依次列在文件中即可</p>
-
-<p><code>
-eachability',  '~&gt; 3.0.0'
-pod 'ASIHTTPRequest'
-pod 'RegexKitLite'
-</code></p>
-
-<p>然后你将编辑好的Podfile文件放到你的项目根目录中，执行如下命令即可：</p>
-
-<p><code>
-cd "your project home"
-pod install
-</code></p>
-
-<p>现在，你的所有第三方库都已经下载完成并且设置好了编译参数和依赖，你只需要记住如下2点即可：</p>
-
-<p>使用CocoaPods生成的 .xcworkspace 文件来打开工程，而不是以前的 .xcodeproj 文件。
-每次更改了Podfile文件，你需要重新执行一次pod install命令。</p>
-
-<h4>查找第三方库</h4>
-
-<p>你如果不知道cocoaPods管理的库中，是否有你想要的库，那么你可以通过pod search命令进行查找，以下是我用pod search json查找到的所有可用的库：
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod search json&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>&ndash;> AnyJSON (0.0.1)
-</span><span class='line'>   Encode / Decode JSON by any means possible.
-</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/mattt/AnyJSON">https://github.com/mattt/AnyJSON&lt;/a>
-</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/mattt/AnyJSON.git">https://github.com/mattt/AnyJSON.git&lt;/a>
-</span><span class='line'>   &ndash; Versions: 0.0.1 [master repo]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>&ndash;> JSONKit (1.5pre)
-</span><span class='line'>   A Very High Performance Objective-C JSON Library.
-</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/johnezang/JSONKit">https://github.com/johnezang/JSONKit&lt;/a>
-</span><span class='line'>   &ndash; Source:   git://github.com/johnezang/JSONKit.git
-</span><span class='line'>   &ndash; Versions: 1.5pre, 1.4 [master repo]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>&ndash;> MTJSONDictionary (0.0.4)
-</span><span class='line'>   An NSDictionary category for when you&rsquo;re working with it converting to/from JSON. DEPRECATED, use MTJSONUtils
-</span><span class='line'>   instead.
-</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/mysterioustrousers/MTJSONDictionary.git">https://github.com/mysterioustrousers/MTJSONDictionary.git&lt;/a>
-</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/mysterioustrousers/MTJSONDictionary.git">https://github.com/mysterioustrousers/MTJSONDictionary.git&lt;/a>
-</span><span class='line'>   &ndash; Versions: 0.0.4, 0.0.3, 0.0.2 [master repo]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>&ndash;> MTJSONUtils (0.1.0)
-</span><span class='line'>   An NSObject category for working with JSON.
-</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/mysterioustrousers/MTJSONUtils.git">https://github.com/mysterioustrousers/MTJSONUtils.git&lt;/a>
-</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/mysterioustrousers/MTJSONUtils.git">https://github.com/mysterioustrousers/MTJSONUtils.git&lt;/a>
-</span><span class='line'>   &ndash; Versions: 0.1.0, 0.0.1 [master repo]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>&ndash;> SBJson (3.1.1)
-</span><span class='line'>   This library implements strict JSON parsing and generation in Objective-C.
-</span><span class='line'>   &ndash; Homepage: &lt;a href="http://stig.github.com/json-framework/">http://stig.github.com/json-framework/&lt;/a>
-</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/stig/json-framework.git">https://github.com/stig/json-framework.git&lt;/a>
-</span><span class='line'>   &ndash; Versions: 3.1.1, 3.1, 3.0.4, 2.2.3 [master repo]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>&ndash;> TouchJSON (1.0)
-</span><span class='line'>   TouchJSON is an Objective-C based parser and generator for JSON encoded data.
-</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/TouchCode/TouchJSON">https://github.com/TouchCode/TouchJSON&lt;/a>
-</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/TouchCode/TouchJSON.git">https://github.com/TouchCode/TouchJSON.git&lt;/a>
-</span><span class='line'>   &ndash; Versions: 1.0 [master repo]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>生成第三方库的帮助文档</p>
-
-<p>如果你想让CococaPods帮你生成第三方库的帮助文档，并集成到XCode中，那么用brew安装appledoc即可：</p>
-
-<p><code>
-brew install appledoc
-</code></p>
-
-<p>关于appledoc，我在今年初的另一篇博客《使用Objective-C的文档生成工具:appledoc》中有专门介绍。它最大的优点是可以将帮助文档集成到XCode中，这样你在敲代码的时候，按住opt键单击类名或方法名，就可以显示出相应的帮助文档。</p>
-
-<h3>原理</h3>
-
-<p>大概研究了一下CocoaPods的原理，它是将所有的依赖库都放到另一个名为Pods项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。发现的一些技术细节有：</p>
-
-<p>Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。
-对于资源文件，CocoaPods提供了一个名为Pods-resources.sh的bash脚本，该脚本在每次项目编译的时候都会执行，将第三方库的各种资源文件复制到目标目录中。
-CocoaPods通过一个名为Pods.xcconfig的文件来在编译时设置所有的依赖和参数。
-Have fun!</p>
-
-<p>转自：
-Posted by 唐巧 Dec 2nd, 2012   iOS
-自由转载-非商用-非衍生-保持署名 | Creative Commons BY-NC-ND 3.0</p>
 ]]></content>
   </entry>
   

@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Game Channel - Saick Blog</title>
+  <title>遭遇SIGPIPE - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Game Channel Aug 1st, 2013 游戏直播-一般都是和朋友打游戏，与其他朋友分享 哈哈 仅支持Flash播放，如果提示链接错误就是当前无直播。 详情联系我哦～ 请更新您的 Flash Player 到最新版本 视频专辑 跑跑卡丁车 http://www.youku.com/ &hellip;">
+  <meta name="description" content="《转》 我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
+然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
+但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出. 用gdb执行程序, 退出时提示&#8221;Broken pipe&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/game.html">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/10/zao-yu-sigpipe">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -79,11 +81,15 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Game Channel</h1>
-    <p class="meta">
+    
+      <h1 class="entry-title">遭遇SIGPIPE</h1>
+    
+    
+      <p class="meta">
+        
 
 
 
@@ -95,97 +101,129 @@
   
 
 
-<time datetime="2013-08-01T16:52:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time></p>
+<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
   </header>
-  
-  <h5>游戏直播-一般都是和朋友打游戏，与其他朋友分享 哈哈</h5>
-
-<p>仅支持Flash播放，如果提示链接错误就是当前无直播。 详情联系我哦～</p>
-
-<!-- Bogou.tv 播狗外链播放器开始 -->
 
 
-<div>
-    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="640" height="393">
-        <param name="movie" value="http://bogou.tv/swfs/BogouExternalPlayer.swf" />
-        <param name="loop" value="false" />
-        <param name="menu" value="false" />
-        <param name="quality" value="best" />
-        <param name="scale" value="noscale" />
-        <param name="salign" value="tl" />
-        <param name="wmode" value="direct" />
-        <param name="allowfullscreen" value="true" />
-        <param name="allowscriptaccess" value="sameDomain" />
-        <param name="flashvars" value="u=8176" />
+<div class="entry-content"><p>《转》</p>
 
-        <object type="application/x-shockwave-flash" data="http://bogou.tv/swfs/BogouExternalPlayer.swf" width="640" height="393">
-            <param name="loop" value="false" />
-            <param name="menu" value="false" />
-            <param name="quality" value="best" />
-            <param name="scale" value="noscale" />
-            <param name="salign" value="tl" />
-            <param name="wmode" value="direct" />
-            <param name="allowfullscreen" value="true" />
-            <param name="allowscriptaccess" value="sameDomain" />
-            <param name="flashvars" value="u=8176" />
+<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
+然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
+但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
 
-            <a href="http://get.adobe.com/cn/flashplayer/">
-                <img src="http://bogou.tv/images/getFlashPlayer.gif" alt="Get Adobe Flash player" />
-                <p>请更新您的 Flash Player 到最新版本</p>
-            </a>
+<p>用gdb执行程序, 退出时提示&#8221;Broken pipe&#8221;.
+最后问题确定为, 对一个对端已经关闭的socket调用两次write,
+第二次将会生成SIGPIPE信号, 该信号默认结束进程.
+具体的分析可以结合TCP的&#8221;四次握手&#8221;关闭. TCP是全双工的信道,
+可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
+虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
+表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
 
-        </object>
+<p>也就是说, 因为TCP协议的限制,
+一个端点无法获知对端的socket是调用了close还是shutdown.
+对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
+这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
+会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
+因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
+第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
 
-    </object>
+<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
+给它设置SIG_IGN信号处理函数:
+<code>signal(SIGPIPE, SIG_IGN);</code>
+这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
+程序便能知道对端已经关闭.</p>
+
+<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
+
+<h5>忽略SIGPIPE信号的方法</h5>
+
+<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct sigaction sa;
+</span><span class='line'>sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
+</span><span class='line'>sa.sa_flags = 0;
+</span><span class='line'>if (sigemptyset(&sa.sa_mask) == -1 || //初始化信号集为空
+</span><span class='line'>sigaction(SIGPIPE, &sa, 0) == -1) { //屏蔽SIGPIPE信号
+</span><span class='line'>perror("failed to ignore SIGPIPE; sigaction");
+</span><span class='line'>exit(EXIT_FAILURE);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
+
+<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
+<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
+
+<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
+pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef WIN32
+</span><span class='line'>sigset_t signal_mask;
+</span><span class='line'>sigemptyset (&signal_mask);
+</span><span class='line'>sigaddset (&signal_mask, SIGPIPE);
+</span><span class='line'>int rc = pthread_sigmask (SIG_BLOCK, &signal_mask, NULL);
+</span><span class='line'>if (rc != 0) {
+</span><span class='line'>printf("block sigpipe error\n");
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
-<!-- Bogou.tv 播狗外链播放器结束 -->
-
-
-<h5>视频专辑</h5>
-
-<ul>
-<li>跑跑卡丁车      <a href="http://www.youku.com/playlist_show/id_17739109.html">http://www.youku.com/playlist_show/id_17739109.html</a></li>
-<li>NBA2K        <a href="http://www.youku.com/playlist_show/id_19511395.html">http://www.youku.com/playlist_show/id_19511395.html</a></li>
-</ul>
-
-
-<h5>经典战役</h5>
-
-<ul>
-<li><p>NBA2K 1v1 虐荡涛之WS</p>
-
-<p><embed src="http://player.youku.com/player.php/sid/XNTkwMjQ0ODYw/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed></p></li>
-<li><p>丿花语丶勇气退出跑跑</p>
-
-<p><embed src="http://player.youku.com/player.php/sid/XODYwMDU1NzY=/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed></p></li>
-</ul>
-
-
-  
-    <footer>
-      <p class="meta">
-        
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T16:52:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
-        
-      </p>
+  <footer>
+    <p class="meta">
       
-        <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/game.html" data-via="eric_shj" data-counturl="http://saick.net/game.html" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/c/'>C</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/" >Tweet</a>
   
   
   
@@ -209,9 +247,14 @@
 
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+        <a class="basic-alignment left" href="/blog/2013/10/10/nanwen-ti-not-a-number/" title="Previous Post: NaN问题 Not a Number">&laquo; NaN问题 Not a Number</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
   <section>
@@ -311,8 +354,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://saick.net/game.html';
-        var disqus_url = 'http://saick.net/game.html';
+        var disqus_identifier = 'http://saick.net/blog/2013/10/10/zao-yu-sigpipe/';
+        var disqus_url = 'http://saick.net/blog/2013/10/10/zao-yu-sigpipe/';
         var disqus_script = 'embed.js';
       
     (function () {
