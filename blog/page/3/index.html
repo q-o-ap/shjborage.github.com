@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="引言 本系列适合0基础的人员，因为我就是从0开始的，此系列记录我步入Android开发的一些经验分享，望与君共勉！作为Android队伍中的一个新人的我，如果有什么不对的地方，还望不吝赐教。
-在开始Android开发之旅启动之前，首先要搭建环境，然后创建一个简单的HelloWorld。 &hellip;">
+  <meta name="description" content="不太常用，但很关键命令 1.整理数据库：vacuum VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize() &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -87,7 +86,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/06/03/android-kai-fa-huan-jing-qiang-jian/">Android 开发环境搭建</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a></h1>
     
     
       <p class="meta">
@@ -103,145 +102,58 @@
   
 
 
-<time datetime="2013-06-03T10:19:00+08:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2013</time>
+<time datetime="2013-09-03T13:35:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
         
-         | <a href="/blog/2013/06/03/android-kai-fa-huan-jing-qiang-jian/#disqus_thread">Comments</a>
+         | <a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/#disqus_thread">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h4>引言</h4>
+  <div class="entry-content"><h3>不太常用，但很关键命令</h3>
 
-<p>本系列适合0基础的人员，因为我就是从0开始的，此系列记录我步入Android开发的一些经验分享，望与君共勉！作为Android队伍中的一个新人的我，如果有什么不对的地方，还望不吝赐教。
-在开始Android开发之旅启动之前，首先要搭建环境，然后创建一个简单的HelloWorld。
-本文的主题如下：
-*   1、环境搭建
-*   1.1、JDK安装
-*   1.2、Eclipse安装
-*   1.3、Android SDK安装
-*   1.4、ADT安装
-*   1.5、创建AVD
-*   2、HelloWorld</p>
+<h4>1.整理数据库：vacuum</h4>
 
-<h5>1、环境搭建1.1、JDK安装</h5>
+<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
 
-<p>如果你还没有JDK的话，可以去这里下载，接下来的工作就是安装提示一步一步走。设置环境变量步骤如下：
-我的电脑->属性->高级->环境变量->系统变量中添加以下环境变量：</p>
+<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>JAVA_HOME值为： D:Program FilesJavajdk1.6.0_18（你安装JDK的目录）
-</span><span class='line'>CLASSPATH值为：.;%JAVA_HOME%lib        ools.jar;%JAVA_HOME%libdt.jar;%JAVA_HOME%in;
-</span><span class='line'>Path:  在开始追加 %JAVA_HOME%in;</span></code></pre></td></tr></table></div></figure>
+<p>当数据库中的一个对象(表，索引或触发器)被撤销，会留下空白的空间。它使数据库比需要的大小更大，但能加快插入速度。实时的插入和删除会使得数据库文件结构混乱，减慢对数据库内容访问的速度。 VACUUM命令复制主数据库文件到临时数据库并从临时数据库重新载入主数据库，以整理数据库文件。这将除去空白页，使表数据彼此相邻排列，并整理数据库文件结构。不能对附加数据库文件进行以上操作。</p>
 
+<p>若当前有活动事务，该命令无法起作用。对于in-memory数据库，该命令无效。</p>
 
-<p>NOTE：前面四步设置环境变量对搭建Android开发环境不是必须的，可以跳过。
-安装完成之后，可以在检查JDK是否安装成功。打开cmd窗口，输入java –version 查看JDK的版本信息。出现类似下面的画面表示安装成功了：</p>
+<p>SQLite3.1中，可以通过使用auto-vacuum模式取代VACUUM命令，使用auto_vacuum pragma开启该模式。
+扩展阅读：<a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
 
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108473lch0zxwa3acwwlz.png"></p>
+<h4>2.导出数据库：.dump</h4>
 
-<p>图1、验证JDK安装是否成功</p>
+<p>.output file.sql</p>
 
-<h5>1.2、Eclipse安装</h5>
+<p>.dump</p>
 
-<p>如果你还么有Eclipse的话，可以去这里下载，下载如下图所示的Eclipse IDE for Java Developers（92M）的win 32bit版：
-<img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108477hf74jjzhwwqghrx.png"></p>
+<p>.output stdout</p>
 
-<p>图2、Eclipse下载</p>
+<h4>3.导入数据库：.read 和.import</h4>
 
-<p>解压之后即可使用。</p>
+<p>.read file.sql</p>
 
-<h5>1.3、Android SDK安装</h5>
+<p>.import [file][table]</p>
 
-<p>在Android Developers下载android-sdk_r05-windows.zip，下载完成后解压到任意路径。
-运行SDK Setup.exe，点击Available Packages。如果没有出现可安装的包，请点击Settings，选中Misc中的&#8221;Force <a href="https://...">https://&#8230;</a>&ldquo;这项，再点击Available Packages 。（《1.3、Android SDK安装》这里由于版本不同，没有SDK Setup.exe，只有SDK Manager ）
-选择希望安装的SDK及其文档或者其它包，点击Installation Selected、Accept All、Install Accepted，开始下载安装所选包
-在用户变量中新建PATH值为：Android SDK中的tools绝对路径（本机为D:\AndroidDevelop\android-sdk-windows\tools）。</p>
+<h3>SQLite不支持的常用操作</h3>
 
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210847zkz3upn8ptupajn3.png"></p>
-
-<p>图2、设置Android SDK的环境变量</p>
-
-<p>“确定”后，重新启动计算机。重启计算机以后，进入cmd命令窗口，检查SDK是不是安装成功。
-运行 android –h 如果有类似以下的输出，表明安装成功：
-<img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108485xc3hhuhqgrxz5x5.png"></p>
-
-<p>图3、验证Android SDK是否安装成功</p>
-
-<h5>1.4、ADT安装</h5>
-
-<p>打开 Eclipse IDE，进入菜单中的 &ldquo;Help&rdquo; &ndash;> &ldquo;Install New Software&rdquo;
-点击Add&hellip;按钮，弹出对话框要求输入Name和Location：Name自己随便取，Location输入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>http://dl-ssl.google.com/android/eclipse</span></code></pre></td></tr></table></div></figure>
+<ul>
+<li>1 高级联结：SQlite支持“左外部联结（LEFT OUTER JOIN）”，不支持“右外部联结（RIGHT OUTER JOIN）”和“全外部联结（FULL OUTER JOIN）”。</li>
+<li>2 修改表操作：SQlite支持“重命名表（RENAME TABLE）”，使用“ALTER TABLE给表添加新列”。不支持使用“ALTER TABLE”进行“删除列（DROP COLUMN）”，“修改列（ALTER COLUMN）”，“添加约束（ADD CONSTRAINT）”等。</li>
+<li>3 触发器支持不完整：SQlite支持“行级触发器（FOR EACH ROW）”，不支持“语句级触发器（FOR EACH STATEMENT）”。</li>
+<li>4 视图只能读不能写：SQlite不能在一个视图上使用“删除（DELETE）”，“插入（INSERT）”和“更新（UPDATE）”语句。但是可以创建一个触发器，当对表进行“DELETE”，“INSERT”或者“UPDATE”操作时激活该触发器，在该触发器的body部分做所需的操作。</li>
+<li>5 不支持GRANT和REVOKE语句：因为SQlite只是去读写普通的磁盘文件，所以唯一可以应用到SQlite数据库的访问权限（控制），只有底层操作系统的普通的文件访问权限。所以那些client/server模式的数据库上通常具有的GRANT和REVOKE命令，SQlite并不支持，因为它们对于“嵌入式的数据库引擎（embedded database engine）”毫无意义。</li>
+</ul>
 
 
-<p>如下图所示：</p>
+<h4>官方SQL语法</h4>
 
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210848nmzllg33c1wnnew3.png"></p>
-
-<p>确定返回后，在work with后的下拉列表中选择我们刚才添加的ADT，我们会看到下面出有Developer Tools，展开它会有Android DDMS和Android Development Tool，勾选他们。</p>
-
-<p>如下图所示：</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210848ztqts8zrr5qbcmzt.png"></p>
-
-<p>然后就是按提示一步一步next。
-完成之后：
-选择Window > Preferences&hellip;
-在左边的面板选择Android，然后在右侧点击Browse&hellip;并选中SDK路径，本机为：
-D:AndroidDevelopandroid-sdk-windows
-点击Apply、OK。配置完成。</p>
-
-<h5>1.5、创建AVD</h5>
-
-<p>为使Android应用程序可以在模拟器上运行，必须创建AVD。
-1、在Eclipse中。选择Windows > Android SDK and AVD Manager
-2、点击左侧面板的Virtual Devices，再右侧点击New
-3、填入Name，选择Target的API，SD Card大小任意，Skin随便选，Hardware目前保持默认值
-4、点击Create AVD即可完成创建AVD
-注意：如果你点击左侧面板的Virtual Devices，再右侧点击New ，而target下拉列表没有可选项时，这时候你：
-点击左侧面板的Available Packages，在右侧勾选</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>https://dl-ssl.google.com/android/repository/repository.xml</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如下图所示：</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108488xiii3gzmrkf9iir.png"></p>
-
-<p>然后点击Install Selected按钮，接下来就是按提示做就行了
-要做这两步，原因是在1.3、Android SDK安装中没有安装一些必要的可用包（Available Packages）。</p>
-
-<h5>2、HelloWorld</h5>
-
-<p>通过File &ndash;> New &ndash;> Project 菜单，建立新项目&#8221;Android Project&#8221;
-然后填写必要的参数，如下图所示：（注意这里我勾选的是Google APIs，你可以选你喜欢的，但你要创建相应的AVD）</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210849rr90t9tp9z74vp19.png"></p>
-
-<p>相关参数的说明：
-Project Name: 包含这个项目的文件夹的名称。
-Package Name: 包名，遵循JAVA规范，用包名来区分不同的类是很重要的，我用的是helloworld.test。
-Activity Name: 这是项目的主类名，这个类将会是Android的Activity类的子类。一个Activity类是一个简单的启动程序和控制程序的类。它可以根据需要创建界面，但不是必须的。
-Application Name: 一个易读的标题在你的应用程序上。
-在&#8221;选择栏&#8221;的 &ldquo;Use default location&rdquo; 选项，允许你选择一个已存在的项目。
-点击Finish后，点击Eclipse的Run菜单选择Run Configurations…
-选择“Android Application”，点击在左上角（按钮像一张纸上有个“+”号）或者双击“Android Application”， 有个新的选项“New_configuration”（可以改为我们喜欢的名字）。
-在右侧Android面板中点击Browse…，选择HelloWorld
-在Target面板的Automatic中勾选相应的AVD，如果没有可用的AVD的话，你需要点击右下角的Manager…，然后新建相应的AVD。如下图所示：
-<img src="http://www.apkbus.com/data/attachment/forum/201204/10/210849v8zlcudvv375v8rz.png"></p>
-
-<p>然后点Run按钮即可，运行成功的话会有Android的模拟器界面，如下图所示：</p>
-
-<p><img src="http://images.cnblogs.com/cnblogs_com/skynet/WindowsLiveWriter/Android1_552/image_22.png"></p>
-
-<p>转自：<a href="http://www.apkbus.com/android-43332-1-1.html">http://www.apkbus.com/android-43332-1-1.html</a></p>
+<p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
 </div>
   
   
@@ -254,7 +166,7 @@ Application Name: 一个易读的标题在你的应用程序上。
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/">Git基本使用与Dropbox配合使用</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a></h1>
     
     
       <p class="meta">
@@ -270,30 +182,84 @@ Application Name: 一个易读的标题在你的应用程序上。
   
 
 
-<time datetime="2013-05-29T11:43:00+08:00" pubdate data-updated="true">May 29<span>th</span>, 2013</time>
+<time datetime="2013-09-03T11:49:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
         
-         | <a href="/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/#disqus_thread">Comments</a>
+         | <a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/#disqus_thread">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h3>Git基本使用</h3>
+  <div class="entry-content"><h3>前言</h3>
 
-<h4>1.取得项目的Git仓库</h4>
+<p>每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如</p>
 
-<h5>1.1从当前目录初始化</h5>
+<ul>
+<li>Java: maven，Ivy</li>
+<li>Ruby: gems</li>
+<li>Python: pip, easy_install</li>
+<li>Nodejs: npm</li>
+</ul>
+
+
+<p>随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫：CocoaPods。</p>
+
+<h3>CocoaPods简介</h3>
+
+<p>CocoaPods是一个负责管理iOS项目中第三方开源代码的工具。CocoaPods项目的源码在Github上管理。该项目开始于2011年8月12日，经过一年多的发展，现在已经超过1000次提交，并且持续保持活跃更新。开发iOS项目不可避免地要使用第三方开源库，CocoaPods的出现使得我们可以节省设置和更新第三方开源库的时间。</p>
+
+<p>拿我之前开发的粉笔网iPhone客户端为例，其使用了14个第三方开源库。在没有使用CocoaPods以前，我需要：</p>
+
+<p>把这些第三方开源库的相关文件复制到项目中，或者设置成git的submodule，然后这些开源库通常需要依赖系统的一些framework，我需要手工地将这些framework一一增加到项目依赖中，比如ASI网络库就需要增加以下framework: CFNetwork, SystemConfiguration, MobileCoreServices, CoreGraphics and zlib。</p>
+
+<p>对于RegexKitLite这个正则表达式库，我还需要设置-licucore的编译参数
+手工管理这些依赖包的更新。</p>
+
+<p>这些体力活虽然简单，但毫无技术含量并且浪费时间。在使用CocoaPods之后，我只需要将用到的第三方开源库放到一个名为Podfile的文件中，然后执行pod install。CocoaPods就会自动将这些第三方开源库的源码下载下来，并且为我的工程设置好相应的系统依赖和编译参数。</p>
+
+<h3>CocoaPods的安装和使用介绍</h3>
+
+<h4>安装</h4>
+
+<p>安装方式异常简单, Mac下都自带ruby，使用ruby的gem命令即可下载安装：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git init</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install cocoapods
+</span><span class='line'>$ pod setup</span></code></pre></td></tr></table></div></figure>
 
 
-<p>然后可以进行git add .. 进行文件添加。<br/>
-以及编写.gitignore文件，对本地文件进行忽略</p>
+<h4>使用</h4>
 
-<figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>使用时需要新建一个名为Podfile的文件，以如下格式，将依赖的库名字依次列在文件中即可</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>eachability',  '~&gt; 3.0.0'
+</span><span class='line'>pod 'ASIHTTPRequest'
+</span><span class='line'>pod 'RegexKitLite'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后你将编辑好的Podfile文件放到你的项目根目录中，执行如下命令即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd "your project home"
+</span><span class='line'>pod install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在，你的所有第三方库都已经下载完成并且设置好了编译参数和依赖，你只需要记住如下2点即可：</p>
+
+<p>使用CocoaPods生成的 .xcworkspace 文件来打开工程，而不是以前的 .xcodeproj 文件。
+每次更改了Podfile文件，你需要重新执行一次pod install命令。</p>
+
+<h4>查找第三方库</h4>
+
+<p>你如果不知道cocoaPods管理的库中，是否有你想要的库，那么你可以通过pod search命令进行查找，以下是我用pod search json查找到的所有可用的库：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -313,109 +279,98 @@ Application Name: 一个易读的标题在你的应用程序上。
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Exclude the build directory
-</span><span class='line'> build/*
-</span><span class='line'> 
-</span><span class='line'> # Exclude temp nibs and swap files
-</span><span class='line'> *~.nib
-</span><span class='line'> *.swp
-</span><span class='line'> 18 
-</span><span class='line'> # Exclude OS X folder attributes
-</span><span class='line'> .DS_Store
-</span><span class='line'> 
-</span><span class='line'> # Exclude user-specific XCode 3 and 4 files
-</span><span class='line'> *.mode1
-</span><span class='line'> *.mode1v3
-</span><span class='line'> *.mode2v3
-</span><span class='line'> *.perspective
-</span><span class='line'> *.perspectivev3
-</span><span class='line'> *.pbxuser
-</span><span class='line'> *.xcworkspace
-</span><span class='line'> *.xcuserstate
-</span><span class='line'> xcuserdata</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod search json
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> AnyJSON (0.0.1)
+</span><span class='line'>   Encode / Decode JSON by any means possible.
+</span><span class='line'>   - Homepage: https://github.com/mattt/AnyJSON
+</span><span class='line'>   - Source:   https://github.com/mattt/AnyJSON.git
+</span><span class='line'>   - Versions: 0.0.1 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> JSONKit (1.5pre)
+</span><span class='line'>   A Very High Performance Objective-C JSON Library.
+</span><span class='line'>   - Homepage: https://github.com/johnezang/JSONKit
+</span><span class='line'>   - Source:   git://github.com/johnezang/JSONKit.git
+</span><span class='line'>   - Versions: 1.5pre, 1.4 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> MTJSONDictionary (0.0.4)
+</span><span class='line'>   An NSDictionary category for when you're working with it converting to/from JSON. DEPRECATED, use MTJSONUtils
+</span><span class='line'>   instead.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Versions: 0.0.4, 0.0.3, 0.0.2 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> MTJSONUtils (0.1.0)
+</span><span class='line'>   An NSObject category for working with JSON.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Versions: 0.1.0, 0.0.1 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> SBJson (3.1.1)
+</span><span class='line'>   This library implements strict JSON parsing and generation in Objective-C.
+</span><span class='line'>   - Homepage: http://stig.github.com/json-framework/
+</span><span class='line'>   - Source:   https://github.com/stig/json-framework.git
+</span><span class='line'>   - Versions: 3.1.1, 3.1, 3.0.4, 2.2.3 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> TouchJSON (1.0)
+</span><span class='line'>   TouchJSON is an Objective-C based parser and generator for JSON encoded data.
+</span><span class='line'>   - Homepage: https://github.com/TouchCode/TouchJSON
+</span><span class='line'>   - Source:   https://github.com/TouchCode/TouchJSON.git
+</span><span class='line'>   - Versions: 1.0 [master repo]</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>1.2 从现有仓库克隆</h5>
+<p>生成第三方库的帮助文档</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/aaaa/aa.git
-</span><span class='line'>git clone file:::/Volumes/Data/xxx.git
-</span><span class='line'>git clone /Volumes/Data/xxx.git
-</span><span class='line'>git clone /Volumes/Data/xxx.git new_xxx_dir</span></code></pre></td></tr></table></div></figure>
-
-
-<p>默认会创建xxx目录（xxx.git）,如果想指定目录的话用最后一种</p>
-
-<h5>1.3 其它常用</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git commit
-</span><span class='line'>git commit -a -m "asdf"
-</span><span class='line'>git status
-</span><span class='line'>git log
-</span><span class='line'>git log -1
-</span><span class='line'>git log -p</span></code></pre></td></tr></table></div></figure>
-
-
-<p>注意看提示就好了。</p>
-
-<h4>2.远程仓库使用</h4>
-
-<h5>2.1 创建</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git init --bare</span></code></pre></td></tr></table></div></figure>
-
-
-<p>创建一个空的远程仓库（可在服务器上，也可在本地，也可以在Dropbox的目录中）</p>
-
-<h5>2.2 查看远程仓库</h5>
-
-<p>在本地执行以下命令</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote -v</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.3 添加远程仓库</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote add [shortanem] [url]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.4 从远程抓取数据</h5>
+<p>如果你想让CococaPods帮你生成第三方库的帮助文档，并集成到XCode中，那么用brew安装appledoc即可：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch [remote-name]</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install appledoc</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>2.5 推送数据</h5>
+<p>关于appledoc，我在今年初的另一篇博客《使用Objective-C的文档生成工具:appledoc》中有专门介绍。它最大的优点是可以将帮助文档集成到XCode中，这样你在敲代码的时候，按住opt键单击类名或方法名，就可以显示出相应的帮助文档。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git push [remote-name] [branchname]</span></code></pre></td></tr></table></div></figure>
+<h3>原理</h3>
 
+<p>大概研究了一下CocoaPods的原理，它是将所有的依赖库都放到另一个名为Pods项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。发现的一些技术细节有：</p>
 
-<h5>2.6 其它</h5>
+<p>Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。
+对于资源文件，CocoaPods提供了一个名为Pods-resources.sh的bash脚本，该脚本在每次项目编译的时候都会执行，将第三方库的各种资源文件复制到目标目录中。
+CocoaPods通过一个名为Pods.xcconfig的文件来在编译时设置所有的依赖和参数。
+Have fun!</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote show [remote-name]
-</span><span class='line'>git remote rename old new
-</span><span class='line'>git remote rm xxx</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Dropbox 整合</h4>
-
-<p>把远程建在Dropbox上即可，哈哈</p>
+<p>转自：
+Posted by 唐巧 Dec 2nd, 2012   iOS
+自由转载-非商用-非衍生-保持署名 | Creative Commons BY-NC-ND 3.0</p>
 </div>
   
   
@@ -428,7 +383,7 @@ Application Name: 一个易读的标题在你的应用程序上。
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Flashlight(PowerSaving) 简介</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a></h1>
     
     
       <p class="meta">
@@ -444,559 +399,58 @@ Application Name: 一个易读的标题在你的应用程序上。
   
 
 
-<time datetime="2013-05-28T16:46:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-09-02T11:00:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
         
-         | <a href="/blog/2013/05/28/flashlight-powersaving-jian-jie/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The best flashlight app to save you power and then protect you battery.</p>
-
-<p>Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked.
-PowerSaving Flashlight also solve this issue.</p>
-
-<p>Details:
-1.Saving you battery power automatic, and you can change it from settings(both in app setting and system setting)
-2.Stop using you torch when battery level is low
-3.Disable the system Auto-Lock
-4.Turn on the flashlight when app startup(You can set it to &ldquo;NO&rdquo;
-5.Fullscreen control, but you can only turn it off by press the button.
-6.Share the famous app to you friends.</p>
-
-<p>No matter what problem you have, just contact us by email or visit the develop&rsquo;s blog.</p>
-
-<p>史上最懂你的省电手电筒</p>
-
-<p>还在为找不到好用的手电筒发愁么？
-还在为那些“大而全”的工具启动慢、难用发愁么？
-还在为手电筒用着用着就黑了发愁么？
-还在为手电筒用着太费电发愁么？</p>
-
-<ol>
-<li>自动为你的手机省电</li>
-<li>当电池电量过低，自动切换到“白屏”模式</li>
-<li>可选择禁用系统锁屏功能</li>
-<li>启动可选择默认打开手电筒</li>
-<li>全屏控制功能，按任意位置打开，关闭按开关</li>
-<li>分享手电筒给好友</li>
-</ol>
-
-
-<p>如果您遇到问题或者有好的建议，请直接与我们联系或者在程序中提交反馈，谢谢。</p>
-
-<p>无奈AppStore不让上，做的再好都不让上，哎！</p>
-
-<h4>91：</h4>
-
-<p><a href="http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788">http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788</a></p>
-
-<h4>同步推：</h4>
-
-<p><a href="http://app.tongbu.com/10001483_flashlight.html">http://app.tongbu.com/10001483_flashlight.html</a></p>
-
-<h5>欢迎留言反馈！</h5>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/isecret-jian-jie/">iSecret 简介</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/isecret-jian-jie/#disqus_thread">Comments</a>
+         | <a href="/blog/2013/09/02/cocoapodsde-shi-yong/#disqus_thread">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
+  <div class="entry-content"><h5>问题来源：</h5>
 
-<p>中国区：<a href="https://itunes.apple.com/cn/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
+<p>在开发iOS的app时，我们时常需要引用第三方Open Source套件来简化开发，一般情况下，我们可以采用Add Files to的方式将其加入到目前的工程中，但也存在一些问题，比如版本演进的控制问题，当前工程引用的第三方库的清单等。</p>
 
-<p>iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them.
-So, iSecret could help you to manage them safely.
-iSecret&rsquo;s all file are encrypted at high level.
-iSecret does not require any network.</p>
+<h4>什么是CocoaPods？</h4>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#115;&#104;&#106;&#98;&#x6f;&#114;&#x61;&#103;&#x65;&#x40;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#115;&#x68;&#x6a;&#98;&#111;&#x72;&#x61;&#x67;&#101;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>CocoaPods是一个依赖关系管理工具，用于管理Objective-C工程项目中各种Library。</p>
 
-<p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
-现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
-所以i秘密帮您把这些帐号密码保管起来,并且全程高强度加密,确保信息安全。
-为了保证密码的安全,首先主密码是通过高强度的加密算法,保存到手机当中。
-即可手机被破解,也能保证数据的安全。
-对于保存的各类网站等的密码信息,全部通过加密文本保存到手机中,并且是全部纯文本解析,没有用
-任何XML、INI等配置文件,让安全性更升一级。
-i秘密不需要任何的网络访问,进一步加强安全性。</p>
+<h4>安装CocoaPods</h4>
 
-<p>欢迎大家提出宝贵意见,共同为好产品而努力。
-<a href="mailto:shjborage@gmail.com">shjborage@gmail.com</a></p>
+<p>由于CocoaPods是ruby的gem，需要首先安装RubyGems，mac电脑一般都已经安装好了ruby，但可能需要更新一下你的RubyGems（注意system前面是两个横线）</p>
 
-<h3>Release Note:</h3>
-
-<h5>v1.0  2012-02-22 10:08:28</h5>
-
-<ul>
-<li>第一版本，仅157kb大小。</li>
-<li>功能简单实用</li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>sudo gem update --system  </span></code></pre></td></tr></table></div></figure>
 
 
-<h5>v1.1  2012-08-15 10:16:20</h5>
+<p>安装command line工具
+确保Xcode中安装了Command Line Tools，打开Xcode->Preferences->Downloads->Components，点一下“Install”按钮
+安装CocoaPods</p>
 
-<ul>
-<li>在查看秘密时，可直接点击文本内容将其拷贝到剪贴板；</li>
-<li>应用需要输入密码时，如果您输入正确的密码，自动进入；</li>
-<li>当您添加新的秘密时，自动进入编辑模式；</li>
-<li>当您发送邮件时，加入一些提示信息；</li>
-<li>添加开发者博客以及用户评价体系；</li>
-<li><p>其它问题修复。</p></li>
-<li><p>In secret detail view, you can tap some text information to copy it to pasteboard;</p></li>
-<li>In the beginning of the app, when you enter the correct password, it will start working automatically;</li>
-<li>When you add new secret, edit it first;</li>
-<li>Add some presentations when you send emails;</li>
-<li>Add author&rsquo;s blog and user review interface;</li>
-<li>Some other bugs fixed.</li>
-</ul>
-
-
-<h5>v1.2  2012-09-24 14:58:31</h5>
-
-<ul>
-<li><p>随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率</p></li>
-<li><p>Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution</p></li>
-</ul>
-
-
-<h5>v1.3  2013-04-25 10:55:45</h5>
-
-<ul>
-<li>支持图形解锁以及简单数字密码，更加简单方便</li>
-<li>简化用户反馈功能，支持内部反馈</li>
-<li>加入程序版更新提示本</li>
-<li>解决各个版本系统上面UI细节问题</li>
-<li>推荐应用给好友圈</li>
-<li><p>禁用程序后台运行，更加安全稳定</p></li>
-<li><p>Support simple password and pattern, which is easy to use</p></li>
-<li>Simply the user feedback in the app without go to the AppStore</li>
-<li>Add new version prompt, you can&rsquo;t miss the new version</li>
-<li>Fix some bugs in the different iOS versions</li>
-<li>Share this app to your friends</li>
-<li>Stop running in the background, much safer</li>
-</ul>
-
-
-<h5>v1.4  2013-05-23 7:55:45</h5>
-
-<ul>
-<li>加强主密码安全性，强烈建议大家升级</li>
-<li><p>默认密码不显示的问题</p></li>
-<li><p>Improve the security of you main passcode, recommend you to update at once.</p></li>
-<li>Fix bug: the default passcode was not show.</li>
-</ul>
-
-
-<h3>欢迎留言反馈！</h3>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
+<p>命令行输入：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>sudo gem install cocoapods  
+</span><span class='line'>pod setup  </span></code></pre></td></tr></table></div></figure>
 
 
+<p>然后就可以开始使用了。</p>
 
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Category 巧用-调试程序</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Category可以用来调试</h3>
-
-<p>除了隐藏私有方法外，我主要用它截住函数。</p>
-
-<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
+<p>用pod search Github上的套件名称就可以找到相应的说明，如</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UITableViewCell(dealloc) 
-</span><span class='line'>-(void)dealloc 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(@"%@",NSStringFromSelector(_cmd)); 
-</span><span class='line'>    NSArray *array = allSubviews(self);       // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有
-</span><span class='line'>    NSLog(@"%@",array); 
-</span><span class='line'>    [super dealloc]; 
-</span><span class='line'>}
-</span><span class='line'>@end </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>pod search nimbus  </span></code></pre></td></tr></table></div></figure>
 
 
-<p>其它的类也可以这样写，你随便输出什么</p>
-
-<p>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> @implementation UITableView(setframe) 
-</span><span class='line'>-(void)setFrame:(CGRect)frame 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(%"%@",self); 
-</span><span class='line'>    [super setFrame: frame]; 
-</span><span class='line'>} 
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">iOS 开发常见低级错误</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
-
-<p>Aug 5, 2013</p>
-
-<ul>
-<li><h3>如果使用C++代码混编，找不到iostream等</h3>
-
-<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
-</ul>
-
-
-<p>May 28, 2013</p>
-
-<ul>
-<li><h3>不要调用[super  release]</h3>
-
-<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-block-bian-cheng/">iOS Block 编程</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T09:57:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/ios-block-bian-cheng/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>block</h2>
-
-<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
-
-<h4>声明block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>定义block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock = ^{
-</span><span class='line'>        NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>声明和定义在一起：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void) = ^{
-</span><span class='line'>    NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>调用block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock();</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>带返回值和参数的block:</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>double (^multiplyTwoValues)(double, double) =
-</span><span class='line'>                              ^(double firstValue, double secondValue) {
-</span><span class='line'>                                  return firstValue * secondValue;
-</span><span class='line'>                              };
-</span><span class='line'>    double result = multiplyTwoValues(2,4);
-</span><span class='line'>    NSLog(@"The result is %f", result);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
-
-<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>__block int (^recursiveBlock)(int) = ^(int param) {
-</span><span class='line'>      if (param == 1) {
-</span><span class='line'>          return 1;
-</span><span class='line'>      }
-</span><span class='line'>      return (param--) * recursiveBlock(param);
-</span><span class='line'>};  
-</span><span class='line'>recursiveBlock(5);    // 计算5的阶乘</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>You Can Pass Blocks as Arguments to Methods or Functions
-&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
-The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {
-</span><span class='line'>    ...
-</span><span class='line'>    callbackBlock();
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>A Block Should Always Be the Last Argument to a Method
-Objects Use Properties to Keep Track of Blocks
-The syntax to define a property to keep track of a block is similar to a block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface XYZObject : NSObject
-</span><span class='line'>@property (copy) void (^blockProperty)(void);
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
-A block property is set or invoked like any other block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>self.blockProperty = ^{
-</span><span class='line'>    ...
-</span><span class='line'>};
-</span><span class='line'>self.blockProperty();
-</span><span class='line'>typedef void(^BlockCC)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>// e.g.更新myTableview并显示最后一行</p>
+<p>会输出</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1011,170 +465,83 @@ A block property is set or invoked like any other block variable:</p>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (dataArray.count &gt; 0) {
-</span><span class='line'>      [myTableView reloadData];   
-</span><span class='line'>      // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
-</span><span class='line'>   // 所以要[NSObject performBlock: afterDelay:0];
-</span><span class='line'>      [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
-</span><span class='line'>      NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
-</span><span class='line'>      void (^scrollToBottom)(void) = ^{
-</span><span class='line'>          [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-</span><span class='line'>          [myTableView release];
-</span><span class='line'>      };
-</span><span class='line'>      //
-</span><span class='line'>      [NSObject performBlock:scrollToBottom afterDelay:0];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>-&gt; Nimbus (1.0.0)  
+</span><span class='line'>   An iOS framework whose growth is bounded by O(documentation).  
+</span><span class='line'>   - Homepage: http://docs.nimbuskit.info/index.html  
+</span><span class='line'>   - Source:   https://github.com/jverkoey/nimbus.git  
+</span><span class='line'>   - Versions: 1.0.0, 0.9.3, 0.9.2, 0.9.1, 0.9.0 [master repo]  
+</span><span class='line'>   - Sub specs:  
+</span><span class='line'>         - Nimbus/Core (1.0.0)  
+</span><span class='line'>         - Nimbus/Badge (1.0.0)  
+</span><span class='line'>         - Nimbus/CSS (1.0.0)  
+</span><span class='line'>         - Nimbus/AttributedLabel (1.0.0)  
+</span><span class='line'>         - Nimbus/Interapp (1.0.0)  
+</span><span class='line'>         - Nimbus/Launcher (1.0.0)  
+</span><span class='line'>         - Nimbus/Models (1.0.0)  
+</span><span class='line'>         - Nimbus/NetworkControllers (1.0.0)  
+</span><span class='line'>         - Nimbus/NetworkImage (1.0.0)  
+</span><span class='line'>         - Nimbus/Overview (1.0.0)  
+</span><span class='line'>         - Nimbus/PagingScrollView (1.0.0)  
+</span><span class='line'>         - Nimbus/Photos (1.0.0)  
+</span><span class='line'>         - Nimbus/Operations (1.0.0)  
+</span><span class='line'>         - Nimbus/Operations/JSON (1.0.0)  
+</span><span class='line'>         - Nimbus/WebController (1.0.0)  </span></code></pre></td></tr></table></div></figure>
 
 
+<h3>使用CocoaPods管理第三方库</h3>
 
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/test-sharing-code-snippets/">Test Sharing Code Snippets</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-27T16:54:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/27/test-sharing-code-snippets/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Sharing Code Snippets</p>
-
-<p><em>Backtick Code Blocks</em></p>
-
-<p>Syntax:(insert enter before and after the two &#8220;&#8220;&#8220;)</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>``` [language] [title] [url] [link text]
-</span><span class='line'>code snippet ```
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Example(plain):</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>``` $ sudo make me a sandwich ```
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo make me a sandwich</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Example With Syntax Highlighting a Caption and Link</p>
+<p>在工程目录下，新建一个空白的Podfile文档，然后在里面添加内容</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>```ruby Discover if a number is prime http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/ Source Article
-</span><span class='line'>class Fixnum
-</span><span class='line'>  def prime?
-</span><span class='line'>    ('1' * self) !~ /^1?$|^(11+?)\1+$/
-</span><span class='line'>  end
-</span><span class='line'>end```</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>platform:ios  
+</span><span class='line'>pod 'AFNetworking', '1.1.0'  </span></code></pre></td></tr></table></div></figure>
 
 
+<p>保存时候，开始配置你的工程，终端中输入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>pod install  </span></code></pre></td></tr></table></div></figure>
 
 
-<figure class='code'><figcaption><span>Discover if a number is prime</span><a href='http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/'>Source Article</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>执行完后，CocoaPods在工程目录创建了一个文件夹“Pods”，这个文件夹存放所有依赖的库，另外还创建了一个.workspace文件
+注意：配置好之后必须用.workspace文件打开工程，而不是.xcodeproj.
+后续：</p>
+
+<p>在使用过程中，有可能会遇到类似下面的问题：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Fixnum</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">prime?</span>
-</span><span class='line'>    <span class="p">(</span><span class="s1">&#39;1&#39;</span> <span class="o">*</span> <span class="nb">self</span><span class="p">)</span> <span class="o">!~</span> <span class="sr">/^1?$|^(11+?)\1+$/</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>Resolving dependencies for target `default' (iOS 4.3)  
+</span><span class='line'>[!] AFNetworking (1.1.0) is not compatible with iOS 4.3.</span></code></pre></td></tr></table></div></figure>
 
 
-<p>More:
-<a href="http://octopress.org/docs/blogging/code/">http://octopress.org/docs/blogging/code/</a></p>
+<p>解决方法，修改Podfile文档</p>
 
-<h4>Codeblock</h4>
-
-<h5>Syntax</h5>
-
-<figure class='code'><figcaption><span>asdf </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSObject</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSObject</span> <span class="n">new</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSObject</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="p">[[]</span><span class="n">NSObject</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>platform:ios, '5.0'  </span></code></pre></td></tr></table></div></figure>
 
 
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/hello-jekyll/">Hello Jekyll</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-27T16:32:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/27/hello-jekyll/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>测试一下这玩意是不是能发布成功，哈哈</p>
+<p>以上可参考stackoverflow
+转自：<a href="http://blog.csdn.net/numbbuaa/article/details/8549018">http://blog.csdn.net/numbbuaa/article/details/8549018</a></p>
 </div>
   
   
@@ -1183,6 +550,8 @@ A block property is set or invoked like any other block variable:</p>
     </article>
   
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
