@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-11T00:05:24+08:00</updated>
+  <updated>2013-10-11T00:06:40+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -84,8 +84,9 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 <code>
 UIImage *backButton = [[UIImage imageNamed:@"blueButton"]     resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12)];
 </code>
-The output nows looks as follows:
-<img class="<a" src="href="http://www.saick.net/images/blog/2013-10-10-5.png">http://www.saick.net/images/blog/2013-10-10-5.png</a>"></p>
+The output nows looks as follows:</p>
+
+<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-10-10-5.png">http://www.saick.net/images/blog/2013-10-10-5.png</a>"></p>
 ]]></content>
   </entry>
   
