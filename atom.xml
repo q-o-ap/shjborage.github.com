@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-10T23:21:51+08:00</updated>
+  <updated>2013-10-10T23:35:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[NaN问题 Not a Number]]></title>
+    <link href="http://saick.net/blog/2013/10/10/nanwen-ti-not-a-number/"/>
+    <updated>2013-10-10T23:26:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/10/nanwen-ti-not-a-number</id>
+    <content type="html"><![CDATA[<p>这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。</p>
+
+<p>主要常见原因：</p>
+
+<ul>
+<li>除以0</li>
+<li>sizeWithFont的字符串为nil</li>
+<li>数学函数不正确运算</li>
+</ul>
+
+
+<p>解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
+如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>float _x = NAN;
+</span><span class='line'>if (!isnan(_x)) {
+</span><span class='line'>cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[group_concat函数详解]]></title>
@@ -1722,20 +1755,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#x77;&#x77;&#119;&#x2e;&#99;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#111;&#116;&#x40;&#119;&#x77;&#119;&#46;&#x63;&#x6e;&#x73;&#x63;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#x72;&#x6f;&#111;&#116;&#64;&#119;&#x77;&#x77;&#x2e;&#x63;&#x6e;&#x73;&#99;&#x6e;&#46;&#x6f;&#x72;&#x67;">&#114;&#x6f;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#99;&#110;&#46;&#111;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x72;&#x6f;&#111;&#116;&#64;&#119;&#119;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#114;&#103;">&#114;&#111;&#111;&#116;&#x40;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#x73;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#116;&#x40;&#119;&#119;&#119;&#x2e;&#99;&#110;&#x73;&#x63;&#x6e;&#46;&#111;&#x72;&#x67;">&#114;&#x6f;&#x6f;&#x74;&#64;&#119;&#x77;&#119;&#46;&#x63;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#114;&#111;&#111;&#x74;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#110;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#111;&#116;&#64;&#x77;&#119;&#x77;&#x2e;&#x63;&#110;&#x73;&#x63;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#114;&#x6f;&#111;&#116;&#x40;&#x77;&#x77;&#119;&#x2e;&#99;&#110;&#x73;&#x63;&#110;&#46;&#111;&#x72;&#103;">&#114;&#x6f;&#111;&#x74;&#64;&#119;&#x77;&#x77;&#x2e;&#99;&#110;&#x73;&#99;&#110;&#x2e;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#119;&#x77;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#111;&#x72;&#x67;">&#114;&#111;&#x6f;&#x74;&#64;&#x77;&#x77;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ mysql -uroot
+<p>[<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#115;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;">&#x72;&#x6f;&#x6f;&#116;&#64;&#x77;&#119;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#111;&#x72;&#x67;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -2217,59 +2250,6 @@ Application Name: 一个易读的标题在你的应用程序上。
 <h4>Dropbox 整合</h4>
 
 <p>把远程建在Dropbox上即可，哈哈</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flashlight(PowerSaving) 简介]]></title>
-    <link href="http://saick.net/blog/2013/05/28/flashlight-powersaving-jian-jie/"/>
-    <updated>2013-05-28T16:46:00+08:00</updated>
-    <id>http://saick.net/blog/2013/05/28/flashlight-powersaving-jian-jie</id>
-    <content type="html"><![CDATA[<p>The best flashlight app to save you power and then protect you battery.</p>
-
-<p>Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked.
-PowerSaving Flashlight also solve this issue.</p>
-
-<p>Details:
-1.Saving you battery power automatic, and you can change it from settings(both in app setting and system setting)
-2.Stop using you torch when battery level is low
-3.Disable the system Auto-Lock
-4.Turn on the flashlight when app startup(You can set it to &ldquo;NO&rdquo;
-5.Fullscreen control, but you can only turn it off by press the button.
-6.Share the famous app to you friends.</p>
-
-<p>No matter what problem you have, just contact us by email or visit the develop&rsquo;s blog.</p>
-
-<p>史上最懂你的省电手电筒</p>
-
-<p>还在为找不到好用的手电筒发愁么？
-还在为那些“大而全”的工具启动慢、难用发愁么？
-还在为手电筒用着用着就黑了发愁么？
-还在为手电筒用着太费电发愁么？</p>
-
-<ol>
-<li>自动为你的手机省电</li>
-<li>当电池电量过低，自动切换到“白屏”模式</li>
-<li>可选择禁用系统锁屏功能</li>
-<li>启动可选择默认打开手电筒</li>
-<li>全屏控制功能，按任意位置打开，关闭按开关</li>
-<li>分享手电筒给好友</li>
-</ol>
-
-
-<p>如果您遇到问题或者有好的建议，请直接与我们联系或者在程序中提交反馈，谢谢。</p>
-
-<p>无奈AppStore不让上，做的再好都不让上，哎！</p>
-
-<h4>91：</h4>
-
-<p><a href="http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788">http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788</a></p>
-
-<h4>同步推：</h4>
-
-<p><a href="http://app.tongbu.com/10001483_flashlight.html">http://app.tongbu.com/10001483_flashlight.html</a></p>
-
-<h5>欢迎留言反馈！</h5>
 ]]></content>
   </entry>
   
