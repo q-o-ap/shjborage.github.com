@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>遭遇SIGPIPE - Saick Blog</title>
+  <title>在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="《转》 我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出. 用gdb执行程序, 退出时提示&#8221;Broken pipe&# &hellip;">
+  <meta name="description" content="序：状态栏白边问题解决 在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可） 在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路 第一种：通过人为的办法改变view. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/10/zao-yu-sigpipe">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -85,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">遭遇SIGPIPE</h1>
+      <h1 class="entry-title">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</h1>
     
     
       <p class="meta">
@@ -101,7 +99,7 @@
   
 
 
-<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -110,39 +108,53 @@
   </header>
 
 
-<div class="entry-content"><p>《转》</p>
+<div class="entry-content"><h4>序：状态栏白边问题解决</h4>
 
-<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
+<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
 
-<p>用gdb执行程序, 退出时提示&#8221;Broken pipe&#8221;.
-最后问题确定为, 对一个对端已经关闭的socket调用两次write,
-第二次将会生成SIGPIPE信号, 该信号默认结束进程.
-具体的分析可以结合TCP的&#8221;四次握手&#8221;关闭. TCP是全双工的信道,
-可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
-虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
-表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
+<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
 
-<p>也就是说, 因为TCP协议的限制,
-一个端点无法获知对端的socket是调用了close还是shutdown.
-对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
-这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
-会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
-因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
-第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
+<h5>第一种：通过人为的办法改变view.transform的属性。</h5>
 
-<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
-给它设置SIG_IGN信号处理函数:
-<code>signal(SIGPIPE, SIG_IGN);</code>
-这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
-程序便能知道对端已经关闭.</p>
+<p>具体办法：</p>
 
-<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
+<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
 
-<h5>忽略SIGPIPE信号的方法</h5>
+<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
 
-<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
+<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
+
+<ul>
+<li>1.获取当前电池条的方向</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>2.获取当前屏幕的大小</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>3.设置我们的View的中心点</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
+</ul>
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -152,23 +164,22 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>struct sigaction sa;
-</span><span class='line'>sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
-</span><span class='line'>sa.sa_flags = 0;
-</span><span class='line'>if (sigemptyset(&sa.sa_mask) == -1 || //初始化信号集为空
-</span><span class='line'>sigaction(SIGPIPE, &sa, 0) == -1) { //屏蔽SIGPIPE信号
-</span><span class='line'>perror("failed to ignore SIGPIPE; sigaction");
-</span><span class='line'>exit(EXIT_FAILURE);
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
+</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
+</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
+</span><span class='line'>} else {
+</span><span class='line'>    return CGAffineTransformIdentity;
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
+<ul>
+<li>5.可以动画的改变我们view的显示方式了</li>
+</ul>
 
-<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
-<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
-
-<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
-pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -178,15 +189,54 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef WIN32
-</span><span class='line'>sigset_t signal_mask;
-</span><span class='line'>sigemptyset (&signal_mask);
-</span><span class='line'>sigaddset (&signal_mask, SIGPIPE);
-</span><span class='line'>int rc = pthread_sigmask (SIG_BLOCK, &signal_mask, NULL);
-</span><span class='line'>if (rc != 0) {
-</span><span class='line'>printf("block sigpipe error\n");
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
+</span><span class='line'>
+</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
+</span><span class='line'>[UIView beginAnimations:nil context:nil];
+</span><span class='line'>[UIView setAnimationDuration:duration];
+</span><span class='line'>
+</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
+</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h5>
+
+<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
+
+<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
+</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
+</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // 更保险的写法 add by Eric
+</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
+</span><span class='line'>    {
+</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
+</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
+</span><span class='line'>                                   withObject:(id)toOrientation];
+</span><span class='line'>      }
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
+
+<pre><code>总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。
+</code></pre>
 </div>
 
 
@@ -209,12 +259,12 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
   
 
 
-<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/c/'>C</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
   
 </span>
 
@@ -223,7 +273,7 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/" >Tweet</a>
   
   
   
@@ -250,10 +300,8 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/10/nanwen-ti-not-a-number/" title="Previous Post: NaN问题 Not a Number">&laquo; NaN问题 Not a Number</a>
+        <a class="basic-alignment left" href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/" title="Previous Post: 怎么查看在mac上连接过的wifi密码">&laquo; 怎么查看在mac上连接过的wifi密码</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/" title="Next Post: iOS 5 : UIImage and resizableImageWithCapInsets">iOS 5 : UIImage and resizableImageWithCapInsets &raquo;</a>
       
     </p>
   </footer>
@@ -357,8 +405,8 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://saick.net/blog/2013/10/10/zao-yu-sigpipe/';
-        var disqus_url = 'http://saick.net/blog/2013/10/10/zao-yu-sigpipe/';
+        var disqus_identifier = 'http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/';
+        var disqus_url = 'http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -9,7 +9,24 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下： 转换步骤： 1、进入项目目录，可看到.project文件， &hellip;">
+  <meta name="description" content="状态栏隐藏问题 使用代码 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+- (BOOL)prefersStatusBarHidden
+{ return _isStatusHidden;//隐藏为YES，显示为NO
+} - (void)hideStatusBar:(BOOL &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +97,274 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">iOS7 初步适配，与iOS6共存</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T15:43:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>状态栏隐藏问题</h4>
+
+<p><strong>使用代码</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)prefersStatusBarHidden
+</span><span class='line'>{
+</span><span class='line'>  return _isStatusHidden;//隐藏为YES，显示为NO
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)hideStatusBar:(BOOL)isHidden
+</span><span class='line'>{
+</span><span class='line'>  if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+</span><span class='line'>    // iOS 7
+</span><span class='line'>    _isStatusHidden = isHidden;
+</span><span class='line'>    [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+</span><span class='line'>  } else {
+</span><span class='line'>    [[UIApplication sharedApplication] setStatusBarHidden:isHidden];
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Catagory</strong> 此处与root ViewController有关，不一定这样解决</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UINavigationController (StatusBar)
+</span><span class='line'>
+</span><span class='line'>- (UIStatusBarStyle)preferredStatusBarStyle
+</span><span class='line'>{
+</span><span class='line'>  return UIStatusBarStyleLightContent;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (BOOL)prefersStatusBarHidden
+</span><span class='line'>{
+</span><span class='line'>  if ([[self topViewController] isKindOfClass:[MovieDetailViewController class]]) {
+</span><span class='line'>    MovieDetailViewController *movieVC = (MovieDetailViewController *)[self topViewController];
+</span><span class='line'>    return [movieVC prefersStatusBarHidden];
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  return NO;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>与iOS6 共存问题</h4>
+
+<p><strong>旋转方面还是iOS6里面那些改动，iOS7基本上没啥变化</strong></p>
+
+<p>主要区别就是相对坐标问题，简单处理如下：</p>
+
+<p>定义全局父类，使得所有ViewController处理些事件。<em>每个都加显然很麻烦的啦</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//global_Header.h中相关的定义
+</span><span class='line'>#define kOSVersion (double)([[[UIDevice currentDevice] systemVersion] length] &gt; 0 ? \
+</span><span class='line'>(double)[[[UIDevice currentDevice] systemVersion] doubleValue] : (double)kMinOSVersion)</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UniversalViewController.m
+</span><span class='line'>//  BFServiceStation
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 10/7/13.
+</span><span class='line'>//  Copyright (c) 2013 Baofeng. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'>
+</span><span class='line'>#import "UniversalViewController.h"
+</span><span class='line'>#import "global_Header.h"
+</span><span class='line'>
+</span><span class='line'>@interface UniversalViewController ()
+</span><span class='line'>
+</span><span class='line'>@end
+</span><span class='line'>
+</span><span class='line'>@implementation UniversalViewController
+</span><span class='line'>
+</span><span class='line'>- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+</span><span class='line'>{
+</span><span class='line'>  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+</span><span class='line'>  if (self) {
+</span><span class='line'>    // Custom initialization
+</span><span class='line'>  }
+</span><span class='line'>  return self;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)viewDidLoad
+</span><span class='line'>{
+</span><span class='line'>  [super viewDidLoad];
+</span><span class='line'>  // Do any additional setup after loading the view.
+</span><span class='line'>  
+</span><span class='line'>  if (kOSVersion >= 7.0f) {
+</span><span class='line'>    self.automaticallyAdjustsScrollViewInsets = NO;
+</span><span class='line'>    [self setEdgesForExtendedLayout:UIRectEdgeNone];
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)didReceiveMemoryWarning
+</span><span class='line'>{
+</span><span class='line'>  [super didReceiveMemoryWarning];
+</span><span class='line'>  // Dispose of any resources that can be recreated.
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>// 引用自CocoaChina</p>
+
+<ul>
+<li>1、如果设置了self.navigationController.navigationBar 设置了UIBarMetricsLandscapePhone的背景;而没有设置UIBarMetricsDefault的背景，navigationBar会变透明</li>
+</ul>
+
+
+<p>如图所示： navigationBar透明</p>
+
+<p><img src="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=177bc31d0ef3d7ca08f63f73c224cf34/730e0cf3d7ca7bcb851f430cbc096b63f624a8a9.jpg?referer=3f277b9367380cd7bf0997dd0867&x=.jpg"></p>
+
+<ul>
+<li>2、上图还出现了一个问题，如果没有设置self.automaticallyAdjustsScrollViewInsets = NO，那么iOS7下会自动让scrollView滑动多次，以满足UITableView第一行的显示需要，这又带来了另外一个问题，下拉刷新的View的frame也随之发生了改变，导致整个下拉刷新不可用了</li>
+<li>3、self.automaticallyAdjustsScrollViewInsets 这个属性是IOS7才有的新方法，目的就是为了让scrollView自动适应屏幕，如果self.automaticallyAdjustsScrollViewInsets = NO，那么效果会变成下图所示：</li>
+</ul>
+
+
+<p><img src="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=e257bde0d5ca7bcb797bc72a8e321a5e/0df3d7ca7bcb0a4662460f1a6963f6246b60afa9.jpg?referer=5ad9d42b0ed79123b9f7a1440967&x=.jpg"></p>
+
+<p>我的ViewController继承的是UITableViewController, 所以TableView是随系统而产生的，在IOS7之前，tableView的Frame的起始点是(0, 20),在IOS7之后，它的起始点变成了(0,0),这个时候如果为了让下拉刷新能正常工作，必须设置self.edgesForExtendedLayout = UIRectEdgeNone
+（这种情况适用于容器建立在UINavigationController）.</p>
+
+<ul>
+<li>4、如果设置了self.navigationController.navigationBar 设置UIBarMetricsDefault的背景为空，则默认的是IOS7上边栏平铺效果，如果设置了图片，并且这个图片高度保持在44（88）,那么IOS5,6,7的效果是一致的。</li>
+<li>5、iOS7中的StatusBar的没有了背景，他的UIStatusBarStyleLightContent和UIStatusBarStyleDefault只会改变StatusBar的文字，都不会有背景</li>
+<li><p>6、ViewController-Based Status Bar Appearance控制了StatusBar的外观，如果设置为YES，则会调用preferredStatusBarStyle。如果为NO,则通过传统方式来控制</p>
+
+<p>下图示IOS6，7上的正常情况</p></li>
+</ul>
+
+
+<p><img src="http://f.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=d9ddefcc8fb1cb133a693c16ed6f2773/5fdf8db1cb134954e4566c47544e9258d1094a4d.jpg?referer=57d47c02708b47109738c8fcb643&x=.jpg"></p>
+
+<p><img src="http://b.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9ec7af048882b90139adc33643b6d84a/1f178a82b9014a90a738c29eab773912b31bee8b.jpg?referer=40e418ff881363274cfaf7034a89&x=.jpg"></p>
+
+<p><img src="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=f3066050af4bd11300cdb7376a94d532/d043ad4bd11373f0b991ebbca60f4bfbfbed0462.jpg?referer=888f3612a38b87d609559e2f6421&x=.jpg"></p>
+
+<p>7、在IOS7下，如果不设置navigationBar的背景图片，而且设置[navigationBar setBarStyle:UIBarStyleBlackTranslucent];可以获取默认的黑色毛玻璃效果哟</p>
+
+<p>如果大家还有遇到一些奇怪的问题，欢迎大家来补充</p>
+
+<p><img src="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=f5b2e0c983cb39dbc5c06753e02d7819/50da81cb39dbb6fd7a1061050b24ab18972b374d.jpg?referer=aa507eef1c178a82972b4a907144&x=.jpg"></p>
+
+<p>本文参考文档:</p>
+
+<p><a href="http://blog.jaredsinclair.com/post/61507315630/wrestling-with-status-bars-and-navigation-bars-on-ios-7">http://blog.jaredsinclair.com/post/61507315630/wrestling-with-status-bars-and-navigation-bars-on-ios-7</a>
+<a href="https://developer.apple.com/library/ios/documentation/userexperience/conceptual/TransitionGuide/index.html">https://developer.apple.com/library/ios/documentation/userexperience/conceptual/TransitionGuide/index.html</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -296,118 +581,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-10T23:41:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a custom background, title and text to the navbar. Once I had this working, to keep a consist look across my application, I began tweaking the buttons on the navbar using the same Appearance API.
-As I got further into the customization of the buttons, I ran into a method withinUIImage that was introduced in iOS 5, resizableImageWithCapInsets. I found myself getting side-tracked from the original idea of navbar look and feel, to understanding how cap insets work. This post delves into what I learned.</p>
-
-<p>Cap Insets with UIButton
-As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
-Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can see the white border):</p>
-
-<p><img src="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=8cf958067d3e6709ba0045fa0bfcee00/c8177f3e6709c93d5bb0aad69d3df8dcd1005454.jpg?referer=1e8577dc79899e5121990f24944a&x=.jpg"></p>
-
-<p>Depending on the context of where the button appears, its size may vary. The code to create a button with the image and the corresponding output follow:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(80, 130, 160, 44)];  
-</span><span class='line'>[button setTitle:@"Test Button" forState:UIControlStateNormal]; 
-</span><span class='line'>
-</span><span class='line'>// Image with without cap insets
-</span><span class='line'>UIImage *buttonImage = [UIImage imageNamed:@"blueButton"];   
-</span><span class='line'>
-</span><span class='line'>[button addTarget:self action:@selector(buttonPressed:) forControlEvents: UIControlEventTouchUpInside];
-</span><span class='line'>[button setBackgroundImage:buttonImage forState:UIControlStateNormal];
-</span><span class='line'>[[self view] addSubview:button];</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=040338663b12b31bc36ccd2cb6234747/a8773912b31bb0518f971709347adab44aede064.jpg?referer=e60131fd0afa513d08bd59ee403a&x=.jpg"></p>
-
-<p>As you can see, the button is stretched in all directions. Let’s change the code to include cap insets, however, before we do that, let’s look at the signature of the cap insets method:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Looking on step further, UIEdgeInserts is defined as:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>typedef struct {  
-</span><span class='line'>   CGFloat top, left, bottom, right;
-</span><span class='line'>} UIEdgeInsets;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>UIEdgeInsets is structure that specifies float values for each cap inset: top, left, bottom and right areas of an image. To apply this to the image for the button, here is all we need to do:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// Image with cap insets
-</span><span class='line'>UIImage *buttonImage = [[UIImage imageNamed:@"blueButton"]     resizableImageWithCapInsets:UIEdgeInsetsMake(0, 16, 0, 16)];</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This requests that the left and right 16 pixels of the original image are not scaled or resized when stretching the image to accomodate the button size frame defined above. The end results is as shown below:</p>
-
-<p><img src="http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5daa3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7fa427ec5066d01609243154.jpg?referer=f13ad2b88026cffc303d8a827f4b&x=.jpg"></p>
-
-<p>Cap Insets with UIBarButtonItem
-We can use the same image for a button on a navbar (I’ll show the specifics in the next post on customizing the navbar). Without specifying the cap insets, the button looks as follows:</p>
-
-<p><img src="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=98f5931979f40ad111e4c7e6671760e2/03087bf40ad162d9605dc63d13dfa9ec8a13cd64.jpg?referer=9ebd1655e9f81a4c7f25d9f92b3a&x=.jpg"></p>
-
-<p>The code below specifies an image where 12 pixels on the top, left, bottom and right be preserved when stretching/resizing the button:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIImage *backButton = [[UIImage imageNamed:@"blueButton"]     resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12)];</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The output nows looks as follows:</p>
-
-<p><img src="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&x=.jpg"></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -432,7 +605,7 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (19)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (20)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -443,6 +616,10 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a>
@@ -458,10 +635,6 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
     
       <li class="post">
         <a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">给xcode工程做命令行build</a>
       </li>
     
   </ul>

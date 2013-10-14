@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-14T16:26:28+08:00</updated>
+  <updated>2013-10-14T16:42:42+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,143 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题]]></title>
+    <link href="http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/"/>
+    <updated>2013-10-14T16:28:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi</id>
+    <content type="html"><![CDATA[<h4>序：状态栏白边问题解决</h4>
+
+<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
+
+<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
+
+<h5>第一种：通过人为的办法改变view.transform的属性。</h5>
+
+<p>具体办法：</p>
+
+<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
+
+<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
+
+<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
+
+<ul>
+<li>1.获取当前电池条的方向</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>2.获取当前屏幕的大小</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>3.设置我们的View的中心点</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
+</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
+</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
+</span><span class='line'>} else {
+</span><span class='line'>    return CGAffineTransformIdentity;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>5.可以动画的改变我们view的显示方式了</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
+</span><span class='line'>
+</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
+</span><span class='line'>[UIView beginAnimations:nil context:nil];
+</span><span class='line'>[UIView setAnimationDuration:duration];
+</span><span class='line'>
+</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
+</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h5>
+
+<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
+
+<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
+</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
+</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // 更保险的写法 add by Eric
+</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
+</span><span class='line'>    {
+</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
+</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
+</span><span class='line'>                                   withObject:(id)toOrientation];
+</span><span class='line'>      }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[怎么查看在mac上连接过的wifi密码]]></title>
@@ -1845,57 +1982,6 @@ rake new_post[&ldquo;Your Title of Your Article&rdquo;]
 <p>isEqual:方法首先检查指针的等同性，然后是类的等同性，最后调用对象的比较器进行比较。比较器的名称指示出参与比较的对象的类名称。这种类型的比较器对传入的对象进行强制类型检查，是Cocoa中常见的约定，NSString的isEqualToString:和NSTimeZone的isEqualToTimeZone:就是两个这样的例子。特定类的比较器（在这个例子中是isEqualToWidget:）负责执行name和data变量的等同性。</p>
 
 <p>在Cocoa框架的所有isEqualToType:方法中，nil都不是正当的参数，这些方法的实现在接收到nil参数时会抛出例外。然而为了向后兼容，Cocoa框架中的isEqual:方法可以接收nil值，在这种情况下返回NO。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[让Apple TV直接收看中国视频]]></title>
-    <link href="http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/"/>
-    <updated>2013-06-20T14:09:00+08:00</updated>
-    <id>http://saick.net/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin</id>
-    <content type="html"><![CDATA[<h4>工作原理：</h4>
-
-<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
-
-<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
-
-<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
-
-<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
-<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
-
-<h4>没有自己的DNS</h4>
-
-<p>　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，
-　　　即可将Apple TV内置网址指向一个新的网站，达到通过Apple TV直接收看贵国视频的愿望。
-修改DNS如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>180.153.225.136 电信服务器，适合于南方电信的用户使用。TTVast提供
-</span><span class='line'>210.129.145.150 适合部分联通用户，以及海外用户使用。TTVast提供</span></code></pre></td></tr></table></div></figure>
-
-
-<p>　　用私人DNS会轻易被他伪装的银行、淘宝等网站来欺骗你，为了安全，请ATV用户使用上面靠谱的。
-　　请勿用于Apple TV之外的任何设备（如：手机、PC、路由器等），否则后果自负。
-　　</p>
-
-<h4>拥有自己的DNS</h4>
-
-<p>将 <a href="http://trailers.apple.com/appletv/">http://trailers.apple.com/appletv/</a> 路径下的 index.xml 及 application.js转向下面网址的对应文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>http://180.153.225.136:8000/index.xml ttvas提供
-</span><span class='line'>http://210.129.145.150:8000/index.xml ttvas提供
-</span><span class='line'>http://4.appletv3.sinaapp.com/index.php Missde提供 - 目前测试中..</span></code></pre></td></tr></table></div></figure>
-
-
-<p>本程序：Apple TV DNS PHP代码下载：
-<a href="https://code.google.com/p/appletv/downloads/list">https://code.google.com/p/appletv/downloads/list</a></p>
-
-<p>获取音悦台MV下载地址 <a href="http://huoqu.sinaapp.com/video/">http://huoqu.sinaapp.com/video/</a></p>
 ]]></content>
   </entry>
   

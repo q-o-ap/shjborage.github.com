@@ -9,9 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="《转》 我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出. 用gdb执行程序, 退出时提示&#8221;Broken pipe&# &hellip;">
+  <meta name="description" content="I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +80,118 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-10T23:41:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a custom background, title and text to the navbar. Once I had this working, to keep a consist look across my application, I began tweaking the buttons on the navbar using the same Appearance API.
+As I got further into the customization of the buttons, I ran into a method withinUIImage that was introduced in iOS 5, resizableImageWithCapInsets. I found myself getting side-tracked from the original idea of navbar look and feel, to understanding how cap insets work. This post delves into what I learned.</p>
+
+<p>Cap Insets with UIButton
+As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
+Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can see the white border):</p>
+
+<p><img src="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=8cf958067d3e6709ba0045fa0bfcee00/c8177f3e6709c93d5bb0aad69d3df8dcd1005454.jpg?referer=1e8577dc79899e5121990f24944a&x=.jpg"></p>
+
+<p>Depending on the context of where the button appears, its size may vary. The code to create a button with the image and the corresponding output follow:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(80, 130, 160, 44)];  
+</span><span class='line'>[button setTitle:@"Test Button" forState:UIControlStateNormal]; 
+</span><span class='line'>
+</span><span class='line'>// Image with without cap insets
+</span><span class='line'>UIImage *buttonImage = [UIImage imageNamed:@"blueButton"];   
+</span><span class='line'>
+</span><span class='line'>[button addTarget:self action:@selector(buttonPressed:) forControlEvents: UIControlEventTouchUpInside];
+</span><span class='line'>[button setBackgroundImage:buttonImage forState:UIControlStateNormal];
+</span><span class='line'>[[self view] addSubview:button];</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=040338663b12b31bc36ccd2cb6234747/a8773912b31bb0518f971709347adab44aede064.jpg?referer=e60131fd0afa513d08bd59ee403a&x=.jpg"></p>
+
+<p>As you can see, the button is stretched in all directions. Let’s change the code to include cap insets, however, before we do that, let’s look at the signature of the cap insets method:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Looking on step further, UIEdgeInserts is defined as:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef struct {  
+</span><span class='line'>   CGFloat top, left, bottom, right;
+</span><span class='line'>} UIEdgeInsets;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>UIEdgeInsets is structure that specifies float values for each cap inset: top, left, bottom and right areas of an image. To apply this to the image for the button, here is all we need to do:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// Image with cap insets
+</span><span class='line'>UIImage *buttonImage = [[UIImage imageNamed:@"blueButton"]     resizableImageWithCapInsets:UIEdgeInsetsMake(0, 16, 0, 16)];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This requests that the left and right 16 pixels of the original image are not scaled or resized when stretching the image to accomodate the button size frame defined above. The end results is as shown below:</p>
+
+<p><img src="http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5daa3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7fa427ec5066d01609243154.jpg?referer=f13ad2b88026cffc303d8a827f4b&x=.jpg"></p>
+
+<p>Cap Insets with UIBarButtonItem
+We can use the same image for a button on a navbar (I’ll show the specifics in the next post on customizing the navbar). Without specifying the cap insets, the button looks as follows:</p>
+
+<p><img src="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=98f5931979f40ad111e4c7e6671760e2/03087bf40ad162d9605dc63d13dfa9ec8a13cd64.jpg?referer=9ebd1655e9f81a4c7f25d9f92b3a&x=.jpg"></p>
+
+<p>The code below specifies an image where 12 pixels on the top, left, bottom and right be preserved when stretching/resizing the button:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIImage *backButton = [[UIImage imageNamed:@"blueButton"]     resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12)];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output nows looks as follows:</p>
+
+<p><img src="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&x=.jpg"></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -259,183 +369,6 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Group_concat函数详解</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-24T00:06:00+08:00" pubdate data-updated="true">Sep 24<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/09/24/group-concathan-shu-xiang-jie/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>问了好多人，都不知道group_concat这个函数。
-这个函数好啊，能将相同的行组合起来，省老事了。
-MySQL中group_concat函数(SQLite或其它数据亦可)</p>
-
-<p>完整的语法如下：</p>
-
-<p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
-
-<h4>基本查询</h4>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select * from aa;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
-
-<p>| id| name |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
-
-<p>|1 | 10|</p>
-
-<p>|1 | 20|</p>
-
-<p>|1 | 20|</p>
-
-<p>|2 | 20|</p>
-
-<p>|3 | 200 |</p>
-
-<p>|3 | 500 |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
-
-<p>6 rows in set (0.00 sec)</p>
-
-<p>以id分组，把name字段的值打印在一行，逗号分隔(默认)</p>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(name) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>| id| group_concat(name) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>|1 | 10,20,20|</p>
-
-<p>|2 | 20 |</p>
-
-<p>|3 | 200,500|</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
-
-<p>以id分组，把name字段的值打印在一行，分号分隔</p>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(name separator &lsquo;;&rsquo;) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>| id| group_concat(name separator &lsquo;;&rsquo;) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>|1 | 10;20;20 |</p>
-
-<p>|2 | 20|</p>
-
-<p>|3 | 200;500 |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
-
-<p>以id分组，把去冗余的name字段的值打印在一行，</p>
-
-<h3>逗号分隔</h3>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(distinct name) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>| id| group_concat(distinct name) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>|1 | 10,20|</p>
-
-<p>|2 | 20 |</p>
-
-<p>|3 | 200,500 |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
-
-<p>以id分组，把name字段的值打印在一行，逗号分隔，以name排倒序</p>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(name order by name desc) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>| id| group_concat(name order by name desc) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>|1 | 20,20,10 |</p>
-
-<p>|2 | 20|</p>
-
-<p>|3 | 500,200|</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -460,7 +393,7 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (19)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (20)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -471,6 +404,10 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a>
@@ -486,10 +423,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
     
       <li class="post">
         <a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">给xcode工程做命令行build</a>
       </li>
     
   </ul>

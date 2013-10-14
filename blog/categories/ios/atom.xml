@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-14T16:26:28+08:00</updated>
+  <updated>2013-10-14T16:42:42+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题]]></title>
+    <link href="http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/"/>
+    <updated>2013-10-14T16:28:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi</id>
+    <content type="html"><![CDATA[<h4>序：状态栏白边问题解决</h4>
+
+<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
+
+<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
+
+<h5>第一种：通过人为的办法改变view.transform的属性。</h5>
+
+<p>具体办法：</p>
+
+<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
+
+<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
+
+<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
+
+<ul>
+<li>1.获取当前电池条的方向</li>
+</ul>
+
+
+<p><code>
+UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation
+</code></p>
+
+<ul>
+<li>2.获取当前屏幕的大小</li>
+</ul>
+
+
+<p><code>
+CGRect frame = [UIScreen mainScreen].applicationFrame;
+</code></p>
+
+<ul>
+<li>3.设置我们的View的中心点</li>
+</ul>
+
+
+<p>```</p>
+
+<pre><code>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
+</code></pre>
+
+<p>```</p>
+
+<ul>
+<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
+</ul>
+
+
+<p>```</p>
+
+<pre><code>if (orientation == UIInterfaceOrientationLandscapeLeft) {
+    return CGAffineTransformMakeRotation(M_PI*1.5);
+} else if (orientation == UIInterfaceOrientationLandscapeRight) {
+    return CGAffineTransformMakeRotation(M_PI/2);
+} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+    return CGAffineTransformMakeRotation(-M_PI);
+} else {
+    return CGAffineTransformIdentity;
+}
+</code></pre>
+
+<p>```</p>
+
+<ul>
+<li>5.可以动画的改变我们view的显示方式了</li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
+</span><span class='line'>[UIView beginAnimations:nil context:nil];
+</span><span class='line'>[UIView setAnimationDuration:duration];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
+</span><span class='line'>[UIView commitAnimations];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h5>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h5>
+
+<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
+
+<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+</span><span class='line'>    [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
+</span><span class='line'>                                   withObject:(id)UIInterfaceOrientationLandscapeRight];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>// 更保险的写法 add by Eric
+</span><span class='line'>+ (void)changeOrientation:(UIInterfaceOrientation)toOrientation
+</span><span class='line'>{
+</span><span class='line'>if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
+</span><span class='line'>    [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
+</span><span class='line'>                               withObject:(id)toOrientation];
+</span><span class='line'>}
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<pre><code>总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[多参数selector]]></title>
@@ -540,79 +687,6 @@ UIImage *backButton = [[UIImage imageNamed:@"blueButton"]     resizableImageWith
 The output nows looks as follows:</p>
 
 <p><img class="<a" src="href="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&amp;x=.jpg">http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&amp;x=.jpg</a>"></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[遭遇SIGPIPE]]></title>
-    <link href="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/"/>
-    <updated>2013-10-10T23:35:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/10/zao-yu-sigpipe</id>
-    <content type="html"><![CDATA[<p>《转》</p>
-
-<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
-
-<p>用gdb执行程序, 退出时提示"Broken pipe".
-最后问题确定为, 对一个对端已经关闭的socket调用两次write,
-第二次将会生成SIGPIPE信号, 该信号默认结束进程.
-具体的分析可以结合TCP的"四次握手"关闭. TCP是全双工的信道,
-可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
-虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
-表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
-
-<p>也就是说, 因为TCP协议的限制,
-一个端点无法获知对端的socket是调用了close还是shutdown.
-对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
-这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
-会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
-因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
-第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
-
-<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
-给它设置SIG_IGN信号处理函数:
-<code>signal(SIGPIPE, SIG_IGN);</code>
-这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
-程序便能知道对端已经关闭.</p>
-
-<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
-
-<h5>忽略SIGPIPE信号的方法</h5>
-
-<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
-
-<p><code>
-struct sigaction sa;
-sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
-sa.sa_flags = 0;
-if (sigemptyset(&amp;sa.sa_mask) == -1 || //初始化信号集为空
-sigaction(SIGPIPE, &amp;sa, 0) == -1) { //屏蔽SIGPIPE信号
-perror("failed to ignore SIGPIPE; sigaction");
-exit(EXIT_FAILURE);
-}
-</code></p>
-
-<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
-
-<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
-<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
-
-<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
-pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
-
-<p>```</p>
-
-<h1>ifndef WIN32</h1>
-
-<p>sigset_t signal_mask;
-sigemptyset (&amp;signal_mask);
-sigaddset (&amp;signal_mask, SIGPIPE);
-int rc = pthread_sigmask (SIG_BLOCK, &amp;signal_mask, NULL);
-if (rc != 0) {
-printf(&ldquo;block sigpipe error\n&rdquo;);
-}
-```</p>
 ]]></content>
   </entry>
   
