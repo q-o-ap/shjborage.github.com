@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SourceControl | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/sourcecontrol/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-14T16:15:33+08:00</updated>
+  <updated>2013-10-14T16:23:19+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -35,50 +35,28 @@
 就找个问题的解决方案，果然有。</p>
 
 <p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a>
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;h1>if you have already checked out to master,&lt;/h1>
-</span><span class='line'>
-</span><span class='line'>&lt;h1>you won&rsquo;t know the commit-ish of your &ldquo;no branch&rdquo;:&lt;/h1>
-</span><span class='line'>
-</span><span class='line'>&lt;p>git fsck &mdash;lost-found # (to find your &lt;commit-ish>)
-</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;h1>if you are still on your &ldquo;no branch&rdquo; commit:&lt;/h1>
-</span><span class='line'>
-</span><span class='line'>&lt;p>git log # (the commit-ish will be on the first line)
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;h1>or&lt;/h1>
-</span><span class='line'>
-</span><span class='line'>&lt;p>git log | head -n 1 | cut -d &lsquo; &rsquo; -f 2 | pbcopy
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock %}</p>
+
+<h1>if you have already checked out to master,</h1>
+
+<h1>you won&rsquo;t know the commit-ish of your &ldquo;no branch&rdquo;:</h1>
+
+<p>git fsck &mdash;lost-found # (to find your &lt;commit-ish>)
+git merge &lt;commit-ish></p>
+
+<h1>if you are still on your &ldquo;no branch&rdquo; commit:</h1>
+
+<p>git log # (the commit-ish will be on the first line)
+git checkout master
+git merge &lt;commit-ish></p>
+
+<h1>or</h1>
+
+<p>git log | head -n 1 | cut -d &lsquo; &rsquo; -f 2 | pbcopy
+git checkout master
+git merge &lt;commit-ish></p>
+
+<p>{% endcodeblock %}</p>
 ]]></content>
   </entry>
   
@@ -100,55 +78,30 @@ $ git init
 <p>然后可以进行git add .. 进行文件添加。<br/>
 以及编写.gitignore文件，对本地文件进行忽略</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p> # Exclude the build directory
-</span><span class='line'> build/*&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p> # Exclude temp nibs and swap files
-</span><span class='line'> &lt;em>~.nib
-</span><span class='line'> &lt;/em>.swp
-</span><span class='line'> 18
-</span><span class='line'> # Exclude OS X folder attributes
-</span><span class='line'> .DS_Store&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p> # Exclude user-specific XCode 3 and 4 files
-</span><span class='line'> &lt;em>.mode1
-</span><span class='line'> &lt;/em>.mode1v3
-</span><span class='line'> &lt;em>.mode2v3
-</span><span class='line'> &lt;/em>.perspective
-</span><span class='line'> &lt;em>.perspectivev3
-</span><span class='line'> &lt;/em>.pbxuser
-</span><span class='line'> &lt;em>.xcworkspace
-</span><span class='line'> &lt;/em>.xcuserstate
-</span><span class='line'> xcuserdata&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock OBJ-C示例 %}</p>
+
+<p> # Exclude the build directory
+ build/*</p>
+
+<p> # Exclude temp nibs and swap files
+ <em>~.nib
+ </em>.swp
+ 18
+ # Exclude OS X folder attributes
+ .DS_Store</p>
+
+<p> # Exclude user-specific XCode 3 and 4 files
+ <em>.mode1
+ </em>.mode1v3
+ <em>.mode2v3
+ </em>.perspective
+ <em>.perspectivev3
+ </em>.pbxuser
+ <em>.xcworkspace
+ </em>.xcuserstate
+ xcuserdata</p>
+
+<p>{% endcodeblock %}</p>
 
 <h5>1.2 从现有仓库克隆</h5>
 
