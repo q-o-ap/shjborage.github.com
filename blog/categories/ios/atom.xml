@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-11T00:15:21+08:00</updated>
+  <updated>2013-10-14T15:26:50+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,125 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[给xcode工程做命令行build]]></title>
+    <link href="http://saick.net/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/"/>
+    <updated>2013-10-14T14:59:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build</id>
+    <content type="html"><![CDATA[<p>XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。</p>
+
+<p>XCode工程的命令行Build命令是 xcodebuild，用 &mdash;help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。</p>
+
+<p>另外，将.app文件转成ipa包的方式也相当简单。具体方式是将 .app文件拷贝到一个名为 ipa/Payload的目录下，然后将ipa下的所有内容用zip打包即可：</p>
+
+<p>```</p>
+
+<pre><code>  mkdir -p ipa/Payload
+  cp -r ./Release-iphoneos/PRODUCT_NAME.app  ./ipa/Payload/
+  cd ipa
+  zip -r $FILE_NAME *
+</code></pre>
+
+<p>```</p>
+
+<p>如果要将打好的ipa包上传到服务器上面去，再加一些脚本即可，我们是放到一个再windows共享的web server目录下，于是可以用smbclient来连接windows共享和上传ipa包：</p>
+
+<p>```</p>
+
+<pre><code>  echo "put FILE_NAME.ipa" | smbclient //主机名 -U 用户名%密码
+</code></pre>
+
+<p>```</p>
+
+<p>附上所有想着的XCode命令</p>
+
+<h6>1.查看xcode的版本号和build版本</h6>
+
+<p><code>
+$ xcodebuild -version
+</code></p>
+
+<p>显示内容：</p>
+
+<p><code>
+Xcode 4.2Build version 4D199
+</code></p>
+
+<h6>2.显示当前系统的sdk、及其版本</h6>
+
+<p><code>
+$ xcodebuild -showsdks
+</code></p>
+
+<p>显示内容：</p>
+
+<p><code>
+Mac OS X SDKs:    Mac OS X 10.6                     -sdk macosx10.6    Mac OS X 10.7                     -sdk macosx10.7iOS SDKs:    iOS 5.0                           -sdk iphoneos5.0iOS Simulator SDKs:    Simulator - iOS 5.0               -sdk iphonesimulator5.0
+</code></p>
+
+<h6>3.显示工程项目信息</h6>
+
+<p>先cd到工程目录下（有＊.xcodeproj的目录，比如MakeFileTest.xcodeproj），然后输入命令
+<code>
+$ xcodebuild -list
+</code></p>
+
+<p>显示内容</p>
+
+<p><code>
+Information about project "MakeFileTest":    
+Targets:        MakeFileTest    
+Build Configurations:        Debug        Release    If no build configuration is specified and -scheme is not passed then "Release" is used.    
+Schemes:        MakeFileTest
+</code></p>
+
+<p>如果未指定Configurations，默认为release</p>
+
+<h6>4.xcodebuild用法：</h6>
+
+<h6>#1）用ios5.0模拟器（iphonesimulator5.0）建立工程</h6>
+
+<p><code>
+$ xcodebuild -sdk iphonesimulator5.0
+</code></p>
+
+<p>输出一堆编译过程，最后输出<strong> BUILD SUCCEEDED </strong>表示创建成功；
+若输出<strong> BUILD FAILED </strong>表示创建失败
+成功后会在当前工程目录下创建build目录，结构如下：</p>
+
+<p><img class="<a" src="href="http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=15fd0cff0afa513d55aa6cdb0d5624c6/a1ec08fa513d2697dd9c917e57fbb2fb4316d842.jpg?referer=dfc765f917ce36d3fb13b6001840&amp;x=.jpg">http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=15fd0cff0afa513d55aa6cdb0d5624c6/a1ec08fa513d2697dd9c917e57fbb2fb4316d842.jpg?referer=dfc765f917ce36d3fb13b6001840&amp;x=.jpg</a>"></p>
+
+<p>MakeFileTest.app就是编译生成的可执行文件，
+而MakeFileTest.build文件夹下是一些中间文件</p>
+
+<p><img class="<a" src="href="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=a14904c0ff1f4134e437057b1524e4f7/a9d3fd1f4134970a3719890c97cad1c8a7865dae.jpg?referer=869c95c8b4fd5266fe3c09249b64&amp;x=.jpg">http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=a14904c0ff1f4134e437057b1524e4f7/a9d3fd1f4134970a3719890c97cad1c8a7865dae.jpg?referer=869c95c8b4fd5266fe3c09249b64&amp;x=.jpg</a>"></p>
+
+<h6>#2）默认是Release工程，要设置成Debug模式如下：</h6>
+
+<p><code>
+$ xcodebuild -sdk iphonesimulator5.0 -configuration Debug
+</code></p>
+
+<h6>#3）clean创建的工程</h6>
+
+<p><code>
+$ xcodebuild clean -sdk iphonesimulator5.0 -configuration Debug
+</code>
+成功输出<strong>CLEAN SUCCEEDED</strong></p>
+
+<h6>5.xcodebuild的编译参数</h6>
+
+<p>下面说运行从命令行中运行应用程序:</p>
+
+<p>需要一个小工具iphonesim,从 <a href="https://github.com/hborders/iphonesim/">https://github.com/hborders/iphonesim/</a> 下载后编译成为一个可执行文件,用它来启动iphone模拟器.
+由于模拟器不支持多个实例,所以运行前记得先把模拟器给关掉。按照以下命令来执行吧!</p>
+
+<p><code>
+iphonesim launch /Users/TadoSoft/Library/Application\ Support/iPhone\ Simulator/4.3.2/Applications/ED845558-5168-45C0-BA98-43AB3C238E9F/Krowdit.app/
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS 5 : UIImage and resizableImageWithCapInsets]]></title>
@@ -25,7 +144,7 @@ As I got further into the customization of the buttons, I ran into a method with
 As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
 Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can see the white border):</p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-10-10-1.png">http://www.saick.net/images/blog/2013-10-10-1.png</a>"></p>
+<p><img class="<a" src="href="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=8cf958067d3e6709ba0045fa0bfcee00/c8177f3e6709c93d5bb0aad69d3df8dcd1005454.jpg?referer=1e8577dc79899e5121990f24944a&amp;x=.jpg">http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=8cf958067d3e6709ba0045fa0bfcee00/c8177f3e6709c93d5bb0aad69d3df8dcd1005454.jpg?referer=1e8577dc79899e5121990f24944a&amp;x=.jpg</a>"></p>
 
 <p>Depending on the context of where the button appears, its size may vary. The code to create a button with the image and the corresponding output follow:
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -47,7 +166,7 @@ Let’s assume I want all the buttons on my UI to have a similar look, a gradien
 </span><span class='line'>[button setBackgroundImage:buttonImage forState:UIControlStateNormal];
 </span><span class='line'>[[self view] addSubview:button];</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-10-10-2.png">http://www.saick.net/images/blog/2013-10-10-2.png</a>"></p>
+<p><img class="<a" src="href="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=040338663b12b31bc36ccd2cb6234747/a8773912b31bb0518f971709347adab44aede064.jpg?referer=e60131fd0afa513d08bd59ee403a&amp;x=.jpg">http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=040338663b12b31bc36ccd2cb6234747/a8773912b31bb0518f971709347adab44aede064.jpg?referer=e60131fd0afa513d08bd59ee403a&amp;x=.jpg</a>"></p>
 
 <p>As you can see, the button is stretched in all directions. Let’s change the code to include cap insets, however, before we do that, let’s look at the signature of the cap insets method:</p>
 
@@ -73,12 +192,12 @@ UIImage *buttonImage = [[UIImage imageNamed:@"blueButton"]     resizableImageWit
 
 <p>This requests that the left and right 16 pixels of the original image are not scaled or resized when stretching the image to accomodate the button size frame defined above. The end results is as shown below:</p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-10-10-3.png">http://www.saick.net/images/blog/2013-10-10-3.png</a>"></p>
+<p><img class="<a" src="href="http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5daa3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7fa427ec5066d01609243154.jpg?referer=f13ad2b88026cffc303d8a827f4b&amp;x=.jpg">http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5daa3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7fa427ec5066d01609243154.jpg?referer=f13ad2b88026cffc303d8a827f4b&amp;x=.jpg</a>"></p>
 
 <p>Cap Insets with UIBarButtonItem
 We can use the same image for a button on a navbar (I’ll show the specifics in the next post on customizing the navbar). Without specifying the cap insets, the button looks as follows:</p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-10-10-4.png">http://www.saick.net/images/blog/2013-10-10-4.png</a>"></p>
+<p><img class="<a" src="href="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=98f5931979f40ad111e4c7e6671760e2/03087bf40ad162d9605dc63d13dfa9ec8a13cd64.jpg?referer=9ebd1655e9f81a4c7f25d9f92b3a&amp;x=.jpg">http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=98f5931979f40ad111e4c7e6671760e2/03087bf40ad162d9605dc63d13dfa9ec8a13cd64.jpg?referer=9ebd1655e9f81a4c7f25d9f92b3a&amp;x=.jpg</a>"></p>
 
 <p>The code below specifies an image where 12 pixels on the top, left, bottom and right be preserved when stretching/resizing the button:
 <code>
@@ -86,7 +205,7 @@ UIImage *backButton = [[UIImage imageNamed:@"blueButton"]     resizableImageWith
 </code>
 The output nows looks as follows:</p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-10-10-5.png">http://www.saick.net/images/blog/2013-10-10-5.png</a>"></p>
+<p><img class="<a" src="href="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&amp;x=.jpg">http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&amp;x=.jpg</a>"></p>
 ]]></content>
   </entry>
   
@@ -201,7 +320,7 @@ cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
     <content type="html"><![CDATA[<p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
 来上图看下吧</p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-1.png">http://www.saick.net/images/blog/2013-09-23-1.png</a>"></p>
+<p><img class="<a" src="href="http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=fdacac7c57fbb2fb302b58177f715199/3c6d55fbb2fb4316c960de5b22a4462309f7d390.jpg?referer=1242abe23887e9501b00c65c1d8e&amp;x=.jpg">http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=fdacac7c57fbb2fb302b58177f715199/3c6d55fbb2fb4316c960de5b22a4462309f7d390.jpg?referer=1242abe23887e9501b00c65c1d8e&amp;x=.jpg</a>"></p>
 
 <p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
 1. group 和 folder的区别
@@ -211,12 +330,12 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
 我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
 会弹出对话框，如图</p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-2.png">http://www.saick.net/images/blog/2013-09-23-2.png</a>"></p>
+<p><img class="<a" src="href="http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5d5b3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7f5527ec5066d0160924315b.jpg?referer=f1cbd2b88026cffc303d8a827f3a&amp;x=.jpg">http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5d5b3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7f5527ec5066d0160924315b.jpg?referer=f1cbd2b88026cffc303d8a827f3a&amp;x=.jpg</a>"></p>
 
 <p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
 这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-3.png">http://www.saick.net/images/blog/2013-09-23-3.png</a>"></p>
+<p><img class="<a" src="href="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=30921610a38b87d65442ab1a37335905/8601a18b87d6277f1da196192a381f30e924fc64.jpg?referer=a32ad7320bf79052b608720e3c3a&amp;x=.jpg">http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=30921610a38b87d65442ab1a37335905/8601a18b87d6277f1da196192a381f30e924fc64.jpg?referer=a32ad7320bf79052b608720e3c3a&amp;x=.jpg</a>"></p>
 
 <ol>
 <li>以group的形式引用文件
@@ -224,73 +343,9 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
 </ol>
 
 
-<p><img class="<a" src="href="http://www.saick.net/images/blog/2013-09-23-4.png">http://www.saick.net/images/blog/2013-09-23-4.png</a>"></p>
+<p><img class="<a" src="href="http://b.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=c6f8e8200855b31998f982707392f31b/78310a55b319ebc4de7ed2b88026cffc1e171688.jpg?referer=74ae9b6a00087bf424fb62d95287&amp;x=.jpg">http://b.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=c6f8e8200855b31998f982707392f31b/78310a55b319ebc4de7ed2b88026cffc1e171688.jpg?referer=74ae9b6a00087bf424fb62d95287&amp;x=.jpg</a>"></p>
 
 <p>现在，终于明白了 folder和 group的区别了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用unit test，资源获取注意事项]]></title>
-    <link href="http://saick.net/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/"/>
-    <updated>2013-09-23T23:42:00+08:00</updated>
-    <id>http://saick.net/blog/2013/09/23/shi-yong-unit-test,zi-yuan-huo-qu-zhu-yi-shi-xiang</id>
-    <content type="html"><![CDATA[<h3>引言</h3>
-
-<p> 使用XCode4.5 下使用unit test时，发现直接使用
- <code>
- UIImage *imgA = [UIImage imageNamed:@"asdf"];
- NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
-</code>
- 得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
-
-<h3>一、基础知识</h3>
-
-<h4>1，官方教程</h4>
-
-<p>　　单元测试包含“逻辑测试”和“应用测试”两种类型，分别对应不同的配置方式：
-　　逻辑测试(Logic Unit Test):测试跟App运行过程无关的纯逻辑代码，比如随机数算法，数据结构一类的。
-　　应用测试(Application Unit test):测试跟App运行环境相关的代码，比如目录、文件操作，Core Data存取等。
-　　在Xcode4.5中，创建App时会自动创建Application Unit Test项目。</p>
-
-<h4>2，示例代码。</h4>
-
-<p>　　在Xcode documentation中，可以找到“iPhoneUnitTests”这个例子项目。这个项目会教你怎么写单元测试代码。</p>
-
-<h3>二、进阶问题</h3>
-
-<h4>1，访问被测类</h4>
-
-<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置) 比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：</p>
-
-<pre><code>1，#import ”FundManager.h"    
-2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。  
-</code></pre>
-
-<p>　　否则会在链接阶段找不到FundManager接口。
-　　</p>
-
-<h4>2，向单元测试目标中添加资源</h4>
-
-<p>　　比如要测试的某个接口需要UIImage对象，需要一张图片来初始化UIImage对象，直接调用[UIImage imageNamed:@”xxx”]是不行的，因为这个接口要从App的main bundle中加载图像，不能直接访问添加到单元测试项目中的资源，下面代码演示了两个bundle目录的不同：</p>
-
-<p><code>
-Resource Paths are Different!
-Many assumptions that your bundle is the main bundle will cause problems when testing. (Especially when adding tests to existing code) Look at the difference in bundles, the main bundle isn’t what you’d expect in a unit test.
-NSString *mainBundlePath = [[NSBundle mainBundle] resourcePath];
-NSString *directBundlePath = [[NSBundle bundleForClass:[self class]] resourcePath];
-NSLog(@”Main Bundle Path: %@”, mainBundlePath);
-NSLog(@”Direct Path: %@”, directBundlePath);
-NSString *mainBundleResourcePath = [[NSBundle mainBundle] pathForResource:@”Frame.png”ofType:nil];
-NSString *directBundleResourcePath = [[NSBundle bundleForClass:[selfclass]] pathForResource:@”Frame.png” ofType:nil];
-NSLog(@”Main Bundle Path: %@”, mainBundleResourcePath);
-NSLog(@”Direct Path: %@”, directBundleResourcePath);
-</code>
-解决方法：
-<code>
-Load resources using the bundle for the current classNSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:theImageName ofType:nil];
-UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
-</code></p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="转自：http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html nested push animation can result in corrupted navigation bar 嵌套的navigation动画会造成 &hellip;">
+  <meta name="description" content="问题来源： 在开发iOS的app时，我们时常需要引用第三方Open Source套件来简化开发，一般情况下，我们可以采用Add Files to的方式将其加入到目前的工程中，但也存在一些问题，比如版本演进的控制问题，当前工程引用的第三方库的清单等。 什么是CocoaPods？ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,177 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-02T11:00:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+        
+         | <a href="/blog/2013/09/02/cocoapodsde-shi-yong/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h5>问题来源：</h5>
+
+<p>在开发iOS的app时，我们时常需要引用第三方Open Source套件来简化开发，一般情况下，我们可以采用Add Files to的方式将其加入到目前的工程中，但也存在一些问题，比如版本演进的控制问题，当前工程引用的第三方库的清单等。</p>
+
+<h4>什么是CocoaPods？</h4>
+
+<p>CocoaPods是一个依赖关系管理工具，用于管理Objective-C工程项目中各种Library。</p>
+
+<h4>安装CocoaPods</h4>
+
+<p>由于CocoaPods是ruby的gem，需要首先安装RubyGems，mac电脑一般都已经安装好了ruby，但可能需要更新一下你的RubyGems（注意system前面是两个横线）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>sudo gem update --system  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装command line工具
+确保Xcode中安装了Command Line Tools，打开Xcode->Preferences->Downloads->Components，点一下“Install”按钮
+安装CocoaPods</p>
+
+<p>命令行输入：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>sudo gem install cocoapods  
+</span><span class='line'>pod setup  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后就可以开始使用了。</p>
+
+<p>用pod search Github上的套件名称就可以找到相应的说明，如</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>pod search nimbus  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>会输出</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>-&gt; Nimbus (1.0.0)  
+</span><span class='line'>   An iOS framework whose growth is bounded by O(documentation).  
+</span><span class='line'>   - Homepage: http://docs.nimbuskit.info/index.html  
+</span><span class='line'>   - Source:   https://github.com/jverkoey/nimbus.git  
+</span><span class='line'>   - Versions: 1.0.0, 0.9.3, 0.9.2, 0.9.1, 0.9.0 [master repo]  
+</span><span class='line'>   - Sub specs:  
+</span><span class='line'>         - Nimbus/Core (1.0.0)  
+</span><span class='line'>         - Nimbus/Badge (1.0.0)  
+</span><span class='line'>         - Nimbus/CSS (1.0.0)  
+</span><span class='line'>         - Nimbus/AttributedLabel (1.0.0)  
+</span><span class='line'>         - Nimbus/Interapp (1.0.0)  
+</span><span class='line'>         - Nimbus/Launcher (1.0.0)  
+</span><span class='line'>         - Nimbus/Models (1.0.0)  
+</span><span class='line'>         - Nimbus/NetworkControllers (1.0.0)  
+</span><span class='line'>         - Nimbus/NetworkImage (1.0.0)  
+</span><span class='line'>         - Nimbus/Overview (1.0.0)  
+</span><span class='line'>         - Nimbus/PagingScrollView (1.0.0)  
+</span><span class='line'>         - Nimbus/Photos (1.0.0)  
+</span><span class='line'>         - Nimbus/Operations (1.0.0)  
+</span><span class='line'>         - Nimbus/Operations/JSON (1.0.0)  
+</span><span class='line'>         - Nimbus/WebController (1.0.0)  </span></code></pre></td></tr></table></div></figure>
+
+
+<h3>使用CocoaPods管理第三方库</h3>
+
+<p>在工程目录下，新建一个空白的Podfile文档，然后在里面添加内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>platform:ios  
+</span><span class='line'>pod 'AFNetworking', '1.1.0'  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存时候，开始配置你的工程，终端中输入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>pod install  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>执行完后，CocoaPods在工程目录创建了一个文件夹“Pods”，这个文件夹存放所有依赖的库，另外还创建了一个.workspace文件
+注意：配置好之后必须用.workspace文件打开工程，而不是.xcodeproj.
+后续：</p>
+
+<p>在使用过程中，有可能会遇到类似下面的问题：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>Resolving dependencies for target `default' (iOS 4.3)  
+</span><span class='line'>[!] AFNetworking (1.1.0) is not compatible with iOS 4.3.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解决方法，修改Podfile文档</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
+</span><span class='line'>platform:ios, '5.0'  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上可参考stackoverflow
+转自：<a href="http://blog.csdn.net/numbbuaa/article/details/8549018">http://blog.csdn.net/numbbuaa/article/details/8549018</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -239,111 +410,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-22T14:58:00+08:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
-        
-         | <a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>从Notification的开关入手，发现了统一给出的入口。
-从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）</p>
-
-<p>来正文</p>
-
-<h4>Best Practices for Maintaining User Privacy</h4>
-
-<p>Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.</p>
-
-<p>You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:</p>
-
-<p>Review guidelines from government or industry sources, including the following documents:</p>
-
-<p>The Federal Trade Commission’s report on mobile privacy: Mobile Privacy Disclosures: Building Trust Through Transparency.</p>
-
-<p>The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: <a href="http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf">http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf</a></p>
-
-<p>The California State Attorney General’s recommendations for mobile privacy: Privacy on the Go: Recommendations for the Mobile Ecosystem</p>
-
-<p>These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
-Request access to user or device data that is protected by the iOS system authorization settings at the time the data is needed. Consider supplying a usage description string in your app’s Info.plist file explaining why your app needs that data. Data protected by iOS system authorization settings includes location data, contacts, calendar events, reminders, photos, and media; see Table 1-1. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.</p>
-
-<p>Be transparent with users about how their data is going to be used. For example, you should specify a URL for your privacy policy or statement with your iTunes Connect metadata when you submit your app, and you might also want to summarize that policy in your app description.
-For more information about providing your app’s privacy policy in iTunes Connect, see “Adding New Apps” in iTunes Connect Developer Guide</p>
-
-<p>Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
-Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
-Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in “Protecting Data Using On-Disk Encryption”) to store it in an encrypted format. And try to use HTTPS when sending user or device data over the network.</p>
-
-<p>If your app uses the ASIdentifierManager class, you must respect the value of its advertisingTrackingEnabled property. And if that property is set to NO by the user, then use the ASIdentifierManager class only for the following purposes: frequency capping, conversion events, estimating the number of unique users, security and fraud detection, and debugging. Remember the ASIdentifierManager class is to be used only for the purposes of serving advertising. Do not use it as a general advertising cookie or for any other purposes.</p>
-
-<p>If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the UIDevice class. That property was deprecated in iOS 5.0, and starting May 1, 2013 the App Store will no longer accept new apps or app updates that use that identifier. Instead, apps should use the identifierForVendor property of the UIDevice class or the advertisingIdentifier property of the ASIdentifierManager class, as appropriate.</p>
-
-<p>Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.</p>
-
-<p>Table 1-1  Data protected by system authorization settings</p>
-
-<p><img src="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png"></p>
-
-<h4>本地与Push通知检测研究</h4>
-
-<p>enabledRemoteNotificationTypes
-Returns the types of notifications the application accepts.</p>
-
-<p><em>&ndash; (UIRemoteNotificationType)enabledRemoteNotificationTypes</em></p>
-
-<p>Return Value
-A bit mask whose values indicate the types of notifications the user has requested for the application. See UIRemoteNotificationType for valid bit-mask values.</p>
-
-<p>Discussion
-The values in the returned bit mask indicate the types of notifications currently enabled for the application. These types are first set when the application calls the registerForRemoteNotificationTypes: method to register itself with Apple Push Notification Service. Thereafter, the user may modify these accepted notification types in the Notifications preference of the Settings application. This method returns those initial or modified values. iOS does not display or play notification types specified in the notification payload that are not one of the enabled types. For example, the application might accept icon-badging as a form of notification, but might reject sounds and alert messages, even if they are specified in the notification payload.</p>
-
-<p>Availability
-Available in iOS 3.0 and later.
-See Also
-– unregisterForRemoteNotifications
-Declared In
-UIApplication.h</p>
-
-<p>返回结果强调，用位与判断某个功能是否打开。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-</span><span class='line'>
-</span><span class='line'>BOOL isBadge = rntypes & UIRemoteNotificationTypeBadge;</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -367,7 +433,7 @@ UIApplication.h</p>
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (16)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (17)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -378,6 +444,10 @@ UIApplication.h</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">给xcode工程做命令行build</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a>
@@ -393,10 +463,6 @@ UIApplication.h</p>
     
       <li class="post">
         <a href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Group_concat函数详解</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</a>
       </li>
     
   </ul>

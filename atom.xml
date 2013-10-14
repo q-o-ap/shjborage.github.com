@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-11T00:15:21+08:00</updated>
+  <updated>2013-10-14T15:26:50+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[给xcode工程做命令行build]]></title>
+    <link href="http://saick.net/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/"/>
+    <updated>2013-10-14T14:59:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build</id>
+    <content type="html"><![CDATA[<p>XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。</p>
+
+<p>XCode工程的命令行Build命令是 xcodebuild，用 &mdash;help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。</p>
+
+<p>另外，将.app文件转成ipa包的方式也相当简单。具体方式是将 .app文件拷贝到一个名为 ipa/Payload的目录下，然后将ipa下的所有内容用zip打包即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  mkdir -p ipa/Payload
+</span><span class='line'>  cp -r ./Release-iphoneos/PRODUCT_NAME.app  ./ipa/Payload/
+</span><span class='line'>  cd ipa
+</span><span class='line'>  zip -r $FILE_NAME *</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果要将打好的ipa包上传到服务器上面去，再加一些脚本即可，我们是放到一个再windows共享的web server目录下，于是可以用smbclient来连接windows共享和上传ipa包：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  echo "put FILE_NAME.ipa" | smbclient //主机名 -U 用户名%密码</span></code></pre></td></tr></table></div></figure>
+
+
+<p>附上所有想着的XCode命令</p>
+
+<h6>1.查看xcode的版本号和build版本</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -version</span></code></pre></td></tr></table></div></figure>
+
+
+<p>显示内容：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Xcode 4.2Build version 4D199</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>2.显示当前系统的sdk、及其版本</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -showsdks</span></code></pre></td></tr></table></div></figure>
+
+
+<p>显示内容：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Mac OS X SDKs:    Mac OS X 10.6                     -sdk macosx10.6    Mac OS X 10.7                     -sdk macosx10.7iOS SDKs:    iOS 5.0                           -sdk iphoneos5.0iOS Simulator SDKs:    Simulator - iOS 5.0               -sdk iphonesimulator5.0</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>3.显示工程项目信息</h6>
+
+<p>先cd到工程目录下（有＊.xcodeproj的目录，比如MakeFileTest.xcodeproj），然后输入命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -list</span></code></pre></td></tr></table></div></figure>
+
+
+<p>显示内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Information about project "MakeFileTest":    
+</span><span class='line'>Targets:        MakeFileTest    
+</span><span class='line'>Build Configurations:        Debug        Release    If no build configuration is specified and -scheme is not passed then "Release" is used.    
+</span><span class='line'>Schemes:        MakeFileTest</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果未指定Configurations，默认为release</p>
+
+<h6>4.xcodebuild用法：</h6>
+
+<h6>#1）用ios5.0模拟器（iphonesimulator5.0）建立工程</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -sdk iphonesimulator5.0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>输出一堆编译过程，最后输出<strong> BUILD SUCCEEDED </strong>表示创建成功；
+若输出<strong> BUILD FAILED </strong>表示创建失败
+成功后会在当前工程目录下创建build目录，结构如下：</p>
+
+<p><img src="http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=15fd0cff0afa513d55aa6cdb0d5624c6/a1ec08fa513d2697dd9c917e57fbb2fb4316d842.jpg?referer=dfc765f917ce36d3fb13b6001840&x=.jpg"></p>
+
+<p>MakeFileTest.app就是编译生成的可执行文件，
+而MakeFileTest.build文件夹下是一些中间文件</p>
+
+<p><img src="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=a14904c0ff1f4134e437057b1524e4f7/a9d3fd1f4134970a3719890c97cad1c8a7865dae.jpg?referer=869c95c8b4fd5266fe3c09249b64&x=.jpg"></p>
+
+<h6>#2）默认是Release工程，要设置成Debug模式如下：</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -sdk iphonesimulator5.0 -configuration Debug</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>#3）clean创建的工程</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild clean -sdk iphonesimulator5.0 -configuration Debug</span></code></pre></td></tr></table></div></figure>
+
+
+<p>成功输出<strong>CLEAN SUCCEEDED</strong></p>
+
+<h6>5.xcodebuild的编译参数</h6>
+
+<p>下面说运行从命令行中运行应用程序:</p>
+
+<p>需要一个小工具iphonesim,从 <a href="https://github.com/hborders/iphonesim/">https://github.com/hborders/iphonesim/</a> 下载后编译成为一个可执行文件,用它来启动iphone模拟器.
+由于模拟器不支持多个实例,所以运行前记得先把模拟器给关掉。按照以下命令来执行吧!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iphonesim launch /Users/TadoSoft/Library/Application\ Support/iPhone\ Simulator/4.3.2/Applications/ED845558-5168-45C0-BA98-43AB3C238E9F/Krowdit.app/</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS 5 : UIImage and resizableImageWithCapInsets]]></title>
@@ -25,7 +146,7 @@ As I got further into the customization of the buttons, I ran into a method with
 As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
 Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can see the white border):</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-1.png"></p>
+<p><img src="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=8cf958067d3e6709ba0045fa0bfcee00/c8177f3e6709c93d5bb0aad69d3df8dcd1005454.jpg?referer=1e8577dc79899e5121990f24944a&x=.jpg"></p>
 
 <p>Depending on the context of where the button appears, its size may vary. The code to create a button with the image and the corresponding output follow:</p>
 
@@ -49,7 +170,7 @@ Let’s assume I want all the buttons on my UI to have a similar look, a gradien
 </span><span class='line'>[[self view] addSubview:button];</span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-2.png"></p>
+<p><img src="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=040338663b12b31bc36ccd2cb6234747/a8773912b31bb0518f971709347adab44aede064.jpg?referer=e60131fd0afa513d08bd59ee403a&x=.jpg"></p>
 
 <p>As you can see, the button is stretched in all directions. Let’s change the code to include cap insets, however, before we do that, let’s look at the signature of the cap insets method:</p>
 
@@ -77,12 +198,12 @@ Let’s assume I want all the buttons on my UI to have a similar look, a gradien
 
 <p>This requests that the left and right 16 pixels of the original image are not scaled or resized when stretching the image to accomodate the button size frame defined above. The end results is as shown below:</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-3.png"></p>
+<p><img src="http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5daa3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7fa427ec5066d01609243154.jpg?referer=f13ad2b88026cffc303d8a827f4b&x=.jpg"></p>
 
 <p>Cap Insets with UIBarButtonItem
 We can use the same image for a button on a navbar (I’ll show the specifics in the next post on customizing the navbar). Without specifying the cap insets, the button looks as follows:</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-4.png"></p>
+<p><img src="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=98f5931979f40ad111e4c7e6671760e2/03087bf40ad162d9605dc63d13dfa9ec8a13cd64.jpg?referer=9ebd1655e9f81a4c7f25d9f92b3a&x=.jpg"></p>
 
 <p>The code below specifies an image where 12 pixels on the top, left, bottom and right be preserved when stretching/resizing the button:</p>
 
@@ -92,7 +213,7 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 
 <p>The output nows looks as follows:</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-5.png"></p>
+<p><img src="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&x=.jpg"></p>
 ]]></content>
   </entry>
   
@@ -370,7 +491,7 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
     <content type="html"><![CDATA[<p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
 来上图看下吧</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-09-23-1.png"></p>
+<p><img src="http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=fdacac7c57fbb2fb302b58177f715199/3c6d55fbb2fb4316c960de5b22a4462309f7d390.jpg?referer=1242abe23887e9501b00c65c1d8e&x=.jpg"></p>
 
 <p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
 1. group 和 folder的区别
@@ -380,12 +501,12 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
 我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
 会弹出对话框，如图</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-09-23-2.png"></p>
+<p><img src="http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5d5b3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7f5527ec5066d0160924315b.jpg?referer=f1cbd2b88026cffc303d8a827f3a&x=.jpg"></p>
 
 <p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
 这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-09-23-3.png"></p>
+<p><img src="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=30921610a38b87d65442ab1a37335905/8601a18b87d6277f1da196192a381f30e924fc64.jpg?referer=a32ad7320bf79052b608720e3c3a&x=.jpg"></p>
 
 <ol>
 <li>以group的形式引用文件
@@ -393,7 +514,7 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
 </ol>
 
 
-<p><img src="http://www.saick.net/images/blog/2013-09-23-4.png"></p>
+<p><img src="http://b.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=c6f8e8200855b31998f982707392f31b/78310a55b319ebc4de7ed2b88026cffc1e171688.jpg?referer=74ae9b6a00087bf424fb62d95287&x=.jpg"></p>
 
 <p>现在，终于明白了 folder和 group的区别了。</p>
 ]]></content>
@@ -998,7 +1119,7 @@ Take reasonable steps to protect the user and device data that you collect in yo
 
 <p>Table 1-1  Data protected by system authorization settings</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-08-22-ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy.png"></p>
+<p><img src="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=c493be3fbb389b503cffe057b50e94e0/2e2eb9389b504fc227201424e7dde71190ef6d90.jpg?referer=3efdfd90820a19d89214b135cb8e&x=.jpg"></p>
 
 <h4>本地与Push通知检测研究</h4>
 
@@ -1923,20 +2044,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#64;&#x77;&#119;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#x6f;&#114;&#x67;">&#x72;&#111;&#x6f;&#116;&#64;&#x77;&#119;&#x77;&#x2e;&#x63;&#110;&#115;&#x63;&#110;&#46;&#x6f;&#x72;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#114;&#x6f;&#111;&#116;&#x40;&#119;&#119;&#x77;&#46;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#103;">&#114;&#111;&#111;&#116;&#64;&#119;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#110;&#x2e;&#x6f;&#114;&#103;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x72;&#x6f;&#x6f;&#116;&#x40;&#119;&#x77;&#x77;&#x2e;&#99;&#x6e;&#115;&#99;&#110;&#x2e;&#111;&#114;&#103;">&#x72;&#111;&#111;&#116;&#64;&#x77;&#119;&#x77;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#111;&#114;&#103;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#114;&#x6f;&#x6f;&#116;&#64;&#x77;&#119;&#119;&#46;&#99;&#110;&#115;&#99;&#x6e;&#x2e;&#x6f;&#114;&#x67;">&#114;&#111;&#111;&#x74;&#64;&#119;&#x77;&#x77;&#46;&#99;&#110;&#x73;&#x63;&#110;&#46;&#x6f;&#x72;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#114;&#111;&#111;&#116;&#64;&#119;&#x77;&#x77;&#46;&#x63;&#x6e;&#x73;&#x63;&#110;&#46;&#111;&#x72;&#103;">&#x72;&#111;&#111;&#116;&#64;&#119;&#119;&#119;&#46;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#114;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#x72;&#x67;">&#114;&#111;&#x6f;&#x74;&#x40;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#111;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#x2e;&#99;&#110;&#115;&#99;&#110;&#46;&#x6f;&#x72;&#103;">&#114;&#x6f;&#x6f;&#x74;&#64;&#x77;&#119;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#x6f;&#x72;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#111;&#111;&#x74;&#64;&#x77;&#x77;&#119;&#x2e;&#99;&#x6e;&#x73;&#99;&#x6e;&#46;&#111;&#114;&#103;">&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#x2e;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#111;&#x72;&#x67;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -2113,28 +2234,6 @@ MySQL安装之后，root的密码是空的。为了提高安全性有必要给ro
 </span><span class='line'>password:
 </span><span class='line'>mysql&gt;SET PASSWORD FOR 'root'@'localhost' = PASSWORD('Password');</span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[JavaWeb开发 eclipse myEclipse JSP编辑卡死问题解决]]></title>
-    <link href="http://saick.net/blog/2013/06/03/javawebkai-fa-eclipse-myeclipse-jspbian-ji-qia-si-wen-ti-jie-jue/"/>
-    <updated>2013-06-03T15:16:00+08:00</updated>
-    <id>http://saick.net/blog/2013/06/03/javawebkai-fa-eclipse-myeclipse-jspbian-ji-qia-si-wen-ti-jie-jue</id>
-    <content type="html"><![CDATA[<p>这几天用lomboz3.3编辑JSP文件时，输入&lt;%@总是卡死，这是因为lomboz在我们输入&lt;%@时，lomboz在后台跟www.w3.org网站自动连接（IP：128.30.52.166：80），我是用WPE监听发现的。</p>
-
-<p>解决办法：</p>
-
-<h6>Windows:</h6>
-
-<p>打开C:\WINDOWS\system32\drivers\etc\下的hosts文件，</p>
-
-<h5>Linux等:</h5>
-
-<p>/etc/hosts</p>
-
-<p>在其中加入 127.0.0.1   www.w3.org
-OK,解决了。</p>
 ]]></content>
   </entry>
   

@@ -115,7 +115,7 @@ As I got further into the customization of the buttons, I ran into a method with
 As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
 Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can see the white border):</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-1.png"></p>
+<p><img src="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=8cf958067d3e6709ba0045fa0bfcee00/c8177f3e6709c93d5bb0aad69d3df8dcd1005454.jpg?referer=1e8577dc79899e5121990f24944a&x=.jpg"></p>
 
 <p>Depending on the context of where the button appears, its size may vary. The code to create a button with the image and the corresponding output follow:</p>
 
@@ -139,7 +139,7 @@ Let’s assume I want all the buttons on my UI to have a similar look, a gradien
 </span><span class='line'>[[self view] addSubview:button];</span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-2.png"></p>
+<p><img src="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=040338663b12b31bc36ccd2cb6234747/a8773912b31bb0518f971709347adab44aede064.jpg?referer=e60131fd0afa513d08bd59ee403a&x=.jpg"></p>
 
 <p>As you can see, the button is stretched in all directions. Let’s change the code to include cap insets, however, before we do that, let’s look at the signature of the cap insets method:</p>
 
@@ -167,12 +167,12 @@ Let’s assume I want all the buttons on my UI to have a similar look, a gradien
 
 <p>This requests that the left and right 16 pixels of the original image are not scaled or resized when stretching the image to accomodate the button size frame defined above. The end results is as shown below:</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-3.png"></p>
+<p><img src="http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5daa3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7fa427ec5066d01609243154.jpg?referer=f13ad2b88026cffc303d8a827f4b&x=.jpg"></p>
 
 <p>Cap Insets with UIBarButtonItem
 We can use the same image for a button on a navbar (I’ll show the specifics in the next post on customizing the navbar). Without specifying the cap insets, the button looks as follows:</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-4.png"></p>
+<p><img src="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=98f5931979f40ad111e4c7e6671760e2/03087bf40ad162d9605dc63d13dfa9ec8a13cd64.jpg?referer=9ebd1655e9f81a4c7f25d9f92b3a&x=.jpg"></p>
 
 <p>The code below specifies an image where 12 pixels on the top, left, bottom and right be preserved when stretching/resizing the button:</p>
 
@@ -182,7 +182,7 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 
 <p>The output nows looks as follows:</p>
 
-<p><img src="http://www.saick.net/images/blog/2013-10-10-5.png"></p>
+<p><img src="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&x=.jpg"></p>
 </div>
 
 
@@ -249,6 +249,8 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
         <a class="basic-alignment left" href="/blog/2013/10/10/zao-yu-sigpipe/" title="Previous Post: 遭遇SIGPIPE">&laquo; 遭遇SIGPIPE</a>
       
       
+        <a class="basic-alignment right" href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/" title="Next Post: 给xcode工程做命令行build">给xcode工程做命令行build &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -274,7 +276,7 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (16)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (17)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -285,6 +287,10 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">给xcode工程做命令行build</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a>
@@ -300,10 +306,6 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
     
       <li class="post">
         <a href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Group_concat函数详解</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</a>
       </li>
     
   </ul>
