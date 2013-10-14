@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "iSecret 简介"
+title: "iSecret 简介 Updated at Oct 14, 2013"
 date: 2013-05-28 16:44
 comments: true
-categories: iSecret
+categories: iOS
 ---
 
 美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a>  
@@ -90,6 +90,11 @@ i秘密不需要任何的网络访问,进一步加强安全性。
 
 *	Improve the security of you main passcode, recommend you to update at once.
 *	Fix bug: the default passcode was not show.
+
+
+##### v1.5	2013-10-10 8:55:45
+
+*	iOS 7 Support
 
 
 

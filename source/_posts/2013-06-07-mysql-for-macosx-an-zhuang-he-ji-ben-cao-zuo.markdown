@@ -3,13 +3,14 @@ layout: post
 title: "Mysql for MacOSX 安装和基本操作"
 date: 2013-06-07 10:55
 comments: true
-categories: 数据库
+categories: Database
 ---
 
 
 ##一.安装mysql 
 
-1.mysql下载地址http://dev.mysql.com/downloads/mysql/我的机器是mac 10.7的;使用mysql-5.1.52-osx10.6-x86.dmg安装包， 没有更新的，这个可用。（5.5也可以这样用，基本一致 MacOSX10.8.x目前都可以用）
+1.mysql下载地址http://dev.mysql.com/downloads/mysql/
+我的机器是mac 10.7的;使用mysql-5.1.52-osx10.6-x86.dmg安装包， 没有更新的，这个可用。（5.5也可以这样用，基本一致 MacOSX10.8.x目前都可以用）
 2.安装软件包位于硬盘映象(.dmg)文件中，必须首先双击搜索起中的图标来安装该文件。应当安装图像并显示其内容。 
 
 
@@ -278,3 +279,44 @@ mysql>use 数据库
 然后使用source命令，后面参数为脚本文件(如这里用到的.sql)
 
 mysql>source d:wcnc_db.sql
+
+##修改Root密码
+
+
+```
+#mysql -u root -p
+Enter password:
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES/NO)
+```
+ 
+安装时没有给root设置密码而默认其为空的,或忘记密码，不能成功登录，或者登录后没有权限操作。
+可以尝试以下的方法：
+方法1  :
+```
+# mysqladmin -u root password 123456
+```
+
+设置了root的密码。
+
+方法2
+{% codeblock %}
+# /etc/init.d/mysql stop
+# mysqld_safe --user=mysql --skip-grant-tables --skip-networking &
+# mysql -u root mysql
+
+mysql> UPDATE user SET Password=PASSWORD('123456') where USER='root';
+mysql> FLUSH PRIVILEGES;
+mysql> quit
+# /etc/init.d/mysql restart
+# mysql -uroot -p
+Enter password: <输入新设的密码newpassword>
+mysql>　
+{% endcodeblock %}
+
+方法3：
+MySQL安装之后，root的密码是空的。为了提高安全性有必要给root加上密码。
+```
+mysql –u root –p
+password:
+mysql>SET PASSWORD FOR 'root'@'localhost' = PASSWORD('Password');
+```

@@ -1,0 +1,77 @@
+---
+layout: post
+title: " iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究"
+date: 2013-08-22 14:58
+comments: true
+categories: iOS
+---
+
+从Notification的开关入手，发现了统一给出的入口。
+从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）
+
+来正文
+
+####Best Practices for Maintaining User Privacy
+
+Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.
+
+You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:
+
+Review guidelines from government or industry sources, including the following documents:
+
+The Federal Trade Commission’s report on mobile privacy: Mobile Privacy Disclosures: Building Trust Through Transparency.
+
+The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf
+
+The California State Attorney General’s recommendations for mobile privacy: Privacy on the Go: Recommendations for the Mobile Ecosystem
+
+These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
+Request access to user or device data that is protected by the iOS system authorization settings at the time the data is needed. Consider supplying a usage description string in your app’s Info.plist file explaining why your app needs that data. Data protected by iOS system authorization settings includes location data, contacts, calendar events, reminders, photos, and media; see Table 1-1. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.
+
+Be transparent with users about how their data is going to be used. For example, you should specify a URL for your privacy policy or statement with your iTunes Connect metadata when you submit your app, and you might also want to summarize that policy in your app description.
+For more information about providing your app’s privacy policy in iTunes Connect, see “Adding New Apps” in iTunes Connect Developer Guide
+
+Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
+Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
+Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in “Protecting Data Using On-Disk Encryption”) to store it in an encrypted format. And try to use HTTPS when sending user or device data over the network.
+
+If your app uses the ASIdentifierManager class, you must respect the value of its advertisingTrackingEnabled property. And if that property is set to NO by the user, then use the ASIdentifierManager class only for the following purposes: frequency capping, conversion events, estimating the number of unique users, security and fraud detection, and debugging. Remember the ASIdentifierManager class is to be used only for the purposes of serving advertising. Do not use it as a general advertising cookie or for any other purposes.
+
+If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the UIDevice class. That property was deprecated in iOS 5.0, and starting May 1, 2013 the App Store will no longer accept new apps or app updates that use that identifier. Instead, apps should use the identifierForVendor property of the UIDevice class or the advertisingIdentifier property of the ASIdentifierManager class, as appropriate.
+
+Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.
+
+Table 1-1  Data protected by system authorization settings
+
+{% img http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=c493be3fbb389b503cffe057b50e94e0/2e2eb9389b504fc227201424e7dde71190ef6d90.jpg?referer=3efdfd90820a19d89214b135cb8e&x=.jpg %}
+
+
+
+
+####本地与Push通知检测研究
+
+enabledRemoteNotificationTypes
+Returns the types of notifications the application accepts.
+
+*- (UIRemoteNotificationType)enabledRemoteNotificationTypes*
+
+Return Value
+A bit mask whose values indicate the types of notifications the user has requested for the application. See UIRemoteNotificationType for valid bit-mask values.
+
+Discussion
+The values in the returned bit mask indicate the types of notifications currently enabled for the application. These types are first set when the application calls the registerForRemoteNotificationTypes: method to register itself with Apple Push Notification Service. Thereafter, the user may modify these accepted notification types in the Notifications preference of the Settings application. This method returns those initial or modified values. iOS does not display or play notification types specified in the notification payload that are not one of the enabled types. For example, the application might accept icon-badging as a form of notification, but might reject sounds and alert messages, even if they are specified in the notification payload.
+
+Availability
+Available in iOS 3.0 and later.
+See Also
+– unregisterForRemoteNotifications
+Declared In
+UIApplication.h
+
+返回结果强调，用位与判断某个功能是否打开。
+
+```
+NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+
+BOOL isBadge = rntypes & UIRemoteNotificationTypeBadge;
+```

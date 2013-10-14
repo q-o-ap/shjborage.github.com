@@ -3,7 +3,7 @@ layout: post
 title: "Git基本使用与Dropbox配合使用"
 date: 2013-05-29 11:43
 comments: true
-categories: Git SourceContorl 版本控制
+categories: Git SourceControl
 ---
 
 ###Git基本使用

@@ -3,7 +3,7 @@ layout: post
 title: "Flashlight(PowerSaving) 简介"
 date: 2013-05-28 16:46
 comments: true
-categories: Flashlight
+categories: iOS
 ---
 
 The best flashlight app to save you power and then protect you battery. 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Android 开发环境抢建"
+title: "Android 开发环境搭建"
 date: 2013-06-03 10:19
 comments: true
 categories: Android
@@ -10,6 +10,7 @@ categories: Android
 本系列适合0基础的人员，因为我就是从0开始的，此系列记录我步入Android开发的一些经验分享，望与君共勉！作为Android队伍中的一个新人的我，如果有什么不对的地方，还望不吝赐教。
 在开始Android开发之旅启动之前，首先要搭建环境，然后创建一个简单的HelloWorld。
 本文的主题如下：
+
 *	1、环境搭建
 *	1.1、JDK安装
 *	1.2、Eclipse安装
