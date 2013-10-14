@@ -9,7 +9,25 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="The best flashlight app to save you power and then protect you battery. Do you encounter such a situation: When you using the flashlight to show &hellip;">
+  <meta name="description" content="Git基本使用 1.取得项目的Git仓库 1.1从当前目录初始化 1
+$ git init 然后可以进行git add .. 进行文件添加。
+以及编写.gitignore文件，对本地文件进行忽略 OBJ-C示例 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +98,180 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/">Git基本使用与Dropbox配合使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-29T11:43:00+08:00" pubdate data-updated="true">May 29<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Git基本使用</h3>
+
+<h4>1.取得项目的Git仓库</h4>
+
+<h5>1.1从当前目录初始化</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后可以进行git add .. 进行文件添加。<br/>
+以及编写.gitignore文件，对本地文件进行忽略</p>
+
+<figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Exclude the build directory
+</span><span class='line'> build/*
+</span><span class='line'> 
+</span><span class='line'> # Exclude temp nibs and swap files
+</span><span class='line'> *~.nib
+</span><span class='line'> *.swp
+</span><span class='line'> 18 
+</span><span class='line'> # Exclude OS X folder attributes
+</span><span class='line'> .DS_Store
+</span><span class='line'> 
+</span><span class='line'> # Exclude user-specific XCode 3 and 4 files
+</span><span class='line'> *.mode1
+</span><span class='line'> *.mode1v3
+</span><span class='line'> *.mode2v3
+</span><span class='line'> *.perspective
+</span><span class='line'> *.perspectivev3
+</span><span class='line'> *.pbxuser
+</span><span class='line'> *.xcworkspace
+</span><span class='line'> *.xcuserstate
+</span><span class='line'> xcuserdata</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>1.2 从现有仓库克隆</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/aaaa/aa.git
+</span><span class='line'>git clone file:::/Volumes/Data/xxx.git
+</span><span class='line'>git clone /Volumes/Data/xxx.git
+</span><span class='line'>git clone /Volumes/Data/xxx.git new_xxx_dir</span></code></pre></td></tr></table></div></figure>
+
+
+<p>默认会创建xxx目录（xxx.git）,如果想指定目录的话用最后一种</p>
+
+<h5>1.3 其它常用</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git commit
+</span><span class='line'>git commit -a -m "asdf"
+</span><span class='line'>git status
+</span><span class='line'>git log
+</span><span class='line'>git log -1
+</span><span class='line'>git log -p</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意看提示就好了。</p>
+
+<h4>2.远程仓库使用</h4>
+
+<h5>2.1 创建</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git init --bare</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建一个空的远程仓库（可在服务器上，也可在本地，也可以在Dropbox的目录中）</p>
+
+<h5>2.2 查看远程仓库</h5>
+
+<p>在本地执行以下命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git remote -v</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>2.3 添加远程仓库</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git remote add [shortanem] [url]</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>2.4 从远程抓取数据</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch [remote-name]</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>2.5 推送数据</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git push [remote-name] [branchname]</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>2.6 其它</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git remote show [remote-name]
+</span><span class='line'>git remote rename old new
+</span><span class='line'>git remote rm xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Dropbox 整合</h4>
+
+<p>把远程建在Dropbox上即可，哈哈</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -203,7 +395,7 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x73;&#104;&#106;&#x62;&#111;&#114;&#97;&#103;&#x65;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#111;&#x6d;">&#x73;&#x68;&#x6a;&#x62;&#111;&#x72;&#x61;&#x67;&#x65;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;</a></p>
+<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#115;&#x68;&#106;&#x62;&#x6f;&#x72;&#x61;&#x67;&#x65;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;">&#x73;&#104;&#x6a;&#x62;&#x6f;&#114;&#97;&#x67;&#101;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;</a></p>
 
 <p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
 现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
@@ -289,74 +481,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -380,7 +504,7 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (17)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (18)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -391,6 +515,10 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">iOS7 初步适配，与iOS6共存</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a>
@@ -406,10 +534,6 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
       <li class="post">
         <a href="/blog/2013/10/10/zao-yu-sigpipe/">遭遇SIGPIPE</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/10/nanwen-ti-not-a-number/">NaN问题 Not a Number</a>
       </li>
     
   </ul>
