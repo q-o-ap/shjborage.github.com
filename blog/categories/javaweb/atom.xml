@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaWeb | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/javaweb/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-14T15:26:50+08:00</updated>
+  <updated>2013-10-14T15:36:15+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Eclipse将java的工程转换为web工程]]></title>
+    <link href="http://saick.net/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/"/>
+    <updated>2013-10-14T15:30:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng</id>
+    <content type="html"><![CDATA[<p>很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下：</p>
+
+<p>转换步骤：</p>
+
+<ul>
+<li>1、进入项目目录，可看到.project文件，打开。</li>
+<li>2、找到<natures>&hellip;</natures>代码段。</li>
+<li>3、在第2步的代码段中加入如下标签内容并保存：</li>
+<li><p><code>
+&lt;nature&gt;org.eclipse.wst.common.project.facet.core.nature&lt;/nature&gt;
+&lt;nature&gt;org.eclipse.wst.common.modulecore.ModuleCoreNature&lt;/nature&gt;
+&lt;nature&gt;org.eclipse.jem.workbench.JavaEMFNature&lt;/nature&gt;
+</code></p></li>
+<li><p>4、在eclipse的项目上点右键，刷新项目。</p></li>
+<li>5、在项目上点右键，进入属性（properties）</li>
+<li>6、在左侧列表项目中点击选择“Project Facets”，在右侧选择“Dynamic Web Module”和"Java"，点击OK保存即可</li>
+</ul>
+
+
+<p><img class="<a" src="href="http://b.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=58929a39c45c1038207ecec7822ae22e/342ac65c103853434a301d029113b07eca808812.jpg?referer=64a02a26e7dde711bec577c6e8f0&amp;x=.jpg">http://b.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=58929a39c45c1038207ecec7822ae22e/342ac65c103853434a301d029113b07eca808812.jpg?referer=64a02a26e7dde711bec577c6e8f0&amp;x=.jpg</a>"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[JSP中java代码与js之间的传值]]></title>
