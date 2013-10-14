@@ -117,7 +117,7 @@
 
 <p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
 
-<h5>第一种：通过人为的办法改变view.transform的属性。</h5>
+<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
 
 <p>具体办法：</p>
 
@@ -202,7 +202,7 @@
 </span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h5>
+<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
 
 <p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
 
@@ -238,8 +238,7 @@
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<pre><code>总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。
-</code></pre>
+<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
 </div>
   
   
