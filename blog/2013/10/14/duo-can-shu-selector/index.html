@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Property 使用注意事项 - Saick Blog</title>
+  <title>多参数selector - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="NSString property的属性必须是copy
-delegate property的属性是assign
-dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
-init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
+  <meta name="description" content="Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/14/duo-can-shu-selector">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
@@ -86,7 +83,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Property 使用注意事项</h1>
+      <h1 class="entry-title">多参数selector</h1>
     
     
       <p class="meta">
@@ -102,7 +99,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-14T16:09:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -111,19 +108,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   </header>
 
 
-<div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
+<div class="entry-content"><p>Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 performSelector可以支持传入参数数组。多个参数就不再是问题了。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -132,16 +117,66 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface NSObject (Addition)
+</span><span class='line'>- (id)performSelector:(SEL)selector withObjects:(NSArray *)objects;
+</span><span class='line'>@end
+</span><span class='line'>
+</span><span class='line'>@implementation NSObject (Addition)
+</span><span class='line'>- (id)performSelector:(SEL)selector withObjects:(NSArray *)objects { 
+</span><span class='line'>    NSMethodSignature *signature = [self methodSignatureForSelector:selector]; 
+</span><span class='line'>    if (signature) { 
+</span><span class='line'>        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:signature]; 
+</span><span class='line'>        [invocation setTarget:self]; 
+</span><span class='line'>        [invocation setSelector:selector]; 
+</span><span class='line'>        
+</span><span class='line'>        for(int i = 0; i &lt; [objects count]; i++){ 
+</span><span class='line'>            id object = [objects objectAtIndex:i]; 
+</span><span class='line'>            [invocation setArgument:&object atIndex: (i + 2)];        
+</span><span class='line'>        } 
+</span><span class='line'>
+</span><span class='line'>        [invocation invoke]; 
+</span><span class='line'>
+</span><span class='line'>        if (signature.methodReturnLength) { 
+</span><span class='line'>            id anObject; 
+</span><span class='line'>            [invocation getReturnValue:&anObject]; 
+</span><span class='line'>            return anObject; 
+</span><span class='line'>        } else { 
+</span><span class='line'>            return nil; 
+</span><span class='line'>        } 
+</span><span class='line'>    } else { 
+</span><span class='line'>        return nil; 
+</span><span class='line'>    } 
+</span><span class='line'>} 
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
-
+<p>本文出自 “林家男孩” 博客，请务必保留此出处<a href="http://bj007.blog.51cto.com/1701577/538995">http://bj007.blog.51cto.com/1701577/538995</a></p>
 </div>
 
 
@@ -164,7 +199,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-14T16:09:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
       
 
 <span class="categories">
@@ -178,7 +213,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/14/duo-can-shu-selector/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/14/duo-can-shu-selector/" >Tweet</a>
   
   
   
@@ -205,10 +240,8 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Previous Post: Category 巧用-调试程序">&laquo; Category 巧用-调试程序</a>
+        <a class="basic-alignment left" href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/" title="Previous Post: iOS7 初步适配，与iOS6共存">&laquo; iOS7 初步适配，与iOS6共存</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/isecret-jian-jie/" title="Next Post: iSecret 简介">iSecret 简介 &raquo;</a>
       
     </p>
   </footer>
@@ -311,8 +344,8 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/';
-        var disqus_url = 'http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/';
+        var disqus_identifier = 'http://saick.net/blog/2013/10/14/duo-can-shu-selector/';
+        var disqus_url = 'http://saick.net/blog/2013/10/14/duo-can-shu-selector/';
         var disqus_script = 'embed.js';
       
     (function () {

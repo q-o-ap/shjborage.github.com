@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-14T15:59:10+08:00</updated>
+  <updated>2013-10-14T16:15:33+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[多参数selector]]></title>
+    <link href="http://saick.net/blog/2013/10/14/duo-can-shu-selector/"/>
+    <updated>2013-10-14T16:09:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/14/duo-can-shu-selector</id>
+    <content type="html"><![CDATA[<p>Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 performSelector可以支持传入参数数组。多个参数就不再是问题了。</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface NSObject (Addition)
+</span><span class='line'>&ndash; (id)performSelector:(SEL)selector withObjects:(NSArray *)objects;
+</span><span class='line'>@end&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>@implementation NSObject (Addition)
+</span><span class='line'>&ndash; (id)performSelector:(SEL)selector withObjects:(NSArray *)objects {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>NSMethodSignature *signature = [self methodSignatureForSelector:selector]; 
+</span><span class='line'>if (signature) { 
+</span><span class='line'>    NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:signature]; 
+</span><span class='line'>    [invocation setTarget:self]; 
+</span><span class='line'>    [invocation setSelector:selector]; 
+</span><span class='line'>
+</span><span class='line'>    for(int i = 0; i &amp;lt; [objects count]; i++){ 
+</span><span class='line'>        id object = [objects objectAtIndex:i]; 
+</span><span class='line'>        [invocation setArgument:&amp;object atIndex: (i + 2)];        
+</span><span class='line'>    } 
+</span><span class='line'>
+</span><span class='line'>    [invocation invoke]; 
+</span><span class='line'>
+</span><span class='line'>    if (signature.methodReturnLength) { 
+</span><span class='line'>        id anObject; 
+</span><span class='line'>        [invocation getReturnValue:&amp;anObject]; 
+</span><span class='line'>        return anObject; 
+</span><span class='line'>    } else { 
+</span><span class='line'>        return nil; 
+</span><span class='line'>    } 
+</span><span class='line'>} else { 
+</span><span class='line'>    return nil; 
+</span><span class='line'>} 
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>@end</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>本文出自 “林家男孩” 博客，请务必保留此出处<a href="http://bj007.blog.51cto.com/1701577/538995">http://bj007.blog.51cto.com/1701577/538995</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS7 初步适配，与iOS6共存]]></title>
@@ -531,36 +613,6 @@ if (rc != 0) {
 printf(&ldquo;block sigpipe error\n&rdquo;);
 }
 ```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[NaN问题 Not a Number]]></title>
-    <link href="http://saick.net/blog/2013/10/10/nanwen-ti-not-a-number/"/>
-    <updated>2013-10-10T23:26:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/10/nanwen-ti-not-a-number</id>
-    <content type="html"><![CDATA[<p>这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。</p>
-
-<p>主要常见原因：</p>
-
-<ul>
-<li>除以0</li>
-<li>sizeWithFont的字符串为nil</li>
-<li>数学函数不正确运算</li>
-</ul>
-
-
-<p>解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
-如下</p>
-
-<p><code>
-float _x = NAN;
-if (!isnan(_x)) {
-cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
-}
-</code></p>
-
-<p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
 ]]></content>
   </entry>
   

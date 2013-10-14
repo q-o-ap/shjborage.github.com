@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a &hellip;">
+  <meta name="description" content="XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。 XCode工程的命令行Build命令是 xcodebuild &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,156 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">给xcode工程做命令行build</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T14:59:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。</p>
+
+<p>XCode工程的命令行Build命令是 xcodebuild，用 &mdash;help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。</p>
+
+<p>另外，将.app文件转成ipa包的方式也相当简单。具体方式是将 .app文件拷贝到一个名为 ipa/Payload的目录下，然后将ipa下的所有内容用zip打包即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  mkdir -p ipa/Payload
+</span><span class='line'>  cp -r ./Release-iphoneos/PRODUCT_NAME.app  ./ipa/Payload/
+</span><span class='line'>  cd ipa
+</span><span class='line'>  zip -r $FILE_NAME *</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果要将打好的ipa包上传到服务器上面去，再加一些脚本即可，我们是放到一个再windows共享的web server目录下，于是可以用smbclient来连接windows共享和上传ipa包：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  echo "put FILE_NAME.ipa" | smbclient //主机名 -U 用户名%密码</span></code></pre></td></tr></table></div></figure>
+
+
+<p>附上所有想着的XCode命令</p>
+
+<h6>1.查看xcode的版本号和build版本</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -version</span></code></pre></td></tr></table></div></figure>
+
+
+<p>显示内容：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Xcode 4.2Build version 4D199</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>2.显示当前系统的sdk、及其版本</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -showsdks</span></code></pre></td></tr></table></div></figure>
+
+
+<p>显示内容：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Mac OS X SDKs:    Mac OS X 10.6                     -sdk macosx10.6    Mac OS X 10.7                     -sdk macosx10.7iOS SDKs:    iOS 5.0                           -sdk iphoneos5.0iOS Simulator SDKs:    Simulator - iOS 5.0               -sdk iphonesimulator5.0</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>3.显示工程项目信息</h6>
+
+<p>先cd到工程目录下（有＊.xcodeproj的目录，比如MakeFileTest.xcodeproj），然后输入命令</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -list</span></code></pre></td></tr></table></div></figure>
+
+
+<p>显示内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Information about project "MakeFileTest":    
+</span><span class='line'>Targets:        MakeFileTest    
+</span><span class='line'>Build Configurations:        Debug        Release    If no build configuration is specified and -scheme is not passed then "Release" is used.    
+</span><span class='line'>Schemes:        MakeFileTest</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果未指定Configurations，默认为release</p>
+
+<h6>4.xcodebuild用法：</h6>
+
+<h6>#1）用ios5.0模拟器（iphonesimulator5.0）建立工程</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -sdk iphonesimulator5.0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>输出一堆编译过程，最后输出<strong> BUILD SUCCEEDED </strong>表示创建成功；
+若输出<strong> BUILD FAILED </strong>表示创建失败
+成功后会在当前工程目录下创建build目录，结构如下：</p>
+
+<p><img src="http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=15fd0cff0afa513d55aa6cdb0d5624c6/a1ec08fa513d2697dd9c917e57fbb2fb4316d842.jpg?referer=dfc765f917ce36d3fb13b6001840&x=.jpg"></p>
+
+<p>MakeFileTest.app就是编译生成的可执行文件，
+而MakeFileTest.build文件夹下是一些中间文件</p>
+
+<p><img src="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=a14904c0ff1f4134e437057b1524e4f7/a9d3fd1f4134970a3719890c97cad1c8a7865dae.jpg?referer=869c95c8b4fd5266fe3c09249b64&x=.jpg"></p>
+
+<h6>#2）默认是Release工程，要设置成Debug模式如下：</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -sdk iphonesimulator5.0 -configuration Debug</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>#3）clean创建的工程</h6>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild clean -sdk iphonesimulator5.0 -configuration Debug</span></code></pre></td></tr></table></div></figure>
+
+
+<p>成功输出<strong>CLEAN SUCCEEDED</strong></p>
+
+<h6>5.xcodebuild的编译参数</h6>
+
+<p>下面说运行从命令行中运行应用程序:</p>
+
+<p>需要一个小工具iphonesim,从 <a href="https://github.com/hborders/iphonesim/">https://github.com/hborders/iphonesim/</a> 下载后编译成为一个可执行文件,用它来启动iphone模拟器.
+由于模拟器不支持多个实例,所以运行前记得先把模拟器给关掉。按照以下命令来执行吧!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>iphonesim launch /Users/TadoSoft/Library/Application\ Support/iPhone\ Simulator/4.3.2/Applications/ED845558-5168-45C0-BA98-43AB3C238E9F/Krowdit.app/</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -307,68 +457,6 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/10/nanwen-ti-not-a-number/">NaN问题 Not a Number</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-10T23:26:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/10/10/nanwen-ti-not-a-number/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。</p>
-
-<p>主要常见原因：</p>
-
-<ul>
-<li>除以0</li>
-<li>sizeWithFont的字符串为nil</li>
-<li>数学函数不正确运算</li>
-</ul>
-
-
-<p>解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
-如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>float _x = NAN;
-</span><span class='line'>if (!isnan(_x)) {
-</span><span class='line'>cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -392,7 +480,7 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (18)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (19)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -403,6 +491,10 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/duo-can-shu-selector/">多参数selector</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">iOS7 初步适配，与iOS6共存</a>
@@ -418,10 +510,6 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
     
       <li class="post">
         <a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/10/zao-yu-sigpipe/">遭遇SIGPIPE</a>
       </li>
     
   </ul>

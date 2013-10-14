@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不太常用，但很关键命令 1.整理数据库：vacuum VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize() &hellip;">
+  <meta name="description" content="引言 使用XCode4.5 下使用unit test时，发现直接使用 UIImage *imgA = [UIImage imageNamed:@"asdf"]; NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@” &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,111 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T23:42:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+         | <a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>引言</h3>
+
+<p> 使用XCode4.5 下使用unit test时，发现直接使用
+ <code>
+ UIImage *imgA = [UIImage imageNamed:@"asdf"];
+ NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
+</code>
+ 得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
+
+<h3>一、基础知识</h3>
+
+<h4>1，官方教程</h4>
+
+<p>　　单元测试包含“逻辑测试”和“应用测试”两种类型，分别对应不同的配置方式：
+　　逻辑测试(Logic Unit Test):测试跟App运行过程无关的纯逻辑代码，比如随机数算法，数据结构一类的。
+　　应用测试(Application Unit test):测试跟App运行环境相关的代码，比如目录、文件操作，Core Data存取等。
+　　在Xcode4.5中，创建App时会自动创建Application Unit Test项目。</p>
+
+<h4>2，示例代码。</h4>
+
+<p>　　在Xcode documentation中，可以找到“iPhoneUnitTests”这个例子项目。这个项目会教你怎么写单元测试代码。</p>
+
+<h3>二、进阶问题</h3>
+
+<h4>1，访问被测类</h4>
+
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置) 比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：</p>
+
+<pre><code>1，#import ”FundManager.h"    
+2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。  
+</code></pre>
+
+<p>　　否则会在链接阶段找不到FundManager接口。
+　　</p>
+
+<h4>2，向单元测试目标中添加资源</h4>
+
+<p>　　比如要测试的某个接口需要UIImage对象，需要一张图片来初始化UIImage对象，直接调用[UIImage imageNamed:@”xxx”]是不行的，因为这个接口要从App的main bundle中加载图像，不能直接访问添加到单元测试项目中的资源，下面代码演示了两个bundle目录的不同：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Resource Paths are Different!
+</span><span class='line'>Many assumptions that your bundle is the main bundle will cause problems when testing. (Especially when adding tests to existing code) Look at the difference in bundles, the main bundle isn’t what you’d expect in a unit test.
+</span><span class='line'>NSString *mainBundlePath = [[NSBundle mainBundle] resourcePath];
+</span><span class='line'>NSString *directBundlePath = [[NSBundle bundleForClass:[self class]] resourcePath];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundlePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundlePath);
+</span><span class='line'>NSString *mainBundleResourcePath = [[NSBundle mainBundle] pathForResource:@”Frame.png”ofType:nil];
+</span><span class='line'>NSString *directBundleResourcePath = [[NSBundle bundleForClass:[selfclass]] pathForResource:@”Frame.png” ofType:nil];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundleResourcePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundleResourcePath);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解决方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Load resources using the bundle for the current classNSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:theImageName ofType:nil]; 
+</span><span class='line'>UIImage *image = [UIImage imageWithContentsOfFile:imagePath];</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -378,177 +483,6 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-02T11:00:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
-        
-         | <a href="/blog/2013/09/02/cocoapodsde-shi-yong/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h5>问题来源：</h5>
-
-<p>在开发iOS的app时，我们时常需要引用第三方Open Source套件来简化开发，一般情况下，我们可以采用Add Files to的方式将其加入到目前的工程中，但也存在一些问题，比如版本演进的控制问题，当前工程引用的第三方库的清单等。</p>
-
-<h4>什么是CocoaPods？</h4>
-
-<p>CocoaPods是一个依赖关系管理工具，用于管理Objective-C工程项目中各种Library。</p>
-
-<h4>安装CocoaPods</h4>
-
-<p>由于CocoaPods是ruby的gem，需要首先安装RubyGems，mac电脑一般都已经安装好了ruby，但可能需要更新一下你的RubyGems（注意system前面是两个横线）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>sudo gem update --system  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装command line工具
-确保Xcode中安装了Command Line Tools，打开Xcode->Preferences->Downloads->Components，点一下“Install”按钮
-安装CocoaPods</p>
-
-<p>命令行输入：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>sudo gem install cocoapods  
-</span><span class='line'>pod setup  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后就可以开始使用了。</p>
-
-<p>用pod search Github上的套件名称就可以找到相应的说明，如</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>pod search nimbus  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>会输出</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>-&gt; Nimbus (1.0.0)  
-</span><span class='line'>   An iOS framework whose growth is bounded by O(documentation).  
-</span><span class='line'>   - Homepage: http://docs.nimbuskit.info/index.html  
-</span><span class='line'>   - Source:   https://github.com/jverkoey/nimbus.git  
-</span><span class='line'>   - Versions: 1.0.0, 0.9.3, 0.9.2, 0.9.1, 0.9.0 [master repo]  
-</span><span class='line'>   - Sub specs:  
-</span><span class='line'>         - Nimbus/Core (1.0.0)  
-</span><span class='line'>         - Nimbus/Badge (1.0.0)  
-</span><span class='line'>         - Nimbus/CSS (1.0.0)  
-</span><span class='line'>         - Nimbus/AttributedLabel (1.0.0)  
-</span><span class='line'>         - Nimbus/Interapp (1.0.0)  
-</span><span class='line'>         - Nimbus/Launcher (1.0.0)  
-</span><span class='line'>         - Nimbus/Models (1.0.0)  
-</span><span class='line'>         - Nimbus/NetworkControllers (1.0.0)  
-</span><span class='line'>         - Nimbus/NetworkImage (1.0.0)  
-</span><span class='line'>         - Nimbus/Overview (1.0.0)  
-</span><span class='line'>         - Nimbus/PagingScrollView (1.0.0)  
-</span><span class='line'>         - Nimbus/Photos (1.0.0)  
-</span><span class='line'>         - Nimbus/Operations (1.0.0)  
-</span><span class='line'>         - Nimbus/Operations/JSON (1.0.0)  
-</span><span class='line'>         - Nimbus/WebController (1.0.0)  </span></code></pre></td></tr></table></div></figure>
-
-
-<h3>使用CocoaPods管理第三方库</h3>
-
-<p>在工程目录下，新建一个空白的Podfile文档，然后在里面添加内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>platform:ios  
-</span><span class='line'>pod 'AFNetworking', '1.1.0'  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>保存时候，开始配置你的工程，终端中输入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>pod install  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>执行完后，CocoaPods在工程目录创建了一个文件夹“Pods”，这个文件夹存放所有依赖的库，另外还创建了一个.workspace文件
-注意：配置好之后必须用.workspace文件打开工程，而不是.xcodeproj.
-后续：</p>
-
-<p>在使用过程中，有可能会遇到类似下面的问题：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>Resolving dependencies for target `default' (iOS 4.3)  
-</span><span class='line'>[!] AFNetworking (1.1.0) is not compatible with iOS 4.3.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>解决方法，修改Podfile文档</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>platform:ios, '5.0'  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上可参考stackoverflow
-转自：<a href="http://blog.csdn.net/numbbuaa/article/details/8549018">http://blog.csdn.net/numbbuaa/article/details/8549018</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -572,7 +506,7 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
 <li class='category'><a href='/blog/categories/git/'>Git (2)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (18)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (19)</a></li>
 <li class='category'><a href='/blog/categories/isecret/'>iSecret (1)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -583,6 +517,10 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/duo-can-shu-selector/">多参数selector</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">iOS7 初步适配，与iOS6共存</a>
@@ -598,10 +536,6 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
     
       <li class="post">
         <a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/10/zao-yu-sigpipe/">遭遇SIGPIPE</a>
       </li>
     
   </ul>
