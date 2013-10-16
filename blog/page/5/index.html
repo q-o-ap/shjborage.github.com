@@ -384,7 +384,7 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods的使用</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods本身版本的更新</a></h1>
     
     
       <p class="meta">
@@ -409,140 +409,22 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
   </header>
 
 
-  <div class="entry-content"><h5>问题来源：</h5>
-
-<p>在开发iOS的app时，我们时常需要引用第三方Open Source套件来简化开发，一般情况下，我们可以采用Add Files to的方式将其加入到目前的工程中，但也存在一些问题，比如版本演进的控制问题，当前工程引用的第三方库的清单等。</p>
-
-<h4>什么是CocoaPods？</h4>
-
-<p>CocoaPods是一个依赖关系管理工具，用于管理Objective-C工程项目中各种Library。</p>
-
-<h4>安装CocoaPods</h4>
-
-<p>由于CocoaPods是ruby的gem，需要首先安装RubyGems，mac电脑一般都已经安装好了ruby，但可能需要更新一下你的RubyGems（注意system前面是两个横线）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>sudo gem update --system  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装command line工具
-确保Xcode中安装了Command Line Tools，打开Xcode->Preferences->Downloads->Components，点一下“Install”按钮
-安装CocoaPods</p>
-
-<p>命令行输入：</p>
+  <div class="entry-content"><p>CocoaPods本身也不断在更新，在项目进行中不建议进行更新。但是不得已时也得为之。
+具体方法如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>sudo gem install cocoapods  
-</span><span class='line'>pod setup  </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem update --system
+</span><span class='line'>gem install cocoapods
+</span><span class='line'>pod setup</span></code></pre></td></tr></table></div></figure>
 
 
-<p>然后就可以开始使用了。</p>
-
-<p>用pod search Github上的套件名称就可以找到相应的说明，如</p>
+<p>和安装其实一样的，注意版本的变化</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>pod search nimbus  </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod --version</span></code></pre></td></tr></table></div></figure>
 
-
-<p>会输出</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>-&gt; Nimbus (1.0.0)  
-</span><span class='line'>   An iOS framework whose growth is bounded by O(documentation).  
-</span><span class='line'>   - Homepage: http://docs.nimbuskit.info/index.html  
-</span><span class='line'>   - Source:   https://github.com/jverkoey/nimbus.git  
-</span><span class='line'>   - Versions: 1.0.0, 0.9.3, 0.9.2, 0.9.1, 0.9.0 [master repo]  
-</span><span class='line'>   - Sub specs:  
-</span><span class='line'>         - Nimbus/Core (1.0.0)  
-</span><span class='line'>         - Nimbus/Badge (1.0.0)  
-</span><span class='line'>         - Nimbus/CSS (1.0.0)  
-</span><span class='line'>         - Nimbus/AttributedLabel (1.0.0)  
-</span><span class='line'>         - Nimbus/Interapp (1.0.0)  
-</span><span class='line'>         - Nimbus/Launcher (1.0.0)  
-</span><span class='line'>         - Nimbus/Models (1.0.0)  
-</span><span class='line'>         - Nimbus/NetworkControllers (1.0.0)  
-</span><span class='line'>         - Nimbus/NetworkImage (1.0.0)  
-</span><span class='line'>         - Nimbus/Overview (1.0.0)  
-</span><span class='line'>         - Nimbus/PagingScrollView (1.0.0)  
-</span><span class='line'>         - Nimbus/Photos (1.0.0)  
-</span><span class='line'>         - Nimbus/Operations (1.0.0)  
-</span><span class='line'>         - Nimbus/Operations/JSON (1.0.0)  
-</span><span class='line'>         - Nimbus/WebController (1.0.0)  </span></code></pre></td></tr></table></div></figure>
-
-
-<h3>使用CocoaPods管理第三方库</h3>
-
-<p>在工程目录下，新建一个空白的Podfile文档，然后在里面添加内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>platform:ios  
-</span><span class='line'>pod 'AFNetworking', '1.1.0'  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>保存时候，开始配置你的工程，终端中输入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>pod install  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>执行完后，CocoaPods在工程目录创建了一个文件夹“Pods”，这个文件夹存放所有依赖的库，另外还创建了一个.workspace文件
-注意：配置好之后必须用.workspace文件打开工程，而不是.xcodeproj.
-后续：</p>
-
-<p>在使用过程中，有可能会遇到类似下面的问题：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>Resolving dependencies for target `default' (iOS 4.3)  
-</span><span class='line'>[!] AFNetworking (1.1.0) is not compatible with iOS 4.3.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>解决方法，修改Podfile文档</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[plain] view plaincopy
-</span><span class='line'>platform:ios, '5.0'  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上可参考stackoverflow
-转自：<a href="http://blog.csdn.net/numbbuaa/article/details/8549018">http://blog.csdn.net/numbbuaa/article/details/8549018</a></p>
 </div>
   
   
