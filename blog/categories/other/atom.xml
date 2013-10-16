@@ -4,7 +4,7 @@
   <title><![CDATA[Category: other | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/other/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-16T10:23:48+08:00</updated>
+  <updated>2013-10-16T11:02:51+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -31,7 +31,7 @@
 
 <p>这些特点中的第三点到第五点尤其吸引我（第一点和第二点也很酷），于是我花了些时间研究。以下是相关的步骤和心得。</p>
 
-<p>在你本地安装octopress</p>
+<h4>在你本地安装octopress</h4>
 
 <p>说“安装”可能不太恰当，准确的说是你需要从github上取得octopress的代码并进行些许配置。步骤请参考这里。</p>
 
@@ -61,6 +61,70 @@
 
 <p>配置你本地的octopress，使之可以发布到你的github pages</p>
 
+<p><code>
+rake setup_github_pages
+Enter the read/write url for your repository
+(For example, 'git@github.com:your_username/your_username.github.com)
+Repository url:
+</code></p>
+
+<p>请输入：git@github.com:yourname/yourname.github.com.git (将yourname替换成你的github登录名)</p>
+
+<p>这个步骤rake会做很多事情：</p>
+
+<p>在.git/config中替换origin为你输入的repository，并把原来的origin写到octopress中。
+创建新的branch source并切换到这个branch。
+在生成的_deploy目录下，初始化git repository为你的repository。
+以下是两个git config的内容，just for your information。</p>
+
+<p>```
+tchen@tchen-mbp:~/projects/octopress$ cat .git/config
+[core]</p>
+
+<pre><code>repositoryformatversion = 0
+filemode = true
+bare = false
+logallrefupdates = true
+ignorecase = true
+</code></pre>
+
+<p>[remote &ldquo;octopress&rdquo;]</p>
+
+<pre><code>url = git://github.com/imathis/octopress.git
+fetch = +refs/heads/*:refs/remotes/octopress/*
+</code></pre>
+
+<p>[branch &ldquo;source&rdquo;]</p>
+
+<pre><code>remote = origin
+merge = refs/heads/master
+rebase = true
+</code></pre>
+
+<p>[remote &ldquo;origin&rdquo;]</p>
+
+<pre><code>url = git@github.com:tyrchen/tyrchen.github.com.git
+fetch = +refs/heads/*:refs/remotes/origin/*
+</code></pre>
+
+<p>tchen@tchen-mbp:~/projects/octopress$ cat _deploy/.git/config
+[core]</p>
+
+<pre><code>repositoryformatversion = 0
+filemode = true
+bare = false
+logallrefupdates = true
+ignorecase = true
+</code></pre>
+
+<p>[remote &ldquo;origin&rdquo;]</p>
+
+<pre><code>url = git@github.com:tyrchen/tyrchen.github.com.git
+fetch = +refs/heads/*:refs/remotes/origin/*
+</code></pre>
+
+<p>```</p>
+
 <p>这样就可以做到：你在本地创建博客文章(当然是用markdown写成的)，然后直接deploy到你的github pages repo，github会自动进行发布。也就是说：所有发博客的动作只需要在你本地用命令完成，酷吧！</p>
 
 <p>参考了这里<a href="http://octopress.org/docs/blogging/">http://octopress.org/docs/blogging/</a>。</p>
@@ -86,7 +150,7 @@ rake setup_github_pages
 
 <p>到这里基本的配置就完成了，你还可以参考这里配置你博客的名称等信息。</p>
 
-<p>编写并发布文章</p>
+<h4>编写并发布文章</h4>
 
 <ol>
 <li>写文章</li>
@@ -111,10 +175,119 @@ cd your_local_octopress_directory
 git add .
 git commit -m 'your message'
 git push origin source
-</code>
-—–EOF—–</li>
+</code></li>
 </ol>
 
+
+<h4>个性化</h4>
+
+<p>添加个人域名
+在octopress目录下：</p>
+
+<p><code>
+$ echo 'blog.yourdomain.com' &gt;&gt; source/CNAME
+</code></p>
+
+<p>然后在你的DNS服务商，如 dnspod.cn，添加相应的CNAME指向 yourname.github.com。如果你要使用顶级域名，如 <a href="http://yourdomain.com">http://yourdomain.com</a> 访问你的博客，则需要使用A记录指向 207.97.227.245。详细内容请参考：<a href="http://octopress.org/docs/deploying/github/%E3%80%82">http://octopress.org/docs/deploying/github/%E3%80%82</a></p>
+
+<h4>设置博客</h4>
+
+<p>打开_config.yml，按照 <a href="http://octopress.org/docs/configuring/">http://octopress.org/docs/configuring/</a> 的说明进行设置即可。注意把不需要的asides都删除，免得加载不必要的js，拖累访问速度。如果想把你自己的微博个人秀加在侧栏，请参考：<a href="http://clark1231.iteye.com/blog/1553939%E3%80%82">http://clark1231.iteye.com/blog/1553939%E3%80%82</a></p>
+
+<h4>使用主题</h4>
+
+<p>可使用 <a href="https://github.com/amelandri/darkstripes">https://github.com/amelandri/darkstripes</a> 的主题。使用方法很简单：</p>
+
+<p><code>
+$ cd octopress
+$ git clone git://github.com/amelandri/darkstripes.git .themes/darkstripes
+$ rake install['darkstripes']
+$ rake generate
+</code></p>
+
+<p>注意你对已有主题的汉化会被覆盖，请确保提交所有更改前你merge了你的改动。</p>
+
+<h4>添加多说</h4>
+
+<p>由于github pages只支持静态文件，所以类似评论这样的功能就只能使用第三方工具。octopress自带disqus的评论系统，但其对国内用户不够友好，另外加载速度也不快。国内disqus的copycat是duoshuo，于是照猫画虎，添加多说的支持进来：</p>
+
+<p>首先在 source/post/ 下创建duoshuo.html:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;!-- Duoshuo Comment BEGIN -->
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>&lt;div class="ds-thread"&gt;&lt;/div&gt;
+</span><span class='line'>&lt;script type="text/javascript"&gt;
+</span><span class='line'>var duoshuoQuery = {short_name:"saick"};
+</span><span class='line'>(function() {
+</span><span class='line'>    var ds = document.createElement('script');
+</span><span class='line'>    ds.type = 'text/javascript';ds.async = true;
+</span><span class='line'>    ds.src = 'http://static.duoshuo.com/embed.js';
+</span><span class='line'>    ds.charset = 'UTF-8';
+</span><span class='line'>    (document.getElementsByTagName('head')[0] 
+</span><span class='line'>    || document.getElementsByTagName('body')[0]).appendChild(ds);
+</span><span class='line'>})();
+</span><span class='line'>&lt;/script&gt;
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;!-- Duoshuo Comment END -->
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>然后在 source/_layouts/post.html，将对应的disqus代码改为：
+注：去掉{与%中间的\</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"></pre></td><td class='code'><pre><code class=''></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>在 source/_config.yml 里，添加：</p>
+
+<p>```</p>
+
+<h1>Duoshuo comments</h1>
+
+<p>duoshuo_name: your_duoshuo_name
+```</p>
+
+<p>应该就可以了。可以使用如下命令测试：</p>
+
+<p><code>
+$ rake generate
+$ rake preview
+</code></p>
+
+<h4>添加百度统计</h4>
+
+<p>百度统计可以将生成的script直接添加到 source/post/after_footer.html 就可以。很简单，这里就不详述。</p>
+
+<p>—–EOF—–</p>
+
+<p>参考：<a href="http://www.cnblogs.com/stevelin/p/3281811.html">http://www.cnblogs.com/stevelin/p/3281811.html</a></p>
 ]]></content>
   </entry>
   
