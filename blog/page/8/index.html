@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="java &mdash;&mdash;> js: List的传递：直接赋值就行，如下： Js代码 1
-var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为js中var赋java变量值（同样适用于el表达式和struts2标签等）时 &hellip;">
+  <meta name="description" content="工作原理： 通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。 本程序给Apple tv访问的网址 : http://4.appletv3.sinaapp.com/index.php(其他设备浏览器无效) 此方法许多人都设想过， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +80,84 @@ var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/">让Apple TV直接收看中国视频</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-20T14:09:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>工作原理：</h4>
+
+<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
+
+<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
+
+<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
+
+<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
+<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
+
+<h4>没有自己的DNS</h4>
+
+<p>　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，
+　　　即可将Apple TV内置网址指向一个新的网站，达到通过Apple TV直接收看贵国视频的愿望。
+修改DNS如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>180.153.225.136 电信服务器，适合于南方电信的用户使用。TTVast提供
+</span><span class='line'>210.129.145.150 适合部分联通用户，以及海外用户使用。TTVast提供</span></code></pre></td></tr></table></div></figure>
+
+
+<p>　　用私人DNS会轻易被他伪装的银行、淘宝等网站来欺骗你，为了安全，请ATV用户使用上面靠谱的。
+　　请勿用于Apple TV之外的任何设备（如：手机、PC、路由器等），否则后果自负。
+　　</p>
+
+<h4>拥有自己的DNS</h4>
+
+<p>将 <a href="http://trailers.apple.com/appletv/">http://trailers.apple.com/appletv/</a> 路径下的 index.xml 及 application.js转向下面网址的对应文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://180.153.225.136:8000/index.xml ttvas提供
+</span><span class='line'>http://210.129.145.150:8000/index.xml ttvas提供
+</span><span class='line'>http://4.appletv3.sinaapp.com/index.php Missde提供 - 目前测试中..</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本程序：Apple TV DNS PHP代码下载：
+<a href="https://code.google.com/p/appletv/downloads/list">https://code.google.com/p/appletv/downloads/list</a></p>
+
+<p>获取音悦台MV下载地址 <a href="http://huoqu.sinaapp.com/video/">http://huoqu.sinaapp.com/video/</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -444,94 +521,6 @@ JSP代码</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Git No Branch 解决方案</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-07T18:03:00+08:00" pubdate data-updated="true">Jun 7<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
-
-<h5>事件经过：</h5>
-
-<ol>
-<li>正常开发，branch:master</li>
-<li>在Eclipse中，使用插件checkout某版本出来</li>
-<li>再checkout到最近一次提交的版本</li>
-<li>不断Commit多次，一直不能push，以为工具出了问题</li>
-<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
-</ol>
-
-
-<p>每次都提交，数据肯定不会丢，也没有担心。
-就找个问题的解决方案，果然有。</p>
-
-<p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># if you have already checked out to master, 
-</span><span class='line'># you won't know the commit-ish of your "no branch":
-</span><span class='line'>
-</span><span class='line'>git fsck --lost-found # (to find your &lt;commit-ish>)
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># if you are still on your "no branch" commit:
-</span><span class='line'>
-</span><span class='line'>git log # (the commit-ish will be on the first line)
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># or
-</span><span class='line'>
-</span><span class='line'>git log | head -n 1 | cut -d ' ' -f 2 | pbcopy
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish></span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -554,7 +543,7 @@ JSP代码</p>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (22)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (23)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
@@ -564,6 +553,10 @@ JSP代码</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
@@ -579,10 +572,6 @@ JSP代码</p>
     
       <li class="post">
         <a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">iOS7 初步适配，与iOS6共存</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a>
       </li>
     
   </ul>

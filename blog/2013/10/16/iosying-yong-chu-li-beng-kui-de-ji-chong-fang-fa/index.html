@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Saick Blog - 专注技术，乐在其中</title>
+  <title>iOS应用处理崩溃的几种方法 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,15 +79,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a></h1>
+      <h1 class="entry-title">iOS应用处理崩溃的几种方法</h1>
     
     
       <p class="meta">
@@ -110,7 +107,7 @@
   </header>
 
 
-  <div class="entry-content"><p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
+<div class="entry-content"><p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
 在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
 
 <h3>1.在XCode中使用一个通用断点</h3>
@@ -429,185 +426,16 @@
 
 <p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
 
-<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h4>序：状态栏白边问题解决</h4>
-
-<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
-
-<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
-
-<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
-
-<p>具体办法：</p>
-
-<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
-
-<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
-
-<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
-
-<ul>
-<li>1.获取当前电池条的方向</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>2.获取当前屏幕的大小</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>3.设置我们的View的中心点</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
-</span><span class='line'>} else {
-</span><span class='line'>    return CGAffineTransformIdentity;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>5.可以动画的改变我们view的显示方式了</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
-</span><span class='line'>
-</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
-</span><span class='line'>[UIView beginAnimations:nil context:nil];
-</span><span class='line'>[UIView setAnimationDuration:duration];
-</span><span class='line'>
-</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
-</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
-
-<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
-
-<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
-</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
-</span><span class='line'>    }
-</span><span class='line'>    
-</span><span class='line'>    // 更保险的写法 add by Eric
-</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
-</span><span class='line'>    {
-</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
-</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
-</span><span class='line'>                                   withObject:(id)toOrientation];
-</span><span class='line'>      }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -619,70 +447,82 @@
   
 
 
-<time datetime="2013-10-14T16:16:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
+<time datetime="2013-10-16T23:31:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+  
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
-<strong>其它密码也可使用同样方法获得</strong></p>
-
-<p>方法/步骤</p>
-
-<ul>
-<li>1.打开“钥匙串访问”</li>
-</ul>
-
-
-<p><img src="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=2694d8151f950a7b71354ec13aea13e4/6f061d950a7b02081168bcc260d9f2d3572cc874.jpg?referer=01ff403769600c33a96eebf8282a&x=.jpg"></p>
-
-<ul>
-<li>2.选中左侧“登陆”、“密码”</li>
-</ul>
-
-
-<p><img src="http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=b6a3fd25aeaf2eddd0f149ecbd2b70d4/4a36acaf2edda3ccbc733b0303e93901213f927a.jpg?referer=f402e8cc8fb1cb13677e0923de18&x=.jpg"></p>
-
-<ul>
-<li>3.找到要查看密码的wifi</li>
-</ul>
-
-
-<p><img src="http://f.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=92454ecfd300baa1be2c47be772bc82f/f9dcd100baa1cd117ff3f103bb12c8fcc3ce2d4f.jpg?referer=d44b7e86d343ad4bff3973f08b45&x=.jpg"></p>
-
-<ul>
-<li>4.点击键，选中“显示简介”，或者双击</li>
-</ul>
-
-
-<p><img src="http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=febce7c983cb39dbc5c06753e02d7819/50da81cb39dbb6fd711e66050b24ab18972b374f.jpg?referer=a15e79ef1c178a82972b4a907146&x=.jpg"></p>
-
-<ul>
-<li>5.在弹出的对话框选择“显示密码”，系统会让你输入电脑帐号的密码，然后密码就显示出来了。</li>
-</ul>
-
-
-<p><img src="http://f.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=ecfc7e86d343ad4ba22e46c5b2392b92/c995d143ad4bd113463f341158afa40f4bfb0526.jpg?referer=be1b050f8501a18ba9fc267f63fd&x=.jpg"></p>
-
-<p>参考资料
-<a href="http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html">http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html</a></p>
-</div>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/" >Tweet</a>
   
   
-
-
-    </article>
   
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
   </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
 </div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/" title="Previous Post: 在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题">&laquo; 在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
+
+
+
+</div>
+
 <aside class="sidebar">
   
     
@@ -769,6 +609,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

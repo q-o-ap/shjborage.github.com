@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-16T12:39:20+08:00</updated>
+  <updated>2013-10-16T23:54:36+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,332 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS应用处理崩溃的几种方法]]></title>
+    <link href="http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/"/>
+    <updated>2013-10-16T23:31:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa</id>
+    <content type="html"><![CDATA[<p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
+在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
+
+<h3>1.在XCode中使用一个通用断点</h3>
+
+<p>在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception BreakPoint”。点done即可。</p>
+
+<h3>2.开启NSZombieEnabled等调试选项</h3>
+
+<p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
+在Environment Variables中增加下面属性并都配置为YES。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>MallocStackLogging
+</span><span class='line'>MallocStackLoggingNoCompact
+</span><span class='line'>NSAutoreleaseFreedObjectCheckEnabled
+</span><span class='line'>NSDebugEnabled
+</span><span class='line'>NSZombieEnabled</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在实际使用中发现，使用了上述配置之后，如果能在模拟器上运行效果更佳。比如,真机调试时遇到过如下错误：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-[CALayer retain]: message sent to deallocated instance 0x1d418a30</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用网上很多地方都提到的方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>info malloc-history 0x1d418a30
+</span><span class='line'>XCode提示:Undefined info command: "malloc-history".  Try "help info".</span></code></pre></td></tr></table></div></figure>
+
+
+<p>针对这种情况可以参考:<a href="http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82">http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82</a></p>
+
+<p><strong>其中最主要的还是</strong> <em>NSZombieEnabled</em>, 这个解决EXC_BAD_ACCESS还是很有用的。
+具体参考这个：<a href="http://www.cocoachina.com/macdev/objc/2011/0219/2661.html">http://www.cocoachina.com/macdev/objc/2011/0219/2661.html</a></p>
+
+<h3>3.增加异常处理[理论上和&#8221;在XCode中使用一个通用断点&#8221;效果类似]</h3>
+
+<p>写iOS代码的时候,经常会遇到程序崩溃在main函数的入口处并出现类似&#8221;First throw call stack&#8221;这样的错误。为了更好的知道崩溃的原因,我们可以在AppDelegate中定义一个方法, 用于处理异常:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void caughtException(NSException *exception) 
+</span><span class='line'>{  
+</span><span class='line'>  NSLog(@"CRASH: %@", exception);  
+</span><span class='line'>  NSLog(@"Stack Trace: %@", [exception callStackSymbols]);  
+</span><span class='line'>  // Internal error reporting 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>另外，在打印时，也可以使用GTM，GTMStackTraceFromException(exception)，跟系统的类似。</p>
+
+<p>然后在应用启动时，设置这个方法作为自己的自定义异常回调：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
+</span><span class='line'>{  
+</span><span class='line'>  NSSetUncaughtExceptionHandler(& caughtException); 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>在定义了这个回调之后，崩溃是的控制台信息一般都会一目了然，我们甚至可以看出是那个类的哪一行出问题了。</p>
+
+<h3>4.signal处理，并提示。</h3>
+
+<p>启动信号处理</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>signal(SIGABRT, signalHandler);
+</span><span class='line'>signal(SIGILL, signalHandler);
+</span><span class='line'>signal(SIGSEGV, signalHandler);
+</span><span class='line'>signal(SIGFPE, signalHandler);
+</span><span class='line'>signal(SIGBUS, signalHandler);
+</span><span class='line'>signal(SIGPIPE, signalHandler);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其它相关代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#include &lt;libkern/OSAtomic.h>
+</span><span class='line'>#include &lt;execinfo.h>
+</span><span class='line'>
+</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
+</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
+</span><span class='line'>NSString * const UncaughtExceptionHandlerAddressesKey = @"UncaughtExceptionHandlerAddressesKey";
+</span><span class='line'>
+</span><span class='line'>volatile int32_t UncaughtExceptionCount = 0;
+</span><span class='line'>const int32_t UncaughtExceptionMaximum = 10;
+</span><span class='line'>const NSInteger UncaughtExceptionHandlerSkipAddressCount = 0;
+</span><span class='line'>const NSInteger UncaughtExceptionHandlerReportAddressCount = 100;
+</span><span class='line'>
+</span><span class='line'>+ (NSArray *)backTrace
+</span><span class='line'>{
+</span><span class='line'>  void* callstack[1024];
+</span><span class='line'>  int frames = backtrace(callstack, 1024);
+</span><span class='line'>  char **strs = backtrace_symbols(callstack, frames);
+</span><span class='line'>  
+</span><span class='line'>  int i;
+</span><span class='line'>  NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
+</span><span class='line'>  for (i = UncaughtExceptionHandlerSkipAddressCount;
+</span><span class='line'>       i &lt; UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount;
+</span><span class='line'>       i++)
+</span><span class='line'>  {
+</span><span class='line'>    if (frames &lt;= i)
+</span><span class='line'>      break;
+</span><span class='line'>    [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  free(strs);
+</span><span class='line'>  
+</span><span class='line'>  return backtrace;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex
+</span><span class='line'>{
+</span><span class='line'>  if (anIndex == 0) {
+</span><span class='line'>    _dismissed = YES;
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)handleException:(NSException *)exception
+</span><span class='line'>{
+</span><span class='line'>  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unhandled exception", nil)
+</span><span class='line'>                                                  message:[NSString stringWithFormat:NSLocalizedString(@"You can try to continue but the application may be unstable.\n" @"%@\n%@", nil), [exception reason], [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]
+</span><span class='line'>                                                 delegate:self
+</span><span class='line'>                                        cancelButtonTitle:NSLocalizedString(@"Quit", nil)
+</span><span class='line'>                                        otherButtonTitles:NSLocalizedString(@"Continue", nil), nil];
+</span><span class='line'>  
+</span><span class='line'>  [alert show];
+</span><span class='line'>  
+</span><span class='line'>  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+</span><span class='line'>  CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);
+</span><span class='line'>  
+</span><span class='line'>  while (!_dismissed) {
+</span><span class='line'>    for (NSString *mode in (NSArray *)CFBridgingRelease(allModes)) {
+</span><span class='line'>      CFRunLoopRunInMode((CFStringRef)CFBridgingRetain(mode), 0.001, false);
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CFRelease(allModes);
+</span><span class='line'>  
+</span><span class='line'>  NSString *log = [NSString stringWithFormat:@"%@\n\n info:\n%@", exception, exception.userInfo];
+</span><span class='line'>  [[DebugUtil sharedDebug] LogException:log];
+</span><span class='line'>  
+</span><span class='line'>  NSSetUncaughtExceptionHandler(NULL);
+</span><span class='line'>  signal(SIGABRT, SIG_DFL);
+</span><span class='line'>  signal(SIGILL, SIG_DFL);
+</span><span class='line'>  signal(SIGSEGV, SIG_DFL);
+</span><span class='line'>  signal(SIGFPE, SIG_DFL);
+</span><span class='line'>  signal(SIGBUS, SIG_DFL);
+</span><span class='line'>  signal(SIGPIPE, SIG_DFL);
+</span><span class='line'>  
+</span><span class='line'>  if ([[exception name] isEqual:UncaughtExceptionHandlerSignalExceptionName]) {
+</span><span class='line'>    kill(getpid(), [[[exception userInfo] objectForKey:UncaughtExceptionHandlerSignalKey] intValue]);
+</span><span class='line'>  } else {
+</span><span class='line'>    [exception raise];
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>NSString * getAppInfo()
+</span><span class='line'>{
+</span><span class='line'>  NSString *appInfo = [NSString stringWithFormat:@"App : %@ %@(%@)\nDevice : %@\nOS Version : %@ %@\nUDID : %@\n",
+</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
+</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
+</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
+</span><span class='line'>                       [UIDevice currentDevice].model,
+</span><span class='line'>                       [UIDevice currentDevice].systemName,
+</span><span class='line'>                       [UIDevice currentDevice].systemVersion,
+</span><span class='line'>                       /*[UIDevice currentDevice].uniqueIdentifier*/@""];
+</span><span class='line'>  return appInfo;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>void signalHandler(int signal)
+</span><span class='line'>{
+</span><span class='line'>  int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
+</span><span class='line'>  
+</span><span class='line'>  if (exceptionCount > UncaughtExceptionMaximum) {
+</span><span class='line'>    return;
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:signal] forKey:UncaughtExceptionHandlerSignalKey];
+</span><span class='line'>  
+</span><span class='line'>  NSArray *callStack = [DebugUtil backTrace];
+</span><span class='line'>  
+</span><span class='line'>  [userInfo setObject:callStack forKey:UncaughtExceptionHandlerAddressesKey];
+</span><span class='line'>  
+</span><span class='line'>  [[[DebugUtil alloc] init] performSelectorOnMainThread:@selector(handleException:) withObject: [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName reason:[NSString stringWithFormat: NSLocalizedString(@"Signal %d was raised.\n" @"%@", nil), signal, getAppInfo()] userInfo:userInfo] waitUntilDone:YES];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题]]></title>
@@ -1865,181 +2191,6 @@ rake new_post[&ldquo;Your Title of Your Article&rdquo;]
 <p>—–EOF—–</p>
 
 <p>参考：<a href="http://www.cnblogs.com/stevelin/p/3281811.html">http://www.cnblogs.com/stevelin/p/3281811.html</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Cocoa 自省机制]]></title>
-    <link href="http://saick.net/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/"/>
-    <updated>2013-08-01T16:30:00+08:00</updated>
-    <id>http://saick.net/blog/2013/08/01/cocoa-zi-sheng-ji-zhi</id>
-    <content type="html"><![CDATA[<h3>内省</h3>
-
-<p>内省（Introspection）是面向对象语言和环境的一个强大特性，Objective-C和Cocoa在这个方面尤其的丰富。内省是对象揭示自己作为一个运行时对象的详细信息的一种能力。这些详细信息包括对象在继承树上的位置，对象是否遵循特定的协议，以及是否可以响应特定的消息。NSObject协议和类定义了很多内省方法，用于查询运行时信息，以便根据对象的特征进行识别。</p>
-
-<p>明智地使用内省可以使面向对象的程序更加高效和强壮。它有助于避免错误地进行消息派发、错误地假设对象相等、以及类似的问题。下面的部分将介绍如何在代码中有效地使用NSObject的内省方法。</p>
-
-<p><strong><em>本部分包括如下内容：</em></strong></p>
-
-<ul>
-<li>评估继承关系</li>
-<li>方法实现和协议遵循</li>
-<li>对象的比较</li>
-</ul>
-
-
-<h4>评估继承关系</h4>
-
-<p>一旦您知道一个对象属于什么类，就可能已经相当了解这个对象了。您可以知道它具有什么能力、哪些属性、以及可以响应哪些消息。即使在内省之后不能了解对象所属的类，也可以知道该对象不能响应特定的消息。</p>
-
-<p>NSObject协议声明了几个方法，用于确定对象在类层次中的位置。这些方法在不同粒度上进行操作，比如class和superclass实例方法分别返回代表类和超类的Class对象。使用这些方法需要将一个Class对象和另一个进行对比。列表2-7给出了一个简单（可能是没有价值）的用法实例。</p>
-
-<p>列表2-7  使用类和超类的方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
-</span><span class='line'>while ( id anObject = [objectEnumerator nextObject] ) {
-</span><span class='line'>    if ( [self class] == [anObject superclass] ) {
-</span><span class='line'>        // do something appropriate...
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>请注意：有些时候您需要通过class或superclass方法得到正确的类消息接收者。
-更加常见的是检查对象类的从属关系，这种情况下您需要向该对象发送isKindOfClass:或isMemberOfClass:消息。前一个方法返回接收者是否为给定类或其继承类的实例，isMemberOfClass:消息则告诉您接收者是否为指定类的实例。isKindOfClass: 方法通常更有用，因为通过它可以知道是否可以向该对象发送一系列消息。考虑列表2-8中的代码片断：</p>
-
-<p>列表2-8  使用isKindOfClass:方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if ([item isKindOfClass:[NSData class]]) {
-</span><span class='line'>    const unsigned char *bytes = [item bytes];
-</span><span class='line'>    unsigned int length = [item length];
-</span><span class='line'>    // ...
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>确定tem对象是NSData类的继承类的实例之后，代码就知道可以向它发送NSData的bytes和length消息。假定item是NSMutableData类的一个实例，则isKindOfClass:和isMemberOfClass:之间的差别就变得更加明显。如果您调用的是isMemberOfClass:，而不是isKindOfClass:，条件控制块中的代码将永远不会被执行，因为item并不是NSData类的实例，而是其子类NSMutableData的实例。</p>
-
-<h4>方法实现和协议遵循</h4>
-
-<p>NSObject还有两个功能更加强大的内省方法，即respondsToSelector:和conformsToProtocol:。这两个方法分别告诉您一个对象是否实现特定的方法，以及是否遵循指定的正式协议（即该对象是否采纳了该协议，且实现了该协议的所有方法）。</p>
-
-<p>在代码中，您可以在类似的情况下使用这些方法。通过这些方法，您可以在将消息或消息集合发送给某些潜在的匿名对象之前，确定它们是否可以正确地进行响应。在发送消息之前进行检查可以避免由不能识别的选择器引起的运行时例外。在实现非正式协议（这种协议是委托技术的基础）时，Application Kit就是在调用委托方法之前检查委托对象是否实现该方法（通过respondsToSelector:方法）。</p>
-
-<p>列表2-9显示了如何在代码中使用respondsToSelector:方法。</p>
-
-<p>列表2-9  使用respondsToSelector:方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)doCommandBySelector:(SEL)aSelector {
-</span><span class='line'>    if ([self respondsToSelector:aSelector]) {
-</span><span class='line'>        [self performSelector:aSelector withObject:nil];
-</span><span class='line'>    } else {
-</span><span class='line'>        [_client doCommandBySelector:aSelector];
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>列表2-10显示如何在代码中使用conformsToProtocol:方法：</p>
-
-<p>列表2-10  使用conformsToProtocol:方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
-</span><span class='line'>if (!([((id)testObject) conformsToProtocol:@protocol(NSMenuItem)])) {
-</span><span class='line'>    NSLog(@"Custom MenuItem, '%@', not loaded; it must conform to the
-</span><span class='line'>        'NSMenuItem' protocol.\n", [testObject class]);
-</span><span class='line'>    [testObject release];
-</span><span class='line'>    testObject = nil;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>对象的比较</h4>
-
-<p>hash和isEqual:方法虽然不是严格的内省方法，但是可以发挥类似的作用，是进行对象的识别和比较时不可或缺的运行时工具。它们并不向运行环境查询对象信息，而是依赖于具体类的比较逻辑。</p>
-
-<p>hash和isEqual:方法都在NSObject协议中声明，且彼此关系紧密。实现hash方法必须返回一个整型数，作为哈希表结构中的表地址。两个对象相等（isEqual:方法的判断结果）意味着它们有相同的哈希值。如果您的对象可能被包含在象NSSet这样的集合中，则需要定义hash方法，并确保该方法在两个对象相等的时候返回相同的哈希值。NSObject类中缺省的isEqual:实现只是简单地检查指针是否相等。</p>
-
-<p>isEqual:的使用相当直接，它将消息的接收者和通过参数传入的对象进行比较。对象的比较常常可以在运行时决定应该对对象做些什么。如列表2-11所示，您可以通过isEqual:来确定是否执行某一个动作。在这个例子中，动作是指保存被修改了的预置信息。</p>
-
-<p>列表2-11  使用isEqual:方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)saveDefaults {
-</span><span class='line'>    NSDictionary *prefs = [self preferences];
-</span><span class='line'>    if (![origValues isEqual:prefs]) 
-</span><span class='line'>        [Preferences savePreferencesToDefaults:prefs];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果您正在创建子类，则可能需要重载isEqual:方法，以进一步检查对象是否相等。子类可能定义额外的属性，当两个实例被认为相等时，属性的值必须相同。举例来说，假定您创建一个名为MyWidget的NSObject子类，类中包含两个实例变量：name和data。当MyWidget的两个实例被认为是相等时，这些变量必须具有相同的值。列表2-12显示如何在MyWidget类中实现isEqual:方法。</p>
-
-<p>列表 2-12  重载isEqual:方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)isEqual:(id)other {
-</span><span class='line'>    if (other == self) 
-</span><span class='line'>        return YES;
-</span><span class='line'>    if (!other || ![other isKindOfClass:[self class]]) 
-</span><span class='line'>        return NO;
-</span><span class='line'>    return [self isEqualToWidget:other];
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>- (BOOL)isEqualToWidget:(MyWidget *)aWidget {
-</span><span class='line'>    if (self == aWidget) 
-</span><span class='line'>        return YES;
-</span><span class='line'>    if (![(id)[self name] isEqual:[aWidget name]])
-</span><span class='line'>        return NO;
-</span><span class='line'>    if (![[self data] isEqualToData:[aWidget data]])
-</span><span class='line'>        return NO;
-</span><span class='line'>    return YES;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>isEqual:方法首先检查指针的等同性，然后是类的等同性，最后调用对象的比较器进行比较。比较器的名称指示出参与比较的对象的类名称。这种类型的比较器对传入的对象进行强制类型检查，是Cocoa中常见的约定，NSString的isEqualToString:和NSTimeZone的isEqualToTimeZone:就是两个这样的例子。特定类的比较器（在这个例子中是isEqualToWidget:）负责执行name和data变量的等同性。</p>
-
-<p>在Cocoa框架的所有isEqualToType:方法中，nil都不是正当的参数，这些方法的实现在接收到nil参数时会抛出例外。然而为了向后兼容，Cocoa框架中的isEqual:方法可以接收nil值，在这种情况下返回NO。</p>
 ]]></content>
   </entry>
   

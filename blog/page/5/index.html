@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不太常用，但很关键命令 1.整理数据库：vacuum VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize() &hellip;">
+  <meta name="description" content="引言 使用XCode4.5 下使用unit test时，发现直接使用 UIImage *imgA = [UIImage imageNamed:@"asdf"]; NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@” &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,109 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T23:42:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>引言</h3>
+
+<p> 使用XCode4.5 下使用unit test时，发现直接使用
+ <code>
+ UIImage *imgA = [UIImage imageNamed:@"asdf"];
+ NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
+</code>
+ 得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
+
+<h3>一、基础知识</h3>
+
+<h4>1，官方教程</h4>
+
+<p>　　单元测试包含“逻辑测试”和“应用测试”两种类型，分别对应不同的配置方式：
+　　逻辑测试(Logic Unit Test):测试跟App运行过程无关的纯逻辑代码，比如随机数算法，数据结构一类的。
+　　应用测试(Application Unit test):测试跟App运行环境相关的代码，比如目录、文件操作，Core Data存取等。
+　　在Xcode4.5中，创建App时会自动创建Application Unit Test项目。</p>
+
+<h4>2，示例代码。</h4>
+
+<p>　　在Xcode documentation中，可以找到“iPhoneUnitTests”这个例子项目。这个项目会教你怎么写单元测试代码。</p>
+
+<h3>二、进阶问题</h3>
+
+<h4>1，访问被测类</h4>
+
+<p>(在Logic Unit Test模式的要求，Application Unit Test不必设置) 比如在App中定义了FundManager.h这个接口，要想在单元测试中访问这个接口：</p>
+
+<pre><code>1，#import ”FundManager.h"    
+2，在单元测试的target中，Build Phases选项卡，Compile Sources区域中，增加FundManager.m文件。  
+</code></pre>
+
+<p>　　否则会在链接阶段找不到FundManager接口。
+　　</p>
+
+<h4>2，向单元测试目标中添加资源</h4>
+
+<p>　　比如要测试的某个接口需要UIImage对象，需要一张图片来初始化UIImage对象，直接调用[UIImage imageNamed:@”xxx”]是不行的，因为这个接口要从App的main bundle中加载图像，不能直接访问添加到单元测试项目中的资源，下面代码演示了两个bundle目录的不同：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Resource Paths are Different!
+</span><span class='line'>Many assumptions that your bundle is the main bundle will cause problems when testing. (Especially when adding tests to existing code) Look at the difference in bundles, the main bundle isn’t what you’d expect in a unit test.
+</span><span class='line'>NSString *mainBundlePath = [[NSBundle mainBundle] resourcePath];
+</span><span class='line'>NSString *directBundlePath = [[NSBundle bundleForClass:[self class]] resourcePath];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundlePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundlePath);
+</span><span class='line'>NSString *mainBundleResourcePath = [[NSBundle mainBundle] pathForResource:@”Frame.png”ofType:nil];
+</span><span class='line'>NSString *directBundleResourcePath = [[NSBundle bundleForClass:[selfclass]] pathForResource:@”Frame.png” ofType:nil];
+</span><span class='line'>NSLog(@”Main Bundle Path: %@”, mainBundleResourcePath);
+</span><span class='line'>NSLog(@”Direct Path: %@”, directBundleResourcePath);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解决方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Load resources using the bundle for the current classNSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:theImageName ofType:nil]; 
+</span><span class='line'>UIImage *image = [UIImage imageWithContentsOfFile:imagePath];</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -374,57 +477,6 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods本身版本的更新</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-02T11:00:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>CocoaPods本身也不断在更新，在项目进行中不建议进行更新。但是不得已时也得为之。
-具体方法如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem update --system
-</span><span class='line'>gem install cocoapods
-</span><span class='line'>pod setup</span></code></pre></td></tr></table></div></figure>
-
-
-<p>和安装其实一样的，注意版本的变化</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod --version</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -447,7 +499,7 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (22)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (23)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
@@ -457,6 +509,10 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
@@ -472,10 +528,6 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
     
       <li class="post">
         <a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">iOS7 初步适配，与iOS6共存</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a>
       </li>
     
   </ul>
