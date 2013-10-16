@@ -92,8 +92,11 @@ google_plus_one_size: medium
 # delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: saick
-disqus_show_comment_count: true
+# disqus_short_name: saick
+# disqus_show_comment_count: true
+
+# Duoshuo comments
+duoshuo_name: saick
 
 # Google Analytics
 google_analytics_tracking_id: UA-41243300-1
