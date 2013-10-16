@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-16T11:02:51+08:00</updated>
+  <updated>2013-10-16T11:07:33+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -1700,16 +1700,16 @@ UIApplication.h</p>
 
 <p>参考了这里<a href="http://octopress.org/docs/blogging/">http://octopress.org/docs/blogging/</a>。</p>
 
-<ol>
-<li>创建你的github pages repo</li>
-</ol>
+<ul>
+<li>1.创建你的github pages repo</li>
+</ul>
 
 
 <p>如果你的github用户名是username，那个就创建一个名称为”username.github.com”的repo，这个repo就是你的github pages repo，更多信息可以参考这里。</p>
 
-<ol>
-<li>在你本地运行以下命令，octopress会自动帮你进行配置：</li>
-</ol>
+<ul>
+<li>2.在你本地运行以下命令，octopress会自动帮你进行配置：</li>
+</ul>
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -1726,18 +1726,18 @@ UIApplication.h</p>
 
 <h4>编写并发布文章</h4>
 
-<ol>
-<li>写文章</li>
-</ol>
+<ul>
+<li>1.写文章</li>
+</ul>
 
 
 <p>cd your_local_octopress_directory
 rake new_post[&ldquo;Your Title of Your Article&rdquo;]
 该命令会在你的”octopress/source/_posts”目录下生成对应的”.markdown”文件，用任意文本编辑器编辑，使用markdown语法编写你的文章。</p>
 
-<ol>
-<li>生成，预览并发布：</li>
-</ol>
+<ul>
+<li>2.生成，预览并发布：</li>
+</ul>
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
