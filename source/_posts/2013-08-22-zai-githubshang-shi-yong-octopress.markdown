@@ -87,11 +87,11 @@ tchen@tchen-mbp:~/projects/octopress$ cat _deploy/.git/config
 
 参考了这里<http://octopress.org/docs/blogging/>。
 
-1. 创建你的github pages repo
++	1.创建你的github pages repo
 
 如果你的github用户名是username，那个就创建一个名称为”username.github.com”的repo，这个repo就是你的github pages repo，更多信息可以参考这里。
 
-2. 在你本地运行以下命令，octopress会自动帮你进行配置：
++	2.在你本地运行以下命令，octopress会自动帮你进行配置：
 ```
 cd your_local_octopress_directory
 rake setup_github_pages
@@ -104,13 +104,13 @@ rake setup_github_pages
 
 ####编写并发布文章
 
-1. 写文章
++	1.写文章
 
 cd your_local_octopress_directory
 rake new_post["Your Title of Your Article"]
 该命令会在你的”octopress/source/_posts”目录下生成对应的”.markdown”文件，用任意文本编辑器编辑，使用markdown语法编写你的文章。
 
-2. 生成，预览并发布：
++	2.生成，预览并发布：
 ```
 cd your_local_octopress_directory
 rake generate # generate your blog static pages content according to your input. 
