@@ -10,6 +10,7 @@ footer: true
 ####不解释
 *	http://iamsujie.com			苏杰-人人都是产品经理
 *	http://tiny4.org/blog/		郝培强（Tinyfool-iApp4Me.com创始人）- iOS开发博客
+*	http://blog.devtang.com		唐巧的技术博客
 
 ####好朋友
 *	http://blog.csdn.net/songhongri		宋红日-iOS开发者
