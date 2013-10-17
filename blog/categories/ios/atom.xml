@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-17T11:31:24+08:00</updated>
+  <updated>2013-10-17T15:43:23+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,134 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS库添加CocoaPods支持]]></title>
+    <link href="http://saick.net/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/"/>
+    <updated>2013-10-17T15:30:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi</id>
+    <content type="html"><![CDATA[<p>现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。</p>
+
+<h3>准备好库代码（GitHub上）</h3>
+
+<p>将代码Checkout下来，打开命令行，cd到代码根目录</p>
+
+<h3>创建XXXX.podspec</h3>
+
+<p><code>
+pod spec create XXXX
+</code></p>
+
+<h3>编辑XXXX.podspec</h3>
+
+<p>创建好的文件里有很多指引，这步很简单。 实在不明白，再看看GitHub上别的库的spec文件怎么写的。</p>
+
+<h3>验证合法性</h3>
+
+<p><code>
+pod spec lint XXXX.podspec
+</code></p>
+
+<p>完成后即可把这个文件提交到<a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>中。</p>
+
+<p>When you&rsquo;re done you can also fork the <a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>  GitHub repository and send a pull request. We really love contributions and will help ensure it&rsquo;s perfect!</p>
+
+<h3>详细提交步骤</h3>
+
+<p>From：<a href="http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html">http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html</a></p>
+
+<h3>Contributing to the master repo</h3>
+
+<p>The master repo contains specifications of open-source Objective-C libraries.</p>
+
+<h4>Details</h4>
+
+<ul>
+<li> installation path: ~/.cocoapods/master</li>
+<li> home: <a href="https://github.com/CocoaPods/Specs">https://github.com/CocoaPods/Specs</a></li>
+</ul>
+
+
+<h4>Contributing</h4>
+
+<p>To ensure a high quality, reliable collection of Pods, the master repo is strict about the acceptable specifications. The CocoaPods linter (see the pod spec lint command) is used to validate specifications, and no errors or warnings are accepted.
+The highest priority of the master repo is to guarantee the integrity of existing CocoaPods installations.
+In general this means that:</p>
+
+<ul>
+<li> A specification cannot be deleted.</li>
+<li> Specifications can be updated only if they don’t affect existing installations.</li>
+<li><ul>
+<li>Broken specifications can be updated.</li>
+<li>Subspecs can be added as they are included by the parent specification by default.</li>
+</ul>
+</li>
+<li> Only authoritative version numbers are accepted.</li>
+</ul>
+
+
+<p>CocoaPods uses a versioning scheme known as Semantic Versioning, necessary for cross resolution of dependencies.</p>
+
+<h4>Unversioned libraries</h4>
+
+<p>One of the CocoaPods goals is to promote the discovery of open-source software, for this reason new Pods for libraries which are not versioned are accepted in the master repo. The specifications of those pods should carry the version 0.0.1 under the assumption that, if the author starts versioning, she/he is unlikely to pick 0.0.1. This is the only exception for authoritative version numbers.
+If you add an unversioned Pod it is your responsibility to ask the author of the library to tag versions, luckily we have a template for this.
+To prevent collisions with possible future versions, unversioned libraries can’t be updated until the author starts to tag them.
+If you need to update an unversioned library you can:</p>
+
+<ul>
+<li> Ask the author to version the library.</li>
+<li> Maintain a fork which is versioned. This fork should be clearly namespaced from the original library according the NAME@USERconvention (e.g. Reachability@irrationalfab). It should also mention in the summary that it is a versioned fork.</li>
+<li> Create a podspec and use it in a private repo.</li>
+</ul>
+
+
+<h4>Creating podspecs</h4>
+
+<p>Creating a podspec is very easy as we provide templates full of examples.
+You can use the following command:</p>
+
+<p><code>
+$ pod spec create Bananas
+</code></p>
+
+<p>If the library is hosted on GitHub you can pass the url so CocoaPods can precompile the template:</p>
+
+<p><code>
+$ pod spec create https://github.com/Bananas/Bananas
+</code></p>
+
+<p>A this point you need edit compile the template (a pod specification is a Ruby source file):</p>
+
+<p><code>
+$ pod spec lint Bananas.podspec --verboseSharing podspecs
+</code></p>
+
+<h4>Sharing podspecs</h4>
+
+<p>When a podspec lints you can submit it to the master repo.</p>
+
+<h4>Without push access</h4>
+
+<p>You need to fork the master repo on github, then you need to:</p>
+
+<p><code>
+$ cd ~/.cocoapods/master
+$ git checkout -b fork
+$ git remote add myfork https://github.com/YOUR_USER_NAME/Specs.git
+$ cp ~/Bananas.podspec ~/.cocoapods/master/Bananas/VERSION/
+$ git push myfork
+$ git checkout master
+</code></p>
+
+<p>Once you push your changes, you can make a pull request on CocoaPods/Specs.
+With push access</p>
+
+<p><code>
+$ pod push Bananas.podspec
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS应用处理崩溃的几种方法]]></title>
@@ -822,125 +950,6 @@ CGRect frame = [UIScreen mainScreen].applicationFrame;
 
 <p><a href="http://blog.jaredsinclair.com/post/61507315630/wrestling-with-status-bars-and-navigation-bars-on-ios-7">http://blog.jaredsinclair.com/post/61507315630/wrestling-with-status-bars-and-navigation-bars-on-ios-7</a>
 <a href="https://developer.apple.com/library/ios/documentation/userexperience/conceptual/TransitionGuide/index.html">https://developer.apple.com/library/ios/documentation/userexperience/conceptual/TransitionGuide/index.html</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[给xcode工程做命令行build]]></title>
-    <link href="http://saick.net/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/"/>
-    <updated>2013-10-14T14:59:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build</id>
-    <content type="html"><![CDATA[<p>XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。</p>
-
-<p>XCode工程的命令行Build命令是 xcodebuild，用 &mdash;help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。</p>
-
-<p>另外，将.app文件转成ipa包的方式也相当简单。具体方式是将 .app文件拷贝到一个名为 ipa/Payload的目录下，然后将ipa下的所有内容用zip打包即可：</p>
-
-<p>```</p>
-
-<pre><code>  mkdir -p ipa/Payload
-  cp -r ./Release-iphoneos/PRODUCT_NAME.app  ./ipa/Payload/
-  cd ipa
-  zip -r $FILE_NAME *
-</code></pre>
-
-<p>```</p>
-
-<p>如果要将打好的ipa包上传到服务器上面去，再加一些脚本即可，我们是放到一个再windows共享的web server目录下，于是可以用smbclient来连接windows共享和上传ipa包：</p>
-
-<p>```</p>
-
-<pre><code>  echo "put FILE_NAME.ipa" | smbclient //主机名 -U 用户名%密码
-</code></pre>
-
-<p>```</p>
-
-<p>附上所有想着的XCode命令</p>
-
-<h6>1.查看xcode的版本号和build版本</h6>
-
-<p><code>
-$ xcodebuild -version
-</code></p>
-
-<p>显示内容：</p>
-
-<p><code>
-Xcode 4.2Build version 4D199
-</code></p>
-
-<h6>2.显示当前系统的sdk、及其版本</h6>
-
-<p><code>
-$ xcodebuild -showsdks
-</code></p>
-
-<p>显示内容：</p>
-
-<p><code>
-Mac OS X SDKs:    Mac OS X 10.6                     -sdk macosx10.6    Mac OS X 10.7                     -sdk macosx10.7iOS SDKs:    iOS 5.0                           -sdk iphoneos5.0iOS Simulator SDKs:    Simulator - iOS 5.0               -sdk iphonesimulator5.0
-</code></p>
-
-<h6>3.显示工程项目信息</h6>
-
-<p>先cd到工程目录下（有＊.xcodeproj的目录，比如MakeFileTest.xcodeproj），然后输入命令
-<code>
-$ xcodebuild -list
-</code></p>
-
-<p>显示内容</p>
-
-<p><code>
-Information about project "MakeFileTest":    
-Targets:        MakeFileTest    
-Build Configurations:        Debug        Release    If no build configuration is specified and -scheme is not passed then "Release" is used.    
-Schemes:        MakeFileTest
-</code></p>
-
-<p>如果未指定Configurations，默认为release</p>
-
-<h6>4.xcodebuild用法：</h6>
-
-<h6>#1）用ios5.0模拟器（iphonesimulator5.0）建立工程</h6>
-
-<p><code>
-$ xcodebuild -sdk iphonesimulator5.0
-</code></p>
-
-<p>输出一堆编译过程，最后输出<strong> BUILD SUCCEEDED </strong>表示创建成功；
-若输出<strong> BUILD FAILED </strong>表示创建失败
-成功后会在当前工程目录下创建build目录，结构如下：</p>
-
-<p><img class="<a" src="href="http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=15fd0cff0afa513d55aa6cdb0d5624c6/a1ec08fa513d2697dd9c917e57fbb2fb4316d842.jpg?referer=dfc765f917ce36d3fb13b6001840&amp;x=.jpg">http://e.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=15fd0cff0afa513d55aa6cdb0d5624c6/a1ec08fa513d2697dd9c917e57fbb2fb4316d842.jpg?referer=dfc765f917ce36d3fb13b6001840&amp;x=.jpg</a>"></p>
-
-<p>MakeFileTest.app就是编译生成的可执行文件，
-而MakeFileTest.build文件夹下是一些中间文件</p>
-
-<p><img class="<a" src="href="http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=a14904c0ff1f4134e437057b1524e4f7/a9d3fd1f4134970a3719890c97cad1c8a7865dae.jpg?referer=869c95c8b4fd5266fe3c09249b64&amp;x=.jpg">http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=a14904c0ff1f4134e437057b1524e4f7/a9d3fd1f4134970a3719890c97cad1c8a7865dae.jpg?referer=869c95c8b4fd5266fe3c09249b64&amp;x=.jpg</a>"></p>
-
-<h6>#2）默认是Release工程，要设置成Debug模式如下：</h6>
-
-<p><code>
-$ xcodebuild -sdk iphonesimulator5.0 -configuration Debug
-</code></p>
-
-<h6>#3）clean创建的工程</h6>
-
-<p><code>
-$ xcodebuild clean -sdk iphonesimulator5.0 -configuration Debug
-</code>
-成功输出<strong>CLEAN SUCCEEDED</strong></p>
-
-<h6>5.xcodebuild的编译参数</h6>
-
-<p>下面说运行从命令行中运行应用程序:</p>
-
-<p>需要一个小工具iphonesim,从 <a href="https://github.com/hborders/iphonesim/">https://github.com/hborders/iphonesim/</a> 下载后编译成为一个可执行文件,用它来启动iphone模拟器.
-由于模拟器不支持多个实例,所以运行前记得先把模拟器给关掉。按照以下命令来执行吧!</p>
-
-<p><code>
-iphonesim launch /Users/TadoSoft/Library/Application\ Support/iPhone\ Simulator/4.3.2/Applications/ED845558-5168-45C0-BA98-43AB3C238E9F/Krowdit.app/
-</code></p>
 ]]></content>
   </entry>
   
