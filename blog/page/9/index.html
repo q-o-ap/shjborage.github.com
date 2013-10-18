@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="工作原理： 通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。 本程序给Apple tv访问的网址 : http://4.appletv3.sinaapp.com/index.php(其他设备浏览器无效) 此方法许多人都设想过， &hellip;">
+  <meta name="description" content="内省 内省（Introspection）是面向对象语言和环境的一个强大特性，Objective-C和Cocoa在这个方面尤其的丰富。内省是对象揭示自己作为一个运行时对象的详细信息的一种能力。这些详细信息包括对象在继承树上的位置，对象是否遵循特定的协议，以及是否可以响应特定的消息。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,208 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/">Cocoa 自省机制</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T16:30:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>内省</h3>
+
+<p>内省（Introspection）是面向对象语言和环境的一个强大特性，Objective-C和Cocoa在这个方面尤其的丰富。内省是对象揭示自己作为一个运行时对象的详细信息的一种能力。这些详细信息包括对象在继承树上的位置，对象是否遵循特定的协议，以及是否可以响应特定的消息。NSObject协议和类定义了很多内省方法，用于查询运行时信息，以便根据对象的特征进行识别。</p>
+
+<p>明智地使用内省可以使面向对象的程序更加高效和强壮。它有助于避免错误地进行消息派发、错误地假设对象相等、以及类似的问题。下面的部分将介绍如何在代码中有效地使用NSObject的内省方法。</p>
+
+<p><strong><em>本部分包括如下内容：</em></strong></p>
+
+<ul>
+<li>评估继承关系</li>
+<li>方法实现和协议遵循</li>
+<li>对象的比较</li>
+</ul>
+
+
+<h4>评估继承关系</h4>
+
+<p>一旦您知道一个对象属于什么类，就可能已经相当了解这个对象了。您可以知道它具有什么能力、哪些属性、以及可以响应哪些消息。即使在内省之后不能了解对象所属的类，也可以知道该对象不能响应特定的消息。</p>
+
+<p>NSObject协议声明了几个方法，用于确定对象在类层次中的位置。这些方法在不同粒度上进行操作，比如class和superclass实例方法分别返回代表类和超类的Class对象。使用这些方法需要将一个Class对象和另一个进行对比。列表2-7给出了一个简单（可能是没有价值）的用法实例。</p>
+
+<p>列表2-7  使用类和超类的方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
+</span><span class='line'>while ( id anObject = [objectEnumerator nextObject] ) {
+</span><span class='line'>    if ( [self class] == [anObject superclass] ) {
+</span><span class='line'>        // do something appropriate...
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>请注意：有些时候您需要通过class或superclass方法得到正确的类消息接收者。
+更加常见的是检查对象类的从属关系，这种情况下您需要向该对象发送isKindOfClass:或isMemberOfClass:消息。前一个方法返回接收者是否为给定类或其继承类的实例，isMemberOfClass:消息则告诉您接收者是否为指定类的实例。isKindOfClass: 方法通常更有用，因为通过它可以知道是否可以向该对象发送一系列消息。考虑列表2-8中的代码片断：</p>
+
+<p>列表2-8  使用isKindOfClass:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ([item isKindOfClass:[NSData class]]) {
+</span><span class='line'>    const unsigned char *bytes = [item bytes];
+</span><span class='line'>    unsigned int length = [item length];
+</span><span class='line'>    // ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>确定tem对象是NSData类的继承类的实例之后，代码就知道可以向它发送NSData的bytes和length消息。假定item是NSMutableData类的一个实例，则isKindOfClass:和isMemberOfClass:之间的差别就变得更加明显。如果您调用的是isMemberOfClass:，而不是isKindOfClass:，条件控制块中的代码将永远不会被执行，因为item并不是NSData类的实例，而是其子类NSMutableData的实例。</p>
+
+<h4>方法实现和协议遵循</h4>
+
+<p>NSObject还有两个功能更加强大的内省方法，即respondsToSelector:和conformsToProtocol:。这两个方法分别告诉您一个对象是否实现特定的方法，以及是否遵循指定的正式协议（即该对象是否采纳了该协议，且实现了该协议的所有方法）。</p>
+
+<p>在代码中，您可以在类似的情况下使用这些方法。通过这些方法，您可以在将消息或消息集合发送给某些潜在的匿名对象之前，确定它们是否可以正确地进行响应。在发送消息之前进行检查可以避免由不能识别的选择器引起的运行时例外。在实现非正式协议（这种协议是委托技术的基础）时，Application Kit就是在调用委托方法之前检查委托对象是否实现该方法（通过respondsToSelector:方法）。</p>
+
+<p>列表2-9显示了如何在代码中使用respondsToSelector:方法。</p>
+
+<p>列表2-9  使用respondsToSelector:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)doCommandBySelector:(SEL)aSelector {
+</span><span class='line'>    if ([self respondsToSelector:aSelector]) {
+</span><span class='line'>        [self performSelector:aSelector withObject:nil];
+</span><span class='line'>    } else {
+</span><span class='line'>        [_client doCommandBySelector:aSelector];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>列表2-10显示如何在代码中使用conformsToProtocol:方法：</p>
+
+<p>列表2-10  使用conformsToProtocol:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
+</span><span class='line'>if (!([((id)testObject) conformsToProtocol:@protocol(NSMenuItem)])) {
+</span><span class='line'>    NSLog(@"Custom MenuItem, '%@', not loaded; it must conform to the
+</span><span class='line'>        'NSMenuItem' protocol.\n", [testObject class]);
+</span><span class='line'>    [testObject release];
+</span><span class='line'>    testObject = nil;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>对象的比较</h4>
+
+<p>hash和isEqual:方法虽然不是严格的内省方法，但是可以发挥类似的作用，是进行对象的识别和比较时不可或缺的运行时工具。它们并不向运行环境查询对象信息，而是依赖于具体类的比较逻辑。</p>
+
+<p>hash和isEqual:方法都在NSObject协议中声明，且彼此关系紧密。实现hash方法必须返回一个整型数，作为哈希表结构中的表地址。两个对象相等（isEqual:方法的判断结果）意味着它们有相同的哈希值。如果您的对象可能被包含在象NSSet这样的集合中，则需要定义hash方法，并确保该方法在两个对象相等的时候返回相同的哈希值。NSObject类中缺省的isEqual:实现只是简单地检查指针是否相等。</p>
+
+<p>isEqual:的使用相当直接，它将消息的接收者和通过参数传入的对象进行比较。对象的比较常常可以在运行时决定应该对对象做些什么。如列表2-11所示，您可以通过isEqual:来确定是否执行某一个动作。在这个例子中，动作是指保存被修改了的预置信息。</p>
+
+<p>列表2-11  使用isEqual:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)saveDefaults {
+</span><span class='line'>    NSDictionary *prefs = [self preferences];
+</span><span class='line'>    if (![origValues isEqual:prefs]) 
+</span><span class='line'>        [Preferences savePreferencesToDefaults:prefs];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果您正在创建子类，则可能需要重载isEqual:方法，以进一步检查对象是否相等。子类可能定义额外的属性，当两个实例被认为相等时，属性的值必须相同。举例来说，假定您创建一个名为MyWidget的NSObject子类，类中包含两个实例变量：name和data。当MyWidget的两个实例被认为是相等时，这些变量必须具有相同的值。列表2-12显示如何在MyWidget类中实现isEqual:方法。</p>
+
+<p>列表 2-12  重载isEqual:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)isEqual:(id)other {
+</span><span class='line'>    if (other == self) 
+</span><span class='line'>        return YES;
+</span><span class='line'>    if (!other || ![other isKindOfClass:[self class]]) 
+</span><span class='line'>        return NO;
+</span><span class='line'>    return [self isEqualToWidget:other];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (BOOL)isEqualToWidget:(MyWidget *)aWidget {
+</span><span class='line'>    if (self == aWidget) 
+</span><span class='line'>        return YES;
+</span><span class='line'>    if (![(id)[self name] isEqual:[aWidget name]])
+</span><span class='line'>        return NO;
+</span><span class='line'>    if (![[self data] isEqualToData:[aWidget data]])
+</span><span class='line'>        return NO;
+</span><span class='line'>    return YES;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>isEqual:方法首先检查指针的等同性，然后是类的等同性，最后调用对象的比较器进行比较。比较器的名称指示出参与比较的对象的类名称。这种类型的比较器对传入的对象进行强制类型检查，是Cocoa中常见的约定，NSString的isEqualToString:和NSTimeZone的isEqualToTimeZone:就是两个这样的例子。特定类的比较器（在这个例子中是isEqualToWidget:）负责执行name和data变量的等同性。</p>
+
+<p>在Cocoa框架的所有isEqualToType:方法中，nil都不是正当的参数，这些方法的实现在接收到nil参数时会抛出例外。然而为了向后兼容，Cocoa框架中的isEqual:方法可以接收nil值，在这种情况下返回NO。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -229,297 +431,6 @@ JSP代码</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/08/web-div-plus-csspai-ban/">Web Div+CSS排版</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-08T16:08:00+08:00" pubdate data-updated="true">Jun 8<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h6>显示效果见源网页：<a href="http://www.java3z.com/cwbwebhome/article/article9/ht26.html">http://www.java3z.com/cwbwebhome/article/article9/ht26.html</a></h6>
-
-<p>用DIV把元素定义为块对象，用CSS设置对象的格式和位置。</p>
-
-<p>CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。以下是几种常用的CSS+DIV的排版技术。</p>
-
-<p>纵向排列元素</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，由于 &lt;div&gt; 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#menu {
-</span><span class='line'>   width: 100px; font-size: 15px;
-</span><span class='line'>}
-</span><span class='line'>.dd {
-</span><span class='line'>   border: 1px dotted #0000FF; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; margin-bottom: 3px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="menu">
-</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
-</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
-</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，用CSS的 float 属性设置对象的浮动。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#box {
-</span><span class='line'>   height: 110px;
-</span><span class='line'>}
-</span><span class='line'>#b1 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left;
-</span><span class='line'>}
-</span><span class='line'>#b2 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: none; margin-left: 5px; margin-right: 5px;
-</span><span class='line'>}
-</span><span class='line'>#b3 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: right;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="box">
-</span><span class='line'>&lt;div id="b1">&lt;/div>
-</span><span class='line'>&lt;div id="b2">&lt;/div>
-</span><span class='line'>&lt;div id="b3">&lt;/div>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>用列表排列元素</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;ul&gt; 或 &lt;ol&gt; 标签制作列表，用CSS设置列表项目的效果。这种方法主要用于规则排列的文本块、图片、控件等。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>.list1 {
-</span><span class='line'>   height: 20px;
-</span><span class='line'>}
-</span><span class='line'>.list1 ul {
-</span><span class='line'>   list-style-type: none; margin: 0px;
-</span><span class='line'>}
-</span><span class='line'>.list1 li {
-</span><span class='line'>   float: left; margin-right: 5px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div class="list1">
-</span><span class='line'>&lt;ul>
-</span><span class='line'>&lt;li>[1]&lt;/li>
-</span><span class='line'>&lt;li>[2]&lt;/li>
-</span><span class='line'>&lt;li>[3]&lt;/li>
-</span><span class='line'>&lt;li>[4]&lt;/li>
-</span><span class='line'>&lt;/ul>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>[1] [2] [3] [4]
-用绝对坐标定位元素</p>
-
-<p>浏览器窗口的左上角坐标为 (0,0)，x 坐标向右，y 坐标向下。</p>
-
-<p>CSS提供了几个位置属性，可以设置对象在页面中的位置。</p>
-
-<p>position：当它取值为 absolute 时，表示对象使用绝对坐标定位。</p>
-
-<p>left、top：对象的左上角坐标。</p>
-
-<p>right、bottom：对象的右下角坐标。</p>
-
-<p>z-index：对象的层叠顺序。取值为一个整数。</p>
-
-<p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#m1 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 50px; top: 10px; z-index: 1;
-</span><span class='line'>}
-</span><span class='line'>#m2 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 185px; top: 10px; z-index: 2;
-</span><span class='line'>}
-</span><span class='line'>#m3 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 320px; top: 10px; z-index: 3;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="m1">&lt;/div>
-</span><span class='line'>&lt;div id="m2">&lt;/div>
-</span><span class='line'>&lt;div id="m3">&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
-
-<p>用相对坐标定位元素</p>
-
-<p>父对象的左上角坐标为 (0,0)，对象的坐标是相对于父对象的。</p>
-
-<p>position：当它取值为 relative 时，表示对象使用相对坐标定位。</p>
-
-<p>left、top：对象的左上角坐标。</p>
-
-<p>right、bottom：对象的右下角坐标。</p>
-
-<p>以上坐标也可理解为相对于父对象的左上角偏移的距离。</p>
-
-<p>注意：用相对坐标定位的对象不允许层叠。此时 z-index 属性无效。</p>
-
-<p>用相对坐标定位对象在实现一些不规则的排列或拼接时有很好的效果。</p>
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#area {
-</span><span class='line'>   width: 270px; height: 70px; border: 1px solid #0000FF;
-</span><span class='line'>}
-</span><span class='line'>#h1 {
-</span><span class='line'>   position: relative; left: 85px; top: 10px;
-</span><span class='line'>}
-</span><span class='line'>#h2 {
-</span><span class='line'>   position: relative; left: 15px; top: 32px;
-</span><span class='line'>}
-</span><span class='line'>#h3 {
-</span><span class='line'>   position: relative; left: 75px; top: 40px;
-</span><span class='line'>}
-</span><span class='line'>#h4 {
-</span><span class='line'>   position: relative; left: 115px; top: 25px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="area">
-</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -541,7 +452,7 @@ JSP代码</p>
 <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
-<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (25)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -552,6 +463,10 @@ JSP代码</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git fetch和git pull的区别</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a>
@@ -567,10 +482,6 @@ JSP代码</p>
     
       <li class="post">
         <a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
       </li>
     
   </ul>

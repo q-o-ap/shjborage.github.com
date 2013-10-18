@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SourceControl | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/sourcecontrol/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-19T01:40:20+08:00</updated>
+  <updated>2013-10-19T01:52:17+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git fetch和git pull的区别]]></title>
+    <link href="http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/"/>
+    <updated>2013-10-19T01:47:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie</id>
+    <content type="html"><![CDATA[<p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
+
+<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
+
+<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
+
+<p><code>
+git fetch origin master
+git log -p master..origin/master
+git merge origin/master
+</code></p>
+
+<p>以上命令的含义：<br/>
+首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
+
+<p>上述过程其实可以用以下更清晰的方式来进行：</p>
+
+<p><code>
+git fetch origin master:tmp
+git diff tmp
+git merge tmp
+</code></p>
+
+<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
+
+<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
+
+<p><code>
+git pull origin master
+</code></p>
+
+<p>上述命令其实相当于git fetch 和 git merge</p>
+
+<p>在实际使用中，git fetch更安全一些</p>
+
+<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
+
+<p>EOF</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git no branch 解决方案]]></title>

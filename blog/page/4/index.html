@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。 XCode工程的命令行Build命令是 xcodebuild &hellip;">
+  <meta name="description" content="很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下： 转换步骤： 1、进入项目目录，可看到.project文件， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,69 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T15:30:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下：</p>
+
+<p>转换步骤：</p>
+
+<ul>
+<li>1、进入项目目录，可看到.project文件，打开。</li>
+<li>2、找到<natures>&hellip;</natures>代码段。</li>
+<li>3、在第2步的代码段中加入如下标签内容并保存：</li>
+<li></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;nature&gt;org.eclipse.wst.common.project.facet.core.nature&lt;/nature&gt; 
+</span><span class='line'>&lt;nature&gt;org.eclipse.wst.common.modulecore.ModuleCoreNature&lt;/nature&gt; 
+</span><span class='line'>&lt;nature&gt;org.eclipse.jem.workbench.JavaEMFNature&lt;/nature&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>4、在eclipse的项目上点右键，刷新项目。</li>
+<li>5、在项目上点右键，进入属性（properties）</li>
+<li>6、在左侧列表项目中点击选择“Project Facets”，在右侧选择“Dynamic Web Module”和&#8221;Java&#8221;，点击OK保存即可</li>
+</ul>
+
+
+<p><img src="http://b.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=58929a39c45c1038207ecec7822ae22e/342ac65c103853434a301d029113b07eca808812.jpg?referer=64a02a26e7dde711bec577c6e8f0&x=.jpg"></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -338,118 +401,6 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/10/zao-yu-sigpipe/">遭遇SIGPIPE</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>《转》</p>
-
-<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
-
-<p>用gdb执行程序, 退出时提示&#8221;Broken pipe&#8221;.
-最后问题确定为, 对一个对端已经关闭的socket调用两次write,
-第二次将会生成SIGPIPE信号, 该信号默认结束进程.
-具体的分析可以结合TCP的&#8221;四次握手&#8221;关闭. TCP是全双工的信道,
-可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
-虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
-表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
-
-<p>也就是说, 因为TCP协议的限制,
-一个端点无法获知对端的socket是调用了close还是shutdown.
-对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
-这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
-会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
-因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
-第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
-
-<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
-给它设置SIG_IGN信号处理函数:
-<code>signal(SIGPIPE, SIG_IGN);</code>
-这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
-程序便能知道对端已经关闭.</p>
-
-<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
-
-<h5>忽略SIGPIPE信号的方法</h5>
-
-<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>struct sigaction sa;
-</span><span class='line'>sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
-</span><span class='line'>sa.sa_flags = 0;
-</span><span class='line'>if (sigemptyset(&sa.sa_mask) == -1 || //初始化信号集为空
-</span><span class='line'>sigaction(SIGPIPE, &sa, 0) == -1) { //屏蔽SIGPIPE信号
-</span><span class='line'>perror("failed to ignore SIGPIPE; sigaction");
-</span><span class='line'>exit(EXIT_FAILURE);
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
-
-<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
-<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
-
-<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
-pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef WIN32
-</span><span class='line'>sigset_t signal_mask;
-</span><span class='line'>sigemptyset (&signal_mask);
-</span><span class='line'>sigaddset (&signal_mask, SIGPIPE);
-</span><span class='line'>int rc = pthread_sigmask (SIG_BLOCK, &signal_mask, NULL);
-</span><span class='line'>if (rc != 0) {
-</span><span class='line'>printf("block sigpipe error\n");
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -471,7 +422,7 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
-<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (25)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -482,6 +433,10 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git fetch和git pull的区别</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a>
@@ -497,10 +452,6 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
     
       <li class="post">
         <a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
       </li>
     
   </ul>

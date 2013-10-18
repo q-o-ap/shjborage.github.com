@@ -5,17 +5,15 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>NaN问题 Not a Number - Saick Blog - 专注技术，乐在其中</title>
+  <title>Git fetch和git pull的区别 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。 主要常见原因： 除以0
-sizeWithFont的字符串为nil
-数学函数不正确运算 解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
-如下 1
+  <meta name="description" content="原文： http://www.tech126.com/git-fetch-pull/ Git中从远程的分支获取最新的版本到本地有这样2个命令： 1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge 1
 2
 3
-4 &hellip;">
+git fetch origin master
+git log &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,7 +22,7 @@ sizeWithFont的字符串为nil
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/10/nanwen-ti-not-a-number/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -88,7 +86,7 @@ sizeWithFont的字符串为nil
   
   <header>
     
-      <h1 class="entry-title">NaN问题 Not a Number</h1>
+      <h1 class="entry-title">Git Fetch和git Pull的区别</h1>
     
     
       <p class="meta">
@@ -104,38 +102,55 @@ sizeWithFont的字符串为nil
   
 
 
-<time datetime="2013-10-10T23:26:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+<time datetime="2013-10-19T01:47:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。</p>
+<div class="entry-content"><p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
 
-<p>主要常见原因：</p>
+<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
 
-<ul>
-<li>除以0</li>
-<li>sizeWithFont的字符串为nil</li>
-<li>数学函数不正确运算</li>
-</ul>
-
-
-<p>解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
-如下</p>
+<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>float _x = NAN;
-</span><span class='line'>if (!isnan(_x)) {
-</span><span class='line'>cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
+</span><span class='line'>git log -p master..origin/master
+</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
 
 
-<p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
+<p>以上命令的含义：<br/>
+首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
+
+<p>上述过程其实可以用以下更清晰的方式来进行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master:tmp
+</span><span class='line'>git diff tmp 
+</span><span class='line'>git merge tmp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
+
+<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git pull origin master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述命令其实相当于git fetch 和 git merge</p>
+
+<p>在实际使用中，git fetch更安全一些</p>
+
+<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
+
+<p>EOF</p>
 </div>
 
 
@@ -158,12 +173,12 @@ sizeWithFont的字符串为nil
   
 
 
-<time datetime="2013-10-10T23:26:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+<time datetime="2013-10-19T01:47:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/sourcecontrol/'>SourceControl</a>
   
 </span>
 
@@ -176,7 +191,7 @@ sizeWithFont的字符串为nil
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/10/nanwen-ti-not-a-number/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/10/nanwen-ti-not-a-number/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/" >Tweet</a>
   
   
   
@@ -203,10 +218,8 @@ sizeWithFont的字符串为nil
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/09/24/group-concathan-shu-xiang-jie/" title="Previous Post: group_concat函数详解">&laquo; group_concat函数详解</a>
+        <a class="basic-alignment left" href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/" title="Previous Post: MAC 系统的启动过程和系统启动时运行shell 脚本">&laquo; MAC 系统的启动过程和系统启动时运行shell 脚本</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/10/zao-yu-sigpipe/" title="Next Post: 遭遇SIGPIPE">遭遇SIGPIPE &raquo;</a>
       
     </p>
   </footer>

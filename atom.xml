@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-19T01:40:20+08:00</updated>
+  <updated>2013-10-19T01:52:17+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git fetch和git pull的区别]]></title>
+    <link href="http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/"/>
+    <updated>2013-10-19T01:47:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie</id>
+    <content type="html"><![CDATA[<p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
+
+<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
+
+<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
+</span><span class='line'>git log -p master..origin/master
+</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上命令的含义：<br/>
+首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
+
+<p>上述过程其实可以用以下更清晰的方式来进行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master:tmp
+</span><span class='line'>git diff tmp 
+</span><span class='line'>git merge tmp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
+
+<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git pull origin master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述命令其实相当于git fetch 和 git merge</p>
+
+<p>在实际使用中，git fetch更安全一些</p>
+
+<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
+
+<p>EOF</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MAC 系统的启动过程和系统启动时运行shell 脚本]]></title>
@@ -1947,30 +1997,6 @@ Posted by 唐巧 Dec 2nd, 2012   iOS
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>pod --version</span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[自定义UITabbarController引发的血案]]></title>
-    <link href="http://saick.net/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/"/>
-    <updated>2013-09-02T09:05:00+08:00</updated>
-    <id>http://saick.net/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an</id>
-    <content type="html"><![CDATA[<p>转自：<a href="http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html">http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html</a></p>
-
-<p>nested push animation can result in corrupted navigation bar 嵌套的navigation动画会造成 navigation bar 错误， 具体表现为上一层的titleview 和这一层重叠， navigationbaritem 维持上一层的左按钮， 右按钮 、、、系统警告提示nested push animation can result in corrupted navigation bar ， 大家遇到过这种情况吗？？
-嵌套的动画， 是什么意思呢， 为什么会这样， 要怎么解决</p>
-
-<p>结贴~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
-
-<p>有一天，从头到尾分析了整个项目的代码， 最后确认问题根源——自定义UITabbarController引发的血案
-项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，
-整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，
-导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</p>
-
-<p>扩展阅读：
-<a href="http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga">http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga</a></p>
-
-<p>其实主要还是在用户看不到的时候，多次使用Animate=YES</p>
 ]]></content>
   </entry>
   
