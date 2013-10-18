@@ -9,9 +9,9 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
-来上图看下吧 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
-1. group 和 folder的区别 &hellip;">
+  <meta name="description" content="问了好多人，都不知道group_concat这个函数。
+这个函数好啊，能将相同的行组合起来，省老事了。
+MySQL中group_concat函数(SQLite或其它数据亦可) 完整的语法如下： group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,181 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Group_concat函数详解</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-24T00:06:00+08:00" pubdate data-updated="true">Sep 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>问了好多人，都不知道group_concat这个函数。
+这个函数好啊，能将相同的行组合起来，省老事了。
+MySQL中group_concat函数(SQLite或其它数据亦可)</p>
+
+<p>完整的语法如下：</p>
+
+<p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
+
+<h4>基本查询</h4>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select * from aa;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>| id| name |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10|</p>
+
+<p>|1 | 20|</p>
+
+<p>|1 | 20|</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 200 |</p>
+
+<p>|3 | 500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>6 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，逗号分隔(默认)</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>| id| group_concat(name) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10,20,20|</p>
+
+<p>|2 | 20 |</p>
+
+<p>|3 | 200,500|</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，分号分隔</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name separator &lsquo;;&rsquo;) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>| id| group_concat(name separator &lsquo;;&rsquo;) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10;20;20 |</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 200;500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把去冗余的name字段的值打印在一行，</p>
+
+<h3>逗号分隔</h3>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(distinct name) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>| id| group_concat(distinct name) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>|1 | 10,20|</p>
+
+<p>|2 | 20 |</p>
+
+<p>|3 | 200,500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，逗号分隔，以name排倒序</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name order by name desc) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>| id| group_concat(name order by name desc) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>|1 | 20,20,10 |</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 500,200|</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -249,84 +424,6 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-03T13:35:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>不太常用，但很关键命令</h3>
-
-<h4>1.整理数据库：vacuum</h4>
-
-<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
-
-<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
-
-<p>当数据库中的一个对象(表，索引或触发器)被撤销，会留下空白的空间。它使数据库比需要的大小更大，但能加快插入速度。实时的插入和删除会使得数据库文件结构混乱，减慢对数据库内容访问的速度。 VACUUM命令复制主数据库文件到临时数据库并从临时数据库重新载入主数据库，以整理数据库文件。这将除去空白页，使表数据彼此相邻排列，并整理数据库文件结构。不能对附加数据库文件进行以上操作。</p>
-
-<p>若当前有活动事务，该命令无法起作用。对于in-memory数据库，该命令无效。</p>
-
-<p>SQLite3.1中，可以通过使用auto-vacuum模式取代VACUUM命令，使用auto_vacuum pragma开启该模式。
-扩展阅读：<a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
-
-<h4>2.导出数据库：.dump</h4>
-
-<p>.output file.sql</p>
-
-<p>.dump</p>
-
-<p>.output stdout</p>
-
-<h4>3.导入数据库：.read 和.import</h4>
-
-<p>.read file.sql</p>
-
-<p>.import [file][table]</p>
-
-<h3>SQLite不支持的常用操作</h3>
-
-<ul>
-<li>1 高级联结：SQlite支持“左外部联结（LEFT OUTER JOIN）”，不支持“右外部联结（RIGHT OUTER JOIN）”和“全外部联结（FULL OUTER JOIN）”。</li>
-<li>2 修改表操作：SQlite支持“重命名表（RENAME TABLE）”，使用“ALTER TABLE给表添加新列”。不支持使用“ALTER TABLE”进行“删除列（DROP COLUMN）”，“修改列（ALTER COLUMN）”，“添加约束（ADD CONSTRAINT）”等。</li>
-<li>3 触发器支持不完整：SQlite支持“行级触发器（FOR EACH ROW）”，不支持“语句级触发器（FOR EACH STATEMENT）”。</li>
-<li>4 视图只能读不能写：SQlite不能在一个视图上使用“删除（DELETE）”，“插入（INSERT）”和“更新（UPDATE）”语句。但是可以创建一个触发器，当对表进行“DELETE”，“INSERT”或者“UPDATE”操作时激活该触发器，在该触发器的body部分做所需的操作。</li>
-<li>5 不支持GRANT和REVOKE语句：因为SQlite只是去读写普通的磁盘文件，所以唯一可以应用到SQlite数据库的访问权限（控制），只有底层操作系统的普通的文件访问权限。所以那些client/server模式的数据库上通常具有的GRANT和REVOKE命令，SQlite并不支持，因为它们对于“嵌入式的数据库引擎（embedded database engine）”毫无意义。</li>
-</ul>
-
-
-<h4>官方SQL语法</h4>
-
-<p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -349,7 +446,7 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (25)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (26)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
@@ -359,6 +456,10 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/ios-arc-jian-rong-chu-li/">iOS ARC 兼容处理</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git fetch和git pull的区别</a>
@@ -374,10 +475,6 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
     
       <li class="post">
         <a href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">iOS库添加CocoaPods支持</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-19T01:52:17+08:00</updated>
+  <updated>2013-10-19T02:04:48+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,43 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS ARC 兼容处理]]></title>
+    <link href="http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li/"/>
+    <updated>2013-10-19T01:56:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li</id>
+    <content type="html"><![CDATA[<p>From:宋红日（转自：<a href="http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89">http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89</a></p>
+
+<p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
+尤其当你决定做一个通用的控件 或 模块的时候。</p>
+
+<p>```
+// ARC conditions</p>
+
+<h1>if !__has_feature(objc_arc)</h1>
+
+<h1>define Release(obj) [obj release]</h1>
+
+<h1>define Retain(obj) [obj retain]</h1>
+
+<h1>else</h1>
+
+<h1>define Release(obj)</h1>
+
+<h1>define Retain(obj) obj</h1>
+
+<h1>endif</h1>
+
+<p>```</p>
+
+<p>另外，如果是ARC工程，某些文件不支持ARC的话，可以在Target->Build Phases->Complie sources 中对某个文件加入Complier Flags “-fno-objc-arc”</p>
+
+<p>如下图：</p>
+
+<p><img class="<a" src="href="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=21b1372bfadcd100c99cf82442b0362d/9e3df8dcd100baa1d767da9d4510b912c8fc2e48.jpg?referer=58d17125ca95d1438361d1138a46&amp;x=.jpg">http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=21b1372bfadcd100c99cf82442b0362d/9e3df8dcd100baa1d767da9d4510b912c8fc2e48.jpg?referer=58d17125ca95d1438361d1138a46&amp;x=.jpg</a>"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS Cookie使用]]></title>
@@ -651,88 +688,6 @@ CGRect frame = [UIScreen mainScreen].applicationFrame;
 </span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[多参数selector]]></title>
-    <link href="http://saick.net/blog/2013/10/14/duo-can-shu-selector/"/>
-    <updated>2013-10-14T16:09:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/14/duo-can-shu-selector</id>
-    <content type="html"><![CDATA[<p>Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 performSelector可以支持传入参数数组。多个参数就不再是问题了。</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface NSObject (Addition)
-</span><span class='line'>&ndash; (id)performSelector:(SEL)selector withObjects:(NSArray *)objects;
-</span><span class='line'>@end&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>@implementation NSObject (Addition)
-</span><span class='line'>&ndash; (id)performSelector:(SEL)selector withObjects:(NSArray *)objects {&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;pre>&lt;code>NSMethodSignature *signature = [self methodSignatureForSelector:selector]; 
-</span><span class='line'>if (signature) { 
-</span><span class='line'>    NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:signature]; 
-</span><span class='line'>    [invocation setTarget:self]; 
-</span><span class='line'>    [invocation setSelector:selector]; 
-</span><span class='line'>
-</span><span class='line'>    for(int i = 0; i &amp;lt; [objects count]; i++){ 
-</span><span class='line'>        id object = [objects objectAtIndex:i]; 
-</span><span class='line'>        [invocation setArgument:&amp;object atIndex: (i + 2)];        
-</span><span class='line'>    } 
-</span><span class='line'>
-</span><span class='line'>    [invocation invoke]; 
-</span><span class='line'>
-</span><span class='line'>    if (signature.methodReturnLength) { 
-</span><span class='line'>        id anObject; 
-</span><span class='line'>        [invocation getReturnValue:&amp;anObject]; 
-</span><span class='line'>        return anObject; 
-</span><span class='line'>    } else { 
-</span><span class='line'>        return nil; 
-</span><span class='line'>    } 
-</span><span class='line'>} else { 
-</span><span class='line'>    return nil; 
-</span><span class='line'>} 
-</span><span class='line'>&lt;/code>&lt;/pre>
-</span><span class='line'>
-</span><span class='line'>&lt;p>}&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>@end</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>本文出自 “林家男孩” 博客，请务必保留此出处<a href="http://bj007.blog.51cto.com/1701577/538995">http://bj007.blog.51cto.com/1701577/538995</a></p>
 ]]></content>
   </entry>
   

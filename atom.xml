@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-19T01:52:17+08:00</updated>
+  <updated>2013-10-19T02:04:48+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS ARC 兼容处理]]></title>
+    <link href="http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li/"/>
+    <updated>2013-10-19T01:56:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li</id>
+    <content type="html"><![CDATA[<p>From:宋红日（转自：<a href="http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89">http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89</a></p>
+
+<p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
+尤其当你决定做一个通用的控件 或 模块的时候。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// ARC conditions
+</span><span class='line'>#if !__has_feature(objc_arc)
+</span><span class='line'>#define Release(obj) [obj release]
+</span><span class='line'>#define Retain(obj) [obj retain]
+</span><span class='line'>#else 
+</span><span class='line'>#define Release(obj)
+</span><span class='line'>#define Retain(obj) obj
+</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另外，如果是ARC工程，某些文件不支持ARC的话，可以在Target->Build Phases->Complie sources 中对某个文件加入Complier Flags “-fno-objc-arc”</p>
+
+<p>如下图：</p>
+
+<p><img src="http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=21b1372bfadcd100c99cf82442b0362d/9e3df8dcd100baa1d767da9d4510b912c8fc2e48.jpg?referer=58d17125ca95d1438361d1138a46&x=.jpg"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git fetch和git pull的区别]]></title>
@@ -1973,30 +2009,6 @@ Have fun!</p>
 <p>转自：
 Posted by 唐巧 Dec 2nd, 2012   iOS
 自由转载-非商用-非衍生-保持署名 | Creative Commons BY-NC-ND 3.0</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CocoaPods本身版本的更新]]></title>
-    <link href="http://saick.net/blog/2013/09/02/cocoapodsde-shi-yong/"/>
-    <updated>2013-09-02T11:00:00+08:00</updated>
-    <id>http://saick.net/blog/2013/09/02/cocoapodsde-shi-yong</id>
-    <content type="html"><![CDATA[<p>CocoaPods本身也不断在更新，在项目进行中不建议进行更新。但是不得已时也得为之。
-具体方法如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem update --system
-</span><span class='line'>gem install cocoapods
-</span><span class='line'>pod setup</span></code></pre></td></tr></table></div></figure>
-
-
-<p>和安装其实一样的，注意版本的变化</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod --version</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
