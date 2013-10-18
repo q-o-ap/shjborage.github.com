@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="转自：http://geeklu.com/2013/04/ios-cookie/ 关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
-和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。 &hellip;">
+  <meta name="description" content="1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本） 1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置： system prefernce--&gt;Accounts--&gt;LogItems--&gt;add 2）把想要启动的shell &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,85 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:34:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）</h4>
+
+<p>1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置：</p>
+
+<pre><code>system prefernce--&gt;Accounts--&gt;LogItems--&gt;add
+</code></pre>
+
+<p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
+
+<p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
+
+<p>4）如果只启动shell 程序，还有一种方式，大体流程是这样的。</p>
+
+<pre><code>A) 把Terminate 设置为开机启动。这样当系统启动时，可以自动运行shell。
+B) 在用户目录下创建或修改".profile"。当shell 启动时，先运行".profile" 文件
+C) 在".profile" 中调用想要执行的shell 脚本
+</code></pre>
+
+<p>5)  应用Mac 的launchd，可以参见：<a href="http://cb.esast.com/cb/wiki/10020">http://cb.esast.com/cb/wiki/10020</a></p>
+
+<p>苹果的安全检查：用上面说过的2，3 方法时，必须设置文件的用户id 和组id，还有文件的运行权限。具体方法，下文有述。</p>
+
+<p>当设置完成后，可以在终端上用SystemStarter 来调试配置的信息
+命令为：<code>SystemStarter -n -D</code>
+根据提示的信息可以查看配置的问题。</p>
+
+<h4>2 解决“Insecure Startup Item disabled.错误”</h4>
+
+<p>可以把想要启动的shell 放到/Labrary/Startupitems/ 目录中。
+必须改变文件的用户id 和组id 才可以，并且权限为755</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo chown -R root:wheel /Library/StartupItems/xxx
+</span><span class='line'>sudo chmod -R 755 /Library/StartupItems/xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(如果运行的是shell 文件，则命令中不用加 -R 选项)</p>
+
+<p>注意：环境变量问题。</p>
+
+<p>当然一定要参考苹果的开发者文档：
+[Introduction to System Startup Programming Topics]
+(<a href="http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1">http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1</a>)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -310,359 +388,6 @@ With push access</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-16T23:31:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
-在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
-
-<h3>1.在XCode中使用一个通用断点</h3>
-
-<p>在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception BreakPoint”。点done即可。</p>
-
-<h3>2.开启NSZombieEnabled等调试选项</h3>
-
-<p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
-在Environment Variables中增加下面属性并都配置为YES。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>MallocStackLogging
-</span><span class='line'>MallocStackLoggingNoCompact
-</span><span class='line'>NSAutoreleaseFreedObjectCheckEnabled
-</span><span class='line'>NSDebugEnabled
-</span><span class='line'>NSZombieEnabled</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在实际使用中发现，使用了上述配置之后，如果能在模拟器上运行效果更佳。比如,真机调试时遇到过如下错误：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-[CALayer retain]: message sent to deallocated instance 0x1d418a30</span></code></pre></td></tr></table></div></figure>
-
-
-<p>使用网上很多地方都提到的方法：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>info malloc-history 0x1d418a30
-</span><span class='line'>XCode提示:Undefined info command: "malloc-history".  Try "help info".</span></code></pre></td></tr></table></div></figure>
-
-
-<p>针对这种情况可以参考:<a href="http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82">http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82</a></p>
-
-<p><strong>其中最主要的还是</strong> <em>NSZombieEnabled</em>, 这个解决EXC_BAD_ACCESS还是很有用的。
-具体参考这个：<a href="http://www.cocoachina.com/macdev/objc/2011/0219/2661.html">http://www.cocoachina.com/macdev/objc/2011/0219/2661.html</a></p>
-
-<h3>3.增加异常处理[理论上和&#8221;在XCode中使用一个通用断点&#8221;效果类似]</h3>
-
-<p>写iOS代码的时候,经常会遇到程序崩溃在main函数的入口处并出现类似&#8221;First throw call stack&#8221;这样的错误。为了更好的知道崩溃的原因,我们可以在AppDelegate中定义一个方法, 用于处理异常:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void caughtException(NSException *exception) 
-</span><span class='line'>{  
-</span><span class='line'>  NSLog(@"CRASH: %@", exception);  
-</span><span class='line'>  NSLog(@"Stack Trace: %@", [exception callStackSymbols]);  
-</span><span class='line'>  // Internal error reporting 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>另外，在打印时，也可以使用GTM，GTMStackTraceFromException(exception)，跟系统的类似。</p>
-
-<p>然后在应用启动时，设置这个方法作为自己的自定义异常回调：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
-</span><span class='line'>{  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(& caughtException); 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>在定义了这个回调之后，崩溃是的控制台信息一般都会一目了然，我们甚至可以看出是那个类的哪一行出问题了。</p>
-
-<h3>4.signal处理，并提示。</h3>
-
-<p>启动信号处理</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>signal(SIGABRT, signalHandler);
-</span><span class='line'>signal(SIGILL, signalHandler);
-</span><span class='line'>signal(SIGSEGV, signalHandler);
-</span><span class='line'>signal(SIGFPE, signalHandler);
-</span><span class='line'>signal(SIGBUS, signalHandler);
-</span><span class='line'>signal(SIGPIPE, signalHandler);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>其它相关代码</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include &lt;libkern/OSAtomic.h>
-</span><span class='line'>#include &lt;execinfo.h>
-</span><span class='line'>
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerAddressesKey = @"UncaughtExceptionHandlerAddressesKey";
-</span><span class='line'>
-</span><span class='line'>volatile int32_t UncaughtExceptionCount = 0;
-</span><span class='line'>const int32_t UncaughtExceptionMaximum = 10;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerSkipAddressCount = 0;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerReportAddressCount = 100;
-</span><span class='line'>
-</span><span class='line'>+ (NSArray *)backTrace
-</span><span class='line'>{
-</span><span class='line'>  void* callstack[1024];
-</span><span class='line'>  int frames = backtrace(callstack, 1024);
-</span><span class='line'>  char **strs = backtrace_symbols(callstack, frames);
-</span><span class='line'>  
-</span><span class='line'>  int i;
-</span><span class='line'>  NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
-</span><span class='line'>  for (i = UncaughtExceptionHandlerSkipAddressCount;
-</span><span class='line'>       i &lt; UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount;
-</span><span class='line'>       i++)
-</span><span class='line'>  {
-</span><span class='line'>    if (frames &lt;= i)
-</span><span class='line'>      break;
-</span><span class='line'>    [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  free(strs);
-</span><span class='line'>  
-</span><span class='line'>  return backtrace;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>- (void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex
-</span><span class='line'>{
-</span><span class='line'>  if (anIndex == 0) {
-</span><span class='line'>    _dismissed = YES;
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>- (void)handleException:(NSException *)exception
-</span><span class='line'>{
-</span><span class='line'>  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unhandled exception", nil)
-</span><span class='line'>                                                  message:[NSString stringWithFormat:NSLocalizedString(@"You can try to continue but the application may be unstable.\n" @"%@\n%@", nil), [exception reason], [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]
-</span><span class='line'>                                                 delegate:self
-</span><span class='line'>                                        cancelButtonTitle:NSLocalizedString(@"Quit", nil)
-</span><span class='line'>                                        otherButtonTitles:NSLocalizedString(@"Continue", nil), nil];
-</span><span class='line'>  
-</span><span class='line'>  [alert show];
-</span><span class='line'>  
-</span><span class='line'>  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
-</span><span class='line'>  CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);
-</span><span class='line'>  
-</span><span class='line'>  while (!_dismissed) {
-</span><span class='line'>    for (NSString *mode in (NSArray *)CFBridgingRelease(allModes)) {
-</span><span class='line'>      CFRunLoopRunInMode((CFStringRef)CFBridgingRetain(mode), 0.001, false);
-</span><span class='line'>    }
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  CFRelease(allModes);
-</span><span class='line'>  
-</span><span class='line'>  NSString *log = [NSString stringWithFormat:@"%@\n\n info:\n%@", exception, exception.userInfo];
-</span><span class='line'>  [[DebugUtil sharedDebug] LogException:log];
-</span><span class='line'>  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(NULL);
-</span><span class='line'>  signal(SIGABRT, SIG_DFL);
-</span><span class='line'>  signal(SIGILL, SIG_DFL);
-</span><span class='line'>  signal(SIGSEGV, SIG_DFL);
-</span><span class='line'>  signal(SIGFPE, SIG_DFL);
-</span><span class='line'>  signal(SIGBUS, SIG_DFL);
-</span><span class='line'>  signal(SIGPIPE, SIG_DFL);
-</span><span class='line'>  
-</span><span class='line'>  if ([[exception name] isEqual:UncaughtExceptionHandlerSignalExceptionName]) {
-</span><span class='line'>    kill(getpid(), [[[exception userInfo] objectForKey:UncaughtExceptionHandlerSignalKey] intValue]);
-</span><span class='line'>  } else {
-</span><span class='line'>    [exception raise];
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>NSString * getAppInfo()
-</span><span class='line'>{
-</span><span class='line'>  NSString *appInfo = [NSString stringWithFormat:@"App : %@ %@(%@)\nDevice : %@\nOS Version : %@ %@\nUDID : %@\n",
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-</span><span class='line'>                       [UIDevice currentDevice].model,
-</span><span class='line'>                       [UIDevice currentDevice].systemName,
-</span><span class='line'>                       [UIDevice currentDevice].systemVersion,
-</span><span class='line'>                       /*[UIDevice currentDevice].uniqueIdentifier*/@""];
-</span><span class='line'>  return appInfo;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>void signalHandler(int signal)
-</span><span class='line'>{
-</span><span class='line'>  int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
-</span><span class='line'>  
-</span><span class='line'>  if (exceptionCount > UncaughtExceptionMaximum) {
-</span><span class='line'>    return;
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:signal] forKey:UncaughtExceptionHandlerSignalKey];
-</span><span class='line'>  
-</span><span class='line'>  NSArray *callStack = [DebugUtil backTrace];
-</span><span class='line'>  
-</span><span class='line'>  [userInfo setObject:callStack forKey:UncaughtExceptionHandlerAddressesKey];
-</span><span class='line'>  
-</span><span class='line'>  [[[DebugUtil alloc] init] performSelectorOnMainThread:@selector(handleException:) withObject: [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName reason:[NSString stringWithFormat: NSLocalizedString(@"Signal %d was raised.\n" @"%@", nil), signal, getAppInfo()] userInfo:userInfo] waitUntilDone:YES];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -681,7 +406,7 @@ With push access</p>
 <li class='category'><a href='/blog/categories/c/'>C (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (25)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
@@ -693,6 +418,10 @@ With push access</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/19/ios-cookieshi-yong/">iOS Cookie使用</a>
@@ -708,10 +437,6 @@ With push access</p>
     
       <li class="post">
         <a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a>
       </li>
     
   </ul>

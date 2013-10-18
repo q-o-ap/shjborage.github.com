@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iSecret 简介 Updated at Oct 14, 2013 - Saick Blog - 专注技术，乐在其中</title>
+  <title>MAC 系统的启动过程和系统启动时运行shell 脚本 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="美国区： 中国区： iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them &hellip;">
+  <meta name="description" content="1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本） 1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置： system prefernce--&gt;Accounts--&gt;LogItems--&gt;add 2）把想要启动的shell &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/isecret-jian-jie/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +82,7 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   
   <header>
     
-      <h1 class="entry-title">iSecret 简介 Updated at Oct 14, 2013</h1>
+      <h1 class="entry-title">MAC 系统的启动过程和系统启动时运行shell 脚本</h1>
     
     
       <p class="meta">
@@ -99,109 +98,57 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   
 
 
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-19T01:34:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
+<div class="entry-content"><h4>1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）</h4>
 
-<p>中国区：<a href="https://itunes.apple.com/cn/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
+<p>1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置：</p>
 
-<p>iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them.
-So, iSecret could help you to manage them safely.
-iSecret&rsquo;s all file are encrypted at high level.
-iSecret does not require any network.</p>
+<pre><code>system prefernce--&gt;Accounts--&gt;LogItems--&gt;add
+</code></pre>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#115;&#x68;&#x6a;&#98;&#x6f;&#114;&#97;&#x67;&#101;&#x40;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x73;&#104;&#106;&#x62;&#x6f;&#x72;&#x61;&#103;&#x65;&#64;&#103;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
 
-<p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
-现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
-所以i秘密帮您把这些帐号密码保管起来,并且全程高强度加密,确保信息安全。
-为了保证密码的安全,首先主密码是通过高强度的加密算法,保存到手机当中。
-即可手机被破解,也能保证数据的安全。
-对于保存的各类网站等的密码信息,全部通过加密文本保存到手机中,并且是全部纯文本解析,没有用
-任何XML、INI等配置文件,让安全性更升一级。
-i秘密不需要任何的网络访问,进一步加强安全性。</p>
+<p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
 
-<p>欢迎大家提出宝贵意见,共同为好产品而努力。
-<a href="mailto:shjborage@gmail.com">shjborage@gmail.com</a></p>
+<p>4）如果只启动shell 程序，还有一种方式，大体流程是这样的。</p>
 
-<h3>Release Note:</h3>
+<pre><code>A) 把Terminate 设置为开机启动。这样当系统启动时，可以自动运行shell。
+B) 在用户目录下创建或修改".profile"。当shell 启动时，先运行".profile" 文件
+C) 在".profile" 中调用想要执行的shell 脚本
+</code></pre>
 
-<h5>v1.0  2012-02-22 10:08:28</h5>
+<p>5)  应用Mac 的launchd，可以参见：<a href="http://cb.esast.com/cb/wiki/10020">http://cb.esast.com/cb/wiki/10020</a></p>
 
-<ul>
-<li>第一版本，仅157kb大小。</li>
-<li>功能简单实用</li>
-</ul>
+<p>苹果的安全检查：用上面说过的2，3 方法时，必须设置文件的用户id 和组id，还有文件的运行权限。具体方法，下文有述。</p>
 
+<p>当设置完成后，可以在终端上用SystemStarter 来调试配置的信息
+命令为：<code>SystemStarter -n -D</code>
+根据提示的信息可以查看配置的问题。</p>
 
-<h5>v1.1  2012-08-15 10:16:20</h5>
+<h4>2 解决“Insecure Startup Item disabled.错误”</h4>
 
-<ul>
-<li>在查看秘密时，可直接点击文本内容将其拷贝到剪贴板；</li>
-<li>应用需要输入密码时，如果您输入正确的密码，自动进入；</li>
-<li>当您添加新的秘密时，自动进入编辑模式；</li>
-<li>当您发送邮件时，加入一些提示信息；</li>
-<li>添加开发者博客以及用户评价体系；</li>
-<li><p>其它问题修复。</p></li>
-<li><p>In secret detail view, you can tap some text information to copy it to pasteboard;</p></li>
-<li>In the beginning of the app, when you enter the correct password, it will start working automatically;</li>
-<li>When you add new secret, edit it first;</li>
-<li>Add some presentations when you send emails;</li>
-<li>Add author&rsquo;s blog and user review interface;</li>
-<li>Some other bugs fixed.</li>
-</ul>
+<p>可以把想要启动的shell 放到/Labrary/Startupitems/ 目录中。
+必须改变文件的用户id 和组id 才可以，并且权限为755</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo chown -R root:wheel /Library/StartupItems/xxx
+</span><span class='line'>sudo chmod -R 755 /Library/StartupItems/xxx</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>v1.2  2012-09-24 14:58:31</h5>
+<p>(如果运行的是shell 文件，则命令中不用加 -R 选项)</p>
 
-<ul>
-<li><p>随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率</p></li>
-<li><p>Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution</p></li>
-</ul>
+<p>注意：环境变量问题。</p>
 
-
-<h5>v1.3  2013-04-25 10:55:45</h5>
-
-<ul>
-<li>支持图形解锁以及简单数字密码，更加简单方便</li>
-<li>简化用户反馈功能，支持内部反馈</li>
-<li>加入程序版更新提示本</li>
-<li>解决各个版本系统上面UI细节问题</li>
-<li>推荐应用给好友圈</li>
-<li><p>禁用程序后台运行，更加安全稳定</p></li>
-<li><p>Support simple password and pattern, which is easy to use</p></li>
-<li>Simply the user feedback in the app without go to the AppStore</li>
-<li>Add new version prompt, you can&rsquo;t miss the new version</li>
-<li>Fix some bugs in the different iOS versions</li>
-<li>Share this app to your friends</li>
-<li>Stop running in the background, much safer</li>
-</ul>
-
-
-<h5>v1.4  2013-05-23 7:55:45</h5>
-
-<ul>
-<li>加强主密码安全性，强烈建议大家升级</li>
-<li><p>默认密码不显示的问题</p></li>
-<li><p>Improve the security of you main passcode, recommend you to update at once.</p></li>
-<li>Fix bug: the default passcode was not show.</li>
-</ul>
-
-
-<h5>v1.5  2013-10-10 8:55:45</h5>
-
-<ul>
-<li>iOS 7 Support</li>
-</ul>
-
-
-<h3>欢迎留言反馈！</h3>
+<p>当然一定要参考苹果的开发者文档：
+[Introduction to System Startup Programming Topics]
+(<a href="http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1">http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1</a>)</p>
 </div>
 
 
@@ -224,12 +171,12 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
   
 
 
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-19T01:34:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/mac/'>Mac</a>
   
 </span>
 
@@ -242,7 +189,7 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/isecret-jian-jie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/isecret-jian-jie/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/" >Tweet</a>
   
   
   
@@ -269,10 +216,8 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" title="Previous Post: Property 使用注意事项">&laquo; Property 使用注意事项</a>
+        <a class="basic-alignment left" href="/blog/2013/10/19/ios-cookieshi-yong/" title="Previous Post: iOS Cookie使用">&laquo; iOS Cookie使用</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/flashlight-powersaving-jian-jie/" title="Next Post: Flashlight(PowerSaving) 简介">Flashlight(PowerSaving) 简介 &raquo;</a>
       
     </p>
   </footer>
