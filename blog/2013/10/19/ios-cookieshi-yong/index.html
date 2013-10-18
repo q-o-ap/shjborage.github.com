@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS block 编程 - Saick Blog - 专注技术，乐在其中</title>
+  <title>iOS Cookie使用 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="block Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks &hellip;">
+  <meta name="description" content="转自：http://geeklu.com/2013/04/ios-cookie/ 关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
+和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/ios-block-bian-cheng/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/19/ios-cookieshi-yong/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS Block 编程</h1>
+      <h1 class="entry-title">iOS Cookie使用</h1>
     
     
       <p class="meta">
@@ -98,141 +99,21 @@
   
 
 
-<time datetime="2013-05-28T09:57:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-19T01:08:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>block</h2>
+<div class="entry-content"><p>转自：<a href="http://geeklu.com/2013/04/ios-cookie/">http://geeklu.com/2013/04/ios-cookie/</a></p>
 
-<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
+<p>关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
+和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。
+一个Cookie对应一个NSHTTPCookie实体，并通过NSHTTPCookieStorage进行管理。
+那些需要持久化的Cookie是存放在 ~/Library/Cookies/Cookies.binarycookies 文件中的，二进制格式。</p>
 
-<h4>声明block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>定义block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock = ^{
-</span><span class='line'>        NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>声明和定义在一起：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void) = ^{
-</span><span class='line'>    NSLog(@"This is a block");
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>调用block：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock();</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<h4>带返回值和参数的block:</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>double (^multiplyTwoValues)(double, double) =
-</span><span class='line'>                              ^(double firstValue, double secondValue) {
-</span><span class='line'>                                  return firstValue * secondValue;
-</span><span class='line'>                              };
-</span><span class='line'>    double result = multiplyTwoValues(2,4);
-</span><span class='line'>    NSLog(@"The result is %f", result);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
-
-<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>__block int (^recursiveBlock)(int) = ^(int param) {
-</span><span class='line'>      if (param == 1) {
-</span><span class='line'>          return 1;
-</span><span class='line'>      }
-</span><span class='line'>      return (param--) * recursiveBlock(param);
-</span><span class='line'>};  
-</span><span class='line'>recursiveBlock(5);    // 计算5的阶乘</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>You Can Pass Blocks as Arguments to Methods or Functions
-&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
-The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {
-</span><span class='line'>    ...
-</span><span class='line'>    callbackBlock();
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>A Block Should Always Be the Last Argument to a Method
-Objects Use Properties to Keep Track of Blocks
-The syntax to define a property to keep track of a block is similar to a block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface XYZObject : NSObject
-</span><span class='line'>@property (copy) void (^blockProperty)(void);
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
-A block property is set or invoked like any other block variable:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>self.blockProperty = ^{
-</span><span class='line'>    ...
-</span><span class='line'>};
-</span><span class='line'>self.blockProperty();
-</span><span class='line'>typedef void(^BlockCC)(void);</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>// e.g.更新myTableview并显示最后一行</p>
+<p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -242,27 +123,23 @@ A block property is set or invoked like any other block variable:</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (dataArray.count &gt; 0) {
-</span><span class='line'>      [myTableView reloadData];   
-</span><span class='line'>      // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
-</span><span class='line'>   // 所以要[NSObject performBlock: afterDelay:0];
-</span><span class='line'>      [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
-</span><span class='line'>      NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
-</span><span class='line'>      void (^scrollToBottom)(void) = ^{
-</span><span class='line'>          [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-</span><span class='line'>          [myTableView release];
-</span><span class='line'>      };
-</span><span class='line'>      //
-</span><span class='line'>      [NSObject performBlock:scrollToBottom afterDelay:0];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
+</span><span class='line'>[cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];
+</span><span class='line'>[cookieProperties setObject:@"www.taobao.com" forKey:NSHTTPCookieDomain];[cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
+</span><span class='line'>[cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
+</span><span class='line'>[cookieProperties setObject:@"30000" forKey:NSHTTPCookieMaximumAge];
+</span><span class='line'>NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
+</span><span class='line'>[[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+</span><span class='line'>//删除cookie的方法为deleteCookie:</span></code></pre></td></tr></table></div></figure>
 
 
+<p>在通过setCookie:进行设置cookie的时候，会覆盖name,domain,path都相同的cookie的。
+至于cookie会不会持久化到cookie文件中主要看这个cookie的生命周期，和Max-Age或者Expires有关。</p>
 
+<p>不过NSHTTPCookieStorage存在一个问题，setCookie或者deleteCookie后并不会立即进行持久化，而是有几秒的延迟。如果在持久化之前App接收到SIGKILL信号，App退出，那么会导致cookie相关操作的丢失。在模拟器调试的过程中，XCode重启App的时发给App的就是SIGKILL，不过真正的生产环境中很少有这种情况。
+但是有时候为了可靠性，我们还是会将cookie信息保存一份到User Defaults，需要用的时候load进来。关于cookie操作丢失的详情可以查看这里<a href="http://openradar.appspot.com/radar?id=2776403">NSHTTPCookieStorage looses cookies on SIGKILL</a></p>
+
+<p>卢克 / 2013-04-02</p>
 </div>
 
 
@@ -285,7 +162,7 @@ A block property is set or invoked like any other block variable:</p>
   
 
 
-<time datetime="2013-05-28T09:57:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-19T01:08:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
       
 
 <span class="categories">
@@ -303,7 +180,7 @@ A block property is set or invoked like any other block variable:</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/ios-block-bian-cheng/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/ios-block-bian-cheng/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/19/ios-cookieshi-yong/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/19/ios-cookieshi-yong/" >Tweet</a>
   
   
   
@@ -330,10 +207,8 @@ A block property is set or invoked like any other block variable:</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/27/test-sharing-code-snippets/" title="Previous Post: Test sharing code snippets">&laquo; Test sharing code snippets</a>
+        <a class="basic-alignment left" href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/" title="Previous Post: iOS库添加CocoaPods支持">&laquo; iOS库添加CocoaPods支持</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" title="Next Post: iOS 开发常见低级错误">iOS 开发常见低级错误 &raquo;</a>
       
     </p>
   </footer>

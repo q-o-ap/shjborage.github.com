@@ -9,8 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。 准备好库代码（GitHub上） 将代码Checkout下来，打开命令行，cd到代码根目录 创建XXXX.podspec 1
-pod spec create XXXX &hellip;">
+  <meta name="description" content="转自：http://geeklu.com/2013/04/ios-cookie/ 关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
+和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,75 @@ pod spec create XXXX &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/ios-cookieshi-yong/">iOS Cookie使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:08:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>转自：<a href="http://geeklu.com/2013/04/ios-cookie/">http://geeklu.com/2013/04/ios-cookie/</a></p>
+
+<p>关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
+和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。
+一个Cookie对应一个NSHTTPCookie实体，并通过NSHTTPCookieStorage进行管理。
+那些需要持久化的Cookie是存放在 ~/Library/Cookies/Cookies.binarycookies 文件中的，二进制格式。</p>
+
+<p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
+</span><span class='line'>[cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];
+</span><span class='line'>[cookieProperties setObject:@"www.taobao.com" forKey:NSHTTPCookieDomain];[cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
+</span><span class='line'>[cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
+</span><span class='line'>[cookieProperties setObject:@"30000" forKey:NSHTTPCookieMaximumAge];
+</span><span class='line'>NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
+</span><span class='line'>[[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+</span><span class='line'>//删除cookie的方法为deleteCookie:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在通过setCookie:进行设置cookie的时候，会覆盖name,domain,path都相同的cookie的。
+至于cookie会不会持久化到cookie文件中主要看这个cookie的生命周期，和Max-Age或者Expires有关。</p>
+
+<p>不过NSHTTPCookieStorage存在一个问题，setCookie或者deleteCookie后并不会立即进行持久化，而是有几秒的延迟。如果在持久化之前App接收到SIGKILL信号，App退出，那么会导致cookie相关操作的丢失。在模拟器调试的过程中，XCode重启App的时发给App的就是SIGKILL，不过真正的生产环境中很少有这种情况。
+但是有时候为了可靠性，我们还是会将cookie信息保存一份到User Defaults，需要用的时候load进来。关于cookie操作丢失的详情可以查看这里<a href="http://openradar.appspot.com/radar?id=2776403">NSHTTPCookieStorage looses cookies on SIGKILL</a></p>
+
+<p>卢克 / 2013-04-02</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -594,169 +663,6 @@ With push access</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h4>序：状态栏白边问题解决</h4>
-
-<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
-
-<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
-
-<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
-
-<p>具体办法：</p>
-
-<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
-
-<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
-
-<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
-
-<ul>
-<li>1.获取当前电池条的方向</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>2.获取当前屏幕的大小</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>3.设置我们的View的中心点</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
-</span><span class='line'>} else {
-</span><span class='line'>    return CGAffineTransformIdentity;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>5.可以动画的改变我们view的显示方式了</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
-</span><span class='line'>
-</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
-</span><span class='line'>[UIView beginAnimations:nil context:nil];
-</span><span class='line'>[UIView setAnimationDuration:duration];
-</span><span class='line'>
-</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
-</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
-
-<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
-
-<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
-</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
-</span><span class='line'>    }
-</span><span class='line'>    
-</span><span class='line'>    // 更保险的写法 add by Eric
-</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
-</span><span class='line'>    {
-</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
-</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
-</span><span class='line'>                                   withObject:(id)toOrientation];
-</span><span class='line'>      }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -777,7 +683,7 @@ With push access</p>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (24)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (25)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
@@ -787,6 +693,10 @@ With push access</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/ios-cookieshi-yong/">iOS Cookie使用</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">iOS库添加CocoaPods支持</a>
@@ -802,10 +712,6 @@ With push access</p>
     
       <li class="post">
         <a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/14/duo-can-shu-selector/">多参数selector</a>
       </li>
     
   </ul>
