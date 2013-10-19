@@ -7,6 +7,13 @@ sharing: false
 footer: true
 ---
 
+####iOS开发资源
+*	http://code4app.com			国内iOS开源代码库
+*	http://ui4app.com			国内iOS App UI界面设计
+*	[http://developer.apple.com/iOS7_TransitionGuide](https://developer.apple.com/library/ios/documentation/userexperience/conceptual/TransitionGuide/index.html) iOS7 官方迁移指导
+*	iOS7 day-by-day 博客：http://www.shinobicontrols.com/blog/posts/2013/09/19/introducing-ios7-day-by-day/ 代码：https://github.com/ShinobiControls/iOS7-day-by-day
+
+
 ####不解释
 *	http://iamsujie.com			苏杰-人人都是产品经理
 *	http://tiny4.org/blog/		郝培强（Tinyfool-iApp4Me.com创始人）- iOS开发博客
