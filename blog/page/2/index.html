@@ -9,7 +9,11 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本） 1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置： system prefernce--&gt;Accounts--&gt;LogItems--&gt;add 2）把想要启动的shell &hellip;">
+  <meta name="description" content="原文： http://www.tech126.com/git-fetch-pull/ Git中从远程的分支获取最新的版本到本地有这样2个命令： 1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge 1
+2
+3
+git fetch origin master
+git log &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +83,83 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git Fetch和git Pull的区别</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:47:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
+
+<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
+
+<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
+</span><span class='line'>git log -p master..origin/master
+</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上命令的含义：<br/>
+首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
+
+<p>上述过程其实可以用以下更清晰的方式来进行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master:tmp
+</span><span class='line'>git diff tmp 
+</span><span class='line'>git merge tmp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
+
+<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git pull origin master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述命令其实相当于git fetch 和 git merge</p>
+
+<p>在实际使用中，git fetch更安全一些</p>
+
+<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
+
+<p>EOF</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -228,166 +309,6 @@ C) 在".profile" 中调用想要执行的shell 脚本
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">iOS库添加CocoaPods支持</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-17T15:30:00+08:00" pubdate data-updated="true">Oct 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。</p>
-
-<h3>准备好库代码（GitHub上）</h3>
-
-<p>将代码Checkout下来，打开命令行，cd到代码根目录</p>
-
-<h3>创建XXXX.podspec</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec create XXXX</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>编辑XXXX.podspec</h3>
-
-<p>创建好的文件里有很多指引，这步很简单。 实在不明白，再看看GitHub上别的库的spec文件怎么写的。</p>
-
-<h3>验证合法性</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec lint XXXX.podspec</span></code></pre></td></tr></table></div></figure>
-
-
-<p>完成后即可把这个文件提交到<a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>中。</p>
-
-<p>When you&rsquo;re done you can also fork the <a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>  GitHub repository and send a pull request. We really love contributions and will help ensure it&rsquo;s perfect!</p>
-
-<h3>详细提交步骤</h3>
-
-<p>From：<a href="http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html">http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html</a></p>
-
-<h3>Contributing to the master repo</h3>
-
-<p>The master repo contains specifications of open-source Objective-C libraries.</p>
-
-<h4>Details</h4>
-
-<ul>
-<li> installation path: ~/.cocoapods/master</li>
-<li> home: <a href="https://github.com/CocoaPods/Specs">https://github.com/CocoaPods/Specs</a></li>
-</ul>
-
-
-<h4>Contributing</h4>
-
-<p>To ensure a high quality, reliable collection of Pods, the master repo is strict about the acceptable specifications. The CocoaPods linter (see the pod spec lint command) is used to validate specifications, and no errors or warnings are accepted.
-The highest priority of the master repo is to guarantee the integrity of existing CocoaPods installations.
-In general this means that:</p>
-
-<ul>
-<li> A specification cannot be deleted.</li>
-<li> Specifications can be updated only if they don’t affect existing installations.</li>
-<li><ul>
-<li>Broken specifications can be updated.</li>
-<li>Subspecs can be added as they are included by the parent specification by default.</li>
-</ul>
-</li>
-<li> Only authoritative version numbers are accepted.</li>
-</ul>
-
-
-<p>CocoaPods uses a versioning scheme known as Semantic Versioning, necessary for cross resolution of dependencies.</p>
-
-<h4>Unversioned libraries</h4>
-
-<p>One of the CocoaPods goals is to promote the discovery of open-source software, for this reason new Pods for libraries which are not versioned are accepted in the master repo. The specifications of those pods should carry the version 0.0.1 under the assumption that, if the author starts versioning, she/he is unlikely to pick 0.0.1. This is the only exception for authoritative version numbers.
-If you add an unversioned Pod it is your responsibility to ask the author of the library to tag versions, luckily we have a template for this.
-To prevent collisions with possible future versions, unversioned libraries can’t be updated until the author starts to tag them.
-If you need to update an unversioned library you can:</p>
-
-<ul>
-<li> Ask the author to version the library.</li>
-<li> Maintain a fork which is versioned. This fork should be clearly namespaced from the original library according the NAME@USERconvention (e.g. Reachability@irrationalfab). It should also mention in the summary that it is a versioned fork.</li>
-<li> Create a podspec and use it in a private repo.</li>
-</ul>
-
-
-<h4>Creating podspecs</h4>
-
-<p>Creating a podspec is very easy as we provide templates full of examples.
-You can use the following command:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create Bananas</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If the library is hosted on GitHub you can pass the url so CocoaPods can precompile the template:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create https://github.com/Bananas/Bananas</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A this point you need edit compile the template (a pod specification is a Ruby source file):</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec lint Bananas.podspec --verboseSharing podspecs</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Sharing podspecs</h4>
-
-<p>When a podspec lints you can submit it to the master repo.</p>
-
-<h4>Without push access</h4>
-
-<p>You need to fork the master repo on github, then you need to:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/.cocoapods/master
-</span><span class='line'>$ git checkout -b fork
-</span><span class='line'>$ git remote add myfork https://github.com/YOUR_USER_NAME/Specs.git
-</span><span class='line'>$ cp ~/Bananas.podspec ~/.cocoapods/master/Bananas/VERSION/
-</span><span class='line'>$ git push myfork
-</span><span class='line'>$ git checkout master</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you push your changes, you can make a pull request on CocoaPods/Specs.
-With push access</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod push Bananas.podspec</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -410,7 +331,7 @@ With push access</p>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (27)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (28)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
@@ -420,6 +341,10 @@ With push access</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">Objective-C的新特性(Object Literals等)</a>
@@ -435,10 +360,6 @@ With push access</p>
     
       <li class="post">
         <a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/19/ios-cookieshi-yong/">iOS Cookie使用</a>
       </li>
     
   </ul>

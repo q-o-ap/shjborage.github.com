@@ -9,7 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 &hellip;">
+  <meta name="description" content="Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
+其它密码也可使用同样方法获得 方法/步骤 1.打开“钥匙串访问” 2.选中左侧“登陆”、“密码” 3.找到要查看密码的wifi 4.点击键，选中“显示简介”，或者双击 5.在弹出的对话框选择“显示密码 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,83 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T16:16:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
+<strong>其它密码也可使用同样方法获得</strong></p>
+
+<p>方法/步骤</p>
+
+<ul>
+<li>1.打开“钥匙串访问”</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
+
+<ul>
+<li>2.选中左侧“登陆”、“密码”</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374769125/" title="2013-10-14-11 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3791/10374769125_fb2339510e.jpg" width="500" height="183" alt="2013-10-14-11"></a></p>
+
+<ul>
+<li>3.找到要查看密码的wifi</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374968363/" title="2013-10-14-12 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3790/10374968363_675b5904c4.jpg" width="500" height="111" alt="2013-10-14-12"></a></p>
+
+<ul>
+<li>4.点击键，选中“显示简介”，或者双击</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374968173/" title="2013-10-14-13 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7431/10374968173_9c2b4957c3.jpg" width="500" height="113" alt="2013-10-14-13"></a></p>
+
+<ul>
+<li>5.在弹出的对话框选择“显示密码”，系统会让你输入电脑帐号的密码，然后密码就显示出来了。</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374784386/" title="2013-10-14-14 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7305/10374784386_8757b04a56.jpg" width="500" height="333" alt="2013-10-14-14"></a></p>
+
+<p>参考资料
+<a href="http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html">http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -450,69 +528,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T15:30:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下：</p>
-
-<p>转换步骤：</p>
-
-<ul>
-<li>1、进入项目目录，可看到.project文件，打开。</li>
-<li>2、找到<natures>&hellip;</natures>代码段。</li>
-<li>3、在第2步的代码段中加入如下标签内容并保存：</li>
-<li></li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;nature&gt;org.eclipse.wst.common.project.facet.core.nature&lt;/nature&gt; 
-</span><span class='line'>&lt;nature&gt;org.eclipse.wst.common.modulecore.ModuleCoreNature&lt;/nature&gt; 
-</span><span class='line'>&lt;nature&gt;org.eclipse.jem.workbench.JavaEMFNature&lt;/nature&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>4、在eclipse的项目上点右键，刷新项目。</li>
-<li>5、在项目上点右键，进入属性（properties）</li>
-<li>6、在左侧列表项目中点击选择“Project Facets”，在右侧选择“Dynamic Web Module”和&#8221;Java&#8221;，点击OK保存即可</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968933/" title="2013-10-14-3 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5534/10374968933_dc5bb24365.jpg" width="500" height="346" alt="2013-10-14-3"></a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -535,7 +550,7 @@
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (27)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (28)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
@@ -545,6 +560,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">Objective-C的新特性(Object Literals等)</a>
@@ -560,10 +579,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/19/ios-cookieshi-yong/">iOS Cookie使用</a>
       </li>
     
   </ul>
