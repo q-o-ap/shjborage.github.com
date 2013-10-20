@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。 准备好库代码（GitHub上） 将代码Checkout下来，打开命令行，cd到代码根目录 创建XXXX.podspec 1
-pod spec create XXXX &hellip;">
+  <meta name="description" content="不太常用，但很关键命令 1.整理数据库：vacuum VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize() &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -86,7 +85,7 @@ pod spec create XXXX &hellip;">
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">iOS库添加CocoaPods支持</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a></h1>
     
     
       <p class="meta">
@@ -102,138 +101,56 @@ pod spec create XXXX &hellip;">
   
 
 
-<time datetime="2013-10-17T15:30:00+08:00" pubdate data-updated="true">Oct 17<span>th</span>, 2013</time>
+<time datetime="2013-09-03T13:35:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。</p>
+  <div class="entry-content"><h3>不太常用，但很关键命令</h3>
 
-<h3>准备好库代码（GitHub上）</h3>
+<h4>1.整理数据库：vacuum</h4>
 
-<p>将代码Checkout下来，打开命令行，cd到代码根目录</p>
+<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
 
-<h3>创建XXXX.podspec</h3>
+<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec create XXXX</span></code></pre></td></tr></table></div></figure>
+<p>当数据库中的一个对象(表，索引或触发器)被撤销，会留下空白的空间。它使数据库比需要的大小更大，但能加快插入速度。实时的插入和删除会使得数据库文件结构混乱，减慢对数据库内容访问的速度。 VACUUM命令复制主数据库文件到临时数据库并从临时数据库重新载入主数据库，以整理数据库文件。这将除去空白页，使表数据彼此相邻排列，并整理数据库文件结构。不能对附加数据库文件进行以上操作。</p>
 
+<p>若当前有活动事务，该命令无法起作用。对于in-memory数据库，该命令无效。</p>
 
-<h3>编辑XXXX.podspec</h3>
+<p>SQLite3.1中，可以通过使用auto-vacuum模式取代VACUUM命令，使用auto_vacuum pragma开启该模式。
+扩展阅读：<a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
 
-<p>创建好的文件里有很多指引，这步很简单。 实在不明白，再看看GitHub上别的库的spec文件怎么写的。</p>
+<h4>2.导出数据库：.dump</h4>
 
-<h3>验证合法性</h3>
+<p>.output file.sql</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec lint XXXX.podspec</span></code></pre></td></tr></table></div></figure>
+<p>.dump</p>
 
+<p>.output stdout</p>
 
-<p>完成后即可把这个文件提交到<a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>中。</p>
+<h4>3.导入数据库：.read 和.import</h4>
 
-<p>When you&rsquo;re done you can also fork the <a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>  GitHub repository and send a pull request. We really love contributions and will help ensure it&rsquo;s perfect!</p>
+<p>.read file.sql</p>
 
-<h3>详细提交步骤</h3>
+<p>.import [file][table]</p>
 
-<p>From：<a href="http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html">http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html</a></p>
-
-<h3>Contributing to the master repo</h3>
-
-<p>The master repo contains specifications of open-source Objective-C libraries.</p>
-
-<h4>Details</h4>
+<h3>SQLite不支持的常用操作</h3>
 
 <ul>
-<li> installation path: ~/.cocoapods/master</li>
-<li> home: <a href="https://github.com/CocoaPods/Specs">https://github.com/CocoaPods/Specs</a></li>
+<li>1 高级联结：SQlite支持“左外部联结（LEFT OUTER JOIN）”，不支持“右外部联结（RIGHT OUTER JOIN）”和“全外部联结（FULL OUTER JOIN）”。</li>
+<li>2 修改表操作：SQlite支持“重命名表（RENAME TABLE）”，使用“ALTER TABLE给表添加新列”。不支持使用“ALTER TABLE”进行“删除列（DROP COLUMN）”，“修改列（ALTER COLUMN）”，“添加约束（ADD CONSTRAINT）”等。</li>
+<li>3 触发器支持不完整：SQlite支持“行级触发器（FOR EACH ROW）”，不支持“语句级触发器（FOR EACH STATEMENT）”。</li>
+<li>4 视图只能读不能写：SQlite不能在一个视图上使用“删除（DELETE）”，“插入（INSERT）”和“更新（UPDATE）”语句。但是可以创建一个触发器，当对表进行“DELETE”，“INSERT”或者“UPDATE”操作时激活该触发器，在该触发器的body部分做所需的操作。</li>
+<li>5 不支持GRANT和REVOKE语句：因为SQlite只是去读写普通的磁盘文件，所以唯一可以应用到SQlite数据库的访问权限（控制），只有底层操作系统的普通的文件访问权限。所以那些client/server模式的数据库上通常具有的GRANT和REVOKE命令，SQlite并不支持，因为它们对于“嵌入式的数据库引擎（embedded database engine）”毫无意义。</li>
 </ul>
 
 
-<h4>Contributing</h4>
+<h4>官方SQL语法</h4>
 
-<p>To ensure a high quality, reliable collection of Pods, the master repo is strict about the acceptable specifications. The CocoaPods linter (see the pod spec lint command) is used to validate specifications, and no errors or warnings are accepted.
-The highest priority of the master repo is to guarantee the integrity of existing CocoaPods installations.
-In general this means that:</p>
-
-<ul>
-<li> A specification cannot be deleted.</li>
-<li> Specifications can be updated only if they don’t affect existing installations.</li>
-<li><ul>
-<li>Broken specifications can be updated.</li>
-<li>Subspecs can be added as they are included by the parent specification by default.</li>
-</ul>
-</li>
-<li> Only authoritative version numbers are accepted.</li>
-</ul>
-
-
-<p>CocoaPods uses a versioning scheme known as Semantic Versioning, necessary for cross resolution of dependencies.</p>
-
-<h4>Unversioned libraries</h4>
-
-<p>One of the CocoaPods goals is to promote the discovery of open-source software, for this reason new Pods for libraries which are not versioned are accepted in the master repo. The specifications of those pods should carry the version 0.0.1 under the assumption that, if the author starts versioning, she/he is unlikely to pick 0.0.1. This is the only exception for authoritative version numbers.
-If you add an unversioned Pod it is your responsibility to ask the author of the library to tag versions, luckily we have a template for this.
-To prevent collisions with possible future versions, unversioned libraries can’t be updated until the author starts to tag them.
-If you need to update an unversioned library you can:</p>
-
-<ul>
-<li> Ask the author to version the library.</li>
-<li> Maintain a fork which is versioned. This fork should be clearly namespaced from the original library according the NAME@USERconvention (e.g. Reachability@irrationalfab). It should also mention in the summary that it is a versioned fork.</li>
-<li> Create a podspec and use it in a private repo.</li>
-</ul>
-
-
-<h4>Creating podspecs</h4>
-
-<p>Creating a podspec is very easy as we provide templates full of examples.
-You can use the following command:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create Bananas</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If the library is hosted on GitHub you can pass the url so CocoaPods can precompile the template:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create https://github.com/Bananas/Bananas</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A this point you need edit compile the template (a pod specification is a Ruby source file):</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec lint Bananas.podspec --verboseSharing podspecs</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Sharing podspecs</h4>
-
-<p>When a podspec lints you can submit it to the master repo.</p>
-
-<h4>Without push access</h4>
-
-<p>You need to fork the master repo on github, then you need to:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/.cocoapods/master
-</span><span class='line'>$ git checkout -b fork
-</span><span class='line'>$ git remote add myfork https://github.com/YOUR_USER_NAME/Specs.git
-</span><span class='line'>$ cp ~/Bananas.podspec ~/.cocoapods/master/Bananas/VERSION/
-</span><span class='line'>$ git push myfork
-</span><span class='line'>$ git checkout master</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you push your changes, you can make a pull request on CocoaPods/Specs.
-With push access</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod push Bananas.podspec</span></code></pre></td></tr></table></div></figure>
-
+<p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
 </div>
   
   
@@ -246,7 +163,7 @@ With push access</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a></h1>
     
     
       <p class="meta">
@@ -262,109 +179,80 @@ With push access</p>
   
 
 
-<time datetime="2013-10-16T23:31:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
+<time datetime="2013-09-03T11:49:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
-在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
+  <div class="entry-content"><h3>前言</h3>
 
-<h3>1.在XCode中使用一个通用断点</h3>
+<p>每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如</p>
 
-<p>在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception BreakPoint”。点done即可。</p>
+<ul>
+<li>Java: maven，Ivy</li>
+<li>Ruby: gems</li>
+<li>Python: pip, easy_install</li>
+<li>Nodejs: npm</li>
+</ul>
 
-<h3>2.开启NSZombieEnabled等调试选项</h3>
 
-<p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
-在Environment Variables中增加下面属性并都配置为YES。</p>
+<p>随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫：CocoaPods。</p>
+
+<h3>CocoaPods简介</h3>
+
+<p>CocoaPods是一个负责管理iOS项目中第三方开源代码的工具。CocoaPods项目的源码在Github上管理。该项目开始于2011年8月12日，经过一年多的发展，现在已经超过1000次提交，并且持续保持活跃更新。开发iOS项目不可避免地要使用第三方开源库，CocoaPods的出现使得我们可以节省设置和更新第三方开源库的时间。</p>
+
+<p>拿我之前开发的粉笔网iPhone客户端为例，其使用了14个第三方开源库。在没有使用CocoaPods以前，我需要：</p>
+
+<p>把这些第三方开源库的相关文件复制到项目中，或者设置成git的submodule，然后这些开源库通常需要依赖系统的一些framework，我需要手工地将这些framework一一增加到项目依赖中，比如ASI网络库就需要增加以下framework: CFNetwork, SystemConfiguration, MobileCoreServices, CoreGraphics and zlib。</p>
+
+<p>对于RegexKitLite这个正则表达式库，我还需要设置-licucore的编译参数
+手工管理这些依赖包的更新。</p>
+
+<p>这些体力活虽然简单，但毫无技术含量并且浪费时间。在使用CocoaPods之后，我只需要将用到的第三方开源库放到一个名为Podfile的文件中，然后执行pod install。CocoaPods就会自动将这些第三方开源库的源码下载下来，并且为我的工程设置好相应的系统依赖和编译参数。</p>
+
+<h3>CocoaPods的安装和使用介绍</h3>
+
+<h4>安装</h4>
+
+<p>安装方式异常简单, Mac下都自带ruby，使用ruby的gem命令即可下载安装：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install cocoapods
+</span><span class='line'>$ pod setup</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>使用</h4>
+
+<p>使用时需要新建一个名为Podfile的文件，以如下格式，将依赖的库名字依次列在文件中即可</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>MallocStackLogging
-</span><span class='line'>MallocStackLoggingNoCompact
-</span><span class='line'>NSAutoreleaseFreedObjectCheckEnabled
-</span><span class='line'>NSDebugEnabled
-</span><span class='line'>NSZombieEnabled</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>eachability',  '~&gt; 3.0.0'
+</span><span class='line'>pod 'ASIHTTPRequest'
+</span><span class='line'>pod 'RegexKitLite'</span></code></pre></td></tr></table></div></figure>
 
 
-<p>在实际使用中发现，使用了上述配置之后，如果能在模拟器上运行效果更佳。比如,真机调试时遇到过如下错误：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-[CALayer retain]: message sent to deallocated instance 0x1d418a30</span></code></pre></td></tr></table></div></figure>
-
-
-<p>使用网上很多地方都提到的方法：</p>
+<p>然后你将编辑好的Podfile文件放到你的项目根目录中，执行如下命令即可：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>info malloc-history 0x1d418a30
-</span><span class='line'>XCode提示:Undefined info command: "malloc-history".  Try "help info".</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd "your project home"
+</span><span class='line'>pod install</span></code></pre></td></tr></table></div></figure>
 
 
-<p>针对这种情况可以参考:<a href="http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82">http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82</a></p>
+<p>现在，你的所有第三方库都已经下载完成并且设置好了编译参数和依赖，你只需要记住如下2点即可：</p>
 
-<p><strong>其中最主要的还是</strong> <em>NSZombieEnabled</em>, 这个解决EXC_BAD_ACCESS还是很有用的。
-具体参考这个：<a href="http://www.cocoachina.com/macdev/objc/2011/0219/2661.html">http://www.cocoachina.com/macdev/objc/2011/0219/2661.html</a></p>
+<p>使用CocoaPods生成的 .xcworkspace 文件来打开工程，而不是以前的 .xcodeproj 文件。
+每次更改了Podfile文件，你需要重新执行一次pod install命令。</p>
 
-<h3>3.增加异常处理[理论上和&#8221;在XCode中使用一个通用断点&#8221;效果类似]</h3>
+<h4>查找第三方库</h4>
 
-<p>写iOS代码的时候,经常会遇到程序崩溃在main函数的入口处并出现类似&#8221;First throw call stack&#8221;这样的错误。为了更好的知道崩溃的原因,我们可以在AppDelegate中定义一个方法, 用于处理异常:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void caughtException(NSException *exception) 
-</span><span class='line'>{  
-</span><span class='line'>  NSLog(@"CRASH: %@", exception);  
-</span><span class='line'>  NSLog(@"Stack Trace: %@", [exception callStackSymbols]);  
-</span><span class='line'>  // Internal error reporting 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>另外，在打印时，也可以使用GTM，GTMStackTraceFromException(exception)，跟系统的类似。</p>
-
-<p>然后在应用启动时，设置这个方法作为自己的自定义异常回调：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
-</span><span class='line'>{  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(& caughtException); 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>在定义了这个回调之后，崩溃是的控制台信息一般都会一目了然，我们甚至可以看出是那个类的哪一行出问题了。</p>
-
-<h3>4.signal处理，并提示。</h3>
-
-<p>启动信号处理</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>signal(SIGABRT, signalHandler);
-</span><span class='line'>signal(SIGILL, signalHandler);
-</span><span class='line'>signal(SIGSEGV, signalHandler);
-</span><span class='line'>signal(SIGFPE, signalHandler);
-</span><span class='line'>signal(SIGBUS, signalHandler);
-</span><span class='line'>signal(SIGPIPE, signalHandler);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>其它相关代码</p>
+<p>你如果不知道cocoaPods管理的库中，是否有你想要的库，那么你可以通过pod search命令进行查找，以下是我用pod search json查找到的所有可用的库：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -410,183 +298,74 @@ With push access</p>
 <span class='line-number'>42</span>
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include &lt;libkern/OSAtomic.h>
-</span><span class='line'>#include &lt;execinfo.h>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod search json
 </span><span class='line'>
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerAddressesKey = @"UncaughtExceptionHandlerAddressesKey";
 </span><span class='line'>
-</span><span class='line'>volatile int32_t UncaughtExceptionCount = 0;
-</span><span class='line'>const int32_t UncaughtExceptionMaximum = 10;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerSkipAddressCount = 0;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerReportAddressCount = 100;
+</span><span class='line'>-> AnyJSON (0.0.1)
+</span><span class='line'>   Encode / Decode JSON by any means possible.
+</span><span class='line'>   - Homepage: https://github.com/mattt/AnyJSON
+</span><span class='line'>   - Source:   https://github.com/mattt/AnyJSON.git
+</span><span class='line'>   - Versions: 0.0.1 [master repo]
 </span><span class='line'>
-</span><span class='line'>+ (NSArray *)backTrace
-</span><span class='line'>{
-</span><span class='line'>  void* callstack[1024];
-</span><span class='line'>  int frames = backtrace(callstack, 1024);
-</span><span class='line'>  char **strs = backtrace_symbols(callstack, frames);
-</span><span class='line'>  
-</span><span class='line'>  int i;
-</span><span class='line'>  NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
-</span><span class='line'>  for (i = UncaughtExceptionHandlerSkipAddressCount;
-</span><span class='line'>       i &lt; UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount;
-</span><span class='line'>       i++)
-</span><span class='line'>  {
-</span><span class='line'>    if (frames &lt;= i)
-</span><span class='line'>      break;
-</span><span class='line'>    [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  free(strs);
-</span><span class='line'>  
-</span><span class='line'>  return backtrace;
-</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'>- (void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex
-</span><span class='line'>{
-</span><span class='line'>  if (anIndex == 0) {
-</span><span class='line'>    _dismissed = YES;
-</span><span class='line'>  }
-</span><span class='line'>}
+</span><span class='line'>-> JSONKit (1.5pre)
+</span><span class='line'>   A Very High Performance Objective-C JSON Library.
+</span><span class='line'>   - Homepage: https://github.com/johnezang/JSONKit
+</span><span class='line'>   - Source:   git://github.com/johnezang/JSONKit.git
+</span><span class='line'>   - Versions: 1.5pre, 1.4 [master repo]
 </span><span class='line'>
-</span><span class='line'>- (void)handleException:(NSException *)exception
-</span><span class='line'>{
-</span><span class='line'>  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unhandled exception", nil)
-</span><span class='line'>                                                  message:[NSString stringWithFormat:NSLocalizedString(@"You can try to continue but the application may be unstable.\n" @"%@\n%@", nil), [exception reason], [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]
-</span><span class='line'>                                                 delegate:self
-</span><span class='line'>                                        cancelButtonTitle:NSLocalizedString(@"Quit", nil)
-</span><span class='line'>                                        otherButtonTitles:NSLocalizedString(@"Continue", nil), nil];
-</span><span class='line'>  
-</span><span class='line'>  [alert show];
-</span><span class='line'>  
-</span><span class='line'>  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
-</span><span class='line'>  CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);
-</span><span class='line'>  
-</span><span class='line'>  while (!_dismissed) {
-</span><span class='line'>    for (NSString *mode in (NSArray *)CFBridgingRelease(allModes)) {
-</span><span class='line'>      CFRunLoopRunInMode((CFStringRef)CFBridgingRetain(mode), 0.001, false);
-</span><span class='line'>    }
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  CFRelease(allModes);
-</span><span class='line'>  
-</span><span class='line'>  NSString *log = [NSString stringWithFormat:@"%@\n\n info:\n%@", exception, exception.userInfo];
-</span><span class='line'>  [[DebugUtil sharedDebug] LogException:log];
-</span><span class='line'>  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(NULL);
-</span><span class='line'>  signal(SIGABRT, SIG_DFL);
-</span><span class='line'>  signal(SIGILL, SIG_DFL);
-</span><span class='line'>  signal(SIGSEGV, SIG_DFL);
-</span><span class='line'>  signal(SIGFPE, SIG_DFL);
-</span><span class='line'>  signal(SIGBUS, SIG_DFL);
-</span><span class='line'>  signal(SIGPIPE, SIG_DFL);
-</span><span class='line'>  
-</span><span class='line'>  if ([[exception name] isEqual:UncaughtExceptionHandlerSignalExceptionName]) {
-</span><span class='line'>    kill(getpid(), [[[exception userInfo] objectForKey:UncaughtExceptionHandlerSignalKey] intValue]);
-</span><span class='line'>  } else {
-</span><span class='line'>    [exception raise];
-</span><span class='line'>  }
-</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'>NSString * getAppInfo()
-</span><span class='line'>{
-</span><span class='line'>  NSString *appInfo = [NSString stringWithFormat:@"App : %@ %@(%@)\nDevice : %@\nOS Version : %@ %@\nUDID : %@\n",
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-</span><span class='line'>                       [UIDevice currentDevice].model,
-</span><span class='line'>                       [UIDevice currentDevice].systemName,
-</span><span class='line'>                       [UIDevice currentDevice].systemVersion,
-</span><span class='line'>                       /*[UIDevice currentDevice].uniqueIdentifier*/@""];
-</span><span class='line'>  return appInfo;
-</span><span class='line'>}
+</span><span class='line'>-> MTJSONDictionary (0.0.4)
+</span><span class='line'>   An NSDictionary category for when you're working with it converting to/from JSON. DEPRECATED, use MTJSONUtils
+</span><span class='line'>   instead.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONDictionary.git
+</span><span class='line'>   - Versions: 0.0.4, 0.0.3, 0.0.2 [master repo]
 </span><span class='line'>
-</span><span class='line'>void signalHandler(int signal)
-</span><span class='line'>{
-</span><span class='line'>  int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
-</span><span class='line'>  
-</span><span class='line'>  if (exceptionCount > UncaughtExceptionMaximum) {
-</span><span class='line'>    return;
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:signal] forKey:UncaughtExceptionHandlerSignalKey];
-</span><span class='line'>  
-</span><span class='line'>  NSArray *callStack = [DebugUtil backTrace];
-</span><span class='line'>  
-</span><span class='line'>  [userInfo setObject:callStack forKey:UncaughtExceptionHandlerAddressesKey];
-</span><span class='line'>  
-</span><span class='line'>  [[[DebugUtil alloc] init] performSelectorOnMainThread:@selector(handleException:) withObject: [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName reason:[NSString stringWithFormat: NSLocalizedString(@"Signal %d was raised.\n" @"%@", nil), signal, getAppInfo()] userInfo:userInfo] waitUntilDone:YES];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>
+</span><span class='line'>-> MTJSONUtils (0.1.0)
+</span><span class='line'>   An NSObject category for working with JSON.
+</span><span class='line'>   - Homepage: https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Source:   https://github.com/mysterioustrousers/MTJSONUtils.git
+</span><span class='line'>   - Versions: 0.1.0, 0.0.1 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> SBJson (3.1.1)
+</span><span class='line'>   This library implements strict JSON parsing and generation in Objective-C.
+</span><span class='line'>   - Homepage: http://stig.github.com/json-framework/
+</span><span class='line'>   - Source:   https://github.com/stig/json-framework.git
+</span><span class='line'>   - Versions: 3.1.1, 3.1, 3.0.4, 2.2.3 [master repo]
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-> TouchJSON (1.0)
+</span><span class='line'>   TouchJSON is an Objective-C based parser and generator for JSON encoded data.
+</span><span class='line'>   - Homepage: https://github.com/TouchCode/TouchJSON
+</span><span class='line'>   - Source:   https://github.com/TouchCode/TouchJSON.git
+</span><span class='line'>   - Versions: 1.0 [master repo]</span></code></pre></td></tr></table></div></figure>
 
 
-<p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
+<p>生成第三方库的帮助文档</p>
+
+<p>如果你想让CococaPods帮你生成第三方库的帮助文档，并集成到XCode中，那么用brew安装appledoc即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install appledoc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关于appledoc，我在今年初的另一篇博客《使用Objective-C的文档生成工具:appledoc》中有专门介绍。它最大的优点是可以将帮助文档集成到XCode中，这样你在敲代码的时候，按住opt键单击类名或方法名，就可以显示出相应的帮助文档。</p>
+
+<h3>原理</h3>
+
+<p>大概研究了一下CocoaPods的原理，它是将所有的依赖库都放到另一个名为Pods项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。发现的一些技术细节有：</p>
+
+<p>Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。
+对于资源文件，CocoaPods提供了一个名为Pods-resources.sh的bash脚本，该脚本在每次项目编译的时候都会执行，将第三方库的各种资源文件复制到目标目录中。
+CocoaPods通过一个名为Pods.xcconfig的文件来在编译时设置所有的依赖和参数。
+Have fun!</p>
+
+<p>转自：
+Posted by 唐巧 Dec 2nd, 2012   iOS
+自由转载-非商用-非衍生-保持署名 | Creative Commons BY-NC-ND 3.0</p>
 </div>
   
   
@@ -599,7 +378,7 @@ With push access</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/02/cocoapodsde-shi-yong/">CocoaPods本身版本的更新</a></h1>
     
     
       <p class="meta">
@@ -615,59 +394,342 @@ With push access</p>
   
 
 
-<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+<time datetime="2013-09-02T11:00:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h4>序：状态栏白边问题解决</h4>
-
-<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
-
-<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
-
-<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
-
-<p>具体办法：</p>
-
-<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
-
-<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
-
-<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
-
-<ul>
-<li>1.获取当前电池条的方向</li>
-</ul>
-
+  <div class="entry-content"><p>CocoaPods本身也不断在更新，在项目进行中不建议进行更新。但是不得已时也得为之。
+具体方法如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem update --system
+</span><span class='line'>gem install cocoapods
+</span><span class='line'>pod setup</span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>2.获取当前屏幕的大小</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>3.设置我们的View的中心点</li>
-</ul>
-
+<p>和安装其实一样的，注意版本的变化</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod --version</span></code></pre></td></tr></table></div></figure>
 
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/">自定义UITabbarController引发的血案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-02T09:05:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>转自：<a href="http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html">http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html</a></p>
+
+<p>nested push animation can result in corrupted navigation bar 嵌套的navigation动画会造成 navigation bar 错误， 具体表现为上一层的titleview 和这一层重叠， navigationbaritem 维持上一层的左按钮， 右按钮 、、、系统警告提示nested push animation can result in corrupted navigation bar ， 大家遇到过这种情况吗？？
+嵌套的动画， 是什么意思呢， 为什么会这样， 要怎么解决</p>
+
+<p>结贴~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+
+<p>有一天，从头到尾分析了整个项目的代码， 最后确认问题根源——自定义UITabbarController引发的血案
+项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，
+整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，
+导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</p>
+
+<p>扩展阅读：
+<a href="http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga">http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga</a></p>
+
+<p>其实主要还是在用户看不到的时候，多次使用Animate=YES</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/02/hybird-appyan-jiu/">Hybird App研究</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-02T09:02:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>hybrid App</h4>
+
+<p>“云”时代的来临正在改变App和运营团队之间的关系，一场不能避免的变革正在进行。鉴于移动终端的局限性，移动终端上的APP由本地化应用(Native App)，到混合型应用（Hybrid APP），再到基于WEB的应用Web App，这一连串的变化都源于技术的更新和市场的需要。</p>
+
+<p>Hybrid App是指介于web-app、native-app这两者之间的app,它虽然看上去是一个Native App，但只有一个UI WebView，里面访问的是一个Web App，比如街旁网最开始的应用就是包了个客户端的壳，其实里面是HTML5的网页，后来才推出真正的原生应用。再彻底一点的，如掌上百度和淘宝客户端Android版，走的也是Hybrid App的路线，不过掌上百度里面封装的不是WebView，而是自己的浏览内核，所以体验上更像客户端，更高效。</p>
+
+<p>汽车有混合动力Hybrid，移动应用同样也有混合模式。Hybrid App（混合模式移动应用）兼具“Native App良好用户交互体验的优势”和“Web App跨平台开发的优势”。很多人不知道市场上一些主流移动应用都是基于Hybrid App的方式开发，比如国外有Facebook、国内有百度搜索等。但究竟什么是Hybrid App？如何定义？</p>
+
+<p>Hybrid App：Hybrid App is a mobile application that is coded in both browser-supported language and computer language. They are available through application distribution platforms such as the Apple App Store, Google Play etc. Usually, they are downloaded from the platform to a target device, such as iPhone, Android phone or Windows Phone. The subscribers need to install to run them.</p>
+
+<p>我们来拆解一下里面的含义：</p>
 
 <ul>
-<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
+<li>1、mobile application：Hybrid App就是一个移动应用</li>
+<li>2、both browser-supported language and computer language：同时使用网页语言与程序语言编写</li>
+<li>3、available through application distribution platforms：通过应用商店进行分发</li>
+<li>4、a target device：区分目标平台</li>
+<li>5、install to run：用户需要安装使用</li>
+<li><p>综合一下就是：“Hybrid App同时使用网页语言与程序语言开发，通过应用商店区分移动操作系统分发，用户需要安装使用的移动应用”。总体特性更接近Native App但是和Web App区别较大。只是因为同时使用了网页语言编码，所以开发成本和难度比Native App要小很多。因此说，Hybrid App兼具了Native App的所有优势，也兼具了Web App使用HTML5跨平台开发低成本的优势</p></li>
 </ul>
+
+
+<h4>Hybrid App为什么会兴起</h4>
+
+<p>Hybrid App的兴起是现阶段移动互联网产业的一种偶然。移动互联网的热潮刮起后，众多公司前赴后继的进入。但是很快发现移动应用的开发人员太少，所以导致疯狂的人才争夺。市场机制下移动应用开发人才的待遇扶摇直上，最终变成众多企业无法负担养一个具备跨平台开发能力的专业移动应用开发团队。而HTML5的出现让Web App露出曙光，HTML5开发移动应用的跨平台和廉价优势让众多想进入移动互联网领域的公司开始心动。可是当下基于HTML5的Web App更是雾里看花，在用户入口习惯、分发渠道和应用体验这三个核心问题没解决之前，Web App也很难得以爆发。正是在这样是机缘巧合下，基于HTML5低成本跨平台开发优势又兼具Native App特质的Hybrid App技术杀入混战，并且很快吸引了众人的目光。大幅的降低了移动应用的开发成本，可以通过现有应用商店模式发行，在用户桌面形成独立入口等等这些，让Hybrid App成为解决移动应用开发困境不错的选择，也成为现阶段Web App的代言人。Hybrid App像刺客一样，在Native App和Web App混战之时，偶然间的在移动应用开发领域占有了一席之地。</p>
+
+<p>如何实现网页语言与程序语言的混合</p>
+
+<p>Hybrid App通常分为三种类型：多View混合型，单View混合型，Web主体型。</p>
+
+<h5>多View混合型</h5>
+
+<p>即Native View和Web View独立展示，交替出现。目前常见的Hybrid App是Native View与WebView交替的场景出现。这种应用混合逻辑相对简单。即在需要的时候，将WebView当成一个独立的View（Activity）运行起来，在WebView内完成相关的展示操作。这种移动应用主体通常是Native App，Web技术只是起到补充作用。开发难度和Native App基本相当。</p>
+
+<h5>单View混合型</h5>
+
+<p>即在同一个View内，同时包括Native View和Web View。互相之间是覆盖（层叠）的关系。这种Hybrid App的开发成本较高，开发难度较大，但是体验较好。如百度搜索为代表的单View混合型移动应用，既可以实现充分的灵活性，又能实现较好的用户体验。</p>
+
+<h5>Web主体型</h5>
+
+<p>即移动应用的主体是Web View，主要以网页语言编写，穿插Native功能的Hybrid App开发类型。这种类型开发的移动应用体验相对而言存在缺陷，但整体开发难度大幅降低，并且基本可以实现跨平台。Web主体型的移动应用用户体验的好坏，主要取决于底层中间件的交互与跨平台的能力。国外的appMobi、PhoneGap国内的AppCan和Rexsee都属于Web主体型移动应用中间件。其中Rexsee不支持跨平台开发。appMobi和PhoneGap除基础的底层能力更多是通过插件（Plugins）扩展的机制实现Hybrid。而AppCan除了插件机制，还提供了大量的单View混合型的接口来完善和弥补Web主体型Hybrid App体验差的问题，接近Native App的体验。</p>
+
+<p>从分析可见，Hybrid App中的Web主体型只要能够解决用户体验差的问题，就可以变成最佳Hybrid App解决方案类型。</p>
+
+<h4>Hybrid App的瓶颈与未来</h4>
+
+<p>国内外Hybrid App的开发框架众多。如何选择又成为一个难题。下面对开发者比较关心的集中知名跨平台开发移动应用中间件进行列表和对比，以便选择最适合您的移动应用中间件。</p>
+
+<p>Hybrid App的瓶颈与未来</p>
+
+<p>国内外Hybrid App的开发框架众多。如何选择又成为一个难题。下面对开发者比较关心的集中知名跨平台开发移动应用中间件进行列表和对比，以便选择最适合您的移动应用中间件。</p>
+
+<p>PhoneGap是相对比较早进入公众视线的一种选择。但是，开发者简单的基于PhoneGap来开发移动应用肯定会发现结果和Web App比较差的用户体验类似。这也是为什么基于PhoneGap有实用性的移动应用主要集中在iOS上。可是PhoneGap这种现状弱化了HTML5的跨平台价值。</p>
+
+<p>AppCan在技术架构上和PhoneGap类似是Web主体型中间件，但是通过结合了一些原生交互效果能够达到iOS、Android平台都比较一致的用户体验。但是相比PhoneGap的开源，AppCan相对封闭的路线显得过于谨慎。</p>
+
+<p>Titanium是一种基于翻译机制的跨平台中间件，能够开发出具有Native体验的移动应用，但是因为翻译机制的限制导致移动应用开发不能像真正的HTML5开发一样灵活。哪怕一个按钮也不能像普通HTML一样来编写，而必须按照Titanium约定的特定格式。</p>
+
+<p>Salama是全新研发的一套Hybrid APP和云端服务整合的开发套件。在终端，一共有三种开发模式：高度混合模式、JS模式和低度混合模式。在低度混合模式下，需要追求终端速度和显示效果的开发者，可以在不改变原有的构架思路的前提下进行开发。在JS模式下，所有的画面显示及业务逻辑均由JS程序实现，对于原来的基于WEB的开发者，只要熟悉JS、CSS、HTML的前端工程师就可以轻松构建自己的应用。在高度混合模式下，原生和HTML5可以随意组合，可以为开发者在进行大型商业软件开发的过程中提供最高的性价比。不仅如此，在云端Salama还提供了一整套云服务，涵盖了业务处理、数据库操作、文件等资源的存储分发等服务。Salama已经为多家公司提供了方案，知名客户有TOSHIBA-AIRCON、GEDORE等品牌商，同时也在Salama平台上构造了Ishow企业电子目录产品服务。[1-2]</p>
+
+<p>Hybrid App这个领域虽然还处于比较初期的阶段，但是已经有很多优秀的公司和技术团队在致力于跨平台开发移动应用中间件技术的研究，给了开发者众多选择。开发者可以根据实际的项目需求来选择中间件。Web App虽被浏览器厂商和搜索引擎公司所推崇，但存在用户体验差、盈利模式不明确等现阶段无法解决的问题，或最终夭折。Hybrid App正在被越来越多的公司和开发者所认同，势必会成为新世界的王。</p>
+
+<p><a href="http://baike.baidu.com/view/8488720.htm">http://baike.baidu.com/view/8488720.htm</a></p>
+
+<p>Web App和Native App 谁将是未来:
+<a href="http://www.cnblogs.com/mofish/archive/2011/07/18/2109565.html">http://www.cnblogs.com/mofish/archive/2011/07/18/2109565.html</a></p>
+
+<p>国内领先的Hybrid App框架 AppCan:   <a href="http://www.appcan.cn/">http://www.appcan.cn/</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-22T14:58:00+08:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>从Notification的开关入手，发现了统一给出的入口。
+从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）</p>
+
+<p>来正文</p>
+
+<h4>Best Practices for Maintaining User Privacy</h4>
+
+<p>Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.</p>
+
+<p>You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:</p>
+
+<p>Review guidelines from government or industry sources, including the following documents:</p>
+
+<p>The Federal Trade Commission’s report on mobile privacy: Mobile Privacy Disclosures: Building Trust Through Transparency.</p>
+
+<p>The EU Data Protection Commissioners’ Opinion on data protection for Mobile Apps: <a href="http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf">http://ec.europa.eu/justice/data-protection/article-29/documentation/opinion-recommendation/files/2013/wp202_en.pdf</a></p>
+
+<p>The California State Attorney General’s recommendations for mobile privacy: Privacy on the Go: Recommendations for the Mobile Ecosystem</p>
+
+<p>These reports provide helpful recommendations for protecting user privacy. You should also review these documents with your company’s legal counsel.
+Request access to user or device data that is protected by the iOS system authorization settings at the time the data is needed. Consider supplying a usage description string in your app’s Info.plist file explaining why your app needs that data. Data protected by iOS system authorization settings includes location data, contacts, calendar events, reminders, photos, and media; see Table 1-1. Provide reasonable fallback behavior in situations where the user does not grant access to the requested data.</p>
+
+<p>Be transparent with users about how their data is going to be used. For example, you should specify a URL for your privacy policy or statement with your iTunes Connect metadata when you submit your app, and you might also want to summarize that policy in your app description.
+For more information about providing your app’s privacy policy in iTunes Connect, see “Adding New Apps” in iTunes Connect Developer Guide</p>
+
+<p>Give the user control over their user or device data. Provide settings so that the user can disable access to certain types of sensitive information as needed.
+Request and use the minimum amount of user or device data needed to accomplish a given task. Do not seek access to or collect data for non obvious reasons, for unnecessary reasons, or because you think it might be useful later.
+Take reasonable steps to protect the user and device data that you collect in your apps. When storing such information locally, try to use the iOS data protection feature (described in “Protecting Data Using On-Disk Encryption”) to store it in an encrypted format. And try to use HTTPS when sending user or device data over the network.</p>
+
+<p>If your app uses the ASIdentifierManager class, you must respect the value of its advertisingTrackingEnabled property. And if that property is set to NO by the user, then use the ASIdentifierManager class only for the following purposes: frequency capping, conversion events, estimating the number of unique users, security and fraud detection, and debugging. Remember the ASIdentifierManager class is to be used only for the purposes of serving advertising. Do not use it as a general advertising cookie or for any other purposes.</p>
+
+<p>If you have not already done so, stop using the unique device identifier (UDID) provided by the uniqueIdentifier property of the UIDevice class. That property was deprecated in iOS 5.0, and starting May 1, 2013 the App Store will no longer accept new apps or app updates that use that identifier. Instead, apps should use the identifierForVendor property of the UIDevice class or the advertisingIdentifier property of the ASIdentifierManager class, as appropriate.</p>
+
+<p>Table 1-1 lists the types of data authorizations supported by iOS and how you can determine if your app is authorized to use that data. You should view this table as a starting point for your app’s own privacy behaviors and not as a finite checklist. The contents of this table may evolve over time.</p>
+
+<p>Table 1-1  Data protected by system authorization settings</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374969633/" title="2013-08-22-ios-quan-xian-guan-li-best-practices-fo by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3752/10374969633_b25523eb45_b.jpg" width="703" height="573" alt="2013-08-22-ios-quan-xian-guan-li-best-practices-fo"></a></p>
+
+<h4>本地与Push通知检测研究</h4>
+
+<p>enabledRemoteNotificationTypes
+Returns the types of notifications the application accepts.</p>
+
+<p><em>&ndash; (UIRemoteNotificationType)enabledRemoteNotificationTypes</em></p>
+
+<p>Return Value
+A bit mask whose values indicate the types of notifications the user has requested for the application. See UIRemoteNotificationType for valid bit-mask values.</p>
+
+<p>Discussion
+The values in the returned bit mask indicate the types of notifications currently enabled for the application. These types are first set when the application calls the registerForRemoteNotificationTypes: method to register itself with Apple Push Notification Service. Thereafter, the user may modify these accepted notification types in the Notifications preference of the Settings application. This method returns those initial or modified values. iOS does not display or play notification types specified in the notification payload that are not one of the enabled types. For example, the application might accept icon-badging as a form of notification, but might reject sounds and alert messages, even if they are specified in the notification payload.</p>
+
+<p>Availability
+Available in iOS 3.0 and later.
+See Also
+– unregisterForRemoteNotifications
+Declared In
+UIApplication.h</p>
+
+<p>返回结果强调，用位与判断某个功能是否打开。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+</span><span class='line'>
+</span><span class='line'>BOOL isBadge = rntypes & UIRemoteNotificationTypeBadge;</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/22/zai-githubshang-shi-yong-octopress/">在github上使用octopress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-22T10:55:00+08:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Octopress是使用ruby语言编写的一套建立在jekyll之上的博客系统，它有一些很独特的特点：</p>
+
+<ol>
+<li>使用静态页面；</li>
+<li>不使用数据库；</li>
+<li>使用markdown标记语言编写文章；</li>
+<li>可以与git紧密集成，方便地进行博客的版本管理；</li>
+<li>可以于Github Pages集成，不需要单独的web hosting，只要你有github帐号即可。</li>
+</ol>
+
+
+<p>这些特点中的第三点到第五点尤其吸引我（第一点和第二点也很酷），于是我花了些时间研究。以下是相关的步骤和心得。</p>
+
+<h4>在你本地安装octopress</h4>
+
+<p>说“安装”可能不太恰当，准确的说是你需要从github上取得octopress的代码并进行些许配置。步骤请参考这里。</p>
+
+<ol>
+<li><p>安装RVM(Ruby Version Manager)并使用”Ruby 1.9.2″作为你本地的ruby实现，这事我之前按照这篇文章做过，这里就不详细说了，你也可以按照octopress官方的介绍来安装RVM。</p></li>
+<li><p>从github得到octopress代码，运行以下命令：</p></li>
+</ol>
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -678,46 +740,36 @@ With push access</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
-</span><span class='line'>} else {
-</span><span class='line'>    return CGAffineTransformIdentity;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git octopress
+</span><span class='line'>cd octopress    # If you use RVM, You'll be asked if you trust the .rvmrc file (say yes).
+</span><span class='line'>ruby --version  # Should report Ruby 1.9.2
+</span><span class='line'>
+</span><span class='line'>gem install bundler # Install dependencies
+</span><span class='line'>bundle install
+</span><span class='line'>
+</span><span class='line'>rake install # Install the default Octopress theme</span></code></pre></td></tr></table></div></figure>
 
 
-<ul>
-<li>5.可以动画的改变我们view的显示方式了</li>
-</ul>
-
+<p>配置你本地的octopress，使之可以发布到你的github pages</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
-</span><span class='line'>
-</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
-</span><span class='line'>[UIView beginAnimations:nil context:nil];
-</span><span class='line'>[UIView setAnimationDuration:duration];
-</span><span class='line'>
-</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
-</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake setup_github_pages
+</span><span class='line'>Enter the read/write url for your repository
+</span><span class='line'>(For example, 'git@github.com:your_username/your_username.github.com)
+</span><span class='line'>Repository url:</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
+<p>请输入：git@github.com:yourname/yourname.github.com.git (将yourname替换成你的github登录名)</p>
 
-<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
+<p>这个步骤rake会做很多事情：</p>
 
-<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
+<p>在.git/config中替换origin为你输入的repository，并把原来的origin写到octopress中。
+创建新的branch source并切换到这个branch。
+在生成的_deploy目录下，初始化git repository为你的repository。
+以下是两个git config的内容，just for your information。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -733,23 +785,568 @@ With push access</p>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
-</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tchen@tchen-mbp:~/projects/octopress$ cat .git/config 
+</span><span class='line'>[core]
+</span><span class='line'>    repositoryformatversion = 0
+</span><span class='line'>    filemode = true
+</span><span class='line'>    bare = false
+</span><span class='line'>    logallrefupdates = true
+</span><span class='line'>    ignorecase = true
+</span><span class='line'>[remote "octopress"]
+</span><span class='line'>    url = git://github.com/imathis/octopress.git
+</span><span class='line'>    fetch = +refs/heads/*:refs/remotes/octopress/*
+</span><span class='line'>[branch "source"]
+</span><span class='line'>    remote = origin
+</span><span class='line'>    merge = refs/heads/master
+</span><span class='line'>    rebase = true
+</span><span class='line'>[remote "origin"]
+</span><span class='line'>    url = git@github.com:tyrchen/tyrchen.github.com.git
+</span><span class='line'>    fetch = +refs/heads/*:refs/remotes/origin/*
+</span><span class='line'>tchen@tchen-mbp:~/projects/octopress$ cat _deploy/.git/config 
+</span><span class='line'>[core]
+</span><span class='line'>    repositoryformatversion = 0
+</span><span class='line'>    filemode = true
+</span><span class='line'>    bare = false
+</span><span class='line'>    logallrefupdates = true
+</span><span class='line'>    ignorecase = true
+</span><span class='line'>[remote "origin"]
+</span><span class='line'>    url = git@github.com:tyrchen/tyrchen.github.com.git
+</span><span class='line'>    fetch = +refs/heads/*:refs/remotes/origin/*</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就可以做到：你在本地创建博客文章(当然是用markdown写成的)，然后直接deploy到你的github pages repo，github会自动进行发布。也就是说：所有发博客的动作只需要在你本地用命令完成，酷吧！</p>
+
+<p>参考了这里<a href="http://octopress.org/docs/blogging/">http://octopress.org/docs/blogging/</a>。</p>
+
+<ul>
+<li>1.创建你的github pages repo</li>
+</ul>
+
+
+<p>如果你的github用户名是username，那个就创建一个名称为”username.github.com”的repo，这个repo就是你的github pages repo，更多信息可以参考这里。</p>
+
+<ul>
+<li>2.在你本地运行以下命令，octopress会自动帮你进行配置：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd your_local_octopress_directory
+</span><span class='line'>rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意：当命令提示你输入github URL时，请使用这个格式的URL: “git@github.com:username/username.github.com.git”</p>
+
+<p>当这个命令运行完成之后，你的github pages repo会有两个branches: master branch用于静态页面的发布(“octopress/<em>deploy”的内容)，source branch用于保存你的blog内容（”octopress”目录中除了”</em>deploy”的其它内容）</p>
+
+<p>到这里基本的配置就完成了，你还可以参考这里配置你博客的名称等信息。</p>
+
+<h4>编写并发布文章</h4>
+
+<ul>
+<li>1.写文章</li>
+</ul>
+
+
+<p>cd your_local_octopress_directory
+rake new_post[&ldquo;Your Title of Your Article&rdquo;]
+该命令会在你的”octopress/source/_posts”目录下生成对应的”.markdown”文件，用任意文本编辑器编辑，使用markdown语法编写你的文章。</p>
+
+<ul>
+<li>2.生成，预览并发布：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd your_local_octopress_directory
+</span><span class='line'>rake generate # generate your blog static pages content according to your input. 
+</span><span class='line'>rake preview # start a web server on "http://localhost:4000", you can preview your blog content.
+</span><span class='line'>rake deploy # push your static pages content to your github pages repo ("master" branch)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>还有很重要的一步是把你的修改(文本修改，不包含”_deploy”目录，”deploy”目录保存”rake generate”生成的静态页面内容，会被”rake deploy”命令提交到”master branch”)放到你的github pages(“source” branch)上:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd your_local_octopress_directory
+</span><span class='line'>git add .
+</span><span class='line'>git commit -m 'your message'
+</span><span class='line'>git push origin source</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>个性化</h4>
+
+<p>添加个人域名
+在octopress目录下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ echo 'blog.yourdomain.com' &gt;&gt; source/CNAME</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在你的DNS服务商，如 dnspod.cn，添加相应的CNAME指向 yourname.github.com。如果你要使用顶级域名，如 <a href="http://yourdomain.com">http://yourdomain.com</a> 访问你的博客，则需要使用A记录指向 207.97.227.245。详细内容请参考：<a href="http://octopress.org/docs/deploying/github/%E3%80%82">http://octopress.org/docs/deploying/github/%E3%80%82</a></p>
+
+<h4>设置博客</h4>
+
+<p>打开_config.yml，按照 <a href="http://octopress.org/docs/configuring/">http://octopress.org/docs/configuring/</a> 的说明进行设置即可。注意把不需要的asides都删除，免得加载不必要的js，拖累访问速度。如果想把你自己的微博个人秀加在侧栏，请参考：<a href="http://clark1231.iteye.com/blog/1553939%E3%80%82">http://clark1231.iteye.com/blog/1553939%E3%80%82</a></p>
+
+<h4>使用主题</h4>
+
+<p>可使用 <a href="https://github.com/amelandri/darkstripes">https://github.com/amelandri/darkstripes</a> 的主题。使用方法很简单：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd octopress
+</span><span class='line'>$ git clone git://github.com/amelandri/darkstripes.git .themes/darkstripes
+</span><span class='line'>$ rake install['darkstripes']
+</span><span class='line'>$ rake generate</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意你对已有主题的汉化会被覆盖，请确保提交所有更改前你merge了你的改动。</p>
+
+<h4>添加多说</h4>
+
+<p>由于github pages只支持静态文件，所以类似评论这样的功能就只能使用第三方工具。octopress自带disqus的评论系统，但其对国内用户不够友好，另外加载速度也不快。国内disqus的copycat是duoshuo，于是照猫画虎，添加多说的支持进来：</p>
+
+<p>首先在 source/post/ 下创建duoshuo.html:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!-- Duoshuo Comment BEGIN -->
+</span><span class='line'>    &lt;div class="ds-thread">&lt;/div>
+</span><span class='line'>    &lt;script type="text/javascript">
+</span><span class='line'>    var duoshuoQuery = {short_name:"saick"};
+</span><span class='line'>    (function() {
+</span><span class='line'>        var ds = document.createElement('script');
+</span><span class='line'>        ds.type = 'text/javascript';ds.async = true;
+</span><span class='line'>        ds.src = 'http://static.duoshuo.com/embed.js';
+</span><span class='line'>        ds.charset = 'UTF-8';
+</span><span class='line'>        (document.getElementsByTagName('head')[0] 
+</span><span class='line'>        || document.getElementsByTagName('body')[0]).appendChild(ds);
+</span><span class='line'>    })();
+</span><span class='line'>    &lt;/script>
+</span><span class='line'>&lt;!-- Duoshuo Comment END --></span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在 source/_layouts/post.html，将对应的disqus代码改为：
+注：去掉{与%中间的\</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section id="comment">
+</span><span class='line'>    &lt;h1>发表评论&lt;/h1>
+</span><span class='line'>    {\% include post/duoshuo.html \%}
+</span><span class='line'>  &lt;/section></span></code></pre></td></tr></table></div></figure>
+
+
+<p>在 source/_config.yml 里，添加：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Duoshuo comments
+</span><span class='line'>duoshuo_name: your_duoshuo_name</span></code></pre></td></tr></table></div></figure>
+
+
+<p>应该就可以了。可以使用如下命令测试：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake generate
+</span><span class='line'>$ rake preview</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>添加百度统计</h4>
+
+<p>百度统计可以将生成的script直接添加到 source/post/after_footer.html 就可以。很简单，这里就不详述。</p>
+
+<p>—–EOF—–</p>
+
+<p>参考：<a href="http://www.cnblogs.com/stevelin/p/3281811.html">http://www.cnblogs.com/stevelin/p/3281811.html</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/">Cocoa 自省机制</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T16:30:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>内省</h3>
+
+<p>内省（Introspection）是面向对象语言和环境的一个强大特性，Objective-C和Cocoa在这个方面尤其的丰富。内省是对象揭示自己作为一个运行时对象的详细信息的一种能力。这些详细信息包括对象在继承树上的位置，对象是否遵循特定的协议，以及是否可以响应特定的消息。NSObject协议和类定义了很多内省方法，用于查询运行时信息，以便根据对象的特征进行识别。</p>
+
+<p>明智地使用内省可以使面向对象的程序更加高效和强壮。它有助于避免错误地进行消息派发、错误地假设对象相等、以及类似的问题。下面的部分将介绍如何在代码中有效地使用NSObject的内省方法。</p>
+
+<p><strong><em>本部分包括如下内容：</em></strong></p>
+
+<ul>
+<li>评估继承关系</li>
+<li>方法实现和协议遵循</li>
+<li>对象的比较</li>
+</ul>
+
+
+<h4>评估继承关系</h4>
+
+<p>一旦您知道一个对象属于什么类，就可能已经相当了解这个对象了。您可以知道它具有什么能力、哪些属性、以及可以响应哪些消息。即使在内省之后不能了解对象所属的类，也可以知道该对象不能响应特定的消息。</p>
+
+<p>NSObject协议声明了几个方法，用于确定对象在类层次中的位置。这些方法在不同粒度上进行操作，比如class和superclass实例方法分别返回代表类和超类的Class对象。使用这些方法需要将一个Class对象和另一个进行对比。列表2-7给出了一个简单（可能是没有价值）的用法实例。</p>
+
+<p>列表2-7  使用类和超类的方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
+</span><span class='line'>while ( id anObject = [objectEnumerator nextObject] ) {
+</span><span class='line'>    if ( [self class] == [anObject superclass] ) {
+</span><span class='line'>        // do something appropriate...
 </span><span class='line'>    }
-</span><span class='line'>    
-</span><span class='line'>    // 更保险的写法 add by Eric
-</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
-</span><span class='line'>    {
-</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
-</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
-</span><span class='line'>                                   withObject:(id)toOrientation];
-</span><span class='line'>      }
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
+<p>请注意：有些时候您需要通过class或superclass方法得到正确的类消息接收者。
+更加常见的是检查对象类的从属关系，这种情况下您需要向该对象发送isKindOfClass:或isMemberOfClass:消息。前一个方法返回接收者是否为给定类或其继承类的实例，isMemberOfClass:消息则告诉您接收者是否为指定类的实例。isKindOfClass: 方法通常更有用，因为通过它可以知道是否可以向该对象发送一系列消息。考虑列表2-8中的代码片断：</p>
+
+<p>列表2-8  使用isKindOfClass:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ([item isKindOfClass:[NSData class]]) {
+</span><span class='line'>    const unsigned char *bytes = [item bytes];
+</span><span class='line'>    unsigned int length = [item length];
+</span><span class='line'>    // ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>确定tem对象是NSData类的继承类的实例之后，代码就知道可以向它发送NSData的bytes和length消息。假定item是NSMutableData类的一个实例，则isKindOfClass:和isMemberOfClass:之间的差别就变得更加明显。如果您调用的是isMemberOfClass:，而不是isKindOfClass:，条件控制块中的代码将永远不会被执行，因为item并不是NSData类的实例，而是其子类NSMutableData的实例。</p>
+
+<h4>方法实现和协议遵循</h4>
+
+<p>NSObject还有两个功能更加强大的内省方法，即respondsToSelector:和conformsToProtocol:。这两个方法分别告诉您一个对象是否实现特定的方法，以及是否遵循指定的正式协议（即该对象是否采纳了该协议，且实现了该协议的所有方法）。</p>
+
+<p>在代码中，您可以在类似的情况下使用这些方法。通过这些方法，您可以在将消息或消息集合发送给某些潜在的匿名对象之前，确定它们是否可以正确地进行响应。在发送消息之前进行检查可以避免由不能识别的选择器引起的运行时例外。在实现非正式协议（这种协议是委托技术的基础）时，Application Kit就是在调用委托方法之前检查委托对象是否实现该方法（通过respondsToSelector:方法）。</p>
+
+<p>列表2-9显示了如何在代码中使用respondsToSelector:方法。</p>
+
+<p>列表2-9  使用respondsToSelector:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)doCommandBySelector:(SEL)aSelector {
+</span><span class='line'>    if ([self respondsToSelector:aSelector]) {
+</span><span class='line'>        [self performSelector:aSelector withObject:nil];
+</span><span class='line'>    } else {
+</span><span class='line'>        [_client doCommandBySelector:aSelector];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>列表2-10显示如何在代码中使用conformsToProtocol:方法：</p>
+
+<p>列表2-10  使用conformsToProtocol:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
+</span><span class='line'>if (!([((id)testObject) conformsToProtocol:@protocol(NSMenuItem)])) {
+</span><span class='line'>    NSLog(@"Custom MenuItem, '%@', not loaded; it must conform to the
+</span><span class='line'>        'NSMenuItem' protocol.\n", [testObject class]);
+</span><span class='line'>    [testObject release];
+</span><span class='line'>    testObject = nil;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>对象的比较</h4>
+
+<p>hash和isEqual:方法虽然不是严格的内省方法，但是可以发挥类似的作用，是进行对象的识别和比较时不可或缺的运行时工具。它们并不向运行环境查询对象信息，而是依赖于具体类的比较逻辑。</p>
+
+<p>hash和isEqual:方法都在NSObject协议中声明，且彼此关系紧密。实现hash方法必须返回一个整型数，作为哈希表结构中的表地址。两个对象相等（isEqual:方法的判断结果）意味着它们有相同的哈希值。如果您的对象可能被包含在象NSSet这样的集合中，则需要定义hash方法，并确保该方法在两个对象相等的时候返回相同的哈希值。NSObject类中缺省的isEqual:实现只是简单地检查指针是否相等。</p>
+
+<p>isEqual:的使用相当直接，它将消息的接收者和通过参数传入的对象进行比较。对象的比较常常可以在运行时决定应该对对象做些什么。如列表2-11所示，您可以通过isEqual:来确定是否执行某一个动作。在这个例子中，动作是指保存被修改了的预置信息。</p>
+
+<p>列表2-11  使用isEqual:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)saveDefaults {
+</span><span class='line'>    NSDictionary *prefs = [self preferences];
+</span><span class='line'>    if (![origValues isEqual:prefs]) 
+</span><span class='line'>        [Preferences savePreferencesToDefaults:prefs];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果您正在创建子类，则可能需要重载isEqual:方法，以进一步检查对象是否相等。子类可能定义额外的属性，当两个实例被认为相等时，属性的值必须相同。举例来说，假定您创建一个名为MyWidget的NSObject子类，类中包含两个实例变量：name和data。当MyWidget的两个实例被认为是相等时，这些变量必须具有相同的值。列表2-12显示如何在MyWidget类中实现isEqual:方法。</p>
+
+<p>列表 2-12  重载isEqual:方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)isEqual:(id)other {
+</span><span class='line'>    if (other == self) 
+</span><span class='line'>        return YES;
+</span><span class='line'>    if (!other || ![other isKindOfClass:[self class]]) 
+</span><span class='line'>        return NO;
+</span><span class='line'>    return [self isEqualToWidget:other];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (BOOL)isEqualToWidget:(MyWidget *)aWidget {
+</span><span class='line'>    if (self == aWidget) 
+</span><span class='line'>        return YES;
+</span><span class='line'>    if (![(id)[self name] isEqual:[aWidget name]])
+</span><span class='line'>        return NO;
+</span><span class='line'>    if (![[self data] isEqualToData:[aWidget data]])
+</span><span class='line'>        return NO;
+</span><span class='line'>    return YES;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>isEqual:方法首先检查指针的等同性，然后是类的等同性，最后调用对象的比较器进行比较。比较器的名称指示出参与比较的对象的类名称。这种类型的比较器对传入的对象进行强制类型检查，是Cocoa中常见的约定，NSString的isEqualToString:和NSTimeZone的isEqualToTimeZone:就是两个这样的例子。特定类的比较器（在这个例子中是isEqualToWidget:）负责执行name和data变量的等同性。</p>
+
+<p>在Cocoa框架的所有isEqualToType:方法中，nil都不是正当的参数，这些方法的实现在接收到nil参数时会抛出例外。然而为了向后兼容，Cocoa框架中的isEqual:方法可以接收nil值，在这种情况下返回NO。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/">让Apple TV直接收看中国视频</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-20T14:09:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>工作原理：</h4>
+
+<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
+
+<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
+
+<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
+
+<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
+<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
+
+<h4>没有自己的DNS</h4>
+
+<p>　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，
+　　　即可将Apple TV内置网址指向一个新的网站，达到通过Apple TV直接收看贵国视频的愿望。
+修改DNS如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>180.153.225.136 电信服务器，适合于南方电信的用户使用。TTVast提供
+</span><span class='line'>210.129.145.150 适合部分联通用户，以及海外用户使用。TTVast提供</span></code></pre></td></tr></table></div></figure>
+
+
+<p>　　用私人DNS会轻易被他伪装的银行、淘宝等网站来欺骗你，为了安全，请ATV用户使用上面靠谱的。
+　　请勿用于Apple TV之外的任何设备（如：手机、PC、路由器等），否则后果自负。
+　　</p>
+
+<h4>拥有自己的DNS</h4>
+
+<p>将 <a href="http://trailers.apple.com/appletv/">http://trailers.apple.com/appletv/</a> 路径下的 index.xml 及 application.js转向下面网址的对应文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://180.153.225.136:8000/index.xml ttvas提供
+</span><span class='line'>http://210.129.145.150:8000/index.xml ttvas提供
+</span><span class='line'>http://4.appletv3.sinaapp.com/index.php Missde提供 - 目前测试中..</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本程序：Apple TV DNS PHP代码下载：
+<a href="https://code.google.com/p/appletv/downloads/list">https://code.google.com/p/appletv/downloads/list</a></p>
+
+<p>获取音悦台MV下载地址 <a href="http://huoqu.sinaapp.com/video/">http://huoqu.sinaapp.com/video/</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">JSP中java代码与js之间的传值</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-17T15:04:00+08:00" pubdate data-updated="true">Jun 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h5>java   &mdash;&mdash;>   js:</h5>
+
+<p>List的传递：直接赋值就行，如下：</p>
+
+<p>Js代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var userIdList = "&lt;%=archiveNameList%&gt;";  //不加引号是错误的！  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>为js中var赋java变量值（同样适用于el表达式和struts2标签等）时，切记需要为赋值串加引号&#8221;&ldquo;:
+如果java变量为纯数字类型的，可以不加，js可以将其识别为Number类型的；但任何时候都加上不失为一个好的习惯，可以让你不为莫名其妙的错误所困扰。</p>
+
+<p>引用
+JSP代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script type="text/javascript"&gt;  
+</span><span class='line'>    var ploIds = "&lt;%=request.getAttribute("refreshStrParam")%&gt;"; //写成var ploIds = &lt;%=request.getAttribute("refreshStrParam")%&gt; 是错误的！  
+</span><span class='line'>    alert(ploIds);  
+</span><span class='line'>    &lt;% String s = "abc";%&gt;  
+</span><span class='line'>    var s = "&lt;%=s%&gt;"; //写成 var s = &lt;%=s%&gt;;是错误的  
+</span><span class='line'>    alert(s);  
+</span><span class='line'>    alert("${param.name}"); //写成alert(${param.name})是错误的  
+</span><span class='line'>&lt;/script&gt;  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>数组的传递：不能像List那样直接赋值.可以参考这里
+<a href="http://wuaner.iteye.com/blog/455481">http://wuaner.iteye.com/blog/455481</a></p>
 </div>
   
   

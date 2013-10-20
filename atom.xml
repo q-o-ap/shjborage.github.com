@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-20T23:31:25+08:00</updated>
+  <updated>2013-10-20T23:36:16+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -23,6 +23,9 @@
 <p>那么，大家最常用的组件是什么？这些组件是如何提升开发效率和稳定性的？哪一款组件适合自己，是 AFNetworking（AFN）还是 ASIHTTPRequest（ASI）？几乎每一个iOS互联网应用开发者都会面对这样的选择题，要从这两个最常用的组件里选出一个好的还真不是那么容易。</p>
 
 <p>单单从两个控件版本提交的时间节点来看，AFN的第一个提交是2011年的1月1日，那个时候ASI早已是1.8+的版本了；而当AFN发布1.0版，2012年10月份的时候，ASI早早的已经停止更新了。这样看起来，AFN是ASI的继任者，似乎不存在之前提到的选择困难的问题，而事实并非如此。本文将从用法、功能、性能和原理几个方面对二者进行简单对比，看看二者之间到底存在着怎样的区别，到底应该如何选择。</p>
+
+<!-- more -->
+
 
 <ul>
 <li>首先，从推荐用法上就可以看出二者设计理念上大有不同。</li>

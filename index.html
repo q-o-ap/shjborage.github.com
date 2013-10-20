@@ -114,114 +114,12 @@
 
 <p>单单从两个控件版本提交的时间节点来看，AFN的第一个提交是2011年的1月1日，那个时候ASI早已是1.8+的版本了；而当AFN发布1.0版，2012年10月份的时候，ASI早早的已经停止更新了。这样看起来，AFN是ASI的继任者，似乎不存在之前提到的选择困难的问题，而事实并非如此。本文将从用法、功能、性能和原理几个方面对二者进行简单对比，看看二者之间到底存在着怎样的区别，到底应该如何选择。</p>
 
-<ul>
-<li>首先，从推荐用法上就可以看出二者设计理念上大有不同。</li>
-</ul>
-
-
-<h3>1、用法对比</h3>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705763/" title="2013-10-20-5 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2867/10382705763_25114b14ed.jpg" width="464" height="309" alt="2013-10-20-5"></a></p>
-
-<p>图1，AFN的示例代码，发起请求（出自：Posts.m）</p>
-
-<p>AFN官方推荐的使用方法是，为一系列相关的请求定义一个HTTPClient，共用一个BaseURL。每次请求把URL中除BaseURL的Path部分做为参数传给HTTPClient的静态方法，并注册一个Block用于回调。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705703/" title="2013-10-20-6 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3724/10382705703_90269d2bbe.jpg" width="464" height="143" alt="2013-10-20-6"></a></p>
-
-<p>图2，ASI示例代码，发起异步请求（出自：ASIHTTPRequestTests.m）</p>
-
-<p>ASI推荐使用方法就非常传统，每一个请求都由构造方法初始化一个（共享）实例，通过这个实例配置参数并发起请求。ASI最初使用delegate模式回调，在iOS SDK支持Block之后也提供了注册Block的实例方法。</p>
-
-<p>以上引用的两段代码都出自各自项目的示例工程。对比两段代码可以很清楚的看出，同样是发起一个最普通的异步请求，使用AFN只需要调用一个静态方法，但代码可读性较差；而ASI的示例看起来更清晰，但需要调用多个实例方法才能完成一次请求。AFN的设计更加工程化，或者说对使用者更友好，而ASI的设计更经典，典型的OOP。
-除了初级用法上的区别，二者的高级功能和对扩展的支持也颇有不同。</p>
-
-<h3>2、高级功能</h3>
-
-<p>AFN只封装了一些常用功能，满足基本需求，而直接忽略了很多扩展功能。例如：AFN默认没有封装同步请求，如果开发者需要使用同步请求，则需要重写getPath:parameters:success:failure方法，对AFHTTPRequestOperation进行同步处理；而ASI则是直接通过调用一个startSynchronous方法。
-此外AFN针对JSON、XML、PList和Image四种数据结构封装了各自处理器，开发者可以把处理器注册到操作队列中，直接在回调方法中获得格式化以后的数据。在示例工程中就使用了JSON处理器：把AFJSONRequestOperation注册到操作队列里。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382500994/" title="2013-10-20-7 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7419/10382500994_16a83e90d4.jpg" width="464" height="192" alt="2013-10-20-7"></a></p>
-
-<p>图3，AFN示例代码，初始化自定义的HTTPClient（出自：AFAppDotNetAPIClient.m）</p>
-
-<p>而ASI在这方面显得更原始，没有针对任何数据类型做特别封装，只是预留了各种接口和工具供开发者自行扩展。ASI比AFN提供更多扩展功能还有一个原因，它把许多内部用到的功能也抽象成类和方法。例如：
-ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用于压缩本地文件，构造POST Body和解压缩返回数据，但这两个类仍然被设计为独立功能，提供了对多种数据结构进行压缩和解压缩的方法。</p>
-
-<p>对比二者的高级功能和对扩展的支持后，可以看出AFN把初级功能（或者叫常用功能）做到了90分。调用方式够简单，处理器够丰富，使用者用起来可以算是轻松加愉快。但它放弃了对高级功能的支持，要满足较复杂的需求，就要大费周折了，在这方面最多只有40分。而ASI显然不满足于做好初级功能，但为了提供更丰富的可扩展接口，导致初级功能用起来也要花上一些力气。虽然ASI单独提供了支持Amazon S3和Rackspace Cloud Files的控件，但对于生在红旗下的我朝开发者来说基本没用，所以在初级功能的支持上ASI能得个70分，牺牲了初级功能的易用性，换来的是良好的扩展性，在高级功能的使用上远远好于AFN，也能得个70分。</p>
-
-<p>从使用角度对比过后，基本上对这两个项目有一个整体上的认识，再深入下去看看二者的性能如何。</p>
-
-<h3>3、性能对比</h3>
-
-<p>我分别用AFN和ASI进行了测试，测试环境如下：iPhone5，联通3G信号全满，室内静止状态，请求国内双线机房独立服务器的静态文件，1~20K共20个文件，每个文件请求20次，记录从创建请求到完全下载文件的耗时，结果如下：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705653/" title="2013-10-20-8 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3715/10382705653_fa58c22d18.jpg" width="464" height="146" alt="2013-10-20-8"></a></p>
-
-<p>图4，AFN连续访问1 ~ 20K文件耗时</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382545196/" title="2013-10-20-9 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7296/10382545196_4c6f799013.jpg" width="464" height="146" alt="2013-10-20-9"></a></p>
-
-<p>图5，ASI连续访问1 ~ 20K文件耗时</p>
-
-<p>图4是AFN的记录图，绿色为20次请求中耗时最久的一次，蓝色为耗时最短的一次，黄色为去除最大值和最小值的18次平均值。从这个图可以看出，AFN最开始创建对象耗时近2.5秒，随后稳定下来，在3K、7K、15K和20K时出现了抖动。图5是ASI做相同测试的结果，首次创建对象近2.25秒，略优于AFN，同样在5K、11K、13K、14K和16K发生了一些抖动，但抖动幅度似乎小于AFN，可见稳定性更好一些。
-下边是把二者的测试结果放在一起的对比图，可以更直观的比较二者的区别。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382500714/" title="2013-10-20-10 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7317/10382500714_0725ae4480.jpg" width="464" height="147" alt="2013-10-20-10"></a></p>
-
-<p>图6，ASI和AFN耗时最大值对比</p>
-
-<p>图6的最大值对比可以更明显的看出二者的抖动对比，ASI略好一些。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382525995/" title="2013-10-20-11 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5476/10382525995_1a6cd98274.jpg" width="464" height="146" alt="2013-10-20-11"></a></p>
-
-<p>图7，ASI和AFN耗时最小值对比</p>
-
-<p>图7的最小值对比可以看出，在每一个大小的测试中ASI的最佳性能似乎都要优于AFN。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705193/" title="2013-10-20-12 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2880/10382705193_25f55ba5b3.jpg" width="464" height="147" alt="2013-10-20-12"></a></p>
-
-<p>图8，ASI和AFN耗时平均值对比</p>
-
-<p>图8是耗时平均值的对比，更能够说明问题。文件小于12K的测试中ASI的性能优势并没有非常明显，超过12K以后，ASI优势开始明显起来，每一次请求都要比AFN节约20% ~ 30%，近0.1秒。同时从这张图上还可以看出，随着下载文件变大，请求耗时并不是线形增长的，这是由于一次请求大部分时间都消耗在建立连接上，而真正接收数据只占用了极少时间，这个问题不在本篇文章的讨论范围，所以不多说，有兴趣的读者可以<a href="http://segmentfault.com/t/ios">移步</a>进一步讨论。</p>
-
-<h3>4、原理分析</h3>
-
-<p>ASI的性能似乎全面优于AFN，那下边从二者的实现原理上看一下到底是什么原因造成这种差距。ASI基于CFNetwork框架开发，而AFN基于NSURL，底层的区别是导致二者性能差距的重要原因之一。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382544986/" title="2013-10-20-13 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7325/10382544986_92a3d7bf99.jpg" width="464" height="289" alt="2013-10-20-13"></a></p>
-
-<p>图9，ASI和AFN以及底层框架的关系</p>
-
-<p>我们知道所有网络通信的基础是Socket，一个Socket与另一个连接并传送数据。BSD Socket是一类最常见的Socket抽象接口。</p>
-
-<p>Core Foundation框架中的CFSocket就是基于BSD Socket开发的。它几乎涵盖了BSD Socket的全部功能，更重要的是把Socket整合到事件的处理循环中。Core Founda-tion中较高层的CFStream是基于CFSocket开发的读写流支持。</p>
-
-<p>CFNetwork是基于Core Foundation中CFStream的一个底层高性能网络框架，它由提供基础服务的CFSocketStream，支持HTTP协议的CFHTTP，基于CFHTTP用于身份认证的CFHTTPAuthentication和支持FTP协议的CFFTP组成。</p>
-
-<p>正如图9所示，ASI是基于CFHTTP开发的一个组件；而AFN的基础——NSURL，也是基于CFNetwork开发的。也就是说ASI相比AFN更加底层，这就从一定程度上造成二者的性能差距。
-另一个方面，虽然二者都使用NSOperation和NSOperationQueue实现但底层的区别也导致实现方式上有非常大的差别。</p>
-
-<p>ASI的直接操作对象ASIHTTPRequest是NSOperation的子类，实现了NSCopying协议。在initialize和initWithURL:方法中初始化相关属性并配置一系列请求相关参数默认值。此外，ASIHTTPRequest还提供了一系列的实例方法用来配置请求对象。在异步请求的处理上，ASIHTTPRequest对象初始化结束后，在startAsynchronous方法中把对象加入共享操作队列。此后，包括创建CFHTTPMessageRef，也就是处理网络请求的主要对象（事实上是一个指向__CFHTTPMessage结构的指针），在内的所有操作都在ASIHTTPRequest对象所属的子线程中完成。</p>
-
-<p>AFN的直接操作对象AFHTTPClient不同于ASI，是一个实现了NSCoding和NSCopying协议的NSObject子类。AFHTTPClient是一个封装了一系列操作方法的“工具类”，处理请求的操作类是一系列单独的，基于NSOperation封装的，AFURLConnectionOperation的子类。AFN的示例代码中通过一个静态方法，使用dispatch_once()的方式创建AFHTTPClient的共享实例，这也是官方建议的使用方法。在创建AFHTTPClient的初始化方法中，创建了OperationQueue并设置一系列参数默认值。在getPath:parameters:success:failure方法中创建NSURLRequest，以NSURLRequest对象实例作为参数，创建一个NSOperation，并加入在初始化发方中创建的NSOperationQueue。以上操作都是在主线程中完成的。在NSOperation的start方法中，以此前创建的NSURLRequest对象为参数创建NSURLConnection并开启连结。</p>
-
-<p>在异步回调的处理上二者也有区别，ASI采取的是CFHTTP请求完成，直接回调ASIHTTPRequest的实例方法，通过储存的实例对象记录的信息完成Delegate模式或Block模式的回调。而AFN则直接使用了NSOperation的completionBlock属性。</p>
-
-<p>这些实现方式也可以看出，ASI显得更加底层，并没有过多使用Cocoa框架中已经封装的API，而AFN则更加实用主义，逻辑简单清晰，大量使用了框架API。这一点也是造成二者性能差别的原因之一。</p>
-
-<h3>总结</h3>
-
-<p>通过以上的对比，基本可以这样评价：AFN适合逻辑简单的应用，或者更适合开发资源尚不丰富的团队，因为AFN的易用性要比ASI好很多，而这样的应用（或团队）对底层网络控件的定制化要求也非常低。ASI更适合已经发展了一段时间的应用，或者开发资源相对丰富的团队，因为往往这些团队（或他们的应用）已经积累了一定的经验，无论是产品上还是技术上的。需求复杂度就是在这种时候高起来，而且底层订制的需求也越来越多，此时AFN就很难满足需求，需要牺牲一定的易用性，使用ASI作为网络底层控件。SegmentFault开源客户端现在被设计为一款简单的阅读客户端，几乎没有定制要求，因此，目前我选择了AFN作为网络控件。
-以上对ASI和AFN两款最常用的iOS底层网络控件做了初步的介绍，要更深入的了解两款控件，还需要大家继续研究各自的源码。大家遇到任何关于iOS的技术问题都可以在<a href="http://segmentfault.com/t/ios">这里</a>进行讨论。另外大家也可以持续关注SegmentFault的开源客户端，与更多的开发者共同探讨iOS开发技术。</p>
-
-<p>作者简介</p>
-
-<p>高嘉峻（微博：@gaosboy），SegmentFault.com联合创始人，杭州iOS开发者沙龙发起人，资深iOS开发者。</p>
-
-<p><a href="http://www.infoq.com/cn/articles/afn_vs_asi">http://www.infoq.com/cn/articles/afn_vs_asi</a></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -539,6 +437,984 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 <p>如下图：</p>
 
 <p><a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git Fetch和git Pull的区别</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:47:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
+
+<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
+
+<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
+</span><span class='line'>git log -p master..origin/master
+</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上命令的含义：<br/>
+首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
+
+<p>上述过程其实可以用以下更清晰的方式来进行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master:tmp
+</span><span class='line'>git diff tmp 
+</span><span class='line'>git merge tmp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
+
+<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git pull origin master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述命令其实相当于git fetch 和 git merge</p>
+
+<p>在实际使用中，git fetch更安全一些</p>
+
+<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
+
+<p>EOF</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:34:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）</h4>
+
+<p>1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置：</p>
+
+<pre><code>system prefernce--&gt;Accounts--&gt;LogItems--&gt;add
+</code></pre>
+
+<p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
+
+<p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
+
+<p>4）如果只启动shell 程序，还有一种方式，大体流程是这样的。</p>
+
+<pre><code>A) 把Terminate 设置为开机启动。这样当系统启动时，可以自动运行shell。
+B) 在用户目录下创建或修改".profile"。当shell 启动时，先运行".profile" 文件
+C) 在".profile" 中调用想要执行的shell 脚本
+</code></pre>
+
+<p>5)  应用Mac 的launchd，可以参见：<a href="http://cb.esast.com/cb/wiki/10020">http://cb.esast.com/cb/wiki/10020</a></p>
+
+<p>苹果的安全检查：用上面说过的2，3 方法时，必须设置文件的用户id 和组id，还有文件的运行权限。具体方法，下文有述。</p>
+
+<p>当设置完成后，可以在终端上用SystemStarter 来调试配置的信息
+命令为：<code>SystemStarter -n -D</code>
+根据提示的信息可以查看配置的问题。</p>
+
+<h4>2 解决“Insecure Startup Item disabled.错误”</h4>
+
+<p>可以把想要启动的shell 放到/Labrary/Startupitems/ 目录中。
+必须改变文件的用户id 和组id 才可以，并且权限为755</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo chown -R root:wheel /Library/StartupItems/xxx
+</span><span class='line'>sudo chmod -R 755 /Library/StartupItems/xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(如果运行的是shell 文件，则命令中不用加 -R 选项)</p>
+
+<p>注意：环境变量问题。</p>
+
+<p>当然一定要参考苹果的开发者文档：
+[Introduction to System Startup Programming Topics]
+(<a href="http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1">http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1</a>)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/ios-cookieshi-yong/">iOS Cookie使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:08:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>转自：<a href="http://geeklu.com/2013/04/ios-cookie/">http://geeklu.com/2013/04/ios-cookie/</a></p>
+
+<p>关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
+和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。
+一个Cookie对应一个NSHTTPCookie实体，并通过NSHTTPCookieStorage进行管理。
+那些需要持久化的Cookie是存放在 ~/Library/Cookies/Cookies.binarycookies 文件中的，二进制格式。</p>
+
+<p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
+</span><span class='line'>[cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];
+</span><span class='line'>[cookieProperties setObject:@"www.taobao.com" forKey:NSHTTPCookieDomain];[cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
+</span><span class='line'>[cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
+</span><span class='line'>[cookieProperties setObject:@"30000" forKey:NSHTTPCookieMaximumAge];
+</span><span class='line'>NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
+</span><span class='line'>[[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+</span><span class='line'>//删除cookie的方法为deleteCookie:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在通过setCookie:进行设置cookie的时候，会覆盖name,domain,path都相同的cookie的。
+至于cookie会不会持久化到cookie文件中主要看这个cookie的生命周期，和Max-Age或者Expires有关。</p>
+
+<p>不过NSHTTPCookieStorage存在一个问题，setCookie或者deleteCookie后并不会立即进行持久化，而是有几秒的延迟。如果在持久化之前App接收到SIGKILL信号，App退出，那么会导致cookie相关操作的丢失。在模拟器调试的过程中，XCode重启App的时发给App的就是SIGKILL，不过真正的生产环境中很少有这种情况。
+但是有时候为了可靠性，我们还是会将cookie信息保存一份到User Defaults，需要用的时候load进来。关于cookie操作丢失的详情可以查看这里<a href="http://openradar.appspot.com/radar?id=2776403">NSHTTPCookieStorage looses cookies on SIGKILL</a></p>
+
+<p>卢克 / 2013-04-02</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">iOS库添加CocoaPods支持</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-17T15:30:00+08:00" pubdate data-updated="true">Oct 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。</p>
+
+<h3>准备好库代码（GitHub上）</h3>
+
+<p>将代码Checkout下来，打开命令行，cd到代码根目录</p>
+
+<h3>创建XXXX.podspec</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec create XXXX</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>编辑XXXX.podspec</h3>
+
+<p>创建好的文件里有很多指引，这步很简单。 实在不明白，再看看GitHub上别的库的spec文件怎么写的。</p>
+
+<h3>验证合法性</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec lint XXXX.podspec</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成后即可把这个文件提交到<a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>中。</p>
+
+<p>When you&rsquo;re done you can also fork the <a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>  GitHub repository and send a pull request. We really love contributions and will help ensure it&rsquo;s perfect!</p>
+
+<h3>详细提交步骤</h3>
+
+<p>From：<a href="http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html">http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html</a></p>
+
+<h3>Contributing to the master repo</h3>
+
+<p>The master repo contains specifications of open-source Objective-C libraries.</p>
+
+<h4>Details</h4>
+
+<ul>
+<li> installation path: ~/.cocoapods/master</li>
+<li> home: <a href="https://github.com/CocoaPods/Specs">https://github.com/CocoaPods/Specs</a></li>
+</ul>
+
+
+<h4>Contributing</h4>
+
+<p>To ensure a high quality, reliable collection of Pods, the master repo is strict about the acceptable specifications. The CocoaPods linter (see the pod spec lint command) is used to validate specifications, and no errors or warnings are accepted.
+The highest priority of the master repo is to guarantee the integrity of existing CocoaPods installations.
+In general this means that:</p>
+
+<ul>
+<li> A specification cannot be deleted.</li>
+<li> Specifications can be updated only if they don’t affect existing installations.</li>
+<li><ul>
+<li>Broken specifications can be updated.</li>
+<li>Subspecs can be added as they are included by the parent specification by default.</li>
+</ul>
+</li>
+<li> Only authoritative version numbers are accepted.</li>
+</ul>
+
+
+<p>CocoaPods uses a versioning scheme known as Semantic Versioning, necessary for cross resolution of dependencies.</p>
+
+<h4>Unversioned libraries</h4>
+
+<p>One of the CocoaPods goals is to promote the discovery of open-source software, for this reason new Pods for libraries which are not versioned are accepted in the master repo. The specifications of those pods should carry the version 0.0.1 under the assumption that, if the author starts versioning, she/he is unlikely to pick 0.0.1. This is the only exception for authoritative version numbers.
+If you add an unversioned Pod it is your responsibility to ask the author of the library to tag versions, luckily we have a template for this.
+To prevent collisions with possible future versions, unversioned libraries can’t be updated until the author starts to tag them.
+If you need to update an unversioned library you can:</p>
+
+<ul>
+<li> Ask the author to version the library.</li>
+<li> Maintain a fork which is versioned. This fork should be clearly namespaced from the original library according the NAME@USERconvention (e.g. Reachability@irrationalfab). It should also mention in the summary that it is a versioned fork.</li>
+<li> Create a podspec and use it in a private repo.</li>
+</ul>
+
+
+<h4>Creating podspecs</h4>
+
+<p>Creating a podspec is very easy as we provide templates full of examples.
+You can use the following command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create Bananas</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the library is hosted on GitHub you can pass the url so CocoaPods can precompile the template:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create https://github.com/Bananas/Bananas</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A this point you need edit compile the template (a pod specification is a Ruby source file):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec lint Bananas.podspec --verboseSharing podspecs</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Sharing podspecs</h4>
+
+<p>When a podspec lints you can submit it to the master repo.</p>
+
+<h4>Without push access</h4>
+
+<p>You need to fork the master repo on github, then you need to:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/.cocoapods/master
+</span><span class='line'>$ git checkout -b fork
+</span><span class='line'>$ git remote add myfork https://github.com/YOUR_USER_NAME/Specs.git
+</span><span class='line'>$ cp ~/Bananas.podspec ~/.cocoapods/master/Bananas/VERSION/
+</span><span class='line'>$ git push myfork
+</span><span class='line'>$ git checkout master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you push your changes, you can make a pull request on CocoaPods/Specs.
+With push access</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod push Bananas.podspec</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-16T23:31:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
+在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
+
+<h3>1.在XCode中使用一个通用断点</h3>
+
+<p>在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception BreakPoint”。点done即可。</p>
+
+<h3>2.开启NSZombieEnabled等调试选项</h3>
+
+<p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
+在Environment Variables中增加下面属性并都配置为YES。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>MallocStackLogging
+</span><span class='line'>MallocStackLoggingNoCompact
+</span><span class='line'>NSAutoreleaseFreedObjectCheckEnabled
+</span><span class='line'>NSDebugEnabled
+</span><span class='line'>NSZombieEnabled</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在实际使用中发现，使用了上述配置之后，如果能在模拟器上运行效果更佳。比如,真机调试时遇到过如下错误：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-[CALayer retain]: message sent to deallocated instance 0x1d418a30</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用网上很多地方都提到的方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>info malloc-history 0x1d418a30
+</span><span class='line'>XCode提示:Undefined info command: "malloc-history".  Try "help info".</span></code></pre></td></tr></table></div></figure>
+
+
+<p>针对这种情况可以参考:<a href="http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82">http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82</a></p>
+
+<p><strong>其中最主要的还是</strong> <em>NSZombieEnabled</em>, 这个解决EXC_BAD_ACCESS还是很有用的。
+具体参考这个：<a href="http://www.cocoachina.com/macdev/objc/2011/0219/2661.html">http://www.cocoachina.com/macdev/objc/2011/0219/2661.html</a></p>
+
+<h3>3.增加异常处理[理论上和&#8221;在XCode中使用一个通用断点&#8221;效果类似]</h3>
+
+<p>写iOS代码的时候,经常会遇到程序崩溃在main函数的入口处并出现类似&#8221;First throw call stack&#8221;这样的错误。为了更好的知道崩溃的原因,我们可以在AppDelegate中定义一个方法, 用于处理异常:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void caughtException(NSException *exception) 
+</span><span class='line'>{  
+</span><span class='line'>  NSLog(@"CRASH: %@", exception);  
+</span><span class='line'>  NSLog(@"Stack Trace: %@", [exception callStackSymbols]);  
+</span><span class='line'>  // Internal error reporting 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>另外，在打印时，也可以使用GTM，GTMStackTraceFromException(exception)，跟系统的类似。</p>
+
+<p>然后在应用启动时，设置这个方法作为自己的自定义异常回调：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
+</span><span class='line'>{  
+</span><span class='line'>  NSSetUncaughtExceptionHandler(& caughtException); 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>在定义了这个回调之后，崩溃是的控制台信息一般都会一目了然，我们甚至可以看出是那个类的哪一行出问题了。</p>
+
+<h3>4.signal处理，并提示。</h3>
+
+<p>启动信号处理</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>signal(SIGABRT, signalHandler);
+</span><span class='line'>signal(SIGILL, signalHandler);
+</span><span class='line'>signal(SIGSEGV, signalHandler);
+</span><span class='line'>signal(SIGFPE, signalHandler);
+</span><span class='line'>signal(SIGBUS, signalHandler);
+</span><span class='line'>signal(SIGPIPE, signalHandler);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其它相关代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#include &lt;libkern/OSAtomic.h>
+</span><span class='line'>#include &lt;execinfo.h>
+</span><span class='line'>
+</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
+</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
+</span><span class='line'>NSString * const UncaughtExceptionHandlerAddressesKey = @"UncaughtExceptionHandlerAddressesKey";
+</span><span class='line'>
+</span><span class='line'>volatile int32_t UncaughtExceptionCount = 0;
+</span><span class='line'>const int32_t UncaughtExceptionMaximum = 10;
+</span><span class='line'>const NSInteger UncaughtExceptionHandlerSkipAddressCount = 0;
+</span><span class='line'>const NSInteger UncaughtExceptionHandlerReportAddressCount = 100;
+</span><span class='line'>
+</span><span class='line'>+ (NSArray *)backTrace
+</span><span class='line'>{
+</span><span class='line'>  void* callstack[1024];
+</span><span class='line'>  int frames = backtrace(callstack, 1024);
+</span><span class='line'>  char **strs = backtrace_symbols(callstack, frames);
+</span><span class='line'>  
+</span><span class='line'>  int i;
+</span><span class='line'>  NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
+</span><span class='line'>  for (i = UncaughtExceptionHandlerSkipAddressCount;
+</span><span class='line'>       i &lt; UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount;
+</span><span class='line'>       i++)
+</span><span class='line'>  {
+</span><span class='line'>    if (frames &lt;= i)
+</span><span class='line'>      break;
+</span><span class='line'>    [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  free(strs);
+</span><span class='line'>  
+</span><span class='line'>  return backtrace;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex
+</span><span class='line'>{
+</span><span class='line'>  if (anIndex == 0) {
+</span><span class='line'>    _dismissed = YES;
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)handleException:(NSException *)exception
+</span><span class='line'>{
+</span><span class='line'>  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unhandled exception", nil)
+</span><span class='line'>                                                  message:[NSString stringWithFormat:NSLocalizedString(@"You can try to continue but the application may be unstable.\n" @"%@\n%@", nil), [exception reason], [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]
+</span><span class='line'>                                                 delegate:self
+</span><span class='line'>                                        cancelButtonTitle:NSLocalizedString(@"Quit", nil)
+</span><span class='line'>                                        otherButtonTitles:NSLocalizedString(@"Continue", nil), nil];
+</span><span class='line'>  
+</span><span class='line'>  [alert show];
+</span><span class='line'>  
+</span><span class='line'>  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+</span><span class='line'>  CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);
+</span><span class='line'>  
+</span><span class='line'>  while (!_dismissed) {
+</span><span class='line'>    for (NSString *mode in (NSArray *)CFBridgingRelease(allModes)) {
+</span><span class='line'>      CFRunLoopRunInMode((CFStringRef)CFBridgingRetain(mode), 0.001, false);
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CFRelease(allModes);
+</span><span class='line'>  
+</span><span class='line'>  NSString *log = [NSString stringWithFormat:@"%@\n\n info:\n%@", exception, exception.userInfo];
+</span><span class='line'>  [[DebugUtil sharedDebug] LogException:log];
+</span><span class='line'>  
+</span><span class='line'>  NSSetUncaughtExceptionHandler(NULL);
+</span><span class='line'>  signal(SIGABRT, SIG_DFL);
+</span><span class='line'>  signal(SIGILL, SIG_DFL);
+</span><span class='line'>  signal(SIGSEGV, SIG_DFL);
+</span><span class='line'>  signal(SIGFPE, SIG_DFL);
+</span><span class='line'>  signal(SIGBUS, SIG_DFL);
+</span><span class='line'>  signal(SIGPIPE, SIG_DFL);
+</span><span class='line'>  
+</span><span class='line'>  if ([[exception name] isEqual:UncaughtExceptionHandlerSignalExceptionName]) {
+</span><span class='line'>    kill(getpid(), [[[exception userInfo] objectForKey:UncaughtExceptionHandlerSignalKey] intValue]);
+</span><span class='line'>  } else {
+</span><span class='line'>    [exception raise];
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>NSString * getAppInfo()
+</span><span class='line'>{
+</span><span class='line'>  NSString *appInfo = [NSString stringWithFormat:@"App : %@ %@(%@)\nDevice : %@\nOS Version : %@ %@\nUDID : %@\n",
+</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
+</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
+</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
+</span><span class='line'>                       [UIDevice currentDevice].model,
+</span><span class='line'>                       [UIDevice currentDevice].systemName,
+</span><span class='line'>                       [UIDevice currentDevice].systemVersion,
+</span><span class='line'>                       /*[UIDevice currentDevice].uniqueIdentifier*/@""];
+</span><span class='line'>  return appInfo;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>void signalHandler(int signal)
+</span><span class='line'>{
+</span><span class='line'>  int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
+</span><span class='line'>  
+</span><span class='line'>  if (exceptionCount > UncaughtExceptionMaximum) {
+</span><span class='line'>    return;
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:signal] forKey:UncaughtExceptionHandlerSignalKey];
+</span><span class='line'>  
+</span><span class='line'>  NSArray *callStack = [DebugUtil backTrace];
+</span><span class='line'>  
+</span><span class='line'>  [userInfo setObject:callStack forKey:UncaughtExceptionHandlerAddressesKey];
+</span><span class='line'>  
+</span><span class='line'>  [[[DebugUtil alloc] init] performSelectorOnMainThread:@selector(handleException:) withObject: [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName reason:[NSString stringWithFormat: NSLocalizedString(@"Signal %d was raised.\n" @"%@", nil), signal, getAppInfo()] userInfo:userInfo] waitUntilDone:YES];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>序：状态栏白边问题解决</h4>
+
+<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
+
+<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
+
+<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
+
+<p>具体办法：</p>
+
+<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
+
+<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
+
+<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
+
+<ul>
+<li>1.获取当前电池条的方向</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>2.获取当前屏幕的大小</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>3.设置我们的View的中心点</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
+</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
+</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
+</span><span class='line'>} else {
+</span><span class='line'>    return CGAffineTransformIdentity;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>5.可以动画的改变我们view的显示方式了</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
+</span><span class='line'>
+</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
+</span><span class='line'>[UIView beginAnimations:nil context:nil];
+</span><span class='line'>[UIView setAnimationDuration:duration];
+</span><span class='line'>
+</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
+</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
+
+<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
+
+<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
+</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
+</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // 更保险的写法 add by Eric
+</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
+</span><span class='line'>    {
+</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
+</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
+</span><span class='line'>                                   withObject:(id)toOrientation];
+</span><span class='line'>      }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T16:16:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
+<strong>其它密码也可使用同样方法获得</strong></p>
+
+<p>方法/步骤</p>
+
+<ul>
+<li>1.打开“钥匙串访问”</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
+
+<ul>
+<li>2.选中左侧“登陆”、“密码”</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374769125/" title="2013-10-14-11 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3791/10374769125_fb2339510e.jpg" width="500" height="183" alt="2013-10-14-11"></a></p>
+
+<ul>
+<li>3.找到要查看密码的wifi</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374968363/" title="2013-10-14-12 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3790/10374968363_675b5904c4.jpg" width="500" height="111" alt="2013-10-14-12"></a></p>
+
+<ul>
+<li>4.点击键，选中“显示简介”，或者双击</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374968173/" title="2013-10-14-13 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7431/10374968173_9c2b4957c3.jpg" width="500" height="113" alt="2013-10-14-13"></a></p>
+
+<ul>
+<li>5.在弹出的对话框选择“显示密码”，系统会让你输入电脑帐号的密码，然后密码就显示出来了。</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374784386/" title="2013-10-14-14 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7305/10374784386_8757b04a56.jpg" width="500" height="333" alt="2013-10-14-14"></a></p>
+
+<p>参考资料
+<a href="http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html">http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html</a></p>
 </div>
   
   

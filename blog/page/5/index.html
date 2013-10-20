@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下： 转换步骤： 1、进入项目目录，可看到.project文件， &hellip;">
+  <meta name="description" content="不断更新中。。。 Aug 5, 2013 如果使用C++代码混编，找不到iostream等 可能是.m中直接import的，这个需要注意改成mm或者修改编译方式 May 28, 2013 不要调用[super release] 在dealloc里要调用[super dealloc]，千万不要调用[ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/">Eclipse将java的工程转换为web工程</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">iOS 开发常见低级错误</a></h1>
     
     
       <p class="meta">
@@ -101,188 +101,31 @@
   
 
 
-<time datetime="2013-10-14T15:30:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下：</p>
+  <div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
 
-<p>转换步骤：</p>
+<p>Aug 5, 2013</p>
 
 <ul>
-<li>1、进入项目目录，可看到.project文件，打开。</li>
-<li>2、找到<natures>&hellip;</natures>代码段。</li>
-<li>3、在第2步的代码段中加入如下标签内容并保存：</li>
-<li></li>
+<li><h3>如果使用C++代码混编，找不到iostream等</h3>
+
+<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;nature&gt;org.eclipse.wst.common.project.facet.core.nature&lt;/nature&gt; 
-</span><span class='line'>&lt;nature&gt;org.eclipse.wst.common.modulecore.ModuleCoreNature&lt;/nature&gt; 
-</span><span class='line'>&lt;nature&gt;org.eclipse.jem.workbench.JavaEMFNature&lt;/nature&gt;</span></code></pre></td></tr></table></div></figure>
-
+<p>May 28, 2013</p>
 
 <ul>
-<li>4、在eclipse的项目上点右键，刷新项目。</li>
-<li>5、在项目上点右键，进入属性（properties）</li>
-<li>6、在左侧列表项目中点击选择“Project Facets”，在右侧选择“Dynamic Web Module”和&#8221;Java&#8221;，点击OK保存即可</li>
+<li><h3>不要调用[super  release]</h3>
+
+<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
 </ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968933/" title="2013-10-14-3 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5534/10374968933_dc5bb24365.jpg" width="500" height="346" alt="2013-10-14-3"></a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">给xcode工程做命令行build</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T14:59:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。</p>
-
-<p>XCode工程的命令行Build命令是 xcodebuild，用 &mdash;help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。</p>
-
-<p>另外，将.app文件转成ipa包的方式也相当简单。具体方式是将 .app文件拷贝到一个名为 ipa/Payload的目录下，然后将ipa下的所有内容用zip打包即可：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>  mkdir -p ipa/Payload
-</span><span class='line'>  cp -r ./Release-iphoneos/PRODUCT_NAME.app  ./ipa/Payload/
-</span><span class='line'>  cd ipa
-</span><span class='line'>  zip -r $FILE_NAME *</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果要将打好的ipa包上传到服务器上面去，再加一些脚本即可，我们是放到一个再windows共享的web server目录下，于是可以用smbclient来连接windows共享和上传ipa包：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>  echo "put FILE_NAME.ipa" | smbclient //主机名 -U 用户名%密码</span></code></pre></td></tr></table></div></figure>
-
-
-<p>附上所有想着的XCode命令</p>
-
-<h6>1.查看xcode的版本号和build版本</h6>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -version</span></code></pre></td></tr></table></div></figure>
-
-
-<p>显示内容：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Xcode 4.2Build version 4D199</span></code></pre></td></tr></table></div></figure>
-
-
-<h6>2.显示当前系统的sdk、及其版本</h6>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -showsdks</span></code></pre></td></tr></table></div></figure>
-
-
-<p>显示内容：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Mac OS X SDKs:    Mac OS X 10.6                     -sdk macosx10.6    Mac OS X 10.7                     -sdk macosx10.7iOS SDKs:    iOS 5.0                           -sdk iphoneos5.0iOS Simulator SDKs:    Simulator - iOS 5.0               -sdk iphonesimulator5.0</span></code></pre></td></tr></table></div></figure>
-
-
-<h6>3.显示工程项目信息</h6>
-
-<p>先cd到工程目录下（有＊.xcodeproj的目录，比如MakeFileTest.xcodeproj），然后输入命令</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -list</span></code></pre></td></tr></table></div></figure>
-
-
-<p>显示内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Information about project "MakeFileTest":    
-</span><span class='line'>Targets:        MakeFileTest    
-</span><span class='line'>Build Configurations:        Debug        Release    If no build configuration is specified and -scheme is not passed then "Release" is used.    
-</span><span class='line'>Schemes:        MakeFileTest</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果未指定Configurations，默认为release</p>
-
-<h6>4.xcodebuild用法：</h6>
-
-<h6>#1）用ios5.0模拟器（iphonesimulator5.0）建立工程</h6>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -sdk iphonesimulator5.0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>输出一堆编译过程，最后输出<strong> BUILD SUCCEEDED </strong>表示创建成功；
-若输出<strong> BUILD FAILED </strong>表示创建失败
-成功后会在当前工程目录下创建build目录，结构如下：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10375710016/" title="2013-10-14-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7455/10375710016_54e25948d4.jpg" width="500" height="60" alt="2013-10-14-1"></a></p>
-
-<p>MakeFileTest.app就是编译生成的可执行文件，
-而MakeFileTest.build文件夹下是一些中间文件</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10375710126/" title="2013-10-14-2 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2894/10375710126_bfaca5c32b.jpg" width="500" height="98" alt="2013-10-14-2"></a></p>
-
-<h6>#2）默认是Release工程，要设置成Debug模式如下：</h6>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild -sdk iphonesimulator5.0 -configuration Debug</span></code></pre></td></tr></table></div></figure>
-
-
-<h6>#3）clean创建的工程</h6>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcodebuild clean -sdk iphonesimulator5.0 -configuration Debug</span></code></pre></td></tr></table></div></figure>
-
-
-<p>成功输出<strong>CLEAN SUCCEEDED</strong></p>
-
-<h6>5.xcodebuild的编译参数</h6>
-
-<p>下面说运行从命令行中运行应用程序:</p>
-
-<p>需要一个小工具iphonesim,从 <a href="https://github.com/hborders/iphonesim/">https://github.com/hborders/iphonesim/</a> 下载后编译成为一个可执行文件,用它来启动iphone模拟器.
-由于模拟器不支持多个实例,所以运行前记得先把模拟器给关掉。按照以下命令来执行吧!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>iphonesim launch /Users/TadoSoft/Library/Application\ Support/iPhone\ Simulator/4.3.2/Applications/ED845558-5168-45C0-BA98-43AB3C238E9F/Krowdit.app/</span></code></pre></td></tr></table></div></figure>
 
 </div>
   
@@ -296,7 +139,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-block-bian-cheng/">iOS Block 编程</a></h1>
     
     
       <p class="meta">
@@ -312,24 +155,141 @@
   
 
 
-<time datetime="2013-10-10T23:41:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+<time datetime="2013-05-28T09:57:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a custom background, title and text to the navbar. Once I had this working, to keep a consist look across my application, I began tweaking the buttons on the navbar using the same Appearance API.
-As I got further into the customization of the buttons, I ran into a method withinUIImage that was introduced in iOS 5, resizableImageWithCapInsets. I found myself getting side-tracked from the original idea of navbar look and feel, to understanding how cap insets work. This post delves into what I learned.</p>
+  <div class="entry-content"><h2>block</h2>
 
-<p>Cap Insets with UIButton
-As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
-Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can scxxx[
-]]]ee the white border):</p>
+<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374761354/" title="2013-10-10-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3766/10374761354_bdb27d747b_o.gif" width="121" height="60" alt="2013-10-10-1"></a></p>
+<h4>声明block：</h4>
 
-<p>Depending on the context of where the button appears, its size may vary. The code to create a button with the image and the corresponding output follow:</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void);</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>定义block：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock = ^{
+</span><span class='line'>        NSLog(@"This is a block");
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h4>声明和定义在一起：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^simpleBlock)(void) = ^{
+</span><span class='line'>    NSLog(@"This is a block");
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>调用block：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>simpleBlock();</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h4>带返回值和参数的block:</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>double (^multiplyTwoValues)(double, double) =
+</span><span class='line'>                              ^(double firstValue, double secondValue) {
+</span><span class='line'>                                  return firstValue * secondValue;
+</span><span class='line'>                              };
+</span><span class='line'>    double result = multiplyTwoValues(2,4);
+</span><span class='line'>    NSLog(@"The result is %f", result);</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>If you need to be able to change the value of a captured variable from within a block, you can use the __block storage type modifier on the original variable declaration.</p>
+
+<h4>如果block是递归调用的，必须设置成 __block。e.g.</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>__block int (^recursiveBlock)(int) = ^(int param) {
+</span><span class='line'>      if (param == 1) {
+</span><span class='line'>          return 1;
+</span><span class='line'>      }
+</span><span class='line'>      return (param--) * recursiveBlock(param);
+</span><span class='line'>};  
+</span><span class='line'>recursiveBlock(5);    // 计算5的阶乘</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>You Can Pass Blocks as Arguments to Methods or Functions
+&ndash; (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock;
+The (void (^)(void)) specifies that the parameter is a block that doesn’t take any arguments or return any values. The implementation of the method can invoke the block in the usual way:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginTaskWithCallbackBlock:(void (^)(void))callbackBlock {
+</span><span class='line'>    ...
+</span><span class='line'>    callbackBlock();
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>A Block Should Always Be the Last Argument to a Method
+Objects Use Properties to Keep Track of Blocks
+The syntax to define a property to keep track of a block is similar to a block variable:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface XYZObject : NSObject
+</span><span class='line'>@property (copy) void (^blockProperty)(void);
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Note: You should specify copy as the property attribute, because a block needs to be copied to keep track of its captured state outside of the original scope.
+A block property is set or invoked like any other block variable:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>self.blockProperty = ^{
+</span><span class='line'>    ...
+</span><span class='line'>};
+</span><span class='line'>self.blockProperty();
+</span><span class='line'>typedef void(^BlockCC)(void);</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>// e.g.更新myTableview并显示最后一行</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -340,61 +300,170 @@ Let’s assume I want all the buttons on my UI to have a similar look, a gradien
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(80, 130, 160, 44)];  
-</span><span class='line'>[button setTitle:@"Test Button" forState:UIControlStateNormal]; 
-</span><span class='line'>
-</span><span class='line'>// Image with without cap insets
-</span><span class='line'>UIImage *buttonImage = [UIImage imageNamed:@"blueButton"];   
-</span><span class='line'>
-</span><span class='line'>[button addTarget:self action:@selector(buttonPressed:) forControlEvents: UIControlEventTouchUpInside];
-</span><span class='line'>[button setBackgroundImage:buttonImage forState:UIControlStateNormal];
-</span><span class='line'>[[self view] addSubview:button];</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (dataArray.count &gt; 0) {
+</span><span class='line'>      [myTableView reloadData];   
+</span><span class='line'>      // reloadData后不能直接调用scrollToRowAtIndexPath，有可能lastIndex在table中不存在，
+</span><span class='line'>   // 所以要[NSObject performBlock: afterDelay:0];
+</span><span class='line'>      [myTableView retain];   // 防止关闭视图，myTableView释放之后scrollToBottom出错
+</span><span class='line'>      NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:dataArray.count-1 inSection:0];
+</span><span class='line'>      void (^scrollToBottom)(void) = ^{
+</span><span class='line'>          [myTableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+</span><span class='line'>          [myTableView release];
+</span><span class='line'>      };
+</span><span class='line'>      //
+</span><span class='line'>      [NSObject performBlock:scrollToBottom afterDelay:0];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374761294/" title="2013-10-10-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7447/10374761294_389a1d7a17_o.gif" width="238" height="76" alt="2013-10-10-2"></a></p>
 
-<p>As you can see, the button is stretched in all directions. Let’s change the code to include cap insets, however, before we do that, let’s look at the signature of the cap insets method:</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/27/test-sharing-code-snippets/">Test Sharing Code Snippets</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-27T16:54:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sharing Code Snippets</p>
+
+<p><em>Backtick Code Blocks</em></p>
+
+<p>Syntax:(insert enter before and after the two &#8220;&#8220;&#8220;)</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>``` [language] [title] [url] [link text]
+</span><span class='line'>code snippet ```
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Looking on step further, UIEdgeInserts is defined as:</p>
+<p><strong>Example(plain):</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>``` $ sudo make me a sandwich ```
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo make me a sandwich</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Example With Syntax Highlighting a Caption and Link</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>typedef struct {  
-</span><span class='line'>   CGFloat top, left, bottom, right;
-</span><span class='line'>} UIEdgeInsets;</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>```ruby Discover if a number is prime http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/ Source Article
+</span><span class='line'>class Fixnum
+</span><span class='line'>  def prime?
+</span><span class='line'>    ('1' * self) !~ /^1?$|^(11+?)\1+$/
+</span><span class='line'>  end
+</span><span class='line'>end```</span></code></pre></td></tr></table></div></figure>
 
 
-<p>UIEdgeInsets is structure that specifies float values for each cap inset: top, left, bottom and right areas of an image. To apply this to the image for the button, here is all we need to do:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+
+<figure class='code'><figcaption><span>Discover if a number is prime</span><a href='http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/'>Source Article</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// Image with cap insets
-</span><span class='line'>UIImage *buttonImage = [[UIImage imageNamed:@"blueButton"]     resizableImageWithCapInsets:UIEdgeInsetsMake(0, 16, 0, 16)];</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Fixnum</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prime?</span>
+</span><span class='line'>    <span class="p">(</span><span class="s1">&#39;1&#39;</span> <span class="o">*</span> <span class="nb">self</span><span class="p">)</span> <span class="o">!~</span> <span class="sr">/^1?$|^(11+?)\1+$/</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>This requests that the left and right 16 pixels of the original image are not scaled or resized when stretching the image to accomodate the button size frame defined above. The end results is as shown below:</p>
+<p>More:
+<a href="http://octopress.org/docs/blogging/code/">http://octopress.org/docs/blogging/code/</a></p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374785416/" title="2013-10-10-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3834/10374785416_12ea31ec14_o.gif" width="239" height="76" alt="2013-10-10-3"></a></p>
+<h4>Codeblock</h4>
 
-<p>Cap Insets with UIBarButtonItem
-We can use the same image for a button on a navbar (I’ll show the specifics in the next post on customizing the navbar). Without specifying the cap insets, the button looks as follows:</p>
+<h5>Syntax</h5>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968953/" title="2013-10-10-4 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7358/10374968953_23c450bb11_o.gif" width="340" height="80" alt="2013-10-10-4"></a></p>
+<figure class='code'><figcaption><span>asdf </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSObject</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSObject</span> <span class="n">new</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSObject</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="p">[[]</span><span class="n">NSObject</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>The code below specifies an image where 12 pixels on the top, left, bottom and right be preserved when stretching/resizing the button:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIImage *backButton = [[UIImage imageNamed:@"blueButton"]     resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12)];</span></code></pre></td></tr></table></div></figure>
 
 
-<p>The output nows looks as follows:</p>
+</div>
+  
+  
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374785266/" title="2013-10-10-5 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3816/10374785266_7b83f64381_o.gif" width="340" height="80" alt="2013-10-10-5"></a></p>
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/27/hello-jekyll/">Hello Jekyll</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-27T16:32:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>测试一下这玩意是不是能发布成功，哈哈</p>
 </div>
   
   
@@ -403,8 +472,6 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
     </article>
   
   <div class="pagination">
-    
-      <a class="prev" href="/blog/page/6/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
