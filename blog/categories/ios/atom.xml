@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-20T22:01:26+08:00</updated>
+  <updated>2013-10-20T22:53:29+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,216 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Objective-C的新特性(Object Literals等)]]></title>
+    <link href="http://saick.net/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/"/>
+    <updated>2013-10-20T22:28:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/20/objective-cde-xin-te-xing-object-literals</id>
+    <content type="html"><![CDATA[<p>转自：<a href="http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/">http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/</a> (Posted by 唐巧 Aug 5th, 2012  iOS)</p>
+
+<p>苹果在今年的WWDC2012大会上介绍了大量Objective-C的新特性，能够帮助iOS程序员更加高效地编写代码。在不久前更新的XCode4.4版本中，这些新特性已经可以使用了。让我们看看这些新特性有哪些：</p>
+
+<h3>Object Literals</h3>
+
+<p>这个是我认为最赞的一个改进。Object Literals允许你方便地定义数字、数组和字典对象。这个功能类似于java5提供的auto boxing功能。这虽然是一个语法糖，但我认为对提高写代码效率帮助很大。让我们先来看看以前定义数字、数组和字典对象的方法：</p>
+
+<p><code>
+123NSNumber * number = [NSNumber numberWithInt:1];
+NSArray * array = [NSArray arrayWithObjects:@"one", @"two", nil];
+NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:@"value1", @"key1", @"value2", @"key2", nil];
+</code></p>
+
+<p>是不是很恶心？现在以上代码可以简化成以下形式，注意到没有，不用再在参数的最后加恶心的nil了，字典的key和value也不再是倒着先写value,再写key了：</p>
+
+<p><code>
+NSNumber * number = @1;
+NSArray * array = @[@"one", @"two"];
+NSDictionary * dict = @{@"key1":@"value1", @"key2":@"value2"};
+</code></p>
+
+<p>更多的示例如下：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 整数&lt;br/>
+</span><span class='line'>NSNumber &lt;em>fortyTwo = @42;             // 等价于 [NSNumber numberWithInt:42]  NSNumber &lt;/em>fortyTwoUnsigned = @42U;    // 等价于 [NSNumber numberWithUnsignedInt:42U]  NSNumber &lt;em>fortyTwoLong = @42L;        // 等价于 [NSNumber numberWithLong:42L]  NSNumber &lt;/em>fortyTwoLongLong = @42LL;   // 等价于 [NSNumber numberWithLongLong:42LL]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>// 浮点数&lt;br/>
+</span><span class='line'>NSNumber &lt;em>piFloat = @3.141592654F;    // 等价于 [NSNumber numberWithFloat:3.141592654F]&lt;br/>
+</span><span class='line'>NSNumber &lt;/em>piDouble = @3.1415926535;   // 等价于 [NSNumber numberWithDouble:3.1415926535]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>// 布尔值&lt;br/>
+</span><span class='line'>NSNumber &lt;em>yesNumber = @YES;           // 等价于 [NSNumber numberWithBool:YES]  NSNumber &lt;/em>noNumber = @NO;             // 等价于 [NSNumber numberWithBool:NO]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>// 空数组&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>NSArray * array = @[];                // 等价于 [NSArray array]  // 空的字典  NSDictionary * dict = @{};            // 等价于 [NSDictionary dictionary]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>怎么样？是不是简单多了？而且，为了方便你的旧代码迁移到新的写法，xcode专门还提供了转换工具，在xcode4.4中，选择 Edit &ndash;> Refactor &ndash;> Convert to Modern Objective-C Syntax即可。</p>
+
+<h3>局部的函数调用不用前向申明</h3>
+
+<p>这虽然是一个挺小的改进，但是很贴心。假如我们在一个源文件中有2个函数：分别名为foo 和 bar，其中foo的定义在bar前面。那如果在foo函数内部直接调用bar，编译器会报警告说找不到函数bar。
+而现在，我们可以随意地在源文件中放置函数bar的位置。编译器在找不到bar时，会再源码后面找，如果找到了bar，就不会报错了。</p>
+
+<h3>带有类型的enum</h3>
+
+<p>现在我们可以定义enum是无符号整数还是整数，这样编译器会更加智能的做类型检查。如下所示：</p>
+
+<p><code>
+typedef enum TableViewCellType : NSInteger {    
+TableViewCellTypeQueue,    
+TableViewCellTypeNewFans,    
+TableViewCellTypeUserInfo,    
+TableViewCellTypeOrganization,    
+TableViewCellTypeFeedback,    
+TableViewCellTypeRateApp,    
+TableViewCellTypeRecommendation,    
+TableViewCellTypeLogout}TableViewCellType;
+</code></p>
+
+<h3>默认生成@synthesize代码</h3>
+
+<p>以前写完一个诸如 @property (nonatomic, strong) NSString * username; 变量定义后，马上得转到 .m文件中去增加相应的 @synthesize username = _username; 代码。</p>
+
+<p>现在，编辑器发现你没有写 @synthesize时，会自动帮你加上这一行。这同时在另一方面，起到了鼓励大家使用以下划线开头的变量名作为成员变量名的作用。</p>
+
+<p>当然，为了向下兼容，如果你的程序里面已经有了 @property 变量对应的 @synthesize 代码时，编辑器就不会自动帮你增加这个代码了。
+另外有2种特殊情况下，即使你没有写 @synthesize ，编辑器也不会自动帮你加上，这2种情况是：</p>
+
+<ul>
+<li>你同时提供了该property的setter 和 getter方法。</li>
+<li>你的这个property是 readonly 的。</li>
+</ul>
+
+
+<h3>遍历元素</h3>
+
+<p>你是如何遍历数组的元素的？通常我们有2种做法，一种是用 for in，另一种是用一个变量来循环数组下标。如下：</p>
+
+<p>```
+// 12345678    NSArray * lines = &hellip;  <br/>
+for (NSString * line in lines) {</p>
+
+<pre><code>   // ...    
+</code></pre>
+
+<p>}
+for (int i = 0; i &lt; lines.count; ++i) {</p>
+
+<pre><code>NSString * s = [lines objectAtIndex:i];        
+...    
+</code></pre>
+
+<p>}
+```</p>
+
+<p>如果是字典，遍历的代码就要稍微复杂一点了：</p>
+
+<p>```
+NSDictionary * dict = …    NSArray * keys = [dict allKeys];
+for (NSString * key in keys) {</p>
+
+<pre><code>NSString * value = [dict objectForKey:key];    
+</code></pre>
+
+<p>}
+```</p>
+
+<p>现在，xcode对于iOS4.0以上的系统，支持用block来遍历元素了。用block来遍历字典可以简化代码的编写，建议大家都使用上这个新特性。</p>
+
+<p><code>
+[lines enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL *stop) {}];[_urlArguments enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {}];
+</code></p>
+
+<h3>Subscripting Methods</h3>
+
+<p>这个新特性在WWDC2012的视频中提到了，但是在XCode4.4中没有实现（在XCode4.5中实现了）。也是一个很体贴的语法糖，它允许你用中括号来代替原本的方法来获取和设置数组元素。</p>
+
+<p>简单来说，以前的 [array objectAtIndex:idx] 和 [array replaceObjectAtIndex:idx withObject:obj]，可以直接写作 array[idx] 和 array[idx] = obj了。其实这个特性在很多高级语言中都实现了，只是Objective-C生于80年代，一直没改进这个。</p>
+
+<p>以下是一些示例代码：</p>
+
+<p>```
+NSArray * array = @[ @&ldquo;111&rdquo;, @&ldquo;222&rdquo;, @&ldquo;333&rdquo;];
+for (int i = 0; i &lt; 3; ++i) {</p>
+
+<pre><code>NSLog(@"array[i] = %@", array[i]);
+</code></pre>
+
+<p>}
+NSMutableDictionary * dict =[@{  @1: @&ldquo;value1&rdquo;, @2: @&ldquo;value2&rdquo;,                                 @3: @&ldquo;value3&rdquo; } mutableCopy];
+for (int i = 0; i &lt; 3; ++i) {</p>
+
+<pre><code>NSLog(@"dict[%d] = %@", i, dict[@(i+1)]);
+dict[@(i+1)] = [NSString stringWithFormat:@"new %@", dict[@(i+1)]];}
+[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop{
+    NSLog(@"dict[%@] = %@", key, dict[key]);
+}];
+</code></pre>
+
+<p>}
+```</p>
+
+<p>这个改进同样对NSDictionary有效。甚至，你也可以给你自己的类提供中括号操作符对应的方法。具体做法是实现如下两个方法：</p>
+
+<p><code>
+- (id)objectAtIndexedSubscript:(NSUInterger)idx;- (void)setObject:(id)value atIndexedSubscript:(NSUInteger)idx;
+</code></p>
+
+<h3>Tips</h3>
+
+<p>上面提到了不用写 @synthesize 了，那原本写的那么多 @synthesize 怎么办呢？作为有代码洁癖的我很想把它们删掉，但怎么删呢？一个文件一个文件打开，然后行一行删掉吗？放心，苹果已经帮我们想了解决方案。在WWDC2012 Session 400 Developer Tools Kickoff 中，苹果介绍了具体做法。步骤如下：</p>
+
+<ul>
+<li>首先使用区域查找，因为一般项目都会依赖第三方的开源库，我们可不想更改别人的库，所以我们只查找我们库中的文件，如下图所示：</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10382148323/" title="2013-10-20-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3803/10382148323_3e5d2aabbc.jpg" width="317" height="449" alt="2013-10-20-1"></a></p>
+
+<ul>
+<li>接着我们用正则匹配，找到以 @synthesize开头，后面接着是 var = _var; 格式的行。插入正则表达式很简单，直接点击查找输入框左边的放大镜，选择“insert pattern”，苹果就会把常见的正则表达式都列出来，你直接选择就可以了，非常方便。如下图所示：</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10382148463/" title="2013-10-20-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7415/10382148463_a1fe6d797a.jpg" width="441" height="181" alt="2013-10-20-2"></a></p>
+
+<p>在插入好合适的正则表达式后，我们按回车，就可以搜索到结果。
+<a href="http://www.flickr.com/photos/105999540@N03/10382148643/" title="2013-10-20-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3724/10382148643_1604c7809b.jpg" width="296" height="315" alt="2013-10-20-3"></a></p>
+
+<ul>
+<li>我们点击搜索界面的preview按钮，查看替换效果，可以看到，对于我们测试代码，XCode生成的预览图已经正确地当对应代码删掉了。然后我们就可以点击替换，去掉所有的 @synthesize 代码了。</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10382148923/" title="2013-10-20-4 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3769/10382148923_5836e42c21.jpg" width="500" height="97" alt="2013-10-20-4"></a></p>
+
+<p>在下载完XCode4.4后，我就把我们的工程代码都转换成了新特性的语法。在转换后，我发现原本25000行的代码少了将近1000行。心里还是很开心的，因为又可以少写一些体力活类型的代码了。
+还是那句话，希望这些新特性能够让大家玩得开心。
+参考资料</p>
+
+<ul>
+<li> LLVM官方网站比较全面地介绍了 Object Literal： <a href="http://clang.llvm.org/docs/ObjectiveCLiterals.html">http://clang.llvm.org/docs/ObjectiveCLiterals.html</a></li>
+<li> WWDC2012 Session 400 Developer Tools Kickoff</li>
+<li> WWDC2012 Session 405 Modern Objective-C</li>
+<li> WWDC2012 Session 413 Migrating to Modern Objective-C</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS ARC 兼容处理]]></title>
@@ -542,152 +752,6 @@ signal(SIGPIPE, signalHandler);
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题]]></title>
-    <link href="http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/"/>
-    <updated>2013-10-14T16:28:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi</id>
-    <content type="html"><![CDATA[<h4>序：状态栏白边问题解决</h4>
-
-<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
-
-<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
-
-<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
-
-<p>具体办法：</p>
-
-<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
-
-<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
-
-<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
-
-<ul>
-<li>1.获取当前电池条的方向</li>
-</ul>
-
-
-<p><code>
-UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation
-</code></p>
-
-<ul>
-<li>2.获取当前屏幕的大小</li>
-</ul>
-
-
-<p><code>
-CGRect frame = [UIScreen mainScreen].applicationFrame;
-</code></p>
-
-<ul>
-<li>3.设置我们的View的中心点</li>
-</ul>
-
-
-<p>```</p>
-
-<pre><code>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
-</code></pre>
-
-<p>```</p>
-
-<ul>
-<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
-</ul>
-
-
-<p>```</p>
-
-<pre><code>if (orientation == UIInterfaceOrientationLandscapeLeft) {
-    return CGAffineTransformMakeRotation(M_PI*1.5);
-} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-    return CGAffineTransformMakeRotation(M_PI/2);
-} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-    return CGAffineTransformMakeRotation(-M_PI);
-} else {
-    return CGAffineTransformIdentity;
-}
-</code></pre>
-
-<p>```</p>
-
-<ul>
-<li>5.可以动画的改变我们view的显示方式了</li>
-</ul>
-
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
-</span><span class='line'>[UIView beginAnimations:nil context:nil];
-</span><span class='line'>[UIView setAnimationDuration:duration];&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
-</span><span class='line'>[UIView commitAnimations];&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
-
-<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
-
-<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;pre>&lt;code>if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-</span><span class='line'>    [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-</span><span class='line'>                                   withObject:(id)UIInterfaceOrientationLandscapeRight];
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>// 更保险的写法 add by Eric
-</span><span class='line'>+ (void)changeOrientation:(UIInterfaceOrientation)toOrientation
-</span><span class='line'>{
-</span><span class='line'>if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
-</span><span class='line'>    [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
-</span><span class='line'>                               withObject:(id)toOrientation];
-</span><span class='line'>}
-</span><span class='line'>&lt;/code>&lt;/pre>
-</span><span class='line'>
-</span><span class='line'>&lt;p>}&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
 ]]></content>
   </entry>
   

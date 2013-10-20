@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Saick Blog - 专注技术，乐在其中</title>
+  <title>Objective-C的新特性(Object Literals等) - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -77,15 +77,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">Objective-C的新特性(Object Literals等)</a></h1>
+      <h1 class="entry-title">Objective-C的新特性(Object Literals等)</h1>
     
     
       <p class="meta">
@@ -108,7 +105,7 @@
   </header>
 
 
-  <div class="entry-content"><p>转自：<a href="http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/">http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/</a> (Posted by 唐巧 Aug 5th, 2012  iOS)</p>
+<div class="entry-content"><p>转自：<a href="http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/">http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/</a> (Posted by 唐巧 Aug 5th, 2012  iOS)</p>
 
 <p>苹果在今年的WWDC2012大会上介绍了大量Objective-C的新特性，能够帮助iOS程序员更加高效地编写代码。在不久前更新的XCode4.4版本中，这些新特性已经可以使用了。让我们看看这些新特性有哪些：</p>
 
@@ -330,85 +327,16 @@
 </ul>
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/19/ios-arc-jian-rong-chu-li/">iOS ARC 兼容处理</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
 
-<time datetime="2013-10-19T01:56:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>From:宋红日（转自：<a href="http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89">http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89</a></p>
-
-<p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
-尤其当你决定做一个通用的控件 或 模块的时候。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ARC conditions
-</span><span class='line'>#if !__has_feature(objc_arc)
-</span><span class='line'>#define Release(obj) [obj release]
-</span><span class='line'>#define Retain(obj) [obj retain]
-</span><span class='line'>#else 
-</span><span class='line'>#define Release(obj)
-</span><span class='line'>#define Retain(obj) obj
-</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
-
-
-<p>另外，如果是ARC工程，某些文件不支持ARC的话，可以在Target->Build Phases->Complie sources 中对某个文件加入Complier Flags “-fno-objc-arc”</p>
-
-<p>如下图：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git Fetch和git Pull的区别</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -420,70 +348,82 @@
   
 
 
-<time datetime="2013-10-19T01:47:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
-        
-      </p>
+<time datetime="2013-10-20T22:28:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+  
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
-
-<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
-
-<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
-</span><span class='line'>git log -p master..origin/master
-</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上命令的含义：<br/>
-首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
-
-<p>上述过程其实可以用以下更清晰的方式来进行：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master:tmp
-</span><span class='line'>git diff tmp 
-</span><span class='line'>git merge tmp</span></code></pre></td></tr></table></div></figure>
-
-
-<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
-
-<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git pull origin master</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上述命令其实相当于git fetch 和 git merge</p>
-
-<p>在实际使用中，git fetch更安全一些</p>
-
-<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
-
-<p>EOF</p>
-</div>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/" >Tweet</a>
   
   
-
-
-    </article>
   
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
   </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
 </div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/19/ios-arc-jian-rong-chu-li/" title="Previous Post: iOS ARC 兼容处理">&laquo; iOS ARC 兼容处理</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
+
+
+
+</div>
+
 <aside class="sidebar">
   
     
@@ -581,6 +521,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

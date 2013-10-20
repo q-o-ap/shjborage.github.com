@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS ARC 兼容处理 - Saick Blog - 专注技术，乐在其中</title>
+  <title>Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="From:宋红日（转自：http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89 我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。 &hellip;">
+  <meta name="description" content="测试一下这玩意是不是能发布成功，哈哈
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li/">
+  <link rel="canonical" href="http://saick.net/blog/page/15/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -77,12 +78,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">iOS ARC 兼容处理</h1>
+      <h1 class="entry-title"><a href="/blog/2013/05/27/hello-jekyll/">Hello Jekyll</a></h1>
     
     
       <p class="meta">
@@ -98,141 +102,29 @@
   
 
 
-<time datetime="2013-10-19T01:56:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+<time datetime="2013-05-27T16:32:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>From:宋红日（转自：<a href="http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89">http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89</a></p>
-
-<p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
-尤其当你决定做一个通用的控件 或 模块的时候。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ARC conditions
-</span><span class='line'>#if !__has_feature(objc_arc)
-</span><span class='line'>#define Release(obj) [obj release]
-</span><span class='line'>#define Retain(obj) [obj retain]
-</span><span class='line'>#else 
-</span><span class='line'>#define Release(obj)
-</span><span class='line'>#define Retain(obj) obj
-</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
-
-
-<p>另外，如果是ARC工程，某些文件不支持ARC的话，可以在Target->Build Phases->Complie sources 中对某个文件加入Complier Flags “-fno-objc-arc”</p>
-
-<p>如下图：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a></p>
+  <div class="entry-content"><p>测试一下这玩意是不是能发布成功，哈哈</p>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
-
-      
-
-
-
-
-
-
-
-
   
 
 
-<time datetime="2013-10-19T01:56:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
-  
-</span>
-
-  
-    </p>
-    <p class="meta">
-	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
-    </p>
+  <div class="pagination">
     
+    <a href="/blog/archives">Blog Archives</a>
     
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li/" >Tweet</a>
-  
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-  
-  
-  <!-- JiaThis Button BEGIN -->
-  <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_googleplus">Google+</a>
-    <a class="jiathis_button_renren">人人网</a>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
+    <a class="next" href="/blog/page/14/">Newer &rarr;</a>
+    
   </div>
-  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
-  <!-- JiaThis Button END -->
-
 </div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/" title="Previous Post: Git fetch和git pull的区别">&laquo; Git fetch和git pull的区别</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/" title="Next Post: Objective-C的新特性(Object Literals等)">Objective-C的新特性(Object Literals等) &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section id="comment">
-    <h1>Comments</h1>
-    
-<!-- Duoshuo Comment BEGIN -->
-    <div class="ds-thread"></div>
-    <script type="text/javascript">
-    var duoshuoQuery = {short_name:"saick"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = 'http://static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-        || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-<!-- Duoshuo Comment END -->
-
-  </section>
-
-
-
-</div>
-
 <aside class="sidebar">
   
     
@@ -330,7 +222,6 @@
 
   
 </aside>
-
 
     </div>
   </div>
