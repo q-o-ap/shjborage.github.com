@@ -13,9 +13,10 @@ As I got further into the customization of the buttons, I ran into a method with
 
 Cap Insets with UIButton
 As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
-Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can see the white border):
+Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can scxxx[
+]]]ee the white border):
 
-{% img http://d.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=8cf958067d3e6709ba0045fa0bfcee00/c8177f3e6709c93d5bb0aad69d3df8dcd1005454.jpg?referer=1e8577dc79899e5121990f24944a&x=.jpg %}
+<a href="http://www.flickr.com/photos/105999540@N03/10374761354/" title="2013-10-10-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3766/10374761354_bdb27d747b_o.gif" width="121" height="60" alt="2013-10-10-1"></a>
 
 Depending on the context of where the button appears, its size may vary. The code to create a button with the image and the corresponding output follow:
 {% codeblock %}
@@ -30,7 +31,7 @@ UIImage *buttonImage = [UIImage imageNamed:@"blueButton"];
 [[self view] addSubview:button];
 {% endcodeblock %}
 
-{% img http://h.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=040338663b12b31bc36ccd2cb6234747/a8773912b31bb0518f971709347adab44aede064.jpg?referer=e60131fd0afa513d08bd59ee403a&x=.jpg %}
+<a href="http://www.flickr.com/photos/105999540@N03/10374761294/" title="2013-10-10-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7447/10374761294_389a1d7a17_o.gif" width="238" height="76" alt="2013-10-10-2"></a>
 
 As you can see, the button is stretched in all directions. Let’s change the code to include cap insets, however, before we do that, let’s look at the signature of the cap insets method:
 
@@ -53,12 +54,12 @@ UIImage *buttonImage = [[UIImage imageNamed:@"blueButton"]     resizableImageWit
 
 This requests that the left and right 16 pixels of the original image are not scaled or resized when stretching the image to accomodate the button size frame defined above. The end results is as shown below:
 
-{% img http://g.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=5daa3c7fdfc451daf2f60cee86c6235b/ac6eddc451da81cb7fa427ec5066d01609243154.jpg?referer=f13ad2b88026cffc303d8a827f4b&x=.jpg %}
+<a href="http://www.flickr.com/photos/105999540@N03/10374785416/" title="2013-10-10-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3834/10374785416_12ea31ec14_o.gif" width="239" height="76" alt="2013-10-10-3"></a>
 
 Cap Insets with UIBarButtonItem
 We can use the same image for a button on a navbar (I’ll show the specifics in the next post on customizing the navbar). Without specifying the cap insets, the button looks as follows:
 
-{% img http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=98f5931979f40ad111e4c7e6671760e2/03087bf40ad162d9605dc63d13dfa9ec8a13cd64.jpg?referer=9ebd1655e9f81a4c7f25d9f92b3a&x=.jpg %}
+<a href="http://www.flickr.com/photos/105999540@N03/10374968953/" title="2013-10-10-4 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7358/10374968953_23c450bb11_o.gif" width="340" height="80" alt="2013-10-10-4"></a>
 
 The code below specifies an image where 12 pixels on the top, left, bottom and right be preserved when stretching/resizing the button:
 ```
@@ -66,4 +67,4 @@ UIImage *backButton = [[UIImage imageNamed:@"blueButton"]     resizableImageWith
 ```
 The output nows looks as follows:
 
-{% img http://a.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=9f523ed27b310a55c024def1877e3294/aec379310a55b31983a0265441a98226cffc17b1.jpg?referer=06628c84087b020855de0ad15150&x=.jpg %}
+<a href="http://www.flickr.com/photos/105999540@N03/10374785266/" title="2013-10-10-5 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3816/10374785266_7b83f64381_o.gif" width="340" height="80" alt="2013-10-10-5"></a>

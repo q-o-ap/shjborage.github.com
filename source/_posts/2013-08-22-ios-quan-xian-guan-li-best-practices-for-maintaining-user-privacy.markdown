@@ -43,7 +43,7 @@ Table 1-1 lists the types of data authorizations supported by iOS and how you ca
 
 Table 1-1  Data protected by system authorization settings
 
-{% img http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=c493be3fbb389b503cffe057b50e94e0/2e2eb9389b504fc227201424e7dde71190ef6d90.jpg?referer=3efdfd90820a19d89214b135cb8e&x=.jpg %}
+<a href="http://www.flickr.com/photos/105999540@N03/10374969633/" title="2013-08-22-ios-quan-xian-guan-li-best-practices-fo by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3752/10374969633_b25523eb45_b.jpg" width="703" height="573" alt="2013-08-22-ios-quan-xian-guan-li-best-practices-fo"></a>
 
 
 

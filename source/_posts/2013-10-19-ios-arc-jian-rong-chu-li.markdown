@@ -28,4 +28,4 @@ From:宋红日（转自：http://blog.sina.com.cn/s/blog_9792a85b01018v83.html�
 
 如下图：  
 
-{% img http://c.hiphotos.bdimg.com/album/s%3D550%3Bq%3D90%3Bc%3Dxiangce%2C100%2C100/sign=21b1372bfadcd100c99cf82442b0362d/9e3df8dcd100baa1d767da9d4510b912c8fc2e48.jpg?referer=58d17125ca95d1438361d1138a46&x=.jpg %}
+<a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a>
