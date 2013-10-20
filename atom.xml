@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-20T23:36:16+08:00</updated>
+  <updated>2013-10-20T23:47:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -158,6 +158,11 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 
 
 <p>是不是很恶心？现在以上代码可以简化成以下形式，注意到没有，不用再在参数的最后加恶心的nil了，字典的key和value也不再是倒着先写value,再写key了：</p>
+
+<!-- more -->
+
+
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -375,6 +380,11 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 <p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
 尤其当你决定做一个通用的控件 或 模块的时候。</p>
 
+<!-- more -->
+
+
+
+
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -418,6 +428,11 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 </pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
 </span><span class='line'>git log -p master..origin/master
 </span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
 
 
 <p>以上命令的含义：<br/>
@@ -466,6 +481,9 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 <p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
 
 <p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
+
+<!-- more -->
+
 
 <p>4）如果只启动shell 程序，还有一种方式，大体流程是这样的。</p>
 
@@ -517,6 +535,11 @@ C) 在".profile" 中调用想要执行的shell 脚本
 
 <p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
 
+<!-- more -->
+
+
+
+
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -560,6 +583,11 @@ C) 在".profile" 中调用想要执行的shell 脚本
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>pod spec create XXXX</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
 
 
 <h3>编辑XXXX.podspec</h3>
@@ -694,6 +722,11 @@ With push access</p>
 
 <p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
 在Environment Variables中增加下面属性并都配置为YES。</p>
+
+<!-- more -->
+
+
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1021,6 +1054,9 @@ With push access</p>
 
 <p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
 
+<!-- more -->
+
+
 <p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
 
 <p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
@@ -1157,6 +1193,9 @@ With push access</p>
 
 <p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
 
+<!-- more -->
+
+
 <ul>
 <li>2.选中左侧“登陆”、“密码”</li>
 </ul>
@@ -1196,6 +1235,11 @@ With push access</p>
     <updated>2013-10-14T16:09:00+08:00</updated>
     <id>http://saick.net/blog/2013/10/14/duo-can-shu-selector</id>
     <content type="html"><![CDATA[<p>Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 performSelector可以支持传入参数数组。多个参数就不再是问题了。</p>
+
+<!-- more -->
+
+
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1306,6 +1350,11 @@ With push access</p>
 </span><span class='line'>    [[UIApplication sharedApplication] setStatusBarHidden:isHidden];
 </span><span class='line'>  }
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
 
 
 <p><strong>Catagory</strong> 此处与root ViewController有关，不一定这样解决</p>
@@ -1519,8 +1568,12 @@ With push access</p>
 <li>1、进入项目目录，可看到.project文件，打开。</li>
 <li>2、找到<natures>&hellip;</natures>代码段。</li>
 <li>3、在第2步的代码段中加入如下标签内容并保存：</li>
-<li></li>
 </ul>
+
+
+<!-- more -->
+
+
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -1550,6 +1603,9 @@ With push access</p>
     <content type="html"><![CDATA[<p>XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。</p>
 
 <p>XCode工程的命令行Build命令是 xcodebuild，用 &mdash;help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。</p>
+
+<!-- more -->
+
 
 <p>另外，将.app文件转成ipa包的方式也相当简单。具体方式是将 .app文件拷贝到一个名为 ipa/Payload的目录下，然后将ipa下的所有内容用zip打包即可：</p>
 
@@ -1671,6 +1727,9 @@ With push access</p>
     <content type="html"><![CDATA[<p>I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a custom background, title and text to the navbar. Once I had this working, to keep a consist look across my application, I began tweaking the buttons on the navbar using the same Appearance API.
 As I got further into the customization of the buttons, I ran into a method withinUIImage that was introduced in iOS 5, resizableImageWithCapInsets. I found myself getting side-tracked from the original idea of navbar look and feel, to understanding how cap insets work. This post delves into what I learned.</p>
 
+<!-- more -->
+
+
 <p>Cap Insets with UIButton
 As the documentation describes, you use resizableImageWithCapInsets to add cap insets to an image, when the image is resized or scaled, cap areas are not affected. The best way to understand this is through an example.
 Let’s assume I want all the buttons on my UI to have a similar look, a gradient with a white border. Below is the image used for the examples in this post (the button is shown on a gray backdrop so you can scxxx[
@@ -1760,8 +1819,12 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 
 <p>用gdb执行程序, 退出时提示&#8221;Broken pipe&#8221;.
 最后问题确定为, 对一个对端已经关闭的socket调用两次write,
-第二次将会生成SIGPIPE信号, 该信号默认结束进程.
-具体的分析可以结合TCP的&#8221;四次握手&#8221;关闭. TCP是全双工的信道,
+第二次将会生成SIGPIPE信号, 该信号默认结束进程.</p>
+
+<!-- more -->
+
+
+<p>具体的分析可以结合TCP的&#8221;四次握手&#8221;关闭. TCP是全双工的信道,
 可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
 虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
 表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
@@ -1877,6 +1940,8 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <p>完整的语法如下：</p>
 
 <p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
+
+<p> <!-- more --></p>
 
 <h4>基本查询</h4>
 
@@ -2024,13 +2089,19 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21369&authkey=AK4bqqBLJG7H2NU" width="273" height="320" frameborder="0" scrolling="no"></iframe>
 
 
-<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
-1. group 和 folder的区别
+<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？</p>
+
+<p> <!-- more --></p>
+
+<ol>
+<li>group 和 folder的区别
 group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
-folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。
-2. 以folder的形式引用文件
+folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。</li>
+<li>以folder的形式引用文件
 我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
-会弹出对话框，如图</p>
+会弹出对话框，如图</li>
+</ol>
+
 
 <iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21370&authkey=AHc_zK2PilQffbQ" width="319" height="215" frameborder="0" scrolling="no"></iframe>
 
@@ -2067,6 +2138,8 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
  NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
 </code>
  得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
+
+<p> <!-- more --></p>
 
 <h3>一、基础知识</h3>
 

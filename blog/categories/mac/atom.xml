@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mac | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/mac/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-20T23:36:16+08:00</updated>
+  <updated>2013-10-20T23:47:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -28,6 +28,9 @@
 <p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
 
 <p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
+
+<!-- more -->
+
 
 <p>4）如果只启动shell 程序，还有一种方式，大体流程是这样的。</p>
 
@@ -80,6 +83,9 @@ sudo chmod -R 755 /Library/StartupItems/xxx
 
 
 <p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
+
+<!-- more -->
+
 
 <ul>
 <li>2.选中左侧“登陆”、“密码”</li>

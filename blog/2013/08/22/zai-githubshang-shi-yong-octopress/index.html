@@ -120,6 +120,9 @@
 </ol>
 
 
+<!-- more -->
+
+
 <p>这些特点中的第三点到第五点尤其吸引我（第一点和第二点也很酷），于是我花了些时间研究。以下是相关的步骤和心得。</p>
 
 <h4>在你本地安装octopress</h4>
@@ -393,9 +396,23 @@ rake new_post[&ldquo;Your Title of Your Article&rdquo;]
 
 <p>百度统计可以将生成的script直接添加到 source/post/after_footer.html 就可以。很简单，这里就不详述。</p>
 
-<p>—–EOF—–</p>
-
 <p>参考：<a href="http://www.cnblogs.com/stevelin/p/3281811.html">http://www.cnblogs.com/stevelin/p/3281811.html</a></p>
+
+<h4>修改READON</h4>
+
+<p>在xxx_post.markdown里添加如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!-- more --&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在_config.yml的excerpt_link:修改为你希望的描述就可以。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>excerpt_link: "阅读全文 &rarr;"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From:<a href="http://ibluegrid.info/blog/2013/01/02/octopress-customization-2/">http://ibluegrid.info/blog/2013/01/02/octopress-customization-2/</a></p>
 </div>
 
 

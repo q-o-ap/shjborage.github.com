@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-20T23:36:16+08:00</updated>
+  <updated>2013-10-20T23:47:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -156,6 +156,9 @@ NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:@"value1", @"ke
 </code></p>
 
 <p>是不是很恶心？现在以上代码可以简化成以下形式，注意到没有，不用再在参数的最后加恶心的nil了，字典的key和value也不再是倒着先写value,再写key了：</p>
+
+<!-- more -->
+
 
 <p><code>
 NSNumber * number = @1;
@@ -356,6 +359,9 @@ dict[@(i+1)] = [NSString stringWithFormat:@"new %@", dict[@(i+1)]];}
 <p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
 尤其当你决定做一个通用的控件 或 模块的时候。</p>
 
+<!-- more -->
+
+
 <p>```
 // ARC conditions</p>
 
@@ -397,6 +403,9 @@ dict[@(i+1)] = [NSString stringWithFormat:@"new %@", dict[@(i+1)]];}
 
 <p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
 
+<!-- more -->
+
+
 <p><code>
 NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
 [cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];
@@ -434,6 +443,9 @@ NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
 <p><code>
 pod spec create XXXX
 </code></p>
+
+<!-- more -->
+
 
 <h3>编辑XXXX.podspec</h3>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SourceControl | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/sourcecontrol/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-20T23:36:16+08:00</updated>
+  <updated>2013-10-20T23:47:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -29,6 +29,9 @@ git fetch origin master
 git log -p master..origin/master
 git merge origin/master
 </code></p>
+
+<!-- more -->
+
 
 <p>以上命令的含义：<br/>
 首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
@@ -79,6 +82,9 @@ git pull origin master
 
 <p>每次都提交，数据肯定不会丢，也没有担心。
 就找个问题的解决方案，果然有。</p>
+
+<!-- more -->
+
 
 <p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a>
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -145,6 +151,9 @@ $ git init
 
 <p>然后可以进行git add .. 进行文件添加。<br/>
 以及编写.gitignore文件，对本地文件进行忽略</p>
+
+<!-- more -->
+
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

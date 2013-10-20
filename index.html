@@ -171,211 +171,12 @@
 
 <p>是不是很恶心？现在以上代码可以简化成以下形式，注意到没有，不用再在参数的最后加恶心的nil了，字典的key和value也不再是倒着先写value,再写key了：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSNumber * number = @1;
-</span><span class='line'>NSArray * array = @[@"one", @"two"];
-</span><span class='line'>NSDictionary * dict = @{@"key1":@"value1", @"key2":@"value2"};</span></code></pre></td></tr></table></div></figure>
-
-
-<p>更多的示例如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// 整数  
-</span><span class='line'>NSNumber *fortyTwo = @42;             // 等价于 [NSNumber numberWithInt:42]  NSNumber *fortyTwoUnsigned = @42U;    // 等价于 [NSNumber numberWithUnsignedInt:42U]  NSNumber *fortyTwoLong = @42L;        // 等价于 [NSNumber numberWithLong:42L]  NSNumber *fortyTwoLongLong = @42LL;   // 等价于 [NSNumber numberWithLongLong:42LL]  
-</span><span class='line'>
-</span><span class='line'>// 浮点数  
-</span><span class='line'>NSNumber *piFloat = @3.141592654F;    // 等价于 [NSNumber numberWithFloat:3.141592654F]  
-</span><span class='line'>NSNumber *piDouble = @3.1415926535;   // 等价于 [NSNumber numberWithDouble:3.1415926535]  
-</span><span class='line'>
-</span><span class='line'>// 布尔值  
-</span><span class='line'>NSNumber *yesNumber = @YES;           // 等价于 [NSNumber numberWithBool:YES]  NSNumber *noNumber = @NO;             // 等价于 [NSNumber numberWithBool:NO]  
-</span><span class='line'>
-</span><span class='line'>// 空数组  
-</span><span class='line'>
-</span><span class='line'>NSArray * array = @[];                // 等价于 [NSArray array]  // 空的字典  NSDictionary * dict = @{};            // 等价于 [NSDictionary dictionary]</span></code></pre></td></tr></table></div></figure>
-
-
-<p>怎么样？是不是简单多了？而且，为了方便你的旧代码迁移到新的写法，xcode专门还提供了转换工具，在xcode4.4中，选择 Edit &ndash;> Refactor &ndash;> Convert to Modern Objective-C Syntax即可。</p>
-
-<h3>局部的函数调用不用前向申明</h3>
-
-<p>这虽然是一个挺小的改进，但是很贴心。假如我们在一个源文件中有2个函数：分别名为foo 和 bar，其中foo的定义在bar前面。那如果在foo函数内部直接调用bar，编译器会报警告说找不到函数bar。
-而现在，我们可以随意地在源文件中放置函数bar的位置。编译器在找不到bar时，会再源码后面找，如果找到了bar，就不会报错了。</p>
-
-<h3>带有类型的enum</h3>
-
-<p>现在我们可以定义enum是无符号整数还是整数，这样编译器会更加智能的做类型检查。如下所示：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>typedef enum TableViewCellType : NSInteger {    
-</span><span class='line'>TableViewCellTypeQueue,    
-</span><span class='line'>TableViewCellTypeNewFans,    
-</span><span class='line'>TableViewCellTypeUserInfo,    
-</span><span class='line'>TableViewCellTypeOrganization,    
-</span><span class='line'>TableViewCellTypeFeedback,    
-</span><span class='line'>TableViewCellTypeRateApp,    
-</span><span class='line'>TableViewCellTypeRecommendation,    
-</span><span class='line'>TableViewCellTypeLogout}TableViewCellType;</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>默认生成@synthesize代码</h3>
-
-<p>以前写完一个诸如 @property (nonatomic, strong) NSString * username; 变量定义后，马上得转到 .m文件中去增加相应的 @synthesize username = _username; 代码。</p>
-
-<p>现在，编辑器发现你没有写 @synthesize时，会自动帮你加上这一行。这同时在另一方面，起到了鼓励大家使用以下划线开头的变量名作为成员变量名的作用。</p>
-
-<p>当然，为了向下兼容，如果你的程序里面已经有了 @property 变量对应的 @synthesize 代码时，编辑器就不会自动帮你增加这个代码了。
-另外有2种特殊情况下，即使你没有写 @synthesize ，编辑器也不会自动帮你加上，这2种情况是：</p>
-
-<ul>
-<li>你同时提供了该property的setter 和 getter方法。</li>
-<li>你的这个property是 readonly 的。</li>
-</ul>
-
-
-<h3>遍历元素</h3>
-
-<p>你是如何遍历数组的元素的？通常我们有2种做法，一种是用 for in，另一种是用一个变量来循环数组下标。如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// 12345678    NSArray * lines = ...    
-</span><span class='line'>for (NSString * line in lines) {
-</span><span class='line'>       // ...    
-</span><span class='line'>}
-</span><span class='line'>for (int i = 0; i &lt; lines.count; ++i) {        
-</span><span class='line'>  NSString * s = [lines objectAtIndex:i];        
-</span><span class='line'>  ...    
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果是字典，遍历的代码就要稍微复杂一点了：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSDictionary * dict = …    NSArray * keys = [dict allKeys];
-</span><span class='line'>for (NSString * key in keys) {        
-</span><span class='line'>    NSString * value = [dict objectForKey:key];    
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在，xcode对于iOS4.0以上的系统，支持用block来遍历元素了。用block来遍历字典可以简化代码的编写，建议大家都使用上这个新特性。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[lines enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL *stop) {}];[_urlArguments enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {}];</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Subscripting Methods</h3>
-
-<p>这个新特性在WWDC2012的视频中提到了，但是在XCode4.4中没有实现（在XCode4.5中实现了）。也是一个很体贴的语法糖，它允许你用中括号来代替原本的方法来获取和设置数组元素。</p>
-
-<p>简单来说，以前的 [array objectAtIndex:idx] 和 [array replaceObjectAtIndex:idx withObject:obj]，可以直接写作 array[idx] 和 array[idx] = obj了。其实这个特性在很多高级语言中都实现了，只是Objective-C生于80年代，一直没改进这个。</p>
-
-<p>以下是一些示例代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSArray * array = @[ @"111", @"222", @"333"];
-</span><span class='line'>for (int i = 0; i &lt; 3; ++i) {
-</span><span class='line'>    NSLog(@"array[i] = %@", array[i]);
-</span><span class='line'>}
-</span><span class='line'>NSMutableDictionary * dict =[@{  @1: @"value1", @2: @"value2",                                 @3: @"value3" } mutableCopy];
-</span><span class='line'>for (int i = 0; i &lt; 3; ++i) {
-</span><span class='line'>    NSLog(@"dict[%d] = %@", i, dict[@(i+1)]);
-</span><span class='line'>    dict[@(i+1)] = [NSString stringWithFormat:@"new %@", dict[@(i+1)]];}
-</span><span class='line'>    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop{
-</span><span class='line'>          NSLog(@"dict[%@] = %@", key, dict[key]);
-</span><span class='line'>    }];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个改进同样对NSDictionary有效。甚至，你也可以给你自己的类提供中括号操作符对应的方法。具体做法是实现如下两个方法：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)objectAtIndexedSubscript:(NSUInterger)idx;- (void)setObject:(id)value atIndexedSubscript:(NSUInteger)idx;</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Tips</h3>
-
-<p>上面提到了不用写 @synthesize 了，那原本写的那么多 @synthesize 怎么办呢？作为有代码洁癖的我很想把它们删掉，但怎么删呢？一个文件一个文件打开，然后行一行删掉吗？放心，苹果已经帮我们想了解决方案。在WWDC2012 Session 400 Developer Tools Kickoff 中，苹果介绍了具体做法。步骤如下：</p>
-
-<ul>
-<li>首先使用区域查找，因为一般项目都会依赖第三方的开源库，我们可不想更改别人的库，所以我们只查找我们库中的文件，如下图所示：</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382148323/" title="2013-10-20-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3803/10382148323_3e5d2aabbc.jpg" width="317" height="449" alt="2013-10-20-1"></a></p>
-
-<ul>
-<li>接着我们用正则匹配，找到以 @synthesize开头，后面接着是 var = _var; 格式的行。插入正则表达式很简单，直接点击查找输入框左边的放大镜，选择“insert pattern”，苹果就会把常见的正则表达式都列出来，你直接选择就可以了，非常方便。如下图所示：</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382148463/" title="2013-10-20-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7415/10382148463_a1fe6d797a.jpg" width="441" height="181" alt="2013-10-20-2"></a></p>
-
-<p>在插入好合适的正则表达式后，我们按回车，就可以搜索到结果。
-<a href="http://www.flickr.com/photos/105999540@N03/10382148643/" title="2013-10-20-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3724/10382148643_1604c7809b.jpg" width="296" height="315" alt="2013-10-20-3"></a></p>
-
-<ul>
-<li>我们点击搜索界面的preview按钮，查看替换效果，可以看到，对于我们测试代码，XCode生成的预览图已经正确地当对应代码删掉了。然后我们就可以点击替换，去掉所有的 @synthesize 代码了。</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382148923/" title="2013-10-20-4 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3769/10382148923_5836e42c21.jpg" width="500" height="97" alt="2013-10-20-4"></a></p>
-
-<p>在下载完XCode4.4后，我就把我们的工程代码都转换成了新特性的语法。在转换后，我发现原本25000行的代码少了将近1000行。心里还是很开心的，因为又可以少写一些体力活类型的代码了。
-还是那句话，希望这些新特性能够让大家玩得开心。
-参考资料</p>
-
-<ul>
-<li> LLVM官方网站比较全面地介绍了 Object Literal： <a href="http://clang.llvm.org/docs/ObjectiveCLiterals.html">http://clang.llvm.org/docs/ObjectiveCLiterals.html</a></li>
-<li> WWDC2012 Session 400 Developer Tools Kickoff</li>
-<li> WWDC2012 Session 405 Modern Objective-C</li>
-<li> WWDC2012 Session 413 Migrating to Modern Objective-C</li>
-</ul>
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -414,31 +215,12 @@
 <p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
 尤其当你决定做一个通用的控件 或 模块的时候。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ARC conditions
-</span><span class='line'>#if !__has_feature(objc_arc)
-</span><span class='line'>#define Release(obj) [obj release]
-</span><span class='line'>#define Retain(obj) [obj retain]
-</span><span class='line'>#else 
-</span><span class='line'>#define Release(obj)
-</span><span class='line'>#define Retain(obj) obj
-</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
-
-
-<p>另外，如果是ARC工程，某些文件不支持ARC的话，可以在Target->Build Phases->Complie sources 中对某个文件加入Complier Flags “-fno-objc-arc”</p>
-
-<p>如下图：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/19/ios-arc-jian-rong-chu-li/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -486,36 +268,14 @@
 </span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
 
 
-<p>以上命令的含义：<br/>
-首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
-
-<p>上述过程其实可以用以下更清晰的方式来进行：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master:tmp
-</span><span class='line'>git diff tmp 
-</span><span class='line'>git merge tmp</span></code></pre></td></tr></table></div></figure>
 
 
-<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
-
-<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git pull origin master</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上述命令其实相当于git fetch 和 git merge</p>
-
-<p>在实际使用中，git fetch更安全一些</p>
-
-<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
-
-<p>EOF</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -560,41 +320,12 @@
 
 <p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
 
-<p>4）如果只启动shell 程序，还有一种方式，大体流程是这样的。</p>
-
-<pre><code>A) 把Terminate 设置为开机启动。这样当系统启动时，可以自动运行shell。
-B) 在用户目录下创建或修改".profile"。当shell 启动时，先运行".profile" 文件
-C) 在".profile" 中调用想要执行的shell 脚本
-</code></pre>
-
-<p>5)  应用Mac 的launchd，可以参见：<a href="http://cb.esast.com/cb/wiki/10020">http://cb.esast.com/cb/wiki/10020</a></p>
-
-<p>苹果的安全检查：用上面说过的2，3 方法时，必须设置文件的用户id 和组id，还有文件的运行权限。具体方法，下文有述。</p>
-
-<p>当设置完成后，可以在终端上用SystemStarter 来调试配置的信息
-命令为：<code>SystemStarter -n -D</code>
-根据提示的信息可以查看配置的问题。</p>
-
-<h4>2 解决“Insecure Startup Item disabled.错误”</h4>
-
-<p>可以把想要启动的shell 放到/Labrary/Startupitems/ 目录中。
-必须改变文件的用户id 和组id 才可以，并且权限为755</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo chown -R root:wheel /Library/StartupItems/xxx
-</span><span class='line'>sudo chmod -R 755 /Library/StartupItems/xxx</span></code></pre></td></tr></table></div></figure>
-
-
-<p>(如果运行的是shell 文件，则命令中不用加 -R 选项)</p>
-
-<p>注意：环境变量问题。</p>
-
-<p>当然一定要参考苹果的开发者文档：
-[Introduction to System Startup Programming Topics]
-(<a href="http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1">http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1</a>)</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -637,33 +368,12 @@ C) 在".profile" 中调用想要执行的shell 脚本
 
 <p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
-</span><span class='line'>[cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];
-</span><span class='line'>[cookieProperties setObject:@"www.taobao.com" forKey:NSHTTPCookieDomain];[cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
-</span><span class='line'>[cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
-</span><span class='line'>[cookieProperties setObject:@"30000" forKey:NSHTTPCookieMaximumAge];
-</span><span class='line'>NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
-</span><span class='line'>[[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-</span><span class='line'>//删除cookie的方法为deleteCookie:</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在通过setCookie:进行设置cookie的时候，会覆盖name,domain,path都相同的cookie的。
-至于cookie会不会持久化到cookie文件中主要看这个cookie的生命周期，和Max-Age或者Expires有关。</p>
-
-<p>不过NSHTTPCookieStorage存在一个问题，setCookie或者deleteCookie后并不会立即进行持久化，而是有几秒的延迟。如果在持久化之前App接收到SIGKILL信号，App退出，那么会导致cookie相关操作的丢失。在模拟器调试的过程中，XCode重启App的时发给App的就是SIGKILL，不过真正的生产环境中很少有这种情况。
-但是有时候为了可靠性，我们还是会将cookie信息保存一份到User Defaults，需要用的时候load进来。关于cookie操作丢失的详情可以查看这里<a href="http://openradar.appspot.com/radar?id=2776403">NSHTTPCookieStorage looses cookies on SIGKILL</a></p>
-
-<p>卢克 / 2013-04-02</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/19/ios-cookieshi-yong/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -709,121 +419,14 @@ C) 在".profile" 中调用想要执行的shell 脚本
 </pre></td><td class='code'><pre><code class=''><span class='line'>pod spec create XXXX</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>编辑XXXX.podspec</h3>
 
-<p>创建好的文件里有很多指引，这步很简单。 实在不明白，再看看GitHub上别的库的spec文件怎么写的。</p>
-
-<h3>验证合法性</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec lint XXXX.podspec</span></code></pre></td></tr></table></div></figure>
-
-
-<p>完成后即可把这个文件提交到<a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>中。</p>
-
-<p>When you&rsquo;re done you can also fork the <a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>  GitHub repository and send a pull request. We really love contributions and will help ensure it&rsquo;s perfect!</p>
-
-<h3>详细提交步骤</h3>
-
-<p>From：<a href="http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html">http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html</a></p>
-
-<h3>Contributing to the master repo</h3>
-
-<p>The master repo contains specifications of open-source Objective-C libraries.</p>
-
-<h4>Details</h4>
-
-<ul>
-<li> installation path: ~/.cocoapods/master</li>
-<li> home: <a href="https://github.com/CocoaPods/Specs">https://github.com/CocoaPods/Specs</a></li>
-</ul>
-
-
-<h4>Contributing</h4>
-
-<p>To ensure a high quality, reliable collection of Pods, the master repo is strict about the acceptable specifications. The CocoaPods linter (see the pod spec lint command) is used to validate specifications, and no errors or warnings are accepted.
-The highest priority of the master repo is to guarantee the integrity of existing CocoaPods installations.
-In general this means that:</p>
-
-<ul>
-<li> A specification cannot be deleted.</li>
-<li> Specifications can be updated only if they don’t affect existing installations.</li>
-<li><ul>
-<li>Broken specifications can be updated.</li>
-<li>Subspecs can be added as they are included by the parent specification by default.</li>
-</ul>
-</li>
-<li> Only authoritative version numbers are accepted.</li>
-</ul>
-
-
-<p>CocoaPods uses a versioning scheme known as Semantic Versioning, necessary for cross resolution of dependencies.</p>
-
-<h4>Unversioned libraries</h4>
-
-<p>One of the CocoaPods goals is to promote the discovery of open-source software, for this reason new Pods for libraries which are not versioned are accepted in the master repo. The specifications of those pods should carry the version 0.0.1 under the assumption that, if the author starts versioning, she/he is unlikely to pick 0.0.1. This is the only exception for authoritative version numbers.
-If you add an unversioned Pod it is your responsibility to ask the author of the library to tag versions, luckily we have a template for this.
-To prevent collisions with possible future versions, unversioned libraries can’t be updated until the author starts to tag them.
-If you need to update an unversioned library you can:</p>
-
-<ul>
-<li> Ask the author to version the library.</li>
-<li> Maintain a fork which is versioned. This fork should be clearly namespaced from the original library according the NAME@USERconvention (e.g. Reachability@irrationalfab). It should also mention in the summary that it is a versioned fork.</li>
-<li> Create a podspec and use it in a private repo.</li>
-</ul>
-
-
-<h4>Creating podspecs</h4>
-
-<p>Creating a podspec is very easy as we provide templates full of examples.
-You can use the following command:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create Bananas</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If the library is hosted on GitHub you can pass the url so CocoaPods can precompile the template:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec create https://github.com/Bananas/Bananas</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A this point you need edit compile the template (a pod specification is a Ruby source file):</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod spec lint Bananas.podspec --verboseSharing podspecs</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Sharing podspecs</h4>
-
-<p>When a podspec lints you can submit it to the master repo.</p>
-
-<h4>Without push access</h4>
-
-<p>You need to fork the master repo on github, then you need to:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/.cocoapods/master
-</span><span class='line'>$ git checkout -b fork
-</span><span class='line'>$ git remote add myfork https://github.com/YOUR_USER_NAME/Specs.git
-</span><span class='line'>$ cp ~/Bananas.podspec ~/.cocoapods/master/Bananas/VERSION/
-</span><span class='line'>$ git push myfork
-</span><span class='line'>$ git checkout master</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you push your changes, you can make a pull request on CocoaPods/Specs.
-With push access</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod push Bananas.podspec</span></code></pre></td></tr></table></div></figure>
 
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -869,314 +472,12 @@ With push access</p>
 <p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
 在Environment Variables中增加下面属性并都配置为YES。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>MallocStackLogging
-</span><span class='line'>MallocStackLoggingNoCompact
-</span><span class='line'>NSAutoreleaseFreedObjectCheckEnabled
-</span><span class='line'>NSDebugEnabled
-</span><span class='line'>NSZombieEnabled</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在实际使用中发现，使用了上述配置之后，如果能在模拟器上运行效果更佳。比如,真机调试时遇到过如下错误：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-[CALayer retain]: message sent to deallocated instance 0x1d418a30</span></code></pre></td></tr></table></div></figure>
-
-
-<p>使用网上很多地方都提到的方法：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>info malloc-history 0x1d418a30
-</span><span class='line'>XCode提示:Undefined info command: "malloc-history".  Try "help info".</span></code></pre></td></tr></table></div></figure>
-
-
-<p>针对这种情况可以参考:<a href="http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82">http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82</a></p>
-
-<p><strong>其中最主要的还是</strong> <em>NSZombieEnabled</em>, 这个解决EXC_BAD_ACCESS还是很有用的。
-具体参考这个：<a href="http://www.cocoachina.com/macdev/objc/2011/0219/2661.html">http://www.cocoachina.com/macdev/objc/2011/0219/2661.html</a></p>
-
-<h3>3.增加异常处理[理论上和&#8221;在XCode中使用一个通用断点&#8221;效果类似]</h3>
-
-<p>写iOS代码的时候,经常会遇到程序崩溃在main函数的入口处并出现类似&#8221;First throw call stack&#8221;这样的错误。为了更好的知道崩溃的原因,我们可以在AppDelegate中定义一个方法, 用于处理异常:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void caughtException(NSException *exception) 
-</span><span class='line'>{  
-</span><span class='line'>  NSLog(@"CRASH: %@", exception);  
-</span><span class='line'>  NSLog(@"Stack Trace: %@", [exception callStackSymbols]);  
-</span><span class='line'>  // Internal error reporting 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>另外，在打印时，也可以使用GTM，GTMStackTraceFromException(exception)，跟系统的类似。</p>
-
-<p>然后在应用启动时，设置这个方法作为自己的自定义异常回调：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
-</span><span class='line'>{  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(& caughtException); 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>在定义了这个回调之后，崩溃是的控制台信息一般都会一目了然，我们甚至可以看出是那个类的哪一行出问题了。</p>
-
-<h3>4.signal处理，并提示。</h3>
-
-<p>启动信号处理</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>signal(SIGABRT, signalHandler);
-</span><span class='line'>signal(SIGILL, signalHandler);
-</span><span class='line'>signal(SIGSEGV, signalHandler);
-</span><span class='line'>signal(SIGFPE, signalHandler);
-</span><span class='line'>signal(SIGBUS, signalHandler);
-</span><span class='line'>signal(SIGPIPE, signalHandler);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>其它相关代码</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include &lt;libkern/OSAtomic.h>
-</span><span class='line'>#include &lt;execinfo.h>
-</span><span class='line'>
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerAddressesKey = @"UncaughtExceptionHandlerAddressesKey";
-</span><span class='line'>
-</span><span class='line'>volatile int32_t UncaughtExceptionCount = 0;
-</span><span class='line'>const int32_t UncaughtExceptionMaximum = 10;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerSkipAddressCount = 0;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerReportAddressCount = 100;
-</span><span class='line'>
-</span><span class='line'>+ (NSArray *)backTrace
-</span><span class='line'>{
-</span><span class='line'>  void* callstack[1024];
-</span><span class='line'>  int frames = backtrace(callstack, 1024);
-</span><span class='line'>  char **strs = backtrace_symbols(callstack, frames);
-</span><span class='line'>  
-</span><span class='line'>  int i;
-</span><span class='line'>  NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
-</span><span class='line'>  for (i = UncaughtExceptionHandlerSkipAddressCount;
-</span><span class='line'>       i &lt; UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount;
-</span><span class='line'>       i++)
-</span><span class='line'>  {
-</span><span class='line'>    if (frames &lt;= i)
-</span><span class='line'>      break;
-</span><span class='line'>    [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  free(strs);
-</span><span class='line'>  
-</span><span class='line'>  return backtrace;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>- (void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex
-</span><span class='line'>{
-</span><span class='line'>  if (anIndex == 0) {
-</span><span class='line'>    _dismissed = YES;
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>- (void)handleException:(NSException *)exception
-</span><span class='line'>{
-</span><span class='line'>  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unhandled exception", nil)
-</span><span class='line'>                                                  message:[NSString stringWithFormat:NSLocalizedString(@"You can try to continue but the application may be unstable.\n" @"%@\n%@", nil), [exception reason], [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]
-</span><span class='line'>                                                 delegate:self
-</span><span class='line'>                                        cancelButtonTitle:NSLocalizedString(@"Quit", nil)
-</span><span class='line'>                                        otherButtonTitles:NSLocalizedString(@"Continue", nil), nil];
-</span><span class='line'>  
-</span><span class='line'>  [alert show];
-</span><span class='line'>  
-</span><span class='line'>  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
-</span><span class='line'>  CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);
-</span><span class='line'>  
-</span><span class='line'>  while (!_dismissed) {
-</span><span class='line'>    for (NSString *mode in (NSArray *)CFBridgingRelease(allModes)) {
-</span><span class='line'>      CFRunLoopRunInMode((CFStringRef)CFBridgingRetain(mode), 0.001, false);
-</span><span class='line'>    }
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  CFRelease(allModes);
-</span><span class='line'>  
-</span><span class='line'>  NSString *log = [NSString stringWithFormat:@"%@\n\n info:\n%@", exception, exception.userInfo];
-</span><span class='line'>  [[DebugUtil sharedDebug] LogException:log];
-</span><span class='line'>  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(NULL);
-</span><span class='line'>  signal(SIGABRT, SIG_DFL);
-</span><span class='line'>  signal(SIGILL, SIG_DFL);
-</span><span class='line'>  signal(SIGSEGV, SIG_DFL);
-</span><span class='line'>  signal(SIGFPE, SIG_DFL);
-</span><span class='line'>  signal(SIGBUS, SIG_DFL);
-</span><span class='line'>  signal(SIGPIPE, SIG_DFL);
-</span><span class='line'>  
-</span><span class='line'>  if ([[exception name] isEqual:UncaughtExceptionHandlerSignalExceptionName]) {
-</span><span class='line'>    kill(getpid(), [[[exception userInfo] objectForKey:UncaughtExceptionHandlerSignalKey] intValue]);
-</span><span class='line'>  } else {
-</span><span class='line'>    [exception raise];
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>NSString * getAppInfo()
-</span><span class='line'>{
-</span><span class='line'>  NSString *appInfo = [NSString stringWithFormat:@"App : %@ %@(%@)\nDevice : %@\nOS Version : %@ %@\nUDID : %@\n",
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-</span><span class='line'>                       [UIDevice currentDevice].model,
-</span><span class='line'>                       [UIDevice currentDevice].systemName,
-</span><span class='line'>                       [UIDevice currentDevice].systemVersion,
-</span><span class='line'>                       /*[UIDevice currentDevice].uniqueIdentifier*/@""];
-</span><span class='line'>  return appInfo;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>void signalHandler(int signal)
-</span><span class='line'>{
-</span><span class='line'>  int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
-</span><span class='line'>  
-</span><span class='line'>  if (exceptionCount > UncaughtExceptionMaximum) {
-</span><span class='line'>    return;
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:signal] forKey:UncaughtExceptionHandlerSignalKey];
-</span><span class='line'>  
-</span><span class='line'>  NSArray *callStack = [DebugUtil backTrace];
-</span><span class='line'>  
-</span><span class='line'>  [userInfo setObject:callStack forKey:UncaughtExceptionHandlerAddressesKey];
-</span><span class='line'>  
-</span><span class='line'>  [[[DebugUtil alloc] init] performSelectorOnMainThread:@selector(handleException:) withObject: [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName reason:[NSString stringWithFormat: NSLocalizedString(@"Signal %d was raised.\n" @"%@", nil), signal, getAppInfo()] userInfo:userInfo] waitUntilDone:YES];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1222,124 +523,12 @@ With push access</p>
 
 <p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
 
-<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
-
-<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
-
-<ul>
-<li>1.获取当前电池条的方向</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>2.获取当前屏幕的大小</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>3.设置我们的View的中心点</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
-</span><span class='line'>} else {
-</span><span class='line'>    return CGAffineTransformIdentity;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>5.可以动画的改变我们view的显示方式了</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
-</span><span class='line'>
-</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
-</span><span class='line'>[UIView beginAnimations:nil context:nil];
-</span><span class='line'>[UIView setAnimationDuration:duration];
-</span><span class='line'>
-</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
-</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
-
-<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
-
-<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
-</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
-</span><span class='line'>    }
-</span><span class='line'>    
-</span><span class='line'>    // 更保险的写法 add by Eric
-</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
-</span><span class='line'>    {
-</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
-</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
-</span><span class='line'>                                   withObject:(id)toOrientation];
-</span><span class='line'>      }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1385,38 +574,12 @@ With push access</p>
 
 <p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
 
-<ul>
-<li>2.选中左侧“登陆”、“密码”</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374769125/" title="2013-10-14-11 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3791/10374769125_fb2339510e.jpg" width="500" height="183" alt="2013-10-14-11"></a></p>
-
-<ul>
-<li>3.找到要查看密码的wifi</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968363/" title="2013-10-14-12 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3790/10374968363_675b5904c4.jpg" width="500" height="111" alt="2013-10-14-12"></a></p>
-
-<ul>
-<li>4.点击键，选中“显示简介”，或者双击</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968173/" title="2013-10-14-13 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7431/10374968173_9c2b4957c3.jpg" width="500" height="113" alt="2013-10-14-13"></a></p>
-
-<ul>
-<li>5.在弹出的对话框选择“显示密码”，系统会让你输入电脑帐号的密码，然后密码就显示出来了。</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374784386/" title="2013-10-14-14 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7305/10374784386_8757b04a56.jpg" width="500" height="333" alt="2013-10-14-14"></a></p>
-
-<p>参考资料
-<a href="http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html">http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html</a></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">Read on &rarr;</a>
+    </footer>
   
 
 

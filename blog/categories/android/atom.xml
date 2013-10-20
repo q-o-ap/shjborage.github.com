@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-20T23:36:16+08:00</updated>
+  <updated>2013-10-20T23:47:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -33,6 +33,9 @@
 <li>1.5、创建AVD</li>
 <li>2、HelloWorld</li>
 </ul>
+
+
+<!-- more -->
 
 
 <h5>1、环境搭建1.1、JDK安装</h5>

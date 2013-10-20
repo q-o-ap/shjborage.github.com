@@ -120,252 +120,14 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，由于 &lt;div&gt; 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。</span></code></pre></td></tr></table></div></figure>
 
 
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#menu {
-</span><span class='line'>   width: 100px; font-size: 15px;
-</span><span class='line'>}
-</span><span class='line'>.dd {
-</span><span class='line'>   border: 1px dotted #0000FF; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; margin-bottom: 3px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="menu">
-</span><span class='line'>&lt;div class="dd">HTML&lt;/div>
-</span><span class='line'>&lt;div class="dd">CSS&lt;/div>
-</span><span class='line'>&lt;div class="dd">JavaScript&lt;/div>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;div&gt; 标签定义块对象，用CSS的 float 属性设置对象的浮动。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#box {
-</span><span class='line'>   height: 110px;
-</span><span class='line'>}
-</span><span class='line'>#b1 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left;
-</span><span class='line'>}
-</span><span class='line'>#b2 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: none; margin-left: 5px; margin-right: 5px;
-</span><span class='line'>}
-</span><span class='line'>#b3 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; float: left; clear: right;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="box">
-</span><span class='line'>&lt;div id="b1">&lt;/div>
-</span><span class='line'>&lt;div id="b2">&lt;/div>
-</span><span class='line'>&lt;div id="b3">&lt;/div>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>用列表排列元素</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>用 &lt;ul&gt; 或 &lt;ol&gt; 标签制作列表，用CSS设置列表项目的效果。这种方法主要用于规则排列的文本块、图片、控件等。</span></code></pre></td></tr></table></div></figure>
-
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>.list1 {
-</span><span class='line'>   height: 20px;
-</span><span class='line'>}
-</span><span class='line'>.list1 ul {
-</span><span class='line'>   list-style-type: none; margin: 0px;
-</span><span class='line'>}
-</span><span class='line'>.list1 li {
-</span><span class='line'>   float: left; margin-right: 5px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div class="list1">
-</span><span class='line'>&lt;ul>
-</span><span class='line'>&lt;li>[1]&lt;/li>
-</span><span class='line'>&lt;li>[2]&lt;/li>
-</span><span class='line'>&lt;li>[3]&lt;/li>
-</span><span class='line'>&lt;li>[4]&lt;/li>
-</span><span class='line'>&lt;/ul>
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>[1] [2] [3] [4]
-用绝对坐标定位元素</p>
-
-<p>浏览器窗口的左上角坐标为 (0,0)，x 坐标向右，y 坐标向下。</p>
-
-<p>CSS提供了几个位置属性，可以设置对象在页面中的位置。</p>
-
-<p>position：当它取值为 absolute 时，表示对象使用绝对坐标定位。</p>
-
-<p>left、top：对象的左上角坐标。</p>
-
-<p>right、bottom：对象的右下角坐标。</p>
-
-<p>z-index：对象的层叠顺序。取值为一个整数。</p>
-
-<p>用绝对坐标定位的对象是可以发生重叠的，如果没有指定层叠顺序，则后定义的对象位于上层，如果指定了“z-index”值，则值大的位于上层。</p>
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#m1 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 50px; top: 10px; z-index: 1;
-</span><span class='line'>}
-</span><span class='line'>#m2 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 185px; top: 10px; z-index: 2;
-</span><span class='line'>}
-</span><span class='line'>#m3 {
-</span><span class='line'>   width: 120px; height: 100px; border: 4px double #0000FF; position: absolute; left: 320px; top: 10px; z-index: 3;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="m1">&lt;/div>
-</span><span class='line'>&lt;div id="m2">&lt;/div>
-</span><span class='line'>&lt;div id="m3">&lt;/div></span></code></pre></td></tr></table></div></figure>
-
-
-<p>我们一般不推荐使用这种方法制作网页，这种网页调整起来非常困难，只是在一些特殊情况下使用。</p>
-
-<p>用相对坐标定位元素</p>
-
-<p>父对象的左上角坐标为 (0,0)，对象的坐标是相对于父对象的。</p>
-
-<p>position：当它取值为 relative 时，表示对象使用相对坐标定位。</p>
-
-<p>left、top：对象的左上角坐标。</p>
-
-<p>right、bottom：对象的右下角坐标。</p>
-
-<p>以上坐标也可理解为相对于父对象的左上角偏移的距离。</p>
-
-<p>注意：用相对坐标定位的对象不允许层叠。此时 z-index 属性无效。</p>
-
-<p>用相对坐标定位对象在实现一些不规则的排列或拼接时有很好的效果。</p>
-
-<p>举例：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;style type="text/css">
-</span><span class='line'>#area {
-</span><span class='line'>   width: 270px; height: 70px; border: 1px solid #0000FF;
-</span><span class='line'>}
-</span><span class='line'>#h1 {
-</span><span class='line'>   position: relative; left: 85px; top: 10px;
-</span><span class='line'>}
-</span><span class='line'>#h2 {
-</span><span class='line'>   position: relative; left: 15px; top: 32px;
-</span><span class='line'>}
-</span><span class='line'>#h3 {
-</span><span class='line'>   position: relative; left: 75px; top: 40px;
-</span><span class='line'>}
-</span><span class='line'>#h4 {
-</span><span class='line'>   position: relative; left: 115px; top: 25px;
-</span><span class='line'>}
-</span><span class='line'>&lt;/style>
-</span><span class='line'>&lt;div id="area">
-</span><span class='line'>&lt;img id="h1" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h2" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h3" src="./image/face19.gif" />
-</span><span class='line'>&lt;img id="h4" src="./image/face19.gif" />
-</span><span class='line'>&lt;/div></span></code></pre></td></tr></table></div></figure>
-
 
 
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/08/web-div-plus-csspai-ban/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -415,45 +177,12 @@
 <p>每次都提交，数据肯定不会丢，也没有担心。
 就找个问题的解决方案，果然有。</p>
 
-<p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># if you have already checked out to master, 
-</span><span class='line'># you won't know the commit-ish of your "no branch":
-</span><span class='line'>
-</span><span class='line'>git fsck --lost-found # (to find your &lt;commit-ish>)
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># if you are still on your "no branch" commit:
-</span><span class='line'>
-</span><span class='line'>git log # (the commit-ish will be on the first line)
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># or
-</span><span class='line'>
-</span><span class='line'>git log | head -n 1 | cut -d ' ' -f 2 | pbcopy
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish></span></code></pre></td></tr></table></div></figure>
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -493,365 +222,14 @@
 我的机器是mac 10.7的;使用mysql-5.1.52-osx10.6-x86.dmg安装包， 没有更新的，这个可用。（5.5也可以这样用，基本一致 MacOSX10.8.x目前都可以用）
 2.安装软件包位于硬盘映象(.dmg)文件中，必须首先双击搜索起中的图标来安装该文件。应当安装图像并显示其内容。</p>
 
-<p>注释：在继续安装前，一定要使用MySQL管理器应用程序(在Mac OS X服务器上)或通过命令行的mysqladmin shutdown关闭所有运行MySQL服务器实例。
-MySQL的Mac OS X PKG安装到/usr/local/mysql-VERSION，并且还会安装一个符号连接，/usr/local/mysql，指向新的位置。如果有/usr/local/mysql目录，首先将它改名为/usr/local/mysql.bak。安装完后，安装器执行mysql_install_db在MySQL数据库中创建授权表。</p>
-
-<p>安装布局与tar文件二进制分发版类似；所有MySQL二进制代码位于目录/usr/local/mysql/bin中。默认情况，MySQL套接字文件创建为/tmp/mysql.sock。
-如果你想在系统启动过程中自动启动MySQL，你还需要安装MySQL Startup Item。在MySQL 5.1中,它是Mac OS X安装盘映像的一部分，是一个独立的安装软件包。只需要双击MySQLStartupItem.图标并按照说明来安装。</p>
-
-<p>MySQL 5.1的Startup Item安装在/Library/StartupItems/MySQLCOM。Startup Item安装时在系统配置文件/etc/hostconfig中加入变量MySQLCOM=-YES-。如果你想要disable自动启动MySQL，只需要将该变量更改为MySQLCOM=-NO-。
-安装完后，可以在终端窗口运行下面的命令来启动MySQL。你必须具有管理员权限来执行该任务。</p>
-
-<p>如果你已经安装的Startup Item：</p>
-
-<p>shell> sudo /Library/StartupItems/MySQLCOM/MySQLCOM start</p>
-
-<p>(Enter your password, if necessary)</p>
-
-<p>(Press Control-D or enter &ldquo;exit&rdquo; to exit the shell)</p>
-
-<p>如果不使用Startup Item，输入下面的命令序列：</p>
-
-<p>shell> cd /usr/local/mysql</p>
-
-<p>shell> sudo ./bin/mysqld_safe</p>
-
-<p>(Enter your password, if necessary)</p>
-
-<p>(Press Control-Z)</p>
-
-<p>shell> bg</p>
-
-<p>(Press Control-D or enter &ldquo;exit&rdquo; to exit the shell)</p>
-
-<h2>二.创建用户 分配权限</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>grant all privileges on *.* to 'user'@'localhost' with grant option 
-</span><span class='line'>grant all privileges on *.* to 'user'@'localhost' identified by ‘123456′; 
-</span><span class='line'>flush privileges; </span></code></pre></td></tr></table></div></figure>
-
-
-<h5>1.新建用户。</h5>
-
-<p><em>如果mysql不识别的话，export PATH=$PATH:/usr/local/mysql/bin</em>
-默认密码为空，直接按回车即可。</p>
-
-<p>登录MYSQL</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@&gt;mysql -u root -p </span></code></pre></td></tr></table></div></figure>
-
-
-<p>@>密码
-创建用户
-mysql> insert into mysql.user(Host,User,Password) values(&ldquo;localhost&rdquo;,&ldquo;phplamp&rdquo;,password(&ldquo;1234&rdquo;));
-刷新系统权限表
-mysql>flush privileges;
-这样就创建了一个名为：phplamp  密码为：1234  的用户。</p>
-
-<p>然后登录一下。</p>
-
-<p>mysql>exit;
-@>mysql -u phplamp -p
-@>输入密码
-mysql>登录成功</p>
-
-<h5>2.为用户授权。</h5>
-
-<p>登录MYSQL（有ROOT权限）。我里我以ROOT身份登录.
-@>mysql -u root -p
-@>密码
-首先为用户创建一个数据库(phplampDB)
-mysql>create database phplampDB;
-授权phplamp用户拥有phplamp数据库的所有权限。 如果其它机器想访问的话，就把localhost改为&#8221;%&#8221;</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;grant all privileges on phplampDB.* to phplamp@localhost identified by '1234'; </span></code></pre></td></tr></table></div></figure>
-
-
-<p>刷新系统权限表
-mysql>flush privileges;
-mysql>其它操作</p>
-
-<p>如果想指定部分权限给一用户，可以这样来写:
-mysql>grant select,update on phplampDB.* to phplamp@localhost identified by &lsquo;1234&rsquo;;
-//刷新系统权限表。
-mysql>flush privileges;</p>
-
-<h5>3.删除用户。</h5>
-
-<p>@>mysql -u root -p
-@>密码
-mysql>DELETE FROM user WHERE User=&ldquo;phplamp&rdquo; and Host=&ldquo;localhost&rdquo;;
-mysql>flush privileges;
-//删除用户的数据库
-mysql>drop database phplampDB;</p>
-
-<h5>4.修改指定用户密码。</h5>
-
-<p>@>mysql -u root -p
-@>密码
-mysql>update mysql.user set password=password(&lsquo;新密码&rsquo;) where User=&ldquo;phplamp&rdquo; and Host=&ldquo;localhost&rdquo;;
-mysql>flush privileges;</p>
-
-<h2>三、使用后修改编码</h2>
-
-<p>修改my.ini文件
-加上
-default-character-set=gb2312
-设定数据库字符集
-alter database da_name default character set &lsquo;charset&rsquo;</p>
-
-<h5>1)设置数据库编码 /etc/my.cnf</h5>
-
-<p>[mysqld]
-default-character-set=gbk
-&hellip;
-[client]
-default-character-set=gbk
-－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－</p>
-
-<h5>2)按字符集导出</h5>
-
-<p>$mysqldump -u root -p dbname &mdash;default-character-set=gbk > a.sql;</p>
-
-<h5>3)查看SQL文件的编码</h5>
-
-<p>[root@localhost gethtml]# file a.sql
-   a.sql: UTF-8 Unicode &hellip;
-[root@localhost gethtml]# iconv -f utf-8 -t gbk a.sql > a2.sql
-[root@localhost gethtml]# file a2.sql
-   a2.sql: Non-ISO extended-ASCII English text 这时已经是gbk的编码了</p>
-
-<h5>3)导入</h5>
-
-<p>查看数据库服务和客户端字符集
-mysql> status;
-Server characterset:    gbk
-Db     characterset:      gbk
-Client characterset:      latin1
-Conn. characterset:     latin1</p>
-
-<p>mysql> set names &lsquo;gbk&rsquo;;   //这样
-mysql> status;
-Server characterset:   gbk
-Db     characterset:     gbk
-Client characterset:     gbk
-Conn. characterset:    gbk
-这时才能导数据</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; source a.sql;
-</span><span class='line'>----------------------------------------------------------------------------------</span></code></pre></td></tr></table></div></figure>
-
-
-<p>单独设置某个数据库：
-alter database testdb character set utf8;
-查看mysql支持的编码：
-show character set;</p>
-
-<p>查看系统的字符集和排序方式的设定可以通过下面的两条命令：
-mysql> SHOW VARIABLES LIKE &lsquo;&#8217;character_set_%&rsquo;&lsquo;;
-LINUX 如下:</p>
-
-<h5>1)导出数据</h5>
-
-<p>[<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#114;&#111;&#111;&#x74;&#64;&#119;&#x77;&#x77;&#x2e;&#99;&#x6e;&#115;&#x63;&#x6e;&#46;&#x6f;&#x72;&#103;">&#114;&#111;&#x6f;&#116;&#64;&#119;&#119;&#x77;&#46;&#x63;&#110;&#115;&#x63;&#110;&#x2e;&#x6f;&#x72;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
-
-<h5>2)查看导出的sql文件的编码</h5>
-
-<p>[<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#114;&#x6f;&#x6f;&#x74;&#64;&#x77;&#x77;&#119;&#46;&#x63;&#x6e;&#115;&#x63;&#110;&#x2e;&#111;&#x72;&#x67;">&#x72;&#x6f;&#111;&#116;&#x40;&#119;&#x77;&#x77;&#46;&#99;&#110;&#115;&#x63;&#x6e;&#46;&#111;&#114;&#103;</a> ~]$ file base_user.sql
-　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
-
-<h5>3)转成要用的编码</h5>
-
-<p>[<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x72;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;">&#114;&#x6f;&#x6f;&#116;&#x40;&#x77;&#119;&#x77;&#46;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#111;&#x72;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
-
-<h5>4)连接数据库并查看当前库的编码</h5>
-
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x72;&#x6f;&#111;&#116;&#x40;&#x77;&#119;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#46;&#111;&#114;&#103;">&#114;&#111;&#x6f;&#116;&#x40;&#119;&#x77;&#119;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#46;&#111;&#x72;&#x67;</a> ~]$ mysql -uroot
-　mysql> use testdb;
-mysql> status;</p>
-
-<pre><code>Server characterset:    latin1
-Db     characterset:    gbk
-Client characterset:    latin1
-Conn. characterset:    latin1
-</code></pre>
-
-<h5>5)设置成需要的编码</h5>
-
-<p>mysql>set names &lsquo;gbk&rsquo;;</p>
-
-<h5>6)查看现在的编码</h5>
-
-<p>mysql> status;</p>
-
-<pre><code>Server characterset:    latin1
-Db     characterset:    gbk
-Client characterset:    gbk
-Conn. characterset:    gbk
-</code></pre>
-
-<h5>7)导入我们转换成gbk后的文件</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mysql&gt; source base_user_gbk.sql;</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>四、导入、导出sql文件</h2>
-
-<p>步骤如下：</p>
-
-<p>一.MYSQL的命令行模式的设置：
-桌面->我的电脑->属性->环境变量->新建-></p>
-
-<p>PATH=“；path\mysql\bin;”其中path为MYSQL的安装路径。</p>
-
-<p>二.简单的介绍一下命令行进入MYSQL的方法：</p>
-
-<h5>1.C:>mysql -h hostname -u username -p</h5>
-
-<p>按ENTER键，等待然后输入密码。这里hostname为服务器的名称，如localhost，username为MYSQL的用户名，如root。
-进入命令行后可以直接操作MYSQL了。</p>
-
-<h5>2.简单介绍一下MYSQL命令：</h5>
-
-<p>mysql->CREATE DATABASE dbname;//创建数据库
-mysql->CREATE TABLE tablename;//创建表
-mysql->SHOW DATABASES;//显示数据库信息，有那些可用的数据库。
-mysql->USE dbname;//选择数据库
-mysql->SHOW TABLES;//显示表信息，有那些可用的表
-mysql->DESCRIBE tablename;//显示创建的表的信息</p>
-
-<h5>三.从数据库导出数据库文件：</h5>
-
-<p>1.将数据库mydb导出到e:\mysql\mydb.sql文件中：</p>
-
-<p>打开开始->运行->输入cmd 进入命令行模式
-c:>mysqldump -h localhost -u root -p mydb >e:\mysql\mydb.sql</p>
-
-<p>然后输入密码，等待一会导出就成功了，可以到目标文件中检查是否成功。</p>
-
-<p>2.将数据库mydb中的mytable导出到e:\mysql\mytable.sql文件中：
-c:>mysqldump -h localhost -u root -p mydb mytable>e:\mysql\mytable.sql</p>
-
-<p>3.将数据库mydb的结构导出到e:\mysql\mydb_stru.sql文件中：
-c:>mysqldump -h localhost -u root -p mydb &mdash;add-drop-table >e:\mysql\mydb_stru.sql</p>
-
-<p>//-h localhost可以省略，其一般在虚拟主机上用</p>
-
-<h5>四.从外部文件导入数据到数据库中：</h5>
-
-<p>从e:\mysql\mydb2.sql中将文件中的SQL语句导入数据库中：</p>
-
-<p>1.从命令行进入mysql，然后用命令CREATE DATABASE mydb2;创建数据库mydb2。</p>
-
-<p>2.退出mysql 可以输入命令exit；或者quit；</p>
-
-<p>3.在CMD中输入下列命令：
-c:>mysql -h localhost -u root -p mydb2 &lt; e:\mysql\mydb2.sql</p>
-
-<p>然后输入密码，就OK了。</p>
-
-<h5>五.下面谈一下关于导入文件大小限制问题的解决：</h5>
-
-<p>默认情况下：mysql 对导入文件大小有限制的，最大为2M，所以当文件很大时候，直接无法导入，下面就这个问题的解决列举如下：</p>
-
-<p>1.在php.ini中修改相关参数：</p>
-
-<p>影响mysql导入文件大小的参数有三个：</p>
-
-<p>memory_limit=128M,upload_max_filesize=2M,post_max_size=8M</p>
-
-<p>修改upload_max_filesize=200 M 这里修改满足你需要的大小，可以同时修改其他两项memory_limit=250M post_max_size=200M</p>
-
-<p>这样就可以导入200M以下的.sql文件了。</p>
-
-<p>上文中是把mysql放置在系统路径中，其实不妨也行。例如我的Mysql安装目录为D:\MySQL Server 5.0；</p>
-
-<p>则首先用cmd打开dos窗口，然后输入D:(没有&#8217;\&lsquo;)回车</p>
-
-<p>此时应该会出现D:>这样的标记，然后在其后面输入D:\MySQL Server 5.0\bin回车（顺序颠倒也行的）</p>
-
-<p>出现D:\MySQL Server 5.0\bin> 接着输入mysqldump -u用户名 -p 数据库名 > 数据库名.sql（也可以输入路径）；具体用法参照上文。</p>
-
-<p>导入文件同样，只是改了‘>’为‘&lt;’就行了。或者直接用source 也行：</p>
-
-<p>常用source 命令</p>
-
-<p>进入mysql数据库控制台</p>
-
-<p>如mysql -u root -p（没必要,省略）</p>
-
-<p>mysql>use 数据库</p>
-
-<p>然后使用source命令，后面参数为脚本文件(如这里用到的.sql)</p>
-
-<p>mysql>source d:wcnc_db.sql</p>
-
-<h2>修改Root密码</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#mysql -u root -p
-</span><span class='line'>Enter password:
-</span><span class='line'>ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES/NO)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装时没有给root设置密码而默认其为空的,或忘记密码，不能成功登录，或者登录后没有权限操作。
-可以尝试以下的方法：
-方法1  :</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># mysqladmin -u root password 123456</span></code></pre></td></tr></table></div></figure>
-
-
-<p>设置了root的密码。</p>
-
-<p>方法2</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># /etc/init.d/mysql stop
-</span><span class='line'># mysqld_safe --user=mysql --skip-grant-tables --skip-networking &
-</span><span class='line'># mysql -u root mysql
-</span><span class='line'>
-</span><span class='line'>mysql> UPDATE user SET Password=PASSWORD('123456') where USER='root';
-</span><span class='line'>mysql> FLUSH PRIVILEGES;
-</span><span class='line'>mysql> quit
-</span><span class='line'># /etc/init.d/mysql restart
-</span><span class='line'># mysql -uroot -p
-</span><span class='line'>Enter password: &lt;输入新设的密码newpassword>
-</span><span class='line'>mysql>　</span></code></pre></td></tr></table></div></figure>
-
-
-<p>方法3：
-MySQL安装之后，root的密码是空的。为了提高安全性有必要给root加上密码。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mysql –u root –p
-</span><span class='line'>password:
-</span><span class='line'>mysql&gt;SET PASSWORD FOR 'root'@'localhost' = PASSWORD('Password');</span></code></pre></td></tr></table></div></figure>
+<p>注释：在继续安装前，一定要使用MySQL管理器应用程序(在Mac OS X服务器上)或通过命令行的mysqladmin shutdown关闭所有运行MySQL服务器实例。</p>
 
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/07/mysql-for-macosx-an-zhuang-he-ji-ben-cao-zuo/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -951,125 +329,12 @@ OK,解决了。</p>
 </ul>
 
 
-<h5>1、环境搭建1.1、JDK安装</h5>
-
-<p>如果你还没有JDK的话，可以去这里下载，接下来的工作就是安装提示一步一步走。设置环境变量步骤如下：
-我的电脑->属性->高级->环境变量->系统变量中添加以下环境变量：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>JAVA_HOME值为： D:Program FilesJavajdk1.6.0_18（你安装JDK的目录）
-</span><span class='line'>CLASSPATH值为：.;%JAVA_HOME%lib        ools.jar;%JAVA_HOME%libdt.jar;%JAVA_HOME%in;
-</span><span class='line'>Path:  在开始追加 %JAVA_HOME%in;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>NOTE：前面四步设置环境变量对搭建Android开发环境不是必须的，可以跳过。
-安装完成之后，可以在检查JDK是否安装成功。打开cmd窗口，输入java –version 查看JDK的版本信息。出现类似下面的画面表示安装成功了：</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108473lch0zxwa3acwwlz.png"></p>
-
-<p>图1、验证JDK安装是否成功</p>
-
-<h5>1.2、Eclipse安装</h5>
-
-<p>如果你还么有Eclipse的话，可以去这里下载，下载如下图所示的Eclipse IDE for Java Developers（92M）的win 32bit版：
-<img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108477hf74jjzhwwqghrx.png"></p>
-
-<p>图2、Eclipse下载</p>
-
-<p>解压之后即可使用。</p>
-
-<h5>1.3、Android SDK安装</h5>
-
-<p>在Android Developers下载android-sdk_r05-windows.zip，下载完成后解压到任意路径。
-运行SDK Setup.exe，点击Available Packages。如果没有出现可安装的包，请点击Settings，选中Misc中的&#8221;Force <a href="https://...">https://&#8230;</a>&ldquo;这项，再点击Available Packages 。（《1.3、Android SDK安装》这里由于版本不同，没有SDK Setup.exe，只有SDK Manager ）
-选择希望安装的SDK及其文档或者其它包，点击Installation Selected、Accept All、Install Accepted，开始下载安装所选包
-在用户变量中新建PATH值为：Android SDK中的tools绝对路径（本机为D:\AndroidDevelop\android-sdk-windows\tools）。</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210847zkz3upn8ptupajn3.png"></p>
-
-<p>图2、设置Android SDK的环境变量</p>
-
-<p>“确定”后，重新启动计算机。重启计算机以后，进入cmd命令窗口，检查SDK是不是安装成功。
-运行 android –h 如果有类似以下的输出，表明安装成功：
-<img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108485xc3hhuhqgrxz5x5.png"></p>
-
-<p>图3、验证Android SDK是否安装成功</p>
-
-<h5>1.4、ADT安装</h5>
-
-<p>打开 Eclipse IDE，进入菜单中的 &ldquo;Help&rdquo; &ndash;> &ldquo;Install New Software&rdquo;
-点击Add&hellip;按钮，弹出对话框要求输入Name和Location：Name自己随便取，Location输入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>http://dl-ssl.google.com/android/eclipse</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如下图所示：</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210848nmzllg33c1wnnew3.png"></p>
-
-<p>确定返回后，在work with后的下拉列表中选择我们刚才添加的ADT，我们会看到下面出有Developer Tools，展开它会有Android DDMS和Android Development Tool，勾选他们。</p>
-
-<p>如下图所示：</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210848ztqts8zrr5qbcmzt.png"></p>
-
-<p>然后就是按提示一步一步next。
-完成之后：
-选择Window > Preferences&hellip;
-在左边的面板选择Android，然后在右侧点击Browse&hellip;并选中SDK路径，本机为：
-D:AndroidDevelopandroid-sdk-windows
-点击Apply、OK。配置完成。</p>
-
-<h5>1.5、创建AVD</h5>
-
-<p>为使Android应用程序可以在模拟器上运行，必须创建AVD。
-1、在Eclipse中。选择Windows > Android SDK and AVD Manager
-2、点击左侧面板的Virtual Devices，再右侧点击New
-3、填入Name，选择Target的API，SD Card大小任意，Skin随便选，Hardware目前保持默认值
-4、点击Create AVD即可完成创建AVD
-注意：如果你点击左侧面板的Virtual Devices，再右侧点击New ，而target下拉列表没有可选项时，这时候你：
-点击左侧面板的Available Packages，在右侧勾选</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>https://dl-ssl.google.com/android/repository/repository.xml</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如下图所示：</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/2108488xiii3gzmrkf9iir.png"></p>
-
-<p>然后点击Install Selected按钮，接下来就是按提示做就行了
-要做这两步，原因是在1.3、Android SDK安装中没有安装一些必要的可用包（Available Packages）。</p>
-
-<h5>2、HelloWorld</h5>
-
-<p>通过File &ndash;> New &ndash;> Project 菜单，建立新项目&#8221;Android Project&#8221;
-然后填写必要的参数，如下图所示：（注意这里我勾选的是Google APIs，你可以选你喜欢的，但你要创建相应的AVD）</p>
-
-<p><img src="http://www.apkbus.com/data/attachment/forum/201204/10/210849rr90t9tp9z74vp19.png"></p>
-
-<p>相关参数的说明：
-Project Name: 包含这个项目的文件夹的名称。
-Package Name: 包名，遵循JAVA规范，用包名来区分不同的类是很重要的，我用的是helloworld.test。
-Activity Name: 这是项目的主类名，这个类将会是Android的Activity类的子类。一个Activity类是一个简单的启动程序和控制程序的类。它可以根据需要创建界面，但不是必须的。
-Application Name: 一个易读的标题在你的应用程序上。
-在&#8221;选择栏&#8221;的 &ldquo;Use default location&rdquo; 选项，允许你选择一个已存在的项目。
-点击Finish后，点击Eclipse的Run菜单选择Run Configurations…
-选择“Android Application”，点击在左上角（按钮像一张纸上有个“+”号）或者双击“Android Application”， 有个新的选项“New_configuration”（可以改为我们喜欢的名字）。
-在右侧Android面板中点击Browse…，选择HelloWorld
-在Target面板的Automatic中勾选相应的AVD，如果没有可用的AVD的话，你需要点击右下角的Manager…，然后新建相应的AVD。如下图所示：
-<img src="http://www.apkbus.com/data/attachment/forum/201204/10/210849v8zlcudvv375v8rz.png"></p>
-
-<p>然后点Run按钮即可，运行成功的话会有Android的模拟器界面，如下图所示：</p>
-
-<p><img src="http://images.cnblogs.com/cnblogs_com/skynet/WindowsLiveWriter/Android1_552/image_22.png"></p>
-
-<p>转自：<a href="http://www.apkbus.com/android-43332-1-1.html">http://www.apkbus.com/android-43332-1-1.html</a></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/03/android-kai-fa-huan-jing-qiang-jian/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1116,132 +381,12 @@ Application Name: 一个易读的标题在你的应用程序上。
 <p>然后可以进行git add .. 进行文件添加。<br/>
 以及编写.gitignore文件，对本地文件进行忽略</p>
 
-<figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Exclude the build directory
-</span><span class='line'> build/*
-</span><span class='line'> 
-</span><span class='line'> # Exclude temp nibs and swap files
-</span><span class='line'> *~.nib
-</span><span class='line'> *.swp
-</span><span class='line'> 18 
-</span><span class='line'> # Exclude OS X folder attributes
-</span><span class='line'> .DS_Store
-</span><span class='line'> 
-</span><span class='line'> # Exclude user-specific XCode 3 and 4 files
-</span><span class='line'> *.mode1
-</span><span class='line'> *.mode1v3
-</span><span class='line'> *.mode2v3
-</span><span class='line'> *.perspective
-</span><span class='line'> *.perspectivev3
-</span><span class='line'> *.pbxuser
-</span><span class='line'> *.xcworkspace
-</span><span class='line'> *.xcuserstate
-</span><span class='line'> xcuserdata</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>1.2 从现有仓库克隆</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/aaaa/aa.git
-</span><span class='line'>git clone file:::/Volumes/Data/xxx.git
-</span><span class='line'>git clone /Volumes/Data/xxx.git
-</span><span class='line'>git clone /Volumes/Data/xxx.git new_xxx_dir</span></code></pre></td></tr></table></div></figure>
-
-
-<p>默认会创建xxx目录（xxx.git）,如果想指定目录的话用最后一种</p>
-
-<h5>1.3 其它常用</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git commit
-</span><span class='line'>git commit -a -m "asdf"
-</span><span class='line'>git status
-</span><span class='line'>git log
-</span><span class='line'>git log -1
-</span><span class='line'>git log -p</span></code></pre></td></tr></table></div></figure>
-
-
-<p>注意看提示就好了。</p>
-
-<h4>2.远程仓库使用</h4>
-
-<h5>2.1 创建</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git init --bare</span></code></pre></td></tr></table></div></figure>
-
-
-<p>创建一个空的远程仓库（可在服务器上，也可在本地，也可以在Dropbox的目录中）</p>
-
-<h5>2.2 查看远程仓库</h5>
-
-<p>在本地执行以下命令</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote -v</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.3 添加远程仓库</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote add [shortanem] [url]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.4 从远程抓取数据</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch [remote-name]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.5 推送数据</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git push [remote-name] [branchname]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>2.6 其它</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git remote show [remote-name]
-</span><span class='line'>git remote rename old new
-</span><span class='line'>git remote rm xxx</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Dropbox 整合</h4>
-
-<p>把远程建在Dropbox上即可，哈哈</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1280,48 +425,12 @@ Application Name: 一个易读的标题在你的应用程序上。
 <p>Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked.
 PowerSaving Flashlight also solve this issue.</p>
 
-<p>Details:
-1.Saving you battery power automatic, and you can change it from settings(both in app setting and system setting)
-2.Stop using you torch when battery level is low
-3.Disable the system Auto-Lock
-4.Turn on the flashlight when app startup(You can set it to &ldquo;NO&rdquo;
-5.Fullscreen control, but you can only turn it off by press the button.
-6.Share the famous app to you friends.</p>
-
-<p>No matter what problem you have, just contact us by email or visit the develop&rsquo;s blog.</p>
-
-<p>史上最懂你的省电手电筒</p>
-
-<p>还在为找不到好用的手电筒发愁么？
-还在为那些“大而全”的工具启动慢、难用发愁么？
-还在为手电筒用着用着就黑了发愁么？
-还在为手电筒用着太费电发愁么？</p>
-
-<ol>
-<li>自动为你的手机省电</li>
-<li>当电池电量过低，自动切换到“白屏”模式</li>
-<li>可选择禁用系统锁屏功能</li>
-<li>启动可选择默认打开手电筒</li>
-<li>全屏控制功能，按任意位置打开，关闭按开关</li>
-<li>分享手电筒给好友</li>
-</ol>
-
-
-<p>如果您遇到问题或者有好的建议，请直接与我们联系或者在程序中提交反馈，谢谢。</p>
-
-<p>无奈AppStore不让上，做的再好都不让上，哎！</p>
-
-<h4>91：</h4>
-
-<p><a href="http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788">http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788</a></p>
-
-<h4>同步推：</h4>
-
-<p><a href="http://app.tongbu.com/10001483_flashlight.html">http://app.tongbu.com/10001483_flashlight.html</a></p>
-
-<h5>欢迎留言反馈！</h5>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1365,94 +474,12 @@ So, iSecret could help you to manage them safely.
 iSecret&rsquo;s all file are encrypted at high level.
 iSecret does not require any network.</p>
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x73;&#x68;&#x6a;&#x62;&#x6f;&#x72;&#97;&#103;&#101;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#115;&#104;&#106;&#x62;&#x6f;&#114;&#x61;&#x67;&#101;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a></p>
-
-<p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
-现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
-所以i秘密帮您把这些帐号密码保管起来,并且全程高强度加密,确保信息安全。
-为了保证密码的安全,首先主密码是通过高强度的加密算法,保存到手机当中。
-即可手机被破解,也能保证数据的安全。
-对于保存的各类网站等的密码信息,全部通过加密文本保存到手机中,并且是全部纯文本解析,没有用
-任何XML、INI等配置文件,让安全性更升一级。
-i秘密不需要任何的网络访问,进一步加强安全性。</p>
-
-<p>欢迎大家提出宝贵意见,共同为好产品而努力。
-<a href="mailto:shjborage@gmail.com">shjborage@gmail.com</a></p>
-
-<h3>Release Note:</h3>
-
-<h5>v1.0  2012-02-22 10:08:28</h5>
-
-<ul>
-<li>第一版本，仅157kb大小。</li>
-<li>功能简单实用</li>
-</ul>
-
-
-<h5>v1.1  2012-08-15 10:16:20</h5>
-
-<ul>
-<li>在查看秘密时，可直接点击文本内容将其拷贝到剪贴板；</li>
-<li>应用需要输入密码时，如果您输入正确的密码，自动进入；</li>
-<li>当您添加新的秘密时，自动进入编辑模式；</li>
-<li>当您发送邮件时，加入一些提示信息；</li>
-<li>添加开发者博客以及用户评价体系；</li>
-<li><p>其它问题修复。</p></li>
-<li><p>In secret detail view, you can tap some text information to copy it to pasteboard;</p></li>
-<li>In the beginning of the app, when you enter the correct password, it will start working automatically;</li>
-<li>When you add new secret, edit it first;</li>
-<li>Add some presentations when you send emails;</li>
-<li>Add author&rsquo;s blog and user review interface;</li>
-<li>Some other bugs fixed.</li>
-</ul>
-
-
-<h5>v1.2  2012-09-24 14:58:31</h5>
-
-<ul>
-<li><p>随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率</p></li>
-<li><p>Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution</p></li>
-</ul>
-
-
-<h5>v1.3  2013-04-25 10:55:45</h5>
-
-<ul>
-<li>支持图形解锁以及简单数字密码，更加简单方便</li>
-<li>简化用户反馈功能，支持内部反馈</li>
-<li>加入程序版更新提示本</li>
-<li>解决各个版本系统上面UI细节问题</li>
-<li>推荐应用给好友圈</li>
-<li><p>禁用程序后台运行，更加安全稳定</p></li>
-<li><p>Support simple password and pattern, which is easy to use</p></li>
-<li>Simply the user feedback in the app without go to the AppStore</li>
-<li>Add new version prompt, you can&rsquo;t miss the new version</li>
-<li>Fix some bugs in the different iOS versions</li>
-<li>Share this app to your friends</li>
-<li>Stop running in the background, much safer</li>
-</ul>
-
-
-<h5>v1.4  2013-05-23 7:55:45</h5>
-
-<ul>
-<li>加强主密码安全性，强烈建议大家升级</li>
-<li><p>默认密码不显示的问题</p></li>
-<li><p>Improve the security of you main passcode, recommend you to update at once.</p></li>
-<li>Fix bug: the default passcode was not show.</li>
-</ul>
-
-
-<h5>v1.5  2013-10-10 8:55:45</h5>
-
-<ul>
-<li>iOS 7 Support</li>
-</ul>
-
-
-<h3>欢迎留言反馈！</h3>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/isecret-jian-jie/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1496,29 +523,12 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
 <h4>NSCoping</h4>
 
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
-
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1558,49 +568,12 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
 
 <p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UITableViewCell(dealloc) 
-</span><span class='line'>-(void)dealloc 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(@"%@",NSStringFromSelector(_cmd)); 
-</span><span class='line'>    NSArray *array = allSubviews(self);       // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有
-</span><span class='line'>    NSLog(@"%@",array); 
-</span><span class='line'>    [super dealloc]; 
-</span><span class='line'>}
-</span><span class='line'>@end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>其它的类也可以这样写，你随便输出什么</p>
-
-<p>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> @implementation UITableView(setframe) 
-</span><span class='line'>-(void)setFrame:(CGRect)frame 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(%"%@",self); 
-</span><span class='line'>    [super setFrame: frame]; 
-</span><span class='line'>} 
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Read on &rarr;</a>
+    </footer>
   
 
 
