@@ -116,7 +116,7 @@ task :new_post, :title do |t, args|
     post.puts "categories: "
     post.puts "---"
   end
-  if open
+  if open(filename, "r")
      `#{editor} #{filename}`
   end
 
@@ -156,7 +156,7 @@ task :new_page, :filename do |t, args|
       page.puts "footer: true"
       page.puts "---"
     end
-    if open
+    if open(file, 'r')
         `#{editor} #{file}`
     end
   else
