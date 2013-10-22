@@ -17,6 +17,8 @@ CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常�
 用 <div> 标签定义块对象，由于 <div> 标签本身有换行作用，各元素自然排成一列。用CSS的 margin 属性设置对象间的距离，用 padding 属性调整对象的宽度和高度。
 ```
 
+<!-- more -->
+
 举例：
 {% codeblock %} 
 <style type="text/css">

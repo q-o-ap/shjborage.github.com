@@ -14,6 +14,8 @@ categories: iOS
 
 Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。
 
+<!-- more -->
+
 ```
 NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
 [cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];

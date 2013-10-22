@@ -13,6 +13,8 @@ categories: iOS
  NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
  ```
  得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。
+ 
+ <!-- more -->
 
 ###一、基础知识
 ####1，官方教程

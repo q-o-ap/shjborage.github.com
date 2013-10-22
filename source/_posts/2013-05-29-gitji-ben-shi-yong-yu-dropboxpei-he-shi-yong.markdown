@@ -17,6 +17,8 @@ $ git init
 然后可以进行git add .. 进行文件添加。  
 以及编写.gitignore文件，对本地文件进行忽略
 
+<!-- more -->
+
 {% codeblock OBJ-C示例 %}
 
  # Exclude the build directory

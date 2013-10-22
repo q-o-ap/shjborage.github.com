@@ -20,3 +20,4 @@ May 28, 2013
 	在dealloc里要调用[super dealloc]，千万不要调用[super release]
 	
 	
+	

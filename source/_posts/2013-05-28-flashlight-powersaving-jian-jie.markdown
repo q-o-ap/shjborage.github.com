@@ -11,6 +11,8 @@ The best flashlight app to save you power and then protect you battery.
 Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked. 
 PowerSaving Flashlight also solve this issue. 
 
+<!-- more -->
+
 Details: 
 1.Saving you battery power automatic, and you can change it from settings(both in app setting and system setting) 
 2.Stop using you torch when battery level is low 

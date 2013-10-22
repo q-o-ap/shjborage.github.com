@@ -18,6 +18,8 @@ Git在使用过程中，不断的Checkout，以及各种工具使用执行各种
 每次都提交，数据肯定不会丢，也没有担心。
 就找个问题的解决方案，果然有。
 
+<!-- more -->
+
 
 http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes
 {% codeblock %}

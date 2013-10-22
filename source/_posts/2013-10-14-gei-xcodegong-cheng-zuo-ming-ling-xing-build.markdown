@@ -9,6 +9,8 @@ categories: iOS
 XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。
 
 XCode工程的命令行Build命令是 xcodebuild，用 --help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。
+
+<!-- more -->
   
 另外，将.app文件转成ipa包的方式也相当简单。具体方式是将 .app文件拷贝到一个名为 ipa/Payload的目录下，然后将ipa下的所有内容用zip打包即可：
 

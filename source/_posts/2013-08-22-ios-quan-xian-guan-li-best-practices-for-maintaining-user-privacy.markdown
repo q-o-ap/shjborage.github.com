@@ -15,6 +15,8 @@ categories: iOS
 
 Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.
 
+<!-- more -->
+
 You should access user or device data only with the user’s informed consent obtained in accordance with applicable law. In addition, you should take appropriate steps to protect user and device data and be transparent about how you use it. Here are some best practices that you can take:
 
 Review guidelines from government or industry sources, including the following documents:

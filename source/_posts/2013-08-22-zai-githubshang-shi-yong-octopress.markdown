@@ -14,6 +14,7 @@ Octopress是使用ruby语言编写的一套建立在jekyll之上的博客系统�
 4. 可以与git紧密集成，方便地进行博客的版本管理；
 5. 可以于Github Pages集成，不需要单独的web hosting，只要你有github帐号即可。
 
+<!-- more -->
 
 这些特点中的第三点到第五点尤其吸引我（第一点和第二点也很酷），于是我花了些时间研究。以下是相关的步骤和心得。
 
@@ -208,6 +209,21 @@ $ rake preview
 
 百度统计可以将生成的script直接添加到 source/post/after_footer.html 就可以。很简单，这里就不详述。
 
-—–EOF—–
 
 参考：http://www.cnblogs.com/stevelin/p/3281811.html
+
+####修改READON
+
+在xxx_post.markdown里添加如下
+
+```
+<!-- more -->
+```
+
+在_config.yml的excerpt_link:修改为你希望的描述就可以。
+
+```
+excerpt_link: "阅读全文 &rarr;"
+```
+
+From:http://ibluegrid.info/blog/2013/01/02/octopress-customization-2/

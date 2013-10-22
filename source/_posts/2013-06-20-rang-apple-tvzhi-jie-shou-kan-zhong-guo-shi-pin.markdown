@@ -17,6 +17,8 @@ categories: other
 TT的微博：http://weibo.com/u/1400101157
 http://www.ottnt.com/ Apple TV论坛 
 
+<!-- more -->
+
 ####没有自己的DNS
 
 　　　只需修改Apple TV的DNS（其它网络设置默认），然后地区选择美国，

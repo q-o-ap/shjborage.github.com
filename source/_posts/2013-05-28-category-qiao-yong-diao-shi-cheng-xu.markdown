@@ -10,9 +10,9 @@ categories: iOS
 
 除了隐藏私有方法外，我主要用它截住函数。 
 
-
 例1：测试时我想知道TableViewCell有没有释放，就可以这样写 
 
+<!-- more -->
 
 ```
 @implementation UITableViewCell(dealloc) 

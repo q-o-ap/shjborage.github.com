@@ -13,6 +13,8 @@ categories: iOS
 
 ####NSCoping  
 
+<!-- more -->
+
 Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.  
   
 

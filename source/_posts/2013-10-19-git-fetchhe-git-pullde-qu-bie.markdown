@@ -6,7 +6,6 @@ comments: true
 categories: SourceControl
 ---
 
-
 原文： http://www.tech126.com/git-fetch-pull/ 
 
 
@@ -19,6 +18,8 @@ git fetch origin master
 git log -p master..origin/master
 git merge origin/master
 ```
+
+<!-- more -->
 
 以上命令的含义：  
 首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.  

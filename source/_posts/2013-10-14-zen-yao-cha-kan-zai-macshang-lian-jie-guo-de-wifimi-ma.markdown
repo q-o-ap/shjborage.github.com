@@ -15,6 +15,8 @@ Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查�
 
 <a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a>
 
+<!-- more -->
+
 *	2.选中左侧“登陆”、“密码”
 
 <a href="http://www.flickr.com/photos/105999540@N03/10374769125/" title="2013-10-14-11 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3791/10374769125_fb2339510e.jpg" width="500" height="183" alt="2013-10-14-11"></a>

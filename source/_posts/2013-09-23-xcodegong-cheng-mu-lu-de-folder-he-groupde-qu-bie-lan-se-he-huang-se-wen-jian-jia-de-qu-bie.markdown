@@ -12,6 +12,9 @@ XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一�
 <iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21369&authkey=AK4bqqBLJG7H2NU" width="273" height="320" frameborder="0" scrolling="no"></iframe>
 
  上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？
+ 
+ <!-- more -->
+ 
 1. group 和 folder的区别
 group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
 folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。

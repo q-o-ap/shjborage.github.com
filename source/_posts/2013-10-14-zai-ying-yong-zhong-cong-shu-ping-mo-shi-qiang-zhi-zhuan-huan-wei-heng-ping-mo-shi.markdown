@@ -9,14 +9,14 @@ categories: iOS
 ####序：状态栏白边问题解决
 在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）
 
-
-
 在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路
 
 ###第一种：通过人为的办法改变view.transform的属性。
 具体办法：
     
 `view.transform`一般是View的旋转，拉伸移动等属性，类似`view.layer.transform`，区别在于`view.transform`是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而`view.layer.transform`可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。
+
+<!-- more -->
     
    这里要记住一点，当你改变过一个`view.transform`属性或者`view.layer.transform`的时候需要恢复默认状态的话，记得先把他们重置可以使用`view.transform = CGAffineTransformIdentity`，或者`view.layer.transform = CATransform3DIdentity`，假设你一直不断的改变一个`view.transform`的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。
     

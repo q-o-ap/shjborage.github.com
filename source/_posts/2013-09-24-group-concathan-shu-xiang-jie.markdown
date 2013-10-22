@@ -16,6 +16,8 @@ MySQL中group_concat函数(SQLite或其它数据亦可)
 
 group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator '分隔符'])
  
+ <!-- more -->
+ 
 ####基本查询
  
 

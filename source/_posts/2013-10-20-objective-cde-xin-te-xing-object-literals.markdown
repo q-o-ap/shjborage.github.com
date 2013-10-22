@@ -22,6 +22,8 @@ NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:@"value1", @"ke
 
 是不是很恶心？现在以上代码可以简化成以下形式，注意到没有，不用再在参数的最后加恶心的nil了，字典的key和value也不再是倒着先写value,再写key了：
 
+<!-- more -->
+
 ```
 NSNumber * number = @1;
 NSArray * array = @[@"one", @"two"];

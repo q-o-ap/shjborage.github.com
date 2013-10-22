@@ -20,6 +20,8 @@ categories: iOS
 pod spec create XXXX
 ```
 
+<!-- more -->
+
 ###编辑XXXX.podspec
 创建好的文件里有很多指引，这步很简单。 实在不明白，再看看GitHub上别的库的spec文件怎么写的。
 

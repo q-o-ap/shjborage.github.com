@@ -8,6 +8,7 @@ categories: iOS
 
 ##block
 Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).
+<!-- more -->
 ####声明block：
 
 ```

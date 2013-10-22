@@ -9,6 +9,8 @@ categories: test
 
 Sharing Code Snippets
 
+<!-- more -->
+
 *Backtick Code Blocks*
 
 Syntax:(insert enter before and after the two ``````)

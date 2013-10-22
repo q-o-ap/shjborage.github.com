@@ -27,6 +27,8 @@ categories: iOS
 }
 {% endcodeblock %}
 
+<!-- more -->
+
 **Catagory** 此处与root ViewController有关，不一定这样解决 
 {% codeblock %}
 @implementation UINavigationController (StatusBar)

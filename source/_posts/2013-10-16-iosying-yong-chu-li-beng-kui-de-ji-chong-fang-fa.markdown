@@ -16,6 +16,9 @@ categories: iOS
 XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
 在Environment Variables中增加下面属性并都配置为YES。
 
+<!-- more -->
+
+
 ```
 MallocStackLogging
 MallocStackLoggingNoCompact

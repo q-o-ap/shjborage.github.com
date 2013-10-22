@@ -9,14 +9,14 @@ categories: iOS
 美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a>  
 
 中国区：<a href="https://itunes.apple.com/cn/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a>
-  
-
 
 iSecret is a program that save and manage your accounts and passwords. 
 Now, everyone have many accounts and password, hard to remember them. 
 So, iSecret could help you to manage them safely. 
 iSecret's all file are encrypted at high level. 
 iSecret does not require any network. 
+
+<!-- more -->
 
 Thanks for you support. No matter what problem, just mail to shjborage@gmail.com 
 

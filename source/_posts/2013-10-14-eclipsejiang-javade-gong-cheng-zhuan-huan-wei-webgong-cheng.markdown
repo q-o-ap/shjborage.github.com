@@ -13,7 +13,9 @@ categories: JavaWeb
 *	1、进入项目目录，可看到.project文件，打开。 
 *	2、找到<natures>...</natures>代码段。 
 *	3、在第2步的代码段中加入如下标签内容并保存： 
-*	
+
+<!-- more -->
+
 ```
 <nature>org.eclipse.wst.common.project.facet.core.nature</nature> 
 <nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature> 

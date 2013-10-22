@@ -15,6 +15,8 @@ categories: Mac
 
 3）*创建/etc/rc.local 文件，把脚本写在文件中*。
 
+<!-- more -->
+
 4）如果只启动shell 程序，还有一种方式，大体流程是这样的。
     A) 把Terminate 设置为开机启动。这样当系统启动时，可以自动运行shell。
     B) 在用户目录下创建或修改".profile"。当shell 启动时，先运行".profile" 文件
