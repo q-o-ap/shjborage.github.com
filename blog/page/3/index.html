@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不太常用，但很关键命令 1.整理数据库：vacuum VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize() &hellip;">
+  <meta name="description" content="引言 使用XCode4.5 下使用unit test时，发现直接使用 UIImage *imgA = [UIImage imageNamed:@"asdf"]; NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@” &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,54 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T23:42:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>引言</h3>
+
+<p> 使用XCode4.5 下使用unit test时，发现直接使用
+ <code>
+ UIImage *imgA = [UIImage imageNamed:@"asdf"];
+ NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
+</code>
+ 得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
+
+<p> </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -522,57 +570,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">JSP中java代码与js之间的传值</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-17T15:04:00+08:00" pubdate data-updated="true">Jun 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h5>java   &mdash;&mdash;>   js:</h5>
-
-<p>List的传递：直接赋值就行，如下：</p>
-
-<p>Js代码</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var userIdList = "&lt;%=archiveNameList%&gt;";  //不加引号是错误的！  </span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -597,6 +594,7 @@
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (28)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (1)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
   </ul>
@@ -605,6 +603,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/23/qian-tan-wu-da-python-webkuang-jia/">浅谈五大Python Web框架</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a>
@@ -620,10 +622,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git fetch和git pull的区别</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a>
       </li>
     
   </ul>
