@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-23T00:38:13+08:00</updated>
+  <updated>2013-10-23T00:38:49+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -146,8 +146,9 @@ URL配置虽然强大，但全部要手写，这一点跟Rails的Convention over
 
 <p>Django 相关教程：</p>
 
-<p><a href="http://www.ibm.com/developerworks/cn/linux/l-django/">Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点</a>
-<a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-django/index.html">基于 Django 框架的敏捷 Web 开发</a></p>
+<p><a href="http://www.ibm.com/developerworks/cn/linux/l-django/">Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点</a></p>
+
+<p><a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-django/index.html">基于 Django 框架的敏捷 Web 开发</a></p>
 ]]></content>
   </entry>
   
