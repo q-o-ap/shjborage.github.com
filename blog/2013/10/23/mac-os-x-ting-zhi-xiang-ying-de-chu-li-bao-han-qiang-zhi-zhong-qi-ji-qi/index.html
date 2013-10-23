@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>JSP中java代码与js之间的传值 - Saick Blog - 专注技术，乐在其中</title>
+  <title>Mac OS X: 停止响应的处理（包含强制重启机器） - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="java &mdash;&mdash;> js: List的传递：直接赋值就行，如下： Js代码 1
-var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为js中var赋java变量值（同样适用于el表达式和struts2标签等）时 &hellip;">
+  <meta name="description" content="Mac OS X: 如果您的计算机停止响应、“悬挂”或“冻结” 本文章已经归档，因此 Apple 将不再对其进行更新。 症状 了解如何消除计算机停止响应（“悬挂”或“冻结”）的情况。解决频发问题可能需要本文以外的解决方法。
+重要：
+所打开的应用程序中未保存的更改将会丢失。这些步骤适用于 Mac &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@ var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +84,7 @@ var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为
   
   <header>
     
-      <h1 class="entry-title">JSP中java代码与js之间的传值</h1>
+      <h1 class="entry-title">Mac OS X: 停止响应的处理（包含强制重启机器）</h1>
     
     
       <p class="meta">
@@ -99,54 +100,101 @@ var userIdList = "&lt;%=archiveNameList%&gt;"; //不加引号是错误的！ 为
   
 
 
-<time datetime="2013-06-17T15:04:00+08:00" pubdate data-updated="true">Jun 17<span>th</span>, 2013</time>
+<time datetime="2013-10-23T22:47:00+08:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h5>java   &mdash;&mdash;>   js:</h5>
+<div class="entry-content"><p><em>Mac OS X: 如果您的计算机停止响应、“悬挂”或“冻结”</em></p>
 
-<p>List的传递：直接赋值就行，如下：</p>
+<p>本文章已经归档，因此 Apple 将不再对其进行更新。</p>
 
-<p>Js代码</p>
+<h4>症状</h4>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var userIdList = "&lt;%=archiveNameList%&gt;";  //不加引号是错误的！  </span></code></pre></td></tr></table></div></figure>
+<p>了解如何消除计算机停止响应（“悬挂”或“冻结”）的情况。解决频发问题可能需要本文以外的解决方法。
+重要：
+所打开的应用程序中未保存的更改将会丢失。这些步骤适用于 Mac OS X 和 Mac OS X Server。“没有响应”通常是以一个旋转的指针和（或）输入响应时间缓慢（或者根本没有响应）来界定的。
+解决方法</p>
 
-
-
+<h4>1. 退出打开的应用程序</h4>
 
 <!-- more -->
 
 
-<p>为js中var赋java变量值（同样适用于el表达式和struts2标签等）时，切记需要为赋值串加引号&#8221;&ldquo;:
-如果java变量为纯数字类型的，可以不加，js可以将其识别为Number类型的；但任何时候都加上不失为一个好的习惯，可以让你不为莫名其妙的错误所困扰。</p>
+<p>如果您的计算机停止响应，那么您有时可以通过退出打开的应用程序来恢复。通过从“文件”菜单中选择“退出”或者按下 Command-Q 组合键，几乎可以退出所有的应用程序。</p>
 
-<p>引用
-JSP代码</p>
+<p>Classic 环境也可能是没有响应的根源。要确定是否运行了 Classic 环境，可以打开“系统预置”，然后从“显示”菜单中选择 Classic 。单击“启动/停止”选项卡，然后注意 Classic 环境的状态，它将会显示在“请为 Classic 选择系统文件夹”部分的上面。要停止 Classic 环境，请单击“停止”。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script type="text/javascript"&gt;  
-</span><span class='line'>    var ploIds = "&lt;%=request.getAttribute("refreshStrParam")%&gt;"; //写成var ploIds = &lt;%=request.getAttribute("refreshStrParam")%&gt; 是错误的！  
-</span><span class='line'>    alert(ploIds);  
-</span><span class='line'>    &lt;% String s = "abc";%&gt;  
-</span><span class='line'>    var s = "&lt;%=s%&gt;"; //写成 var s = &lt;%=s%&gt;;是错误的  
-</span><span class='line'>    alert(s);  
-</span><span class='line'>    alert("${param.name}"); //写成alert(${param.name})是错误的  
-</span><span class='line'>&lt;/script&gt;  </span></code></pre></td></tr></table></div></figure>
+<h4>2. 强制退出应用程序</h4>
+
+<p>如果您不能以正常方式退出应用程序，那么请试着通过从 Apple 菜单中选择“强制退出”来强制退出程序。在出现的对话框中，选定没有响应的应用程序，然后单击“强制退出”按钮。</p>
+
+<p>要强制退出 Classic 环境，请打开“系统预置”应用程序，然后从“显示”菜单中选择 Classic 。单击“启动/停止”选项卡，然后单击“强制退出”。</p>
+
+<p>警告：当前文档中未保存的更改将会丢失。</p>
+
+<h4>3. 重新启动计算机</h4>
+
+<p>通常您可以通过重新启动计算机来解决问题，它将会清除它的内存。在重新启动之前，请确保保存所有打开的文档。通常试着采用正确的方式来重新启动：</p>
+
+<ul>
+<li> 从 Apple 菜单中选择“重新启动”，或者</li>
+<li> 在有些计算机中，您可以按下键盘上的电源键，然后在出现的对话框中单击“重新启动”。如果您的计算机使用的是 Apple 专业键盘，那么请按下 Control-Eject 组合键，然后在出现的对话框中单击“重新启动”。</li>
+</ul>
 
 
-<p>数组的传递：不能像List那样直接赋值.可以参考这里
-<a href="http://wuaner.iteye.com/blog/455481">http://wuaner.iteye.com/blog/455481</a></p>
+<h4>4. 关闭计算机</h4>
+
+<p>正如在重新启动计算机时一样，您可以通过重新启动计算机来解决问题，这将会清除它的内存。在重新启动之前，请确保保存所有打开的文档。通常试着采用正确的方式来重新启动：</p>
+
+<ul>
+<li> 从 Apple 菜单中选择“关机”，或者</li>
+<li> 在有些计算机中，您可以按下键盘上的电源键，然后在出现的对话框中单击“关机”。如果您的计算机使用的是 Apple 专业键盘，那么请按下 Control-Eject 组合键，然后在出现的对话框中单击“关机”。</li>
+</ul>
+
+
+<h4>5. 强制关闭计算机</h4>
+
+<p>您应该只有在上述所有步骤（1 &ndash; 4）都失败的情况下才强制关闭您的计算机。
+1. 按住计算机上的电源键保持 6 秒钟，以关闭计算机。</p>
+
+<p>注意：请不要按下显示器上的电源键。</p>
+
+<ol>
+<li>等待 10 秒钟，然后再打开计算机。
+注意：
+这项技术不适用于某些早期的与 Mac OS X 兼容的计算机。在这些计算机中，可以在按下重置键（参阅下面的内容）后立即按下电源键来关闭计算机。</li>
+</ol>
+
+
+<h4>6. 强制重启计算机</h4>
+
+<p>您应该在只有上述所有步骤（1 &ndash; 5）都失败的情况下才试着强制重启计算机。当您的计算机停止响应时，强制重启计算机并不是首选的解决方法。</p>
+
+<p>如果您不能以正常方式重新启动您的计算机，那么请尝试下面的方法：</p>
+
+<ul>
+<li> 按下 Command-Control-Power 组合键。若您的计算机使用的是 Apple 专业键盘，那么不适用这种方法。</li>
+</ul>
+
+
+<p>如果这种方法无效，那么请执行下面的操作：</p>
+
+<ul>
+<li> 如果您的计算机有“重置”键孔，那么请小心地将伸直的曲别针插入孔中，并轻轻地按一下。取出曲别针。您的计算机就应该重新启动了。关于“重置”键孔的位置，请参阅计算机附带的技术资料。</li>
+<li> 如果您的计算机有“重置”键，那么请按下它。重置键在计算机上，而不在键盘上，并且是用一个三角形标记的。关于“重置”键的位置，请参阅计算机附带的技术资料。</li>
+</ul>
+
+
+<p>注意：
+有些 PowerBook 计算机没有“重置”键。在这种情况下，请按下 Shift-Function-Control-Power 组合键，直到计算机关闭。然后，等待至少 30 秒，然后通过按下电源键重新打开 PowerBook。</p>
+
+<h4>7. 拔掉计算机的电源</h4>
+
+<p>如果重置无效，并且您的计算机是插入到有开关的插座板上的，那么请关闭插座板上的开关。如果没有开关，那么请拔掉计算机的电源。等待至少 30 秒，然后重新打开计算机。可以通过按下键盘或计算机上的电源键来重新打开计算机。
+上次修改时间： 2011-11-22</p>
 </div>
 
 
@@ -169,12 +217,12 @@ JSP代码</p>
   
 
 
-<time datetime="2013-06-17T15:04:00+08:00" pubdate data-updated="true">Jun 17<span>th</span>, 2013</time>
+<time datetime="2013-10-23T22:47:00+08:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/javaweb/'>JavaWeb</a>
+    <a class='category' href='/blog/categories/mac/'>Mac</a>
   
 </span>
 
@@ -187,7 +235,7 @@ JSP代码</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/" >Tweet</a>
   
   
   
@@ -214,10 +262,8 @@ JSP代码</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/06/08/web-div-plus-csspai-ban/" title="Previous Post: Web Div+CSS排版">&laquo; Web Div+CSS排版</a>
+        <a class="basic-alignment left" href="/blog/2013/10/23/qian-tan-wu-da-python-webkuang-jia/" title="Previous Post: 浅谈五大Python Web框架">&laquo; 浅谈五大Python Web框架</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/" title="Next Post: 让Apple TV直接收看中国视频">让Apple TV直接收看中国视频 &raquo;</a>
       
     </p>
   </footer>

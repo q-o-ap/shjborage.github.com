@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-23T00:39:28+08:00</updated>
+  <updated>2013-10-23T22:53:55+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mac OS X: 停止响应的处理（包含强制重启机器）]]></title>
+    <link href="http://saick.net/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/"/>
+    <updated>2013-10-23T22:47:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi</id>
+    <content type="html"><![CDATA[<p><em>Mac OS X: 如果您的计算机停止响应、“悬挂”或“冻结”</em></p>
+
+<p>本文章已经归档，因此 Apple 将不再对其进行更新。</p>
+
+<h4>症状</h4>
+
+<p>了解如何消除计算机停止响应（“悬挂”或“冻结”）的情况。解决频发问题可能需要本文以外的解决方法。
+重要：
+所打开的应用程序中未保存的更改将会丢失。这些步骤适用于 Mac OS X 和 Mac OS X Server。“没有响应”通常是以一个旋转的指针和（或）输入响应时间缓慢（或者根本没有响应）来界定的。
+解决方法</p>
+
+<h4>1. 退出打开的应用程序</h4>
+
+<!-- more -->
+
+
+<p>如果您的计算机停止响应，那么您有时可以通过退出打开的应用程序来恢复。通过从“文件”菜单中选择“退出”或者按下 Command-Q 组合键，几乎可以退出所有的应用程序。</p>
+
+<p>Classic 环境也可能是没有响应的根源。要确定是否运行了 Classic 环境，可以打开“系统预置”，然后从“显示”菜单中选择 Classic 。单击“启动/停止”选项卡，然后注意 Classic 环境的状态，它将会显示在“请为 Classic 选择系统文件夹”部分的上面。要停止 Classic 环境，请单击“停止”。</p>
+
+<h4>2. 强制退出应用程序</h4>
+
+<p>如果您不能以正常方式退出应用程序，那么请试着通过从 Apple 菜单中选择“强制退出”来强制退出程序。在出现的对话框中，选定没有响应的应用程序，然后单击“强制退出”按钮。</p>
+
+<p>要强制退出 Classic 环境，请打开“系统预置”应用程序，然后从“显示”菜单中选择 Classic 。单击“启动/停止”选项卡，然后单击“强制退出”。</p>
+
+<p>警告：当前文档中未保存的更改将会丢失。</p>
+
+<h4>3. 重新启动计算机</h4>
+
+<p>通常您可以通过重新启动计算机来解决问题，它将会清除它的内存。在重新启动之前，请确保保存所有打开的文档。通常试着采用正确的方式来重新启动：</p>
+
+<ul>
+<li> 从 Apple 菜单中选择“重新启动”，或者</li>
+<li> 在有些计算机中，您可以按下键盘上的电源键，然后在出现的对话框中单击“重新启动”。如果您的计算机使用的是 Apple 专业键盘，那么请按下 Control-Eject 组合键，然后在出现的对话框中单击“重新启动”。</li>
+</ul>
+
+
+<h4>4. 关闭计算机</h4>
+
+<p>正如在重新启动计算机时一样，您可以通过重新启动计算机来解决问题，这将会清除它的内存。在重新启动之前，请确保保存所有打开的文档。通常试着采用正确的方式来重新启动：</p>
+
+<ul>
+<li> 从 Apple 菜单中选择“关机”，或者</li>
+<li> 在有些计算机中，您可以按下键盘上的电源键，然后在出现的对话框中单击“关机”。如果您的计算机使用的是 Apple 专业键盘，那么请按下 Control-Eject 组合键，然后在出现的对话框中单击“关机”。</li>
+</ul>
+
+
+<h4>5. 强制关闭计算机</h4>
+
+<p>您应该只有在上述所有步骤（1 &ndash; 4）都失败的情况下才强制关闭您的计算机。
+1. 按住计算机上的电源键保持 6 秒钟，以关闭计算机。</p>
+
+<p>注意：请不要按下显示器上的电源键。</p>
+
+<ol>
+<li>等待 10 秒钟，然后再打开计算机。
+注意：
+这项技术不适用于某些早期的与 Mac OS X 兼容的计算机。在这些计算机中，可以在按下重置键（参阅下面的内容）后立即按下电源键来关闭计算机。</li>
+</ol>
+
+
+<h4>6. 强制重启计算机</h4>
+
+<p>您应该在只有上述所有步骤（1 &ndash; 5）都失败的情况下才试着强制重启计算机。当您的计算机停止响应时，强制重启计算机并不是首选的解决方法。</p>
+
+<p>如果您不能以正常方式重新启动您的计算机，那么请尝试下面的方法：</p>
+
+<ul>
+<li> 按下 Command-Control-Power 组合键。若您的计算机使用的是 Apple 专业键盘，那么不适用这种方法。</li>
+</ul>
+
+
+<p>如果这种方法无效，那么请执行下面的操作：</p>
+
+<ul>
+<li> 如果您的计算机有“重置”键孔，那么请小心地将伸直的曲别针插入孔中，并轻轻地按一下。取出曲别针。您的计算机就应该重新启动了。关于“重置”键孔的位置，请参阅计算机附带的技术资料。</li>
+<li> 如果您的计算机有“重置”键，那么请按下它。重置键在计算机上，而不在键盘上，并且是用一个三角形标记的。关于“重置”键的位置，请参阅计算机附带的技术资料。</li>
+</ul>
+
+
+<p>注意：
+有些 PowerBook 计算机没有“重置”键。在这种情况下，请按下 Shift-Function-Control-Power 组合键，直到计算机关闭。然后，等待至少 30 秒，然后通过按下电源键重新打开 PowerBook。</p>
+
+<h4>7. 拔掉计算机的电源</h4>
+
+<p>如果重置无效，并且您的计算机是插入到有开关的插座板上的，那么请关闭插座板上的开关。如果没有开关，那么请拔掉计算机的电源。等待至少 30 秒，然后重新打开计算机。可以通过按下键盘或计算机上的电源键来重新打开计算机。
+上次修改时间： 2011-11-22</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[浅谈五大Python Web框架]]></title>
@@ -2210,53 +2306,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
 
 <p>3 rows in set (0.00 sec)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别)]]></title>
-    <link href="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/"/>
-    <updated>2013-09-23T23:58:00+08:00</updated>
-    <id>http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie</id>
-    <content type="html"><![CDATA[<p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
-来上图看下吧</p>
-
-<iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21369&authkey=AK4bqqBLJG7H2NU" width="273" height="320" frameborder="0" scrolling="no"></iframe>
-
-
-<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？</p>
-
-<p> <!-- more --></p>
-
-<ol>
-<li>group 和 folder的区别
-group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
-folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。</li>
-<li>以folder的形式引用文件
-我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
-会弹出对话框，如图</li>
-</ol>
-
-
-<iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21370&authkey=AHc_zK2PilQffbQ" width="319" height="215" frameborder="0" scrolling="no"></iframe>
-
-
-<p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
-这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
-
-<iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21389&authkey=AKR8wpWrQd-yG2c" width="319" height="171" frameborder="0" scrolling="no"></iframe>
-
-
-<ol>
-<li>以group的形式引用文件
-回到1的第一步，选中 create groups for any added folders ，点击完成，则如下图所示，文件夹是黄色的，并且编译文件列表里面神奇的存在了 webviewjavascriptBridge.m这个文件</li>
-</ol>
-
-
-<iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21373&authkey=AE7YJN2Diae_oVs" width="319" height="171" frameborder="0" scrolling="no"></iframe>
-
-
-<p>现在，终于明白了 folder和 group的区别了。</p>
 ]]></content>
   </entry>
   

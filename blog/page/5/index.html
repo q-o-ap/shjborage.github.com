@@ -9,7 +9,11 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category可以用来调试 除了隐藏私有方法外，我主要用它截住函数。 例1：测试时我想知道TableViewCell有没有释放，就可以这样写 ">
+  <meta name="description" content="
+NSString property的属性必须是copy
+delegate property的属性是assign
+dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
+init 和dealloc中不要用self.XX=; NSCoping ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +83,55 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><ul>
+<li>NSString property的属性必须是copy</li>
+<li>delegate property的属性是assign</li>
+<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
+<li>init 和dealloc中不要用self.XX=;</li>
+</ul>
+
+
+<h4>NSCoping</h4>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -317,7 +370,7 @@
 <li class='category'><a href='/blog/categories/c/'>C (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (3)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (28)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
@@ -330,6 +383,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/">Mac OS X: 停止响应的处理（包含强制重启机器）</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/23/qian-tan-wu-da-python-webkuang-jia/">浅谈五大Python Web框架</a>
@@ -345,10 +402,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/19/ios-arc-jian-rong-chu-li/">iOS ARC 兼容处理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git fetch和git pull的区别</a>
       </li>
     
   </ul>
