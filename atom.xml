@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-24T23:54:10+08:00</updated>
+  <updated>2013-10-25T01:11:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IP地址，0.0.0.0 监听，所有地址]]></title>
+    <link href="http://saick.net/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/"/>
+    <updated>2013-10-25T01:07:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/25/ipdi-zhi-,0-dot-0-0-dot-0-jian-ting-,suo-you-di-zhi</id>
+    <content type="html"><![CDATA[<p>曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
+PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用<strong>0.0.0.0</strong>这个来监听所有IP地址，解决这个问题。</p>
+
+<p>不能再出现同样的问题了，不用怕被别人笑话，哈哈</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mac OS X添加PATH环境变量]]></title>
@@ -2078,95 +2090,6 @@ We can use the same image for a button on a navbar (I’ll show the specifics in
 <p>The output nows looks as follows:</p>
 
 <p><a href="http://www.flickr.com/photos/105999540@N03/10374785266/" title="2013-10-10-5 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3816/10374785266_7b83f64381_o.gif" width="340" height="80" alt="2013-10-10-5"></a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[遭遇SIGPIPE]]></title>
-    <link href="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/"/>
-    <updated>2013-10-10T23:35:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/10/zao-yu-sigpipe</id>
-    <content type="html"><![CDATA[<p>《转》</p>
-
-<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
-
-<p>用gdb执行程序, 退出时提示&#8221;Broken pipe&#8221;.
-最后问题确定为, 对一个对端已经关闭的socket调用两次write,
-第二次将会生成SIGPIPE信号, 该信号默认结束进程.</p>
-
-<!-- more -->
-
-
-<p>具体的分析可以结合TCP的&#8221;四次握手&#8221;关闭. TCP是全双工的信道,
-可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
-虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
-表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
-
-<p>也就是说, 因为TCP协议的限制,
-一个端点无法获知对端的socket是调用了close还是shutdown.
-对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
-这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
-会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
-因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
-第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
-
-<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
-给它设置SIG_IGN信号处理函数:
-<code>signal(SIGPIPE, SIG_IGN);</code>
-这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
-程序便能知道对端已经关闭.</p>
-
-<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
-
-<h5>忽略SIGPIPE信号的方法</h5>
-
-<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>struct sigaction sa;
-</span><span class='line'>sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
-</span><span class='line'>sa.sa_flags = 0;
-</span><span class='line'>if (sigemptyset(&sa.sa_mask) == -1 || //初始化信号集为空
-</span><span class='line'>sigaction(SIGPIPE, &sa, 0) == -1) { //屏蔽SIGPIPE信号
-</span><span class='line'>perror("failed to ignore SIGPIPE; sigaction");
-</span><span class='line'>exit(EXIT_FAILURE);
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
-
-<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
-<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
-
-<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
-pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef WIN32
-</span><span class='line'>sigset_t signal_mask;
-</span><span class='line'>sigemptyset (&signal_mask);
-</span><span class='line'>sigaddset (&signal_mask, SIGPIPE);
-</span><span class='line'>int rc = pthread_sigmask (SIG_BLOCK, &signal_mask, NULL);
-</span><span class='line'>if (rc != 0) {
-</span><span class='line'>printf("block sigpipe error\n");
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

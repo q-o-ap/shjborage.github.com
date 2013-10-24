@@ -9,13 +9,9 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。 主要常见原因： 除以0
-sizeWithFont的字符串为nil
-数学函数不正确运算 解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
-如下 1
-2
-3
-4 &hellip;">
+  <meta name="description" content="《转》 我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
+然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
+但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出. 用gdb执行程序, 退出时提示&#8221;Broken pipe&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +81,55 @@ sizeWithFont的字符串为nil
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/10/zao-yu-sigpipe/">遭遇SIGPIPE</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>《转》</p>
+
+<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
+然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
+但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
+
+<p>用gdb执行程序, 退出时提示&#8221;Broken pipe&#8221;.
+最后问题确定为, 对一个对端已经关闭的socket调用两次write,
+第二次将会生成SIGPIPE信号, 该信号默认结束进程.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/10/zao-yu-sigpipe/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -528,54 +573,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-22T14:58:00+08:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>从Notification的开关入手，发现了统一给出的入口。
-从iOS7 beta的文档中获得，但目测还是老的。（关于MircoPhone的控制还没有）</p>
-
-<p>来正文</p>
-
-<h4>Best Practices for Maintaining User Privacy</h4>
-
-<p>Maintaining user privacy should be an important consideration when designing your app. Most iOS devices contain user and device data that users might not want to expose to apps or external entities. If your app uses user or device data in an unexpected way, the user might delete your app rather than trust it to use the data in an appropriate way.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -596,6 +593,7 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (28)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
@@ -608,6 +606,10 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">IP地址，0.0.0.0 监听，所有地址</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/">Mac OS X添加PATH环境变量</a>
@@ -623,10 +625,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
     
       <li class="post">
         <a href="/blog/2013/10/23/qian-tan-wu-da-python-webkuang-jia/">浅谈五大Python Web框架</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a>
       </li>
     
   </ul>

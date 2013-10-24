@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Django学习资源以及相关备注 - Saick Blog - 专注技术，乐在其中</title>
+  <title>IP地址，0.0.0.0 监听，所有地址 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="对于我这个python新手，还是用Django入门比较容易一些，以后熟悉了可以再考虑换别的 Django 相关教程： Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点
-基于 Django 框架的敏捷 Web 开发 上面这俩有点老，参考一下即可。 &hellip;">
+  <meta name="description" content="曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
+PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用0.0.0.0这个来监听所有IP地址， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">Django学习资源以及相关备注</h1>
+      <h1 class="entry-title">IP地址，0.0.0.0 监听，所有地址</h1>
     
     
       <p class="meta">
@@ -99,30 +99,17 @@
   
 
 
-<time datetime="2013-10-24T23:01:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
+<time datetime="2013-10-25T01:07:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>对于我这个python新手，还是用Django入门比较容易一些，以后熟悉了可以再考虑换别的</p>
+<div class="entry-content"><p>曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
+PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用<strong>0.0.0.0</strong>这个来监听所有IP地址，解决这个问题。</p>
 
-<p>Django 相关教程：</p>
-
-<p><a href="http://www.ibm.com/developerworks/cn/linux/l-django/">Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点</a><br/>
-<a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-django/index.html">基于 Django 框架的敏捷 Web 开发</a></p>
-
-<p>上面这俩有点老，参考一下即可。</p>
-
-<p><a href="http://haoluobo.com/trac/wiki/Django">http://haoluobo.com/trac/wiki/Django</a></p>
-
-<p>这哥们跟Django好像关系不错，收集了很多东西，起来帮助很大。不过有些链接进去也是广告N多，那种一看就是垃圾站。那个2010年版的Django Step by Step就是那样。</p>
-
-<p>Django book 2.0 的中文翻译<br/>
-<a href="http://djangobook.py3k.cn/2.0/">http://djangobook.py3k.cn/2.0/</a></p>
-
-<p>这本书是我先看的，效果过段时间写入评论吧。</p>
+<p>不能再出现同样的问题了，不用怕被别人笑话，哈哈</p>
 </div>
 
 
@@ -145,12 +132,12 @@
   
 
 
-<time datetime="2013-10-24T23:01:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
+<time datetime="2013-10-25T01:07:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/python/'>python</a>
+    <a class='category' href='/blog/categories/network/'>Network</a>
   
 </span>
 
@@ -163,7 +150,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/" >Tweet</a>
   
   
   
@@ -190,10 +177,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/" title="Previous Post: Mac OS X: 停止响应的处理（包含强制重启机器）">&laquo; Mac OS X: 停止响应的处理（包含强制重启机器）</a>
+        <a class="basic-alignment left" href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/" title="Previous Post: Mac OS X添加PATH环境变量">&laquo; Mac OS X添加PATH环境变量</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/" title="Next Post: Mac OS X添加PATH环境变量">Mac OS X添加PATH环境变量 &raquo;</a>
       
     </p>
   </footer>
