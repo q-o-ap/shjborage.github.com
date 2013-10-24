@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Saick Blog - 专注技术，乐在其中</title>
+  <title>Mac OS X添加PATH环境变量 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="The best flashlight app to save you power and then protect you battery. Do you encounter such a situation: When you using the flashlight to show &hellip;">
+  <meta name="description" content="解决办法:
+sudo vim /etc/paths 将路径添加到里面去， 一行一个路径 注意：即便添加成功，未必运行成功；在制定路径下得脚本必须具是executable, 否则就会被在搜索时被忽略。
+sudo chmod +x XXX 而在Ubuntu下，则只需要修改/etc/.profile或者 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/page/5/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -77,15 +79,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Flashlight(PowerSaving) 简介</a></h1>
+      <h1 class="entry-title">Mac OS X添加PATH环境变量</h1>
     
     
       <p class="meta">
@@ -101,88 +100,35 @@
   
 
 
-<time datetime="2013-05-28T16:46:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-24T23:53:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>The best flashlight app to save you power and then protect you battery.</p>
+<div class="entry-content"><p>解决办法:
+sudo vim /etc/paths</p>
 
-<p>Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked.
-PowerSaving Flashlight also solve this issue.</p>
+<p>将路径添加到里面去， 一行一个路径</p>
 
+<p>注意：即便添加成功，未必运行成功；在制定路径下得脚本必须具是executable, 否则就会被在搜索时被忽略。
+sudo chmod +x XXX</p>
+
+<p>而在Ubuntu下，则只需要修改/etc/.profile或者 ~/.profile或~/.bashrc等修改</p>
+
+<p>如转载文章，请注明本文链接： <a href="http://www.32133.com/skills/575.html">http://www.32133.com/skills/575.html</a></p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/isecret-jian-jie/">iSecret 简介 Updated at Oct 14, 2013</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
 
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
-
-<p>中国区：<a href="https://itunes.apple.com/cn/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
-
-<p>iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them.
-So, iSecret could help you to manage them safely.
-iSecret&rsquo;s all file are encrypted at high level.
-iSecret does not require any network.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/isecret-jian-jie/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -194,261 +140,82 @@ iSecret does not require any network.</p>
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2013-10-24T23:53:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Category 巧用-调试程序</a></h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-
-
-
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mac/'>Mac</a>
+  
+</span>
 
   
-
-
-<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Category可以用来调试</h3>
-
-<p>除了隐藏私有方法外，我主要用它截住函数。</p>
-
-<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">iOS 开发常见低级错误</a></h1>
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
     
     
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
-
-
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
-
-<p>Aug 5, 2013</p>
-
-<ul>
-<li><h3>如果使用C++代码混编，找不到iostream等</h3>
-
-<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
-</ul>
-
-
-<p>May 28, 2013</p>
-
-<ul>
-<li><h3>不要调用[super  release]</h3>
-
-<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
-</ul>
-
-</div>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/" >Tweet</a>
   
   
-
-
-    </article>
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
   
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-block-bian-cheng/">iOS Block 编程</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
-
-
-<time datetime="2013-05-28T09:57:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>block</h2>
-
-<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/ios-block-bian-cheng/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/test-sharing-code-snippets/">Test Sharing Code Snippets</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-27T16:54:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Sharing Code Snippets</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/27/test-sharing-code-snippets/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/hello-jekyll/">Hello Jekyll</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-27T16:32:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>测试一下这玩意是不是能发布成功，哈哈</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/page/4/">Newer &rarr;</a>
-    
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
   </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
 </div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/" title="Previous Post: Django学习资源以及相关备注">&laquo; Django学习资源以及相关备注</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
+
+
+
+</div>
+
 <aside class="sidebar">
   
     
@@ -546,6 +313,7 @@ iSecret does not require any network.</p>
 
   
 </aside>
+
 
     </div>
   </div>

@@ -9,8 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
-在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。 1.在XCode中使用一个通用断点 在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception &hellip;">
+  <meta name="description" content="现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。 准备好库代码（GitHub上） 将代码Checkout下来，打开命令行，cd到代码根目录 创建XXXX.podspec 1
+pod spec create XXXX ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,59 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">iOS库添加CocoaPods支持</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-17T15:30:00+08:00" pubdate data-updated="true">Oct 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。</p>
+
+<h3>准备好库代码（GitHub上）</h3>
+
+<p>将代码Checkout下来，打开命令行，cd到代码根目录</p>
+
+<h3>创建XXXX.podspec</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec create XXXX</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -536,66 +589,6 @@ As I got further into the customization of the buttons, I ran into a method with
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/10/nanwen-ti-not-a-number/">NaN问题 Not a Number</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-10T23:26:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。</p>
-
-<p>主要常见原因：</p>
-
-<ul>
-<li>除以0</li>
-<li>sizeWithFont的字符串为nil</li>
-<li>数学函数不正确运算</li>
-</ul>
-
-
-<p>解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
-如下</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>float _x = NAN;
-</span><span class='line'>if (!isnan(_x)) {
-</span><span class='line'>cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -615,7 +608,7 @@ As I got further into the customization of the buttons, I ran into a method with
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (3)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (3)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (28)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
@@ -628,6 +621,10 @@ As I got further into the customization of the buttons, I ran into a method with
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/">Mac OS X添加PATH环境变量</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/">Django学习资源以及相关备注</a>
@@ -643,10 +640,6 @@ As I got further into the customization of the buttons, I ran into a method with
     
       <li class="post">
         <a href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">对比iOS网络组件：AFNetworking VS ASIHTTPRequest</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">Objective-C的新特性(Object Literals等)</a>
       </li>
     
   </ul>

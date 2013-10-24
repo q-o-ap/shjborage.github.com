@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mac | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/mac/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-24T23:35:06+08:00</updated>
+  <updated>2013-10-24T23:54:10+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mac OS X添加PATH环境变量]]></title>
+    <link href="http://saick.net/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/"/>
+    <updated>2013-10-24T23:53:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang</id>
+    <content type="html"><![CDATA[<p>解决办法:
+sudo vim /etc/paths</p>
+
+<p>将路径添加到里面去， 一行一个路径</p>
+
+<p>注意：即便添加成功，未必运行成功；在制定路径下得脚本必须具是executable, 否则就会被在搜索时被忽略。
+sudo chmod +x XXX</p>
+
+<p>而在Ubuntu下，则只需要修改/etc/.profile或者 ~/.profile或~/.bashrc等修改</p>
+
+<p>如转载文章，请注明本文链接： <a href="http://www.32133.com/skills/575.html">http://www.32133.com/skills/575.html</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mac OS X: 停止响应的处理（包含强制重启机器）]]></title>
