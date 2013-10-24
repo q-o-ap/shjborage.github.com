@@ -117,3 +117,12 @@ Bottle、Flask跟web.py一样，都非常精简，Bottle甚至所有的代码都
 注：前面有网友质疑我“Quora是用Pylons开发的”这样的说法不客观，特说明一下，这里所说的某个网站A是用B开发的，只是指A主要或部分是由B开发的，大家就不要再去纠结A还用C了。
 
 原文链接：http://feilong.me/2011/01/talk-about-python-web-framework
+
+
+###个人实践
+对于我这个python新手，还是用Django吧，可能容易一些，以后熟悉了可以再考虑换别的
+
+Django 相关教程：
+
+[Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点](http://www.ibm.com/developerworks/cn/linux/l-django/)  
+[基于 Django 框架的敏捷 Web 开发](http://www.ibm.com/developerworks/cn/opensource/os-cn-django/index.html)
