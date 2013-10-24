@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-23T23:17:45+08:00</updated>
+  <updated>2013-10-24T23:35:06+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Django学习资源以及相关备注]]></title>
+    <link href="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/"/>
+    <updated>2013-10-24T23:01:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu</id>
+    <content type="html"><![CDATA[<p>对于我这个python新手，还是用Django入门比较容易一些，以后熟悉了可以再考虑换别的</p>
+
+<p>Django 相关教程：</p>
+
+<p><a href="http://www.ibm.com/developerworks/cn/linux/l-django/">Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点</a><br/>
+<a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-django/index.html">基于 Django 框架的敏捷 Web 开发</a></p>
+
+<p>上面这俩有点老，参考一下即可。</p>
+
+<p><a href="http://haoluobo.com/trac/wiki/Django">http://haoluobo.com/trac/wiki/Django</a></p>
+
+<p>这哥们跟Django好像关系不错，收集了很多东西，起来帮助很大。不过有些链接进去也是广告N多，那种一看就是垃圾站。那个2010年版的Django Step by Step就是那样。</p>
+
+<p>Django book 2.0 的中文翻译<br/>
+<a href="http://djangobook.py3k.cn/2.0/">http://djangobook.py3k.cn/2.0/</a></p>
+
+<p>这本书是我先看的，效果过段时间写入评论吧。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[浅谈五大Python Web框架]]></title>

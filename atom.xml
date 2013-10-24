@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-23T23:17:45+08:00</updated>
+  <updated>2013-10-24T23:35:06+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Django学习资源以及相关备注]]></title>
+    <link href="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/"/>
+    <updated>2013-10-24T23:01:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu</id>
+    <content type="html"><![CDATA[<p>对于我这个python新手，还是用Django入门比较容易一些，以后熟悉了可以再考虑换别的</p>
+
+<p>Django 相关教程：</p>
+
+<p><a href="http://www.ibm.com/developerworks/cn/linux/l-django/">Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点</a><br/>
+<a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-django/index.html">基于 Django 框架的敏捷 Web 开发</a></p>
+
+<p>上面这俩有点老，参考一下即可。</p>
+
+<p><a href="http://haoluobo.com/trac/wiki/Django">http://haoluobo.com/trac/wiki/Django</a></p>
+
+<p>这哥们跟Django好像关系不错，收集了很多东西，起来帮助很大。不过有些链接进去也是广告N多，那种一看就是垃圾站。那个2010年版的Django Step by Step就是那样。</p>
+
+<p>Django book 2.0 的中文翻译<br/>
+<a href="http://djangobook.py3k.cn/2.0/">http://djangobook.py3k.cn/2.0/</a></p>
+
+<p>这本书是我先看的，效果过段时间写入评论吧。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mac OS X: 停止响应的处理（包含强制重启机器）]]></title>
@@ -2156,156 +2181,6 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
 
 
 <p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[group_concat函数详解]]></title>
-    <link href="http://saick.net/blog/2013/09/24/group-concathan-shu-xiang-jie/"/>
-    <updated>2013-09-24T00:06:00+08:00</updated>
-    <id>http://saick.net/blog/2013/09/24/group-concathan-shu-xiang-jie</id>
-    <content type="html"><![CDATA[<p>问了好多人，都不知道group_concat这个函数。
-这个函数好啊，能将相同的行组合起来，省老事了。
-MySQL中group_concat函数(SQLite或其它数据亦可)</p>
-
-<p>完整的语法如下：</p>
-
-<p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
-
-<p> <!-- more --></p>
-
-<h4>基本查询</h4>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select * from aa;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
-
-<p>| id| name |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
-
-<p>|1 | 10|</p>
-
-<p>|1 | 20|</p>
-
-<p>|1 | 20|</p>
-
-<p>|2 | 20|</p>
-
-<p>|3 | 200 |</p>
-
-<p>|3 | 500 |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
-
-<p>6 rows in set (0.00 sec)</p>
-
-<p>以id分组，把name字段的值打印在一行，逗号分隔(默认)</p>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(name) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>| id| group_concat(name) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>|1 | 10,20,20|</p>
-
-<p>|2 | 20 |</p>
-
-<p>|3 | 200,500|</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
-
-<p>以id分组，把name字段的值打印在一行，分号分隔</p>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(name separator &lsquo;;&rsquo;) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>| id| group_concat(name separator &lsquo;;&rsquo;) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>|1 | 10;20;20 |</p>
-
-<p>|2 | 20|</p>
-
-<p>|3 | 200;500 |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
-
-<p>以id分组，把去冗余的name字段的值打印在一行，</p>
-
-<h3>逗号分隔</h3>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(distinct name) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>| id| group_concat(distinct name) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>|1 | 10,20|</p>
-
-<p>|2 | 20 |</p>
-
-<p>|3 | 200,500 |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
-
-<p>以id分组，把name字段的值打印在一行，逗号分隔，以name排倒序</p>
-
-<p>Sql代码</p>
-
-<ol>
-<li> select id,group_concat(name order by name desc) from aa group by id;</li>
-</ol>
-
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>| id| group_concat(name order by name desc) |</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>|1 | 20,20,10 |</p>
-
-<p>|2 | 20|</p>
-
-<p>|3 | 500,200|</p>
-
-<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
-
-<p>3 rows in set (0.00 sec)</p>
 ]]></content>
   </entry>
   
