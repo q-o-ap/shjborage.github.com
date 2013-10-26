@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
-PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用0.0.0.0这个来监听所有IP地址， &hellip;">
+  <meta name="description" content="本文将介绍，在Emacs中，通过各种扩展，打造强大的Python IDE环境，包括Snippet工具，智能提示，自动补全，重构工具，调试以及GAE的调试，等等。以下各工具的安装前提是你对Emacs的配置文件有一定的了解，所有相关的el文件都必须放在load_path能够加载的地方。 1. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,232 @@ PD可以自动连接，使用Boujour进行发现，很是方便。但是解析�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-26T22:26:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>本文将介绍，在Emacs中，通过各种扩展，打造强大的Python IDE环境，包括Snippet工具，智能提示，自动补全，重构工具，调试以及GAE的调试，等等。以下各工具的安装前提是你对Emacs的配置文件有一定的了解，所有相关的el文件都必须放在load_path能够加载的地方。</p>
+
+<h3>1. YASnippet</h3>
+
+<p>snippet工具，可自定义一些模板，必不可少的好东西！看了下面这个很酷的演示动画就明白了：</p>
+
+<p><a href="http://yasnippet.googlecode.com/files/yasnippet.avi">http://yasnippet.googlecode.com/files/yasnippet.avi</a></p>
+
+<p>安装方法：
+(Add by Eric 建议看GitHub上的安装说明：<a href="https://github.com/capitaomorte/yasnippet">https://github.com/capitaomorte/yasnippet</a>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(require 'yasnippet)
+</span><span class='line'>(yas/initialize)
+</span><span class='line'>(yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2. AutoComplete</h3>
+
+<p>自动完成工具，会像VS里一样，弹出一个列表框让你去选择。
+<a href="http://www.flickr.com/photos/105999540@N03/10493765485/" title="2013-10-26-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3678/10493765485_ce80f8cd35.jpg" width="414" height="309" alt="2013-10-26-1"></a></p>
+
+<p>安装方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(require 'auto-complete)
+</span><span class='line'>(require 'auto-complete-config)
+</span><span class='line'>(global-auto-complete-mode t)
+</span><span class='line'>(setq-default ac-sources '(ac-source-words-in-same-mode-buffers))
+</span><span class='line'>(add-hook 'emacs-lisp-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-symbols)))
+</span><span class='line'>(add-hook 'auto-complete-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-filename)))
+</span><span class='line'>(set-face-background 'ac-candidate-face "lightgray")
+</span><span class='line'>(set-face-underline 'ac-candidate-face "darkgray")
+</span><span class='line'>(set-face-background 'ac-selection-face "steelblue") ;;; 设置比上面截图中更好看的背景颜色
+</span><span class='line'>(define-key ac-completing-map "\M-n" 'ac-next)  ;;; 列表中通过按M-n来向下移动
+</span><span class='line'>(define-key ac-completing-map "\M-p" 'ac-previous)
+</span><span class='line'>(setq ac-auto-start 2)
+</span><span class='line'>(setq ac-dwim t)
+</span><span class='line'>(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. Rope and Ropemacs</h3>
+
+<p>非常棒的重构工具，比如rename,move,extract method等等。还有非常好用的goto difinition(跳到定义)，show documents(显示文档)等等。安装Ropemacs前，必须先安装rope和pymacs 。</p>
+
+<p>rope的安装方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>pymacs的安装方法：</p>
+
+<p>python setup.py install
+.emacs中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(autoload 'pymacs-apply "pymacs")
+</span><span class='line'>(autoload 'pymacs-call "pymacs")
+</span><span class='line'>(autoload 'pymacs-eval "pymacs" nil t)
+</span><span class='line'>(autoload 'pymacs-exec "pymacs" nil t)
+</span><span class='line'>(autoload 'pymacs-load "pymacs" nil t)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ropmacs的安装方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>.emacs中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(pymacs-load "ropemacs" "rope-")
+</span><span class='line'>(setq ropemacs-enable-autoimport t)</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4. pycomplete</h3>
+
+<p>一个更加强大的智能提示工具，比如，输入time.cl 然后按TAB键，会列出time模块所有cl开头的函数名。在调用函数时，还会在mini buffer中提示函数的参数类型。这个东西需要先安装pymacs。</p>
+
+<p>安装方法：</p>
+
+<ol>
+<li>拷贝 python-mode.el and pycomplete.el 到Emacs的load_path中</li>
+<li>拷贝 pycomplete.py 到PYTHONPATH (比如： c:/python25/Lib/site-packages)</li>
+<li>.emacs中添加：</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(require 'pycomplete)
+</span><span class='line'>(setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
+</span><span class='line'>(autoload 'python-mode "python-mode" "Python editing mode." t)
+</span><span class='line'>(setq interpreter-mode-alist(cons '("python" . python-mode)
+</span><span class='line'>                           interpreter-mode-alist))</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>5. pdb调试</h3>
+
+<p>在Emacs中，通过M-x pdb可调出pdb对python代码进行调试。但是发现在Windows系统中，总进入不了调试模式。主要原因有：</p>
+
+<h4>1. windows中，找不到pdb.py位置。需自己制定pdb的路径。可以通过下面的方法设置pdb的路径：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>;; pdb setup, note the python version
+</span><span class='line'>(setq pdb-path 'c:/python25/Lib/pdb.py
+</span><span class='line'>       gud-pdb-command-name (symbol-name pdb-path))
+</span><span class='line'> (defadvice pdb (before gud-query-cmdline activate)
+</span><span class='line'>   "Provide a better default command line when called interactively."
+</span><span class='line'>   (interactive
+</span><span class='line'>    (list (gud-query-cmdline pdb-path
+</span><span class='line'>                 (file-name-nondirectory buffer-file-name)))))</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. windows中，调用pdb时，未使用python -i 参数。</h4>
+
+<p>针对上面两个问题，我的解决办法是，不设置pdb具体路径，M-x pdb 回车后，出现下面命令:</p>
+
+<p>Run pdb (like this): pdb
+然后手动修改一下：</p>
+
+<p>Run pdb (like this): python -i -m pdb test.py
+这样就搞定了。</p>
+
+<h3>6. 如何调试GAE程序</h3>
+
+<p>GAE是一个Web应用，需要跨线程进行调试，而pdb本身对线程调试支持不好。使用pdb进行线程调试时，只有在需要调试的地方插入下面代码：</p>
+
+<p>import pdb
+pdb.set_trace()</p>
+
+<p>然后直接运行被调试代码，而不是通过python pdb来执行，就可以多线程代码进行调试了。</p>
+
+<p>但是Google App Engine这样的Web应用，使用这个方法还是不能调试，和stdin和stdout有关，最后找到一个很好的解决方法：</p>
+
+<p>def set_trace():</p>
+
+<pre><code>import pdb, sys
+debugger = pdb.Pdb(stdin=sys.__stdin__,
+    stdout=sys.__stdout__)
+debugger.set_trace(sys._getframe().f_back)
+</code></pre>
+
+<p>在任何需要调试的地方，调用上面的set_trace()函数。</p>
+
+<p>如果你还有更好玩的东西，一定要告诉我！</p>
+
+<h3>参考文档：</h3>
+
+<p><a href="http://www.emacswiki.org/emacs/PythonMode">http://www.emacswiki.org/emacs/PythonMode</a></p>
+
+<p><a href="http://www.enigmacurry.com/2008/05/09/emacs-as-a-powerful-python-ide/">http://www.enigmacurry.com/2008/05/09/emacs-as-a-powerful-python-ide/</a></p>
+
+<p><a href="http://jjinux.blogspot.com/2008/05/python-debugging-google-app-engine-apps.html">http://jjinux.blogspot.com/2008/05/python-debugging-google-app-engine-apps.html</a></p>
+
+<p>作者：CoderZh（CoderZh的技术博客 &ndash; 博客园）
+微博：<a href="http://t.sina.com.cn/coderzh">http://t.sina.com.cn/coderzh</a>
+出处：<a href="http://coderzh.cnblogs.com">http://coderzh.cnblogs.com</a>
+文章版权归本人所有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，否则保留追究法律责任的权利。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -514,56 +739,6 @@ sudo chmod +x XXX</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-19T01:34:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h4>1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）</h4>
-
-<p>1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置：</p>
-
-<pre><code>system prefernce--&gt;Accounts--&gt;LogItems--&gt;add
-</code></pre>
-
-<p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
-
-<p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -586,7 +761,7 @@ sudo chmod +x XXX</p>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (28)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
-<li class='category'><a href='/blog/categories/python/'>python (2)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
   </ul>
@@ -595,6 +770,10 @@ sudo chmod +x XXX</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">IP地址，0.0.0.0 监听，所有地址</a>
@@ -610,10 +789,6 @@ sudo chmod +x XXX</p>
     
       <li class="post">
         <a href="/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/">Mac OS X: 停止响应的处理（包含强制重启机器）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/23/qian-tan-wu-da-python-webkuang-jia/">浅谈五大Python Web框架</a>
       </li>
     
   </ul>
