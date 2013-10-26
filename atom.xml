@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-26T23:51:13+08:00</updated>
+  <updated>2013-10-26T23:52:38+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -25,6 +25,9 @@
 <p>使用 Emacs 可以完全抛弃鼠标，不必在打字的同时把手移开键盘找鼠标，不必在 一大堆深藏不露的菜单里寻找那些常用功能，也不必被一条条工具栏遮挡视线。 大多数的 Windows 编辑器都有一条菜单栏，n条工具栏。菜单里有无数选项，很 多选项都会弹出一个对话框，这个对话框又会带有层层叠叠的标签，每个标签里 又有很多输入框很多按钮。一个简单的把所有字母大写的命令就要在菜单里翻半 天，说不定还找不到，而他们的帮助信息又总是不知所云。而 Emacs 的大多数操 作都可以通过快捷键或直接输入命令完成，而且有着极好的帮助系统，可以通过 多种方式找到你想要的命令或按键。</p>
 
 <p>不要被 Emacs 简单的外观和与众不同的操作方式迷惑，上手 Emacs 并不是什么 难事，看一遍 Tutorial 就可以了，Emacs23 已经带着多种语言版本的快速指南， 包括中文。仍然觉得 Tutor 太长？那可以继续看本文。</p>
+
+<!-- more -->
+
 
 <h3>按键说明</h3>
 
@@ -217,6 +220,11 @@ Emacs 配置使用的语言是 Elisp，Emacs 附带非常详细的 Elisp 手册�
 
 <p>安装方法：
 (Add by Eric 建议看GitHub上的安装说明：<a href="https://github.com/capitaomorte/yasnippet">https://github.com/capitaomorte/yasnippet</a>)</p>
+
+<!-- more -->
+
+
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
