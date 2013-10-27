@@ -16,6 +16,8 @@ Django 相关教程：
 
 上面这俩有点老，参考一下即可。
 
+<!-- more -->
+
 http://haoluobo.com/trac/wiki/Django  
 
 这哥们跟Django好像关系不错，收集了很多东西，起来帮助很大。不过有些链接进去也是广告N多，那种一看就是垃圾站。那个2010年版的Django Step by Step就是那样。
