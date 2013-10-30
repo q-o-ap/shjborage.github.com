@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Property 使用注意事项 - Saick Blog - 专注技术，乐在其中</title>
+  <title> python MySQLdb安装以及问题汇总 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="NSString property的属性必须是copy
-delegate property的属性是assign
-dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
-init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
+  <meta name="description" content="自已备注一些, 斜体 转自：http://blog.chinaunix.net/uid-8487640-id-3183185.html MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb： 首先要下载下载：请到官方网站http://sourceforge. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">
+  <link rel="canonical" href="http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +82,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Property 使用注意事项</h1>
+      <h1 class="entry-title">Python MySQLdb安装以及问题汇总</h1>
     
     
       <p class="meta">
@@ -101,29 +98,58 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-30T23:17:00+08:00" pubdate data-updated="true">Oct 30<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
+<div class="entry-content"><p>自已备注一些, 斜体</p>
 
+<p>转自：<a href="http://blog.chinaunix.net/uid-8487640-id-3183185.html">http://blog.chinaunix.net/uid-8487640-id-3183185.html</a></p>
 
-<h4>NSCoping</h4>
+<p>MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb：</p>
+
+<p>首先要下载下载：请到官方网站<a href="http://sourceforge.net/projects/mysql-python/%E6%88%96%E8%80%85">http://sourceforge.net/projects/mysql-python/%E6%88%96%E8%80%85</a> <a href="http://downloads.sourceforge.net/project/mysql-python/mysql-python-test/1.2.3c1/MySQL-python-1.2.3c1.tar.gz?use_mirror=nchc">点击链接下载</a></p>
 
 <!-- more -->
 
 
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
+<p>解压：tar zxvf MySQL-python*</p>
 
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
+<p>进入文件目录，运行以下命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py install </span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装完成，到你的python安装目录下的site-packages目录里检查以下文件是否存在，如果存在即代表安装成功了</p>
+
+<p>Linux：MySQL_python-1.2.3c1-py2.6-linux-i686.egg
+Mac OS X：MySQL_python-1.2.3c1-py2.6-macosx-10.4-x86_64.egg</p>
+
+<h4>注：如果碰到mysql_config not found的问题，有两种方法解决：<em>可能两个方法要合一起</em></h4>
+
+<p>1）ln -s /usr/local/mysql/bin/mysql_config /usr/local/bin/mysql_config
+将mysql_confi从你的安装目录链接到/usr/local/bin目录下，这样就可以在任意目录下访问了（也可以放到/usr/bin）</p>
+
+<p>2）编辑源码文件夹的site.cfg文件，去掉#mysql_config = /usr/local/bin/mysql_config前的注释＃，修改后面的路径为你的mysql_config真正的目录就可以了。（如果不知道mysql_config在哪里，运行命令：whereis mysql_config）</p>
+
+<h4>注:如果碰到import error: libmysqlclient.so.18: cannot open shared object file: No such file or directory</h4>
+
+<p>解决方法:</p>
+
+<p>locate or find libmysqlclient.so.18
+link path/libmysqlclient.so.18 /usr/lib/libmysqlclient.so.18
+vi /etc/ld.so.conf    //加入libmysqlclient.so.18 所在的目录
+插入: /usr/lib/</p>
+
+<p>保存退出后执行/sbin/ldconfig生效</p>
+
+<h4><em>后部安装：需要进行一个软连接链接不然会提示报错。</em></h4>
+
+<p>问题如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -132,15 +158,41 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;&gt;&gt; from django.db import connection
+</span><span class='line'>&gt;&gt;&gt; cursor = connection.cursor()
+</span><span class='line'>Traceback (most recent call last):
+</span><span class='line'>  File "&lt;console&gt;", line 1, in &lt;module&gt;
+</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/__init__.py", line 39, in __getattr__
+</span><span class='line'>    return getattr(connections[DEFAULT_DB_ALIAS], item)
+</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/utils.py", line 193, in __getitem__
+</span><span class='line'>    backend = load_backend(db['ENGINE'])
+</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/utils.py", line 108, in load_backend
+</span><span class='line'>    return import_module('%s.base' % backend_name)
+</span><span class='line'>  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/__init__.py", line 37, in import_module
+</span><span class='line'>    __import__(name)
+</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/backends/mysql/base.py", line 17, in &lt;module&gt;
+</span><span class='line'>    raise ImproperlyConfigured("Error loading MySQLdb module: %s" % e)
+</span><span class='line'>ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/_mysql.so, 2): Library not loaded: libmysqlclient.18.dylib
+</span><span class='line'>  Referenced from: /Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/_mysql.so
+</span><span class='line'>  Reason: image not found
+</span><span class='line'>&gt;&gt;&gt; </span></code></pre></td></tr></table></div></figure>
 
 
+<p>解决方案：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -164,12 +216,12 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-10-30T23:17:00+08:00" pubdate data-updated="true">Oct 30<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/database/'>Database</a>, <a class='category' href='/blog/categories/python/'>python</a>
   
 </span>
 
@@ -182,7 +234,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/" >Tweet</a>
   
   
   
@@ -209,10 +261,8 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Previous Post: Category 巧用-调试程序">&laquo; Category 巧用-调试程序</a>
+        <a class="basic-alignment left" href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/" title="Previous Post: Dash：程序员的的好帮手">&laquo; Dash：程序员的的好帮手</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/isecret-jian-jie/" title="Next Post: iSecret 简介 Updated at Oct 14, 2013">iSecret 简介 Updated at Oct 14, 2013 &raquo;</a>
       
     </p>
   </footer>

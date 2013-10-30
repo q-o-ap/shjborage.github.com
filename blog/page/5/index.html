@@ -9,8 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="一.安装mysql 1.mysql下载地址http://dev.mysql.com/downloads/mysql/
-我的机器是mac 10.7的;使用mysql-5.1.52-osx10.6-x86.dmg安装包， 没有更新的，这个可用。（5.5也可以这样用，基本一致 MacOSX10.8. &hellip;">
+  <meta name="description" content="Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发 事件经过： 正常开发，branch:master
+在Eclipse中，使用插件checkout某版本出来 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,61 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Git No Branch 解决方案</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-07T18:03:00+08:00" pubdate data-updated="true">Jun 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
+
+<h5>事件经过：</h5>
+
+<ol>
+<li>正常开发，branch:master</li>
+<li>在Eclipse中，使用插件checkout某版本出来</li>
+<li>再checkout到最近一次提交的版本</li>
+<li>不断Commit多次，一直不能push，以为工具出了问题</li>
+<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
+</ol>
+
+
+<p>每次都提交，数据肯定不会丢，也没有担心。
+就找个问题的解决方案，果然有。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -526,49 +581,6 @@ iSecret does not require any network.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-block-bian-cheng/">iOS Block 编程</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T09:57:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>block</h2>
-
-<p>Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks for concurrent or asynchronous execution using technologies like Grand Central Dispatch (GCD).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/ios-block-bian-cheng/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -586,14 +598,14 @@ iSecret does not require any network.</p>
   <h1>Categories</h1>
   <ul id="categories">
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
-<li class='category'><a href='/blog/categories/database/'>Database (3)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (4)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (29)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
-<li class='category'><a href='/blog/categories/python/'>python (5)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
 
   </ul>
@@ -602,6 +614,10 @@ iSecret does not require any network.</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/"> python MySQLdb安装以及问题汇总</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Dash：程序员的的好帮手</a>
@@ -617,10 +633,6 @@ iSecret does not require any network.</p>
     
       <li class="post">
         <a href="/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">IP地址，0.0.0.0 监听，所有地址</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/">Mac OS X添加PATH环境变量</a>
       </li>
     
   </ul>

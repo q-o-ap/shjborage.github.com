@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Database | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-10-29T00:39:36+08:00</updated>
+  <updated>2013-10-30T23:35:53+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,101 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ python MySQLdb安装以及问题汇总]]></title>
+    <link href="http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/"/>
+    <updated>2013-10-30T23:17:00+08:00</updated>
+    <id>http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong</id>
+    <content type="html"><![CDATA[<p>自已备注一些, 斜体</p>
+
+<p>转自：<a href="http://blog.chinaunix.net/uid-8487640-id-3183185.html">http://blog.chinaunix.net/uid-8487640-id-3183185.html</a></p>
+
+<p>MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb：</p>
+
+<p>首先要下载下载：请到官方网站<a href="http://sourceforge.net/projects/mysql-python/%E6%88%96%E8%80%85">http://sourceforge.net/projects/mysql-python/%E6%88%96%E8%80%85</a> <a href="http://downloads.sourceforge.net/project/mysql-python/mysql-python-test/1.2.3c1/MySQL-python-1.2.3c1.tar.gz?use_mirror=nchc">点击链接下载</a></p>
+
+<!-- more -->
+
+
+<p>解压：tar zxvf MySQL-python*</p>
+
+<p>进入文件目录，运行以下命令：
+<code>
+python setup.py install
+</code></p>
+
+<p>安装完成，到你的python安装目录下的site-packages目录里检查以下文件是否存在，如果存在即代表安装成功了</p>
+
+<p>Linux：MySQL_python-1.2.3c1-py2.6-linux-i686.egg
+Mac OS X：MySQL_python-1.2.3c1-py2.6-macosx-10.4-x86_64.egg</p>
+
+<h4>注：如果碰到mysql_config not found的问题，有两种方法解决：<em>可能两个方法要合一起</em></h4>
+
+<p>1）ln -s /usr/local/mysql/bin/mysql_config /usr/local/bin/mysql_config
+将mysql_confi从你的安装目录链接到/usr/local/bin目录下，这样就可以在任意目录下访问了（也可以放到/usr/bin）</p>
+
+<p>2）编辑源码文件夹的site.cfg文件，去掉#mysql_config = /usr/local/bin/mysql_config前的注释＃，修改后面的路径为你的mysql_config真正的目录就可以了。（如果不知道mysql_config在哪里，运行命令：whereis mysql_config）</p>
+
+<h4>注:如果碰到import error: libmysqlclient.so.18: cannot open shared object file: No such file or directory</h4>
+
+<p>解决方法:</p>
+
+<p>locate or find libmysqlclient.so.18
+link path/libmysqlclient.so.18 /usr/lib/libmysqlclient.so.18
+vi /etc/ld.so.conf    //加入libmysqlclient.so.18 所在的目录
+插入: /usr/lib/</p>
+
+<p>保存退出后执行/sbin/ldconfig生效</p>
+
+<h4><em>后部安装：需要进行一个软连接链接不然会提示报错。</em></h4>
+
+<p>问题如下：</p>
+
+<p>```</p>
+
+<blockquote><blockquote><blockquote><p>from django.db import connection
+cursor = connection.cursor()
+Traceback (most recent call last):
+  File &ldquo;<console>&rdquo;, line 1, in <module>
+  File &ldquo;/Library/Python/2.7/site-packages/django/db/<strong>init</strong>.py&rdquo;, line 39, in <strong>getattr</strong></p>
+
+<pre><code>return getattr(connections[DEFAULT_DB_ALIAS], item)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 193, in <strong>getitem</strong></p>
+
+<pre><code>backend = load_backend(db['ENGINE'])
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 108, in load_backend</p>
+
+<pre><code>return import_module('%s.base' % backend_name)
+</code></pre>
+
+<p>  File &ldquo;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/<strong>init</strong>.py&rdquo;, line 37, in import_module</p>
+
+<pre><code>__import__(name)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/backends/mysql/base.py&rdquo;, line 17, in <module></p>
+
+<pre><code>raise ImproperlyConfigured("Error loading MySQLdb module: %s" % e)
+</code></pre>
+
+<p>ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/<em>mysql.so, 2): Library not loaded: libmysqlclient.18.dylib
+  Referenced from: /Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/</em>mysql.so
+  Reason: image not found</p>
+
+<p>```</p></blockquote></blockquote></blockquote>
+
+<p>解决方案：</p>
+
+<p><code>
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[group_concat函数详解]]></title>
@@ -392,20 +487,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x72;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#x77;&#x2e;&#x63;&#110;&#115;&#99;&#110;&#x2e;&#111;&#x72;&#103;">&#114;&#111;&#111;&#x74;&#64;&#x77;&#x77;&#x77;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#46;&#x6f;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x72;&#x6f;&#111;&#x74;&#64;&#x77;&#x77;&#119;&#46;&#x63;&#110;&#x73;&#x63;&#x6e;&#x2e;&#111;&#114;&#x67;">&#114;&#111;&#111;&#x74;&#64;&#119;&#119;&#x77;&#x2e;&#x63;&#x6e;&#115;&#x63;&#110;&#x2e;&#111;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x72;&#x6f;&#x6f;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#103;">&#x72;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#99;&#110;&#115;&#x63;&#x6e;&#x2e;&#111;&#x72;&#x67;</a> ~]$ file base_user.sql
+<p>[<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#111;&#111;&#x74;&#64;&#x77;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#x63;&#x6e;&#x2e;&#111;&#114;&#x67;">&#x72;&#x6f;&#111;&#x74;&#x40;&#x77;&#119;&#119;&#x2e;&#99;&#110;&#115;&#99;&#110;&#46;&#111;&#x72;&#103;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#114;&#x6f;&#x6f;&#x74;&#64;&#119;&#119;&#119;&#46;&#x63;&#110;&#115;&#x63;&#110;&#x2e;&#111;&#x72;&#x67;">&#x72;&#111;&#111;&#x74;&#x40;&#x77;&#x77;&#119;&#46;&#x63;&#110;&#115;&#x63;&#x6e;&#x2e;&#x6f;&#114;&#x67;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#x77;&#119;&#46;&#99;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#x6f;&#x72;&#x67;">&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#x77;&#119;&#x2e;&#99;&#x6e;&#115;&#99;&#110;&#x2e;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x72;&#111;&#x6f;&#x74;&#x40;&#119;&#119;&#x77;&#x2e;&#99;&#x6e;&#115;&#x63;&#x6e;&#x2e;&#111;&#114;&#x67;">&#114;&#x6f;&#111;&#x74;&#x40;&#x77;&#119;&#x77;&#46;&#x63;&#x6e;&#x73;&#x63;&#x6e;&#x2e;&#111;&#114;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#114;&#111;&#x6f;&#x74;&#x40;&#119;&#x77;&#x77;&#x2e;&#x63;&#110;&#115;&#99;&#110;&#46;&#111;&#x72;&#103;">&#114;&#111;&#x6f;&#x74;&#64;&#x77;&#119;&#x77;&#x2e;&#x63;&#110;&#115;&#99;&#x6e;&#46;&#x6f;&#114;&#103;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
