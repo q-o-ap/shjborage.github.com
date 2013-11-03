@@ -6,6 +6,8 @@ comments: true
 categories: other
 ---
 
+更新（转自威锋论坛）：  
+最近老的DNS方案已不行，已有解决方案，不怕麻烦的弄一下就好。 [传送门](http://bbs.weiphone.com/read-htm-tid-6876174.html)
 
 ####工作原理：
 通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。
