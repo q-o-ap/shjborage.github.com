@@ -9,24 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="状态栏隐藏问题 使用代码 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-- (BOOL)prefersStatusBarHidden
-{ return _isStatusHidden;//隐藏为YES，显示为NO
-} - (void)hideStatusBar:(BOOL &hellip;">
+  <meta name="description" content="Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,6 +79,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/duo-can-shu-selector/">多参数selector</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T16:09:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 performSelector可以支持传入参数数组。多个参数就不再是问题了。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/duo-can-shu-selector/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -560,53 +584,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">SQLite使用 iOS平台</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-03T13:35:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>不太常用，但很关键命令</h3>
-
-<h4>1.整理数据库：vacuum</h4>
-
-<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
-
-<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/03/sqliteshi-yong-iosping-tai/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -629,7 +606,7 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (31)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (32)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -640,6 +617,10 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/">Python MySQLdb安装以及问题汇总</a>
@@ -655,10 +636,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
     
       <li class="post">
         <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">IP地址，0.0.0.0 监听，所有地址</a>
       </li>
     
   </ul>

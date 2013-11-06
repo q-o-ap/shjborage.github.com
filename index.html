@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="自已备注一些, 斜体 转自：http://blog.chinaunix.net/uid-8487640-id-3183185.html MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb： 首先要下载下载：请到官方网站http://sourceforge. &hellip;">
+  <meta name="description" content="介绍： Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。 设计： GCD的工作原理是： &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,71 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-06T23:14:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>介绍：</h3>
+
+<p>Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。</p>
+
+<h4>设计：</h4>
+
+<p>GCD的工作原理是：让程序平行排队的特定任务，根据可用的处理资源，安排他们在任何可用的处理器核心上执行任务。</p>
+
+<p>一个任务可以是一个函数(function)或者是一个block。 GCD的底层依然是用线程实现，不过这样可以让程序员不用关注实现的细节。</p>
+
+<p>GCD中的FIFO队列称为dispatch queue，它可以保证先进来的任务先得到执行</p>
+
+<p>dispatch queue分为下面三种：</p>
+
+<h4>Serial</h4>
+
+<p>又称为private dispatch queues，同时只执行一个任务。Serial queue通常用于同步访问特定的资源或数据。当你创建多个Serial queue时，虽然它们各自是同步执行的，但Serial queue与Serial queue之间是并发执行的。</p>
+
+<h4>Concurrent</h4>
+
+<p>又称为global dispatch queue，可以并发地执行多个任务，但是执行完成的顺序是随机的。</p>
+
+<h4>Main dispatch queue</h4>
+
+<p>它是全局可用的serial queue，它是在应用程序主线程上执行任务的。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -507,51 +572,6 @@ sudo chmod +x XXX</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">对比iOS网络组件：AFNetworking vs ASIHTTPRequest</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-20T22:55:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在开发iOS应用过程中，如何高效的与服务端API进行数据交换，是一个常见问题。一般开发者都会选择一个第三方的网络组件作为服务，以提高开发效率和稳定性。这些组件把复杂的网络底层操作封装成友好的类和方法，并且加入异常处理等。</p>
-
-<p>那么，大家最常用的组件是什么？这些组件是如何提升开发效率和稳定性的？哪一款组件适合自己，是 AFNetworking（AFN）还是 ASIHTTPRequest（ASI）？几乎每一个iOS互联网应用开发者都会面对这样的选择题，要从这两个最常用的组件里选出一个好的还真不是那么容易。</p>
-
-<p>单单从两个控件版本提交的时间节点来看，AFN的第一个提交是2011年的1月1日，那个时候ASI早已是1.8+的版本了；而当AFN发布1.0版，2012年10月份的时候，ASI早早的已经停止更新了。这样看起来，AFN是ASI的继任者，似乎不存在之前提到的选择困难的问题，而事实并非如此。本文将从用法、功能、性能和原理几个方面对二者进行简单对比，看看二者之间到底存在着怎样的区别，到底应该如何选择。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -572,7 +592,7 @@ sudo chmod +x XXX</p>
 <li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (31)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (32)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -583,6 +603,10 @@ sudo chmod +x XXX</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/">Python MySQLdb安装以及问题汇总</a>
@@ -598,10 +622,6 @@ sudo chmod +x XXX</p>
     
       <li class="post">
         <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">IP地址，0.0.0.0 监听，所有地址</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="block Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks &hellip;">
+  <meta name="description" content="不断更新中。。。 Aug 5, 2013 如果使用C++代码混编，找不到iostream等 可能是.m中直接import的，这个需要注意改成mm或者修改编译方式 May 28, 2013 不要调用[super release] 在dealloc里要调用[super dealloc]，千万不要调用[ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">iOS 开发常见低级错误</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
+
+<p>Aug 5, 2013</p>
+
+<ul>
+<li><h3>如果使用C++代码混编，找不到iostream等</h3>
+
+<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
+</ul>
+
+
+<p>May 28, 2013</p>
+
+<ul>
+<li><h3>不要调用[super  release]</h3>
+
+<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -237,28 +291,12 @@
 <p>1.注册应用支持的文档类型（会被系统管理起来）<br/>
 2.打开所用的ViewController</p>
 
-<h4>1.注册类型，按需要添加</h4>
-
-<p>附上本地的文档链接（搜索关键字：Uniform Type Identifier Concepts）
-（file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/understanding_utis/understand_utis_conc/understand_utis_conc.html#//apple_ref/doc/uid/TP40001319-CH202-CHDHIJDE）</p>
-
-<p>All Files这个文件类型，是从Dropbox里面抄来的，你懂的（<a href="http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82">http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82</a></p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10708970444/" title="2013-2-17-2 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5488/10708970444_870ea07b91.jpg" width="500" height="284" alt="2013-2-17-2"></a></p>
-
-<h3>2.打开文件ViewController</h3>
-
-<p>附本地文件链接：（搜索关键字：Previewing and Opening Files）file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/DocumentInteraction_TopicsForIOS/Articles/PreviewingandOpeningItems.html#//apple_ref/doc/uid/TP40010410-SW1</p>
-
-<h4>UIDocumentInteractionController</h4>
-
-<p>不知道的话看一下文档就好了，还是比较容易使用。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10708900325/" title="2013-2-17-3 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5478/10708900325_1a55a4d3d8.jpg" width="282" height="500" alt="2013-2-17-3"></a></p>
-
-<p>再有的话呢，就是HandleOpenUrl的用法了，这个相信大家都比较熟悉了，就不多说了。URL的内容是文件的路径，你自己想干什么都可以咯。</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -301,227 +339,12 @@
 
 <p>使用这个组件（<em>SKStoreProductViewController</em>），API相当简单。就像发短信的组件类似，可以传个ID过去，就可以在应用中使用AppStore了，不用再跳转过去。</p>
 
-<p>具体如下： Apple Documents</p>
-
-<h4>SKStoreProductViewController Class Reference</h4>
-
-<p>Inherits from</p>
-
-<p><strong>UIViewController : UIResponder : NSObject</strong></p>
-
-<p>Conforms to</p>
-
-<p><strong>NSCoding (UIViewController)</strong>
-<strong>UIAppearanceContainer (UIViewController)</strong>
-<strong>NSObject (NSObject)</strong></p>
-
-<p>Framework</p>
-
-<p><strong>/System/Library/Frameworks/StoreKit.framework</strong></p>
-
-<p>Availability</p>
-
-<p>Available in iOS <strong>6.0</strong> and later.</p>
-
-<p>Companion guide</p>
-
-<p>In-App Purchase Programming Guide
-Declared in <strong>SKStoreProductViewController.h</strong></p>
-
-<h5>Overview</h5>
-
-<p>A SKStoreProductViewController object presents a store that allows the user to purchase other media from the App Store. For example, your app might display the store to allow the user to purchase another app.</p>
-
-<p>To display a store, create a new SKStoreProductViewController object and set its delegate. Then, present the view controller modally from another view controller in your app. Your delegate dismisses the view controller when the user completes the purchase.</p>
-
-<p>To choose a specific product, call the loadProductWithParameters:completionBlock: method, passing the iTunes item identifier for the item you want to sell.</p>
-
-<h5>Tasks</h5>
-
-<p>Setting a Delegate
-  delegate  property
-Loading a New Product Screen</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>– loadProductWithParameters:completionBlock:</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Properties</h5>
-
-<p>delegate</p>
-
-<p>The store view controller’s delegate.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@property(nonatomic, assign) id&lt;SKStoreProductViewControllerDelegate&gt; delegate</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Discussion</h5>
-
-<p>Your application must set the delegate before presenting the store view controller.</p>
-
-<h5>Availability</h5>
-
-<p>Available in iOS 6.0 and later.</p>
-
-<h5>Declared In</h5>
-
-<p>SKStoreProductViewController.h</p>
-
-<h5>Instance Methods</h5>
-
-<p><em>loadProductWithParameters:completionBlock:</em></p>
-
-<p>Loads a new product screen to display.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)loadProductWithParameters:(NSDictionary *)parameters completionBlock:(void (^)(BOOL result, NSError *error))block</span></code></pre></td></tr></table></div></figure>
-
-
-<h6>Parameters</h6>
-
-<p>parameters</p>
-
-<p>A dictionary describing the content you want the view controller to display. See “Product Dictionary Keys.”</p>
-
-<p>block</p>
-
-<p>A block to be called when the product information has been loaded from the App Store. The completion block is called on the main thread and receives the following
-parameters:</p>
-
-<p><em>result</em>
-YES if the product information was successfully loaded, otherwise NO.
-<em>error</em>
-If an error occurred, this object describes the error. If the product information was successfully loaded, this value is nil.</p>
-
-<h5>Discussion</h5>
-
-<p>In most cases, you should load the product information and then present the view controller. However, if you load new product information while the view controller is presented, the contents of the view controller are replaced after the new product data is loaded.</p>
-
-<h5>Availability</h5>
-
-<p>Available in iOS 6.0 and later.</p>
-
-<h5>Declared In</h5>
-
-<p>SKStoreProductViewController.h</p>
-
-<h5>Constants</h5>
-
-<p>Product Dictionary Keys
-Keys supported in the product dictionary.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSString * const SKStoreProductParameterITunesItemIdentifier;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Constants</p>
-
-<p>SKStoreProductParameterITunesItemIdentifier
-The value associated with this key should be a string representing the iTunes identifier for the item you want the store to display when the view controller is presented.
-Available in iOS 6.0 and later.
-Declared in SKStoreProductViewController.h.
-Next</p>
-
-<p>另外也可以在自己的网站中，使用
-具体如下就是，在Html中写Meta即可，但仅支持iOS系统，而且不能内置在应用内部。</p>
-
-<p>本地Document地址：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS6.0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Promoting Apps with Smart App Banners</h4>
-
-<p>Safari has a new Smart App Banner feature in iOS 6 and later that provides a standardized method of promoting apps on the App Store from a website, as shown in Figure 7-1.</p>
-
-<p>Figure 7-1  A Smart App Banner of the Apple Store app</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10709021953/" title="2012-12-17-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7300/10709021953_e4c01baec5.jpg" width="490" height="114" alt="2012-12-17-1"></a></p>
-
-<p>Note: Smart App Banners only show on iOS, not OS X.</p>
-
-<p>Smart App Banners vastly improve users’ browsing experience compared to other promotional methods. As banners are implemented in iOS 6, they will provide a consistent look and feel across the web that users will come to recognize. Users will trust that tapping the banner will take them to the App Store and not a third-party advertisement. They will appreciate that banners are presented unobtrusively at the top of a webpage, instead of as a full-screen ad interrupting the web content. And with a large and prominent close button, a banner is easy for users to dismiss.</p>
-
-<p>If the app is already installed on a user&rsquo;s device, the banner intelligently changes its action, and tapping the banner will simply open the app. If the user doesn’t have your app on his device, tapping on the banner will take him to the app’s entry in the App Store. When he returns to your website, a progress bar appears in the banner, indicating how much longer the download will take to complete. When the app finishes downloading, the View button changes to an Open button, and tapping the banner will open the app while preserving the user’s context from your website.</p>
-
-<p>Smart App Banners automatically determine whether the app is supported on the user’s device. If the device loading the banner does not support your app, or if your app is not available in the user&rsquo;s location, the banner will not display.</p>
-
-<p>Implementing a Smart App Banner on Your Website
-To add a Smart App Banner to your website, include the following meta tag in the head of each page where you’d like the banner to appear:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL"&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can include three comma-separated parameters in the content attribute:</p>
-
-<p>app-id: (Required.) Your app&rsquo;s unique identifier. To find your app ID from the iTunes Link Maker, type the name of your app in the Search field, and select the appropriate country and media type. In the results, find your app and select iPhone App Link in the column on the right. Your app ID is the nine-digit number in between id and ?mt.</p>
-
-<p>affiliate-data: (Optional.) Your iTunes affiliate string, if you are an iTunes affiliate. If you are not, find out more about becoming an iTunes affiliate at <a href="http://www.apple.com/itunes/affiliates/.">http://www.apple.com/itunes/affiliates/.</a></p>
-
-<p>app-argument: (Optional.) A URL that provides context to your native app. If you include this, and the user has your app installed, she can jump from your website to the corresponding position in your iOS app. Typically, it is beneficial to retain navigational context because:
-If the user is deep within the navigational hierarchy of your website, you can pass the document’s entire URL, and then parse it in your app to reroute her to the correct location in your app.</p>
-
-<p>If the user performs a search on your website, you can pass the query string so that she can seamlessly continue the search in your app without having to retype her query.</p>
-
-<p>If the user is in the midst of creating content, you can pass the session ID to download the web session state in your app so she can nondestructively resume her work.</p>
-
-<p>You can generate the app-argument of each page dynamically with a server-side script. You can format it however you&rsquo;d like, as long as it is a valid URL.
-Note: You cannot display Smart App Banners inside of a frame.</p>
-
-<h3>Providing Navigational Context to Your App</h3>
-
-<p>In your app, implement the application:openURL:sourceApplication:annotation: method in your app delegate, which fires when your app is launched from a URL. Then provide logic that can interpret the URL that you pass. The value you set to the app-argumentparameter is available as the NSURL url object.</p>
-
-<p>The example in Listing 7-1 illustrates a website that passes data to a native iOS app. To accomplish this, detect if the URL contains the string/profile. If it does, then open the profile view controller and pass the profile ID number that is in the query string.</p>
-
-<p>Listing 7-1  Routing the user to the correct view controller</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-</span><span class='line'>{
-</span><span class='line'>
-</span><span class='line'>    // in this example, the URL from which the user came is http://example.com/profile/?12345
-</span><span class='line'>
-</span><span class='line'>    // determine if the user was viewing a profile
-</span><span class='line'>
-</span><span class='line'>    if ([[url path] isEqualToString:@"/profile"]) {
-</span><span class='line'>        // switch to profile view controller
-</span><span class='line'>        [self.tabBarController setSelectedViewController:profileViewController];
-</span><span class='line'>
-</span><span class='line'>        // pull the profile id number found in the query string
-</span><span class='line'>        NSString *profileID = [url query];
-</span><span class='line'>
-</span><span class='line'>        // pass profileID to profile view controller
-</span><span class='line'>        [profileViewController loadProfile:profileID];
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    return YES; }</span></code></pre></td></tr></table></div></figure>
-
-
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -547,7 +370,7 @@ Note: You cannot display Smart App Banners inside of a frame.</p>
 <li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (31)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (32)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -558,6 +381,10 @@ Note: You cannot display Smart App Banners inside of a frame.</p>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/">Python MySQLdb安装以及问题汇总</a>
@@ -573,10 +400,6 @@ Note: You cannot display Smart App Banners inside of a frame.</p>
     
       <li class="post">
         <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">IP地址，0.0.0.0 监听，所有地址</a>
       </li>
     
   </ul>

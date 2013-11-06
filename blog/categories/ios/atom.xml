@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-11-06T23:13:02+08:00</updated>
+  <updated>2013-11-06T23:23:52+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,237 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用]]></title>
+    <link href="http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/"/>
+    <updated>2013-11-06T23:14:00+08:00</updated>
+    <id>http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong</id>
+    <content type="html"><![CDATA[<h3>介绍：</h3>
+
+<p>Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。</p>
+
+<h4>设计：</h4>
+
+<p>GCD的工作原理是：让程序平行排队的特定任务，根据可用的处理资源，安排他们在任何可用的处理器核心上执行任务。</p>
+
+<p>一个任务可以是一个函数(function)或者是一个block。 GCD的底层依然是用线程实现，不过这样可以让程序员不用关注实现的细节。</p>
+
+<p>GCD中的FIFO队列称为dispatch queue，它可以保证先进来的任务先得到执行</p>
+
+<p>dispatch queue分为下面三种：</p>
+
+<h4>Serial</h4>
+
+<p>又称为private dispatch queues，同时只执行一个任务。Serial queue通常用于同步访问特定的资源或数据。当你创建多个Serial queue时，虽然它们各自是同步执行的，但Serial queue与Serial queue之间是并发执行的。</p>
+
+<h4>Concurrent</h4>
+
+<p>又称为global dispatch queue，可以并发地执行多个任务，但是执行完成的顺序是随机的。</p>
+
+<h4>Main dispatch queue</h4>
+
+<p>它是全局可用的serial queue，它是在应用程序主线程上执行任务的。</p>
+
+<!--more-->
+
+
+<h3>我们看看dispatch queue如何使用</h3>
+
+<h4>1、常用的方法dispatch_async</h4>
+
+<p>为了避免界面在处理耗时的操作时卡死，比如读取网络数据，IO,数据库读写等，我们会在另外一个线程中处理这些操作，然后通知主线程更新界面。<br/>
+用GCD实现这个流程的操作比前面介绍的NSThread  NSOperation的方法都要简单。代码框架结构如下：</p>
+
+<p>```
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{</p>
+
+<pre><code>// 耗时的操作  
+dispatch_async(dispatch_get_main_queue(), ^{  
+    // 更新界面  
+});  
+</code></pre>
+
+<p>});
+```</p>
+
+<p>如果这样还不清晰的话，那我们还是用上两篇博客中的下载图片为例子，代码如下：
+```
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{</p>
+
+<pre><code>NSURL * url = [NSURL URLWithString:@"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"];  
+NSData * data = [[NSData alloc]initWithContentsOfURL:url];  
+UIImage *image = [[UIImage alloc]initWithData:data];  
+if (data != nil) {  
+    dispatch_async(dispatch_get_main_queue(), ^{  
+        self.imageView.image = image;  
+     });  
+}  
+</code></pre>
+
+<p>});<br/>
+```</p>
+
+<p>运行显示：</p>
+
+<p>是不是代码比NSThread  NSOperation简洁很多，而且GCD会自动根据任务在多核处理器上分配资源，优化程序。
+系统给每一个应用程序提供了三个concurrent dispatch queues。这三个并发调度队列是全局的，它们只有优先级的不同。因为是全局的，我们不需要去创建。我们只需要通过使用函数dispath_get_global_queue去得到队列，如下：</p>
+
+<p><code>
+dispatch_queue_t globalQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);    
+</code></p>
+
+<p>这里也用到了系统默认就有一个串行队列main_queue</p>
+
+<p><code>
+dispatch_queue_t mainQ = dispatch_get_main_queue();    
+</code></p>
+
+<p>虽然dispatch queue是引用计数的对象，但是以上两个都是全局的队列，不用retain或release。</p>
+
+<h4>2、dispatch_group_async的使用</h4>
+
+<p>dispatch_group_async可以实现监听一组任务是否完成，完成后得到通知执行其他的操作。这个方法很有用，比如你执行三个下载任务，当三个任务都下载完成后你才通知界面说完成的了。下面是一段例子代码：</p>
+
+<p>```
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);<br/>
+dispatch_group_t group = dispatch_group_create();<br/>
+dispatch_group_async(group, queue, ^{</p>
+
+<pre><code>[NSThread sleepForTimeInterval:1];  
+NSLog(@"group1");  
+</code></pre>
+
+<p>});<br/>
+dispatch_group_async(group, queue, ^{</p>
+
+<pre><code>[NSThread sleepForTimeInterval:2];  
+NSLog(@"group2");  
+</code></pre>
+
+<p>});<br/>
+dispatch_group_async(group, queue, ^{</p>
+
+<pre><code>[NSThread sleepForTimeInterval:3];  
+NSLog(@"group3");  
+</code></pre>
+
+<p>});<br/>
+dispatch_group_notify(group, dispatch_get_main_queue(), ^{</p>
+
+<pre><code>NSLog(@"updateUi");  
+</code></pre>
+
+<p>});<br/>
+dispatch_release(group);<br/>
+```</p>
+
+<p>dispatch_group_async是异步的方法，运行后可以看到打印结果：</p>
+
+<p><code>
+2012-09-25 16:04:16.737 gcdTest[43328:11303] group1
+2012-09-25 16:04:17.738 gcdTest[43328:12a1b] group2
+2012-09-25 16:04:18.738 gcdTest[43328:13003] group3
+2012-09-25 16:04:18.739 gcdTest[43328:f803] updateUi
+</code></p>
+
+<p>每个一秒打印一个，当第三个任务执行后，upadteUi被打印。</p>
+
+<h4>3、dispatch_barrier_async的使用</h4>
+
+<p>dispatch_barrier_async是在前面的任务执行结束后它才执行，而且它后面的任务等它执行完成之后才会执行
+例子代码如下：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t queue = dispatch_queue_create(&ldquo;gcdtest.rongfzh.yc&rdquo;, DISPATCH_QUEUE_CONCURRENT);&lt;br/>
+</span><span class='line'>dispatch_async(queue, ^{&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>[NSThread sleepForTimeInterval:2];  
+</span><span class='line'>NSLog(@"dispatch_async1");  
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>});&lt;br/>
+</span><span class='line'>dispatch_async(queue, ^{&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>[NSThread sleepForTimeInterval:4];  
+</span><span class='line'>NSLog(@"dispatch_async2");  
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>});&lt;br/>
+</span><span class='line'>dispatch_barrier_async(queue, ^{&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>NSLog(@"dispatch_barrier_async");  
+</span><span class='line'>[NSThread sleepForTimeInterval:4];
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>});&lt;br/>
+</span><span class='line'>dispatch_async(queue, ^{&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>[NSThread sleepForTimeInterval:1];  
+</span><span class='line'>NSLog(@"dispatch_async3");  
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>});&lt;br/></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>打印结果：</p>
+
+<p><code>
+2012-09-25 16:20:33.967 gcdTest[45547:11203] dispatch_async1
+2012-09-25 16:20:35.967 gcdTest[45547:11303] dispatch_async2
+2012-09-25 16:20:35.967 gcdTest[45547:11303] dispatch_barrier_async
+2012-09-25 16:20:40.970 gcdTest[45547:11303] dispatch_async3
+</code></p>
+
+<p>请注意执行的时间，可以看到执行的顺序如上所述。</p>
+
+<h4>4、dispatch_apply</h4>
+
+<p>执行某个代码片段N次。</p>
+
+<p>```
+dispatch_apply(5, globalQ, ^(size_t index) {</p>
+
+<pre><code>// 执行5次
+</code></pre>
+
+<p>});
+```</p>
+
+<p>本篇使用的到的例子代码：<a href="http://download.csdn.net/detail/totogo2010/4596471">http://download.csdn.net/detail/totogo2010/4596471</a></p>
+
+<p>GCD还有很多其他用法，可以参考官方文档<br/>
+参考的文档还有：<a href="http://en.wikipedia.org/wiki/Grand_Central_Dispatch  ">http://en.wikipedia.org/wiki/Grand_Central_Dispatch  </a>
+著作权声明：本文由<a href="http://blog.csdn.net/totogo2010/">http://blog.csdn.net/totogo2010/</a> 原创，欢迎转载分享。请尊重作者劳动，转载时保留该声明和作者博客链接，谢谢!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dash：程序员的的好帮手]]></title>
@@ -450,44 +681,6 @@ dict[@(i+1)] = [NSString stringWithFormat:@"new %@", dict[@(i+1)]];}
 <p>如下图：</p>
 
 <p><a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS Cookie使用]]></title>
-    <link href="http://saick.net/blog/2013/10/19/ios-cookieshi-yong/"/>
-    <updated>2013-10-19T01:08:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/19/ios-cookieshi-yong</id>
-    <content type="html"><![CDATA[<p>转自：<a href="http://geeklu.com/2013/04/ios-cookie/">http://geeklu.com/2013/04/ios-cookie/</a></p>
-
-<p>关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
-和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。
-一个Cookie对应一个NSHTTPCookie实体，并通过NSHTTPCookieStorage进行管理。
-那些需要持久化的Cookie是存放在 ~/Library/Cookies/Cookies.binarycookies 文件中的，二进制格式。</p>
-
-<p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
-
-<!-- more -->
-
-
-<p><code>
-NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
-[cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];
-[cookieProperties setObject:@"www.taobao.com" forKey:NSHTTPCookieDomain];[cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
-[cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
-[cookieProperties setObject:@"30000" forKey:NSHTTPCookieMaximumAge];
-NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
-[[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-//删除cookie的方法为deleteCookie:
-</code></p>
-
-<p>在通过setCookie:进行设置cookie的时候，会覆盖name,domain,path都相同的cookie的。
-至于cookie会不会持久化到cookie文件中主要看这个cookie的生命周期，和Max-Age或者Expires有关。</p>
-
-<p>不过NSHTTPCookieStorage存在一个问题，setCookie或者deleteCookie后并不会立即进行持久化，而是有几秒的延迟。如果在持久化之前App接收到SIGKILL信号，App退出，那么会导致cookie相关操作的丢失。在模拟器调试的过程中，XCode重启App的时发给App的就是SIGKILL，不过真正的生产环境中很少有这种情况。
-但是有时候为了可靠性，我们还是会将cookie信息保存一份到User Defaults，需要用的时候load进来。关于cookie操作丢失的详情可以查看这里<a href="http://openradar.appspot.com/radar?id=2776403">NSHTTPCookieStorage looses cookies on SIGKILL</a></p>
-
-<p>卢克 / 2013-04-02</p>
 ]]></content>
   </entry>
   

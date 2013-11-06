@@ -4,13 +4,13 @@
         <loc>
             http://saick.net/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/
         </loc>
-        <lastmod>2013-11-06T22:57:37+08:00</lastmod>
+        <lastmod>2013-11-06T23:21:45+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/
         </loc>
-        <lastmod>2013-11-06T23:07:48+08:00</lastmod>
+        <lastmod>2013-11-06T23:21:35+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/2013/05/27/hello-jekyll/</loc>
@@ -255,12 +255,18 @@
         <lastmod>2013-11-06T22:33:12+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/
+        </loc>
+        <lastmod>2013-11-06T23:23:13+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-11-06T23:07:48+08:00</lastmod>
+        <lastmod>2013-11-06T23:23:13+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -272,7 +278,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-11-06T23:07:48+08:00</lastmod>
+        <lastmod>2013-11-06T23:23:13+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

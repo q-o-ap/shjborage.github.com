@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Cocoa 自省机制 - Saick Blog - 专注技术，乐在其中</title>
+  <title>iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="内省 内省（Introspection）是面向对象语言和环境的一个强大特性，Objective-C和Cocoa在这个方面尤其的丰富。内省是对象揭示自己作为一个运行时对象的详细信息的一种能力。这些详细信息包括对象在继承树上的位置，对象是否遵循特定的协议，以及是否可以响应特定的消息。 &hellip;">
+  <meta name="description" content="介绍： Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。 设计： GCD的工作原理是： &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/">
+  <link rel="canonical" href="http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Cocoa 自省机制</h1>
+      <h1 class="entry-title">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</h1>
     
     
       <p class="meta">
@@ -98,38 +98,48 @@
   
 
 
-<time datetime="2013-08-01T16:30:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+<time datetime="2013-11-06T23:14:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>内省</h3>
+<div class="entry-content"><h3>介绍：</h3>
 
-<p>内省（Introspection）是面向对象语言和环境的一个强大特性，Objective-C和Cocoa在这个方面尤其的丰富。内省是对象揭示自己作为一个运行时对象的详细信息的一种能力。这些详细信息包括对象在继承树上的位置，对象是否遵循特定的协议，以及是否可以响应特定的消息。NSObject协议和类定义了很多内省方法，用于查询运行时信息，以便根据对象的特征进行识别。</p>
+<p>Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。</p>
 
-<p>明智地使用内省可以使面向对象的程序更加高效和强壮。它有助于避免错误地进行消息派发、错误地假设对象相等、以及类似的问题。下面的部分将介绍如何在代码中有效地使用NSObject的内省方法。</p>
+<h4>设计：</h4>
 
-<p><strong><em>本部分包括如下内容：</em></strong></p>
+<p>GCD的工作原理是：让程序平行排队的特定任务，根据可用的处理资源，安排他们在任何可用的处理器核心上执行任务。</p>
 
-<ul>
-<li>评估继承关系</li>
-<li>方法实现和协议遵循</li>
-<li>对象的比较</li>
-</ul>
+<p>一个任务可以是一个函数(function)或者是一个block。 GCD的底层依然是用线程实现，不过这样可以让程序员不用关注实现的细节。</p>
+
+<p>GCD中的FIFO队列称为dispatch queue，它可以保证先进来的任务先得到执行</p>
+
+<p>dispatch queue分为下面三种：</p>
+
+<h4>Serial</h4>
+
+<p>又称为private dispatch queues，同时只执行一个任务。Serial queue通常用于同步访问特定的资源或数据。当你创建多个Serial queue时，虽然它们各自是同步执行的，但Serial queue与Serial queue之间是并发执行的。</p>
+
+<h4>Concurrent</h4>
+
+<p>又称为global dispatch queue，可以并发地执行多个任务，但是执行完成的顺序是随机的。</p>
+
+<h4>Main dispatch queue</h4>
+
+<p>它是全局可用的serial queue，它是在应用程序主线程上执行任务的。</p>
+
+<!--more-->
 
 
-<!-- more -->
+<h3>我们看看dispatch queue如何使用</h3>
 
+<h4>1、常用的方法dispatch_async</h4>
 
-<h4>评估继承关系</h4>
-
-<p>一旦您知道一个对象属于什么类，就可能已经相当了解这个对象了。您可以知道它具有什么能力、哪些属性、以及可以响应哪些消息。即使在内省之后不能了解对象所属的类，也可以知道该对象不能响应特定的消息。</p>
-
-<p>NSObject协议声明了几个方法，用于确定对象在类层次中的位置。这些方法在不同粒度上进行操作，比如class和superclass实例方法分别返回代表类和超类的Class对象。使用这些方法需要将一个Class对象和另一个进行对比。列表2-7给出了一个简单（可能是没有价值）的用法实例。</p>
-
-<p>列表2-7  使用类和超类的方法</p>
+<p>为了避免界面在处理耗时的操作时卡死，比如读取网络数据，IO,数据库读写等，我们会在另外一个线程中处理这些操作，然后通知主线程更新界面。<br/>
+用GCD实现这个流程的操作比前面介绍的NSThread  NSOperation的方法都要简单。代码框架结构如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -137,42 +147,15 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
-</span><span class='line'>while ( id anObject = [objectEnumerator nextObject] ) {
-</span><span class='line'>    if ( [self class] == [anObject superclass] ) {
-</span><span class='line'>        // do something appropriate...
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{  
+</span><span class='line'>    // 耗时的操作  
+</span><span class='line'>    dispatch_async(dispatch_get_main_queue(), ^{  
+</span><span class='line'>        // 更新界面  
+</span><span class='line'>    });  
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
-<p>请注意：有些时候您需要通过class或superclass方法得到正确的类消息接收者。
-更加常见的是检查对象类的从属关系，这种情况下您需要向该对象发送isKindOfClass:或isMemberOfClass:消息。前一个方法返回接收者是否为给定类或其继承类的实例，isMemberOfClass:消息则告诉您接收者是否为指定类的实例。isKindOfClass: 方法通常更有用，因为通过它可以知道是否可以向该对象发送一系列消息。考虑列表2-8中的代码片断：</p>
-
-<p>列表2-8  使用isKindOfClass:方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if ([item isKindOfClass:[NSData class]]) {
-</span><span class='line'>    const unsigned char *bytes = [item bytes];
-</span><span class='line'>    unsigned int length = [item length];
-</span><span class='line'>    // ...
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>确定tem对象是NSData类的继承类的实例之后，代码就知道可以向它发送NSData的bytes和length消息。假定item是NSMutableData类的一个实例，则isKindOfClass:和isMemberOfClass:之间的差别就变得更加明显。如果您调用的是isMemberOfClass:，而不是isKindOfClass:，条件控制块中的代码将永远不会被执行，因为item并不是NSData类的实例，而是其子类NSMutableData的实例。</p>
-
-<h4>方法实现和协议遵循</h4>
-
-<p>NSObject还有两个功能更加强大的内省方法，即respondsToSelector:和conformsToProtocol:。这两个方法分别告诉您一个对象是否实现特定的方法，以及是否遵循指定的正式协议（即该对象是否采纳了该协议，且实现了该协议的所有方法）。</p>
-
-<p>在代码中，您可以在类似的情况下使用这些方法。通过这些方法，您可以在将消息或消息集合发送给某些潜在的匿名对象之前，确定它们是否可以正确地进行响应。在发送消息之前进行检查可以避免由不能识别的选择器引起的运行时例外。在实现非正式协议（这种协议是委托技术的基础）时，Application Kit就是在调用委托方法之前检查委托对象是否实现该方法（通过respondsToSelector:方法）。</p>
-
-<p>列表2-9显示了如何在代码中使用respondsToSelector:方法。</p>
-
-<p>列表2-9  使用respondsToSelector:方法</p>
+<p>如果这样还不清晰的话，那我们还是用上两篇博客中的下载图片为例子，代码如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -181,60 +164,41 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)doCommandBySelector:(SEL)aSelector {
-</span><span class='line'>    if ([self respondsToSelector:aSelector]) {
-</span><span class='line'>        [self performSelector:aSelector withObject:nil];
-</span><span class='line'>    } else {
-</span><span class='line'>        [_client doCommandBySelector:aSelector];
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{  
+</span><span class='line'>    NSURL * url = [NSURL URLWithString:@"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"];  
+</span><span class='line'>    NSData * data = [[NSData alloc]initWithContentsOfURL:url];  
+</span><span class='line'>    UIImage *image = [[UIImage alloc]initWithData:data];  
+</span><span class='line'>    if (data != nil) {  
+</span><span class='line'>        dispatch_async(dispatch_get_main_queue(), ^{  
+</span><span class='line'>            self.imageView.image = image;  
+</span><span class='line'>         });  
+</span><span class='line'>    }  
+</span><span class='line'>});  </span></code></pre></td></tr></table></div></figure>
 
 
-<p>列表2-10显示如何在代码中使用conformsToProtocol:方法：</p>
+<p>运行显示：</p>
 
-<p>列表2-10  使用conformsToProtocol:方法</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ...
-</span><span class='line'>if (!([((id)testObject) conformsToProtocol:@protocol(NSMenuItem)])) {
-</span><span class='line'>    NSLog(@"Custom MenuItem, '%@', not loaded; it must conform to the
-</span><span class='line'>        'NSMenuItem' protocol.\n", [testObject class]);
-</span><span class='line'>    [testObject release];
-</span><span class='line'>    testObject = nil;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>对象的比较</h4>
-
-<p>hash和isEqual:方法虽然不是严格的内省方法，但是可以发挥类似的作用，是进行对象的识别和比较时不可或缺的运行时工具。它们并不向运行环境查询对象信息，而是依赖于具体类的比较逻辑。</p>
-
-<p>hash和isEqual:方法都在NSObject协议中声明，且彼此关系紧密。实现hash方法必须返回一个整型数，作为哈希表结构中的表地址。两个对象相等（isEqual:方法的判断结果）意味着它们有相同的哈希值。如果您的对象可能被包含在象NSSet这样的集合中，则需要定义hash方法，并确保该方法在两个对象相等的时候返回相同的哈希值。NSObject类中缺省的isEqual:实现只是简单地检查指针是否相等。</p>
-
-<p>isEqual:的使用相当直接，它将消息的接收者和通过参数传入的对象进行比较。对象的比较常常可以在运行时决定应该对对象做些什么。如列表2-11所示，您可以通过isEqual:来确定是否执行某一个动作。在这个例子中，动作是指保存被修改了的预置信息。</p>
-
-<p>列表2-11  使用isEqual:方法</p>
+<p>是不是代码比NSThread  NSOperation简洁很多，而且GCD会自动根据任务在多核处理器上分配资源，优化程序。
+系统给每一个应用程序提供了三个concurrent dispatch queues。这三个并发调度队列是全局的，它们只有优先级的不同。因为是全局的，我们不需要去创建。我们只需要通过使用函数dispath_get_global_queue去得到队列，如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)saveDefaults {
-</span><span class='line'>    NSDictionary *prefs = [self preferences];
-</span><span class='line'>    if (![origValues isEqual:prefs]) 
-</span><span class='line'>        [Preferences savePreferencesToDefaults:prefs];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t globalQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);    </span></code></pre></td></tr></table></div></figure>
 
 
-<p>如果您正在创建子类，则可能需要重载isEqual:方法，以进一步检查对象是否相等。子类可能定义额外的属性，当两个实例被认为相等时，属性的值必须相同。举例来说，假定您创建一个名为MyWidget的NSObject子类，类中包含两个实例变量：name和data。当MyWidget的两个实例被认为是相等时，这些变量必须具有相同的值。列表2-12显示如何在MyWidget类中实现isEqual:方法。</p>
+<p>这里也用到了系统默认就有一个串行队列main_queue</p>
 
-<p>列表 2-12  重载isEqual:方法</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t mainQ = dispatch_get_main_queue();    </span></code></pre></td></tr></table></div></figure>
+
+
+<p>虽然dispatch queue是引用计数的对象，但是以上两个都是全局的队列，不用retain或release。</p>
+
+<h4>2、dispatch_group_async的使用</h4>
+
+<p>dispatch_group_async可以实现监听一组任务是否完成，完成后得到通知执行其他的操作。这个方法很有用，比如你执行三个下载任务，当三个任务都下载完成后你才通知界面说完成的了。下面是一段例子代码：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -253,28 +217,113 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)isEqual:(id)other {
-</span><span class='line'>    if (other == self) 
-</span><span class='line'>        return YES;
-</span><span class='line'>    if (!other || ![other isKindOfClass:[self class]]) 
-</span><span class='line'>        return NO;
-</span><span class='line'>    return [self isEqualToWidget:other];
-</span><span class='line'>}
-</span><span class='line'> 
-</span><span class='line'>- (BOOL)isEqualToWidget:(MyWidget *)aWidget {
-</span><span class='line'>    if (self == aWidget) 
-</span><span class='line'>        return YES;
-</span><span class='line'>    if (![(id)[self name] isEqual:[aWidget name]])
-</span><span class='line'>        return NO;
-</span><span class='line'>    if (![[self data] isEqualToData:[aWidget data]])
-</span><span class='line'>        return NO;
-</span><span class='line'>    return YES;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);  
+</span><span class='line'>dispatch_group_t group = dispatch_group_create();  
+</span><span class='line'>dispatch_group_async(group, queue, ^{  
+</span><span class='line'>    [NSThread sleepForTimeInterval:1];  
+</span><span class='line'>    NSLog(@"group1");  
+</span><span class='line'>});  
+</span><span class='line'>dispatch_group_async(group, queue, ^{  
+</span><span class='line'>    [NSThread sleepForTimeInterval:2];  
+</span><span class='line'>    NSLog(@"group2");  
+</span><span class='line'>});  
+</span><span class='line'>dispatch_group_async(group, queue, ^{  
+</span><span class='line'>    [NSThread sleepForTimeInterval:3];  
+</span><span class='line'>    NSLog(@"group3");  
+</span><span class='line'>});  
+</span><span class='line'>dispatch_group_notify(group, dispatch_get_main_queue(), ^{  
+</span><span class='line'>    NSLog(@"updateUi");  
+</span><span class='line'>});  
+</span><span class='line'>dispatch_release(group);  </span></code></pre></td></tr></table></div></figure>
 
 
-<p>isEqual:方法首先检查指针的等同性，然后是类的等同性，最后调用对象的比较器进行比较。比较器的名称指示出参与比较的对象的类名称。这种类型的比较器对传入的对象进行强制类型检查，是Cocoa中常见的约定，NSString的isEqualToString:和NSTimeZone的isEqualToTimeZone:就是两个这样的例子。特定类的比较器（在这个例子中是isEqualToWidget:）负责执行name和data变量的等同性。</p>
+<p>dispatch_group_async是异步的方法，运行后可以看到打印结果：</p>
 
-<p>在Cocoa框架的所有isEqualToType:方法中，nil都不是正当的参数，这些方法的实现在接收到nil参数时会抛出例外。然而为了向后兼容，Cocoa框架中的isEqual:方法可以接收nil值，在这种情况下返回NO。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2012-09-25 16:04:16.737 gcdTest[43328:11303] group1
+</span><span class='line'>2012-09-25 16:04:17.738 gcdTest[43328:12a1b] group2
+</span><span class='line'>2012-09-25 16:04:18.738 gcdTest[43328:13003] group3
+</span><span class='line'>2012-09-25 16:04:18.739 gcdTest[43328:f803] updateUi</span></code></pre></td></tr></table></div></figure>
+
+
+<p>每个一秒打印一个，当第三个任务执行后，upadteUi被打印。</p>
+
+<h4>3、dispatch_barrier_async的使用</h4>
+
+<p>dispatch_barrier_async是在前面的任务执行结束后它才执行，而且它后面的任务等它执行完成之后才会执行
+例子代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t queue = dispatch_queue_create("gcdtest.rongfzh.yc", DISPATCH_QUEUE_CONCURRENT);  
+</span><span class='line'>dispatch_async(queue, ^{  
+</span><span class='line'>    [NSThread sleepForTimeInterval:2];  
+</span><span class='line'>    NSLog(@"dispatch_async1");  
+</span><span class='line'>});  
+</span><span class='line'>dispatch_async(queue, ^{  
+</span><span class='line'>    [NSThread sleepForTimeInterval:4];  
+</span><span class='line'>    NSLog(@"dispatch_async2");  
+</span><span class='line'>});  
+</span><span class='line'>dispatch_barrier_async(queue, ^{  
+</span><span class='line'>    NSLog(@"dispatch_barrier_async");  
+</span><span class='line'>    [NSThread sleepForTimeInterval:4];
+</span><span class='line'>});  
+</span><span class='line'>dispatch_async(queue, ^{  
+</span><span class='line'>    [NSThread sleepForTimeInterval:1];  
+</span><span class='line'>    NSLog(@"dispatch_async3");  
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>打印结果：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2012-09-25 16:20:33.967 gcdTest[45547:11203] dispatch_async1
+</span><span class='line'>2012-09-25 16:20:35.967 gcdTest[45547:11303] dispatch_async2
+</span><span class='line'>2012-09-25 16:20:35.967 gcdTest[45547:11303] dispatch_barrier_async
+</span><span class='line'>2012-09-25 16:20:40.970 gcdTest[45547:11303] dispatch_async3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>请注意执行的时间，可以看到执行的顺序如上所述。</p>
+
+<h4>4、dispatch_apply</h4>
+
+<p>执行某个代码片段N次。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_apply(5, globalQ, ^(size_t index) {
+</span><span class='line'>    // 执行5次
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本篇使用的到的例子代码：<a href="http://download.csdn.net/detail/totogo2010/4596471">http://download.csdn.net/detail/totogo2010/4596471</a></p>
+
+<p>GCD还有很多其他用法，可以参考官方文档<br/>
+参考的文档还有：<a href="http://en.wikipedia.org/wiki/Grand_Central_Dispatch  ">http://en.wikipedia.org/wiki/Grand_Central_Dispatch  </a>
+著作权声明：本文由<a href="http://blog.csdn.net/totogo2010/">http://blog.csdn.net/totogo2010/</a> 原创，欢迎转载分享。请尊重作者劳动，转载时保留该声明和作者博客链接，谢谢!</p>
 </div>
 
 
@@ -297,7 +346,7 @@
   
 
 
-<time datetime="2013-08-01T16:30:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+<time datetime="2013-11-06T23:14:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time>
       
 
 <span class="categories">
@@ -315,7 +364,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/" >Tweet</a>
   
   
   
@@ -342,10 +391,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/" title="Previous Post: 让Apple TV直接收看中国视频">&laquo; 让Apple TV直接收看中国视频</a>
+        <a class="basic-alignment left" href="/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/" title="Previous Post: Python MySQLdb安装以及问题汇总">&laquo; Python MySQLdb安装以及问题汇总</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/08/22/zai-githubshang-shi-yong-octopress/" title="Next Post: 在github上使用octopress">在github上使用octopress &raquo;</a>
       
     </p>
   </footer>
