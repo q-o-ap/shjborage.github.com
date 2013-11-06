@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>
+            http://saick.net/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/
+        </loc>
+        <lastmod>2013-11-06T22:57:37+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/blog/2013/05/27/hello-jekyll/</loc>
         <lastmod>2013-10-20T00:09:06+08:00</lastmod>
     </url>
@@ -240,7 +246,7 @@
     </url>
     <url>
         <loc>http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/</loc>
-        <lastmod>2013-11-02T22:28:59+08:00</lastmod>
+        <lastmod>2013-11-06T22:33:12+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/about.html</loc>
@@ -248,7 +254,7 @@
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-11-02T22:28:59+08:00</lastmod>
+        <lastmod>2013-11-06T22:57:37+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -260,7 +266,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-11-02T22:28:59+08:00</lastmod>
+        <lastmod>2013-11-06T22:57:37+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>
