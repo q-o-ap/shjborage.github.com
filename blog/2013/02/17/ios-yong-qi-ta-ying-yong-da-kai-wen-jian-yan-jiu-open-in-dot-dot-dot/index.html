@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS Cookie使用 - Saick Blog - 专注技术，乐在其中</title>
+  <title>iOS 用其它应用打开文件研究 Open In... - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="转自：http://geeklu.com/2013/04/ios-cookie/ 关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
-和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。 &hellip;">
+  <meta name="description" content="今天上班的状态还没有完全恢复，就拿Reminders里面的提醒来看看，研究一些以前没时间弄的东西，就发现了这个。 这项功能开始不知道是哪个版本的iOS加入的，研究这些方法的时候才发现，原来从iOS3.2（iPad上市时）就开始支持了，真是惭愧啊。 下面慢慢道来 1.注册应用支持的文档类型（ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/19/ios-cookieshi-yong/">
+  <link rel="canonical" href="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS Cookie使用</h1>
+      <h1 class="entry-title">iOS 用其它应用打开文件研究 Open In...</h1>
     
     
       <p class="meta">
@@ -99,52 +98,42 @@
   
 
 
-<time datetime="2013-10-19T01:08:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+<time datetime="2013-02-17T17:34:00+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>转自：<a href="http://geeklu.com/2013/04/ios-cookie/">http://geeklu.com/2013/04/ios-cookie/</a></p>
+<div class="entry-content"><p>今天上班的状态还没有完全恢复，就拿Reminders里面的提醒来看看，研究一些以前没时间弄的东西，就发现了这个。</p>
 
-<p>关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
-和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。
-一个Cookie对应一个NSHTTPCookie实体，并通过NSHTTPCookieStorage进行管理。
-那些需要持久化的Cookie是存放在 ~/Library/Cookies/Cookies.binarycookies 文件中的，二进制格式。</p>
+<p><a href="http://www.flickr.com/photos/105999540@N03/10709167093/" title="2013-2-17-1 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5535/10709167093_713ae846bd.jpg" width="381" height="28" alt="2013-2-17-1"></a></p>
 
-<p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
+<p>这项功能开始不知道是哪个版本的iOS加入的，研究这些方法的时候才发现，原来从iOS3.2（iPad上市时）就开始支持了，真是惭愧啊。 下面慢慢道来</p>
 
-<!-- more -->
+<p>1.注册应用支持的文档类型（会被系统管理起来）<br/>
+2.打开所用的ViewController</p>
 
+<h4>1.注册类型，按需要添加</h4>
 
+<p>附上本地的文档链接（搜索关键字：Uniform Type Identifier Concepts）
+（file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/understanding_utis/understand_utis_conc/understand_utis_conc.html#//apple_ref/doc/uid/TP40001319-CH202-CHDHIJDE）</p>
 
+<p>All Files这个文件类型，是从Dropbox里面抄来的，你懂的（<a href="http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82">http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82</a></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];[cookieProperties setObject:@"name" forKey:NSHTTPCookieName];
-</span><span class='line'>[cookieProperties setObject:@"value" forKey:NSHTTPCookieValue];
-</span><span class='line'>[cookieProperties setObject:@"www.taobao.com" forKey:NSHTTPCookieDomain];[cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
-</span><span class='line'>[cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
-</span><span class='line'>[cookieProperties setObject:@"30000" forKey:NSHTTPCookieMaximumAge];
-</span><span class='line'>NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
-</span><span class='line'>[[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-</span><span class='line'>//删除cookie的方法为deleteCookie:</span></code></pre></td></tr></table></div></figure>
+<p><a href="http://www.flickr.com/photos/105999540@N03/10708970444/" title="2013-2-17-2 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5488/10708970444_870ea07b91.jpg" width="500" height="284" alt="2013-2-17-2"></a></p>
 
+<h3>2.打开文件ViewController</h3>
 
-<p>在通过setCookie:进行设置cookie的时候，会覆盖name,domain,path都相同的cookie的。
-至于cookie会不会持久化到cookie文件中主要看这个cookie的生命周期，和Max-Age或者Expires有关。</p>
+<p>附本地文件链接：（搜索关键字：Previewing and Opening Files）file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/DocumentInteraction_TopicsForIOS/Articles/PreviewingandOpeningItems.html#//apple_ref/doc/uid/TP40010410-SW1</p>
 
-<p>不过NSHTTPCookieStorage存在一个问题，setCookie或者deleteCookie后并不会立即进行持久化，而是有几秒的延迟。如果在持久化之前App接收到SIGKILL信号，App退出，那么会导致cookie相关操作的丢失。在模拟器调试的过程中，XCode重启App的时发给App的就是SIGKILL，不过真正的生产环境中很少有这种情况。
-但是有时候为了可靠性，我们还是会将cookie信息保存一份到User Defaults，需要用的时候load进来。关于cookie操作丢失的详情可以查看这里<a href="http://openradar.appspot.com/radar?id=2776403">NSHTTPCookieStorage looses cookies on SIGKILL</a></p>
+<h4>UIDocumentInteractionController</h4>
 
-<p>卢克 / 2013-04-02</p>
+<p>不知道的话看一下文档就好了，还是比较容易使用。</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10708900325/" title="2013-2-17-3 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5478/10708900325_1a55a4d3d8.jpg" width="282" height="500" alt="2013-2-17-3"></a></p>
+
+<p>再有的话呢，就是HandleOpenUrl的用法了，这个相信大家都比较熟悉了，就不多说了。URL的内容是文件的路径，你自己想干什么都可以咯。</p>
 </div>
 
 
@@ -167,7 +156,7 @@
   
 
 
-<time datetime="2013-10-19T01:08:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+<time datetime="2013-02-17T17:34:00+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
       
 
 <span class="categories">
@@ -185,7 +174,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/19/ios-cookieshi-yong/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/19/ios-cookieshi-yong/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/" >Tweet</a>
   
   
   
@@ -212,10 +201,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/" title="Previous Post: iOS库添加CocoaPods支持">&laquo; iOS库添加CocoaPods支持</a>
+        <a class="basic-alignment left" href="/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/" title="Previous Post: iOS应用内置AppStore以及iOS Safari内置Banner进行推广">&laquo; iOS应用内置AppStore以及iOS Safari内置Banner进行推广</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/" title="Next Post: MAC 系统的启动过程和系统启动时运行shell 脚本">MAC 系统的启动过程和系统启动时运行shell 脚本 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/05/27/hello-jekyll/" title="Next Post: Hello jekyll">Hello jekyll &raquo;</a>
       
     </p>
   </footer>
