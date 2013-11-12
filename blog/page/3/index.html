@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 &hellip;">
+  <meta name="description" content="序：状态栏白边问题解决 在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可） 在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路 第一种：通过人为的办法改变view. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,108 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>序：状态栏白边问题解决</h4>
+
+<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
+
+<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
+
+<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
+
+<p>具体办法：</p>
+
+<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T16:16:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
+<strong>其它密码也可使用同样方法获得</strong></p>
+
+<p>方法/步骤</p>
+
+<ul>
+<li>1.打开“钥匙串访问”</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -489,101 +591,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-23T23:58:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
-来上图看下吧</p>
-
-<iframe src="https://skydrive.live.com/embed?cid=08A712E639A96BFA&resid=8A712E639A96BFA%21369&authkey=AK4bqqBLJG7H2NU" width="273" height="320" frameborder="0" scrolling="no"></iframe>
-
-
-<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？</p>
-
-<p> </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">使用unit Test，资源获取注意事项</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-23T23:42:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>引言</h3>
-
-<p> 使用XCode4.5 下使用unit test时，发现直接使用
- <code>
- UIImage *imgA = [UIImage imageNamed:@"asdf"];
- NSString *resourcePath = [[NSBundle mainBundle] pathForResource:@”xxx.json”ofType:nil];
-</code>
- 得不到资源，调查一下原来是这样，怪不得人们写代码不想用imageNamed呢。</p>
-
-<p> </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -603,10 +610,10 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (4)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (32)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (34)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -619,6 +626,14 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 hosts文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">深入浅出 Cocoa 多线程编程之 block 与 dispatch quene</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
       </li>
     
@@ -628,14 +643,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
     
       <li class="post">
         <a href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Dash：程序员的的好帮手</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacs-30fen-zhong-ji-chu-jiao-cheng/">Emacs 30分钟基础教程</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
       </li>
     
   </ul>

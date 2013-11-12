@@ -9,7 +9,11 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不断更新中。。。 Aug 5, 2013 如果使用C++代码混编，找不到iostream等 可能是.m中直接import的，这个需要注意改成mm或者修改编译方式 May 28, 2013 不要调用[super release] 在dealloc里要调用[super dealloc]，千万不要调用[ &hellip;">
+  <meta name="description" content="
+NSString property的属性必须是copy
+delegate property的属性是assign
+dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
+init 和dealloc中不要用self.XX=; NSCoping ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +83,100 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><ul>
+<li>NSString property的属性必须是copy</li>
+<li>delegate property的属性是assign</li>
+<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
+<li>init 和dealloc中不要用self.XX=;</li>
+</ul>
+
+
+<h4>NSCoping</h4>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Category 巧用-调试程序</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Category可以用来调试</h3>
+
+<p>除了隐藏私有方法外，我主要用它截住函数。</p>
+
+<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -350,6 +448,55 @@
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/">在iOS中使用重定向，把控制台内容写入文件中</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-11T17:39:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>转自：<a href="http://mmz06.blog.163.com/blog/static/121416962011111210462288/">http://mmz06.blog.163.com/blog/static/121416962011111210462288/</a></p>
+
+<h3>引入</h3>
+
+<p>在做j2ee开发的时候，会用到log4j或其它类似工具去记录程序运行日志，以便调试时或在程序运行出错后，通过日志查询出错原因。那在IOS开发中是否有类似的方式来记录日志呢？下面将简单的说明：</p>
+
+<h3>说明</h3>
+
+<p>在Objective-c开发程序的时候，有专门的日志操作类NSLog，它将指定的输出，输出到（stderr）,我们可以利用Xcode的日志输出窗口，那么既然是要记录到具体日志文件，我们就想输出日志写入到具体的日志文件即可。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -367,10 +514,10 @@
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (4)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (32)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (34)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -383,6 +530,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 hosts文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">深入浅出 Cocoa 多线程编程之 block 与 dispatch quene</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
       </li>
     
@@ -392,14 +547,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Dash：程序员的的好帮手</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacs-30fen-zhong-ji-chu-jiao-cheng/">Emacs 30分钟基础教程</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-11-08T21:54:13+08:00</updated>
+  <updated>2013-11-12T22:53:32+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,711 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mac OS X 改 hosts文件]]></title>
+    <link href="http://saick.net/blog/2013/11/12/mac-os-x-gai-hostswen-jian/"/>
+    <updated>2013-11-12T22:34:00+08:00</updated>
+    <id>http://saick.net/blog/2013/11/12/mac-os-x-gai-hostswen-jian</id>
+    <content type="html"><![CDATA[<p>一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者，因此没有权限写到该文件”的提示，要解决这个权限问题又比较麻烦，对于刚刚使用 Mac 的用户来说并不容易整明白。因此，就有了这篇小贴士，下面我分享四种方法来修改 Mac OS X Lion 系统中的 Hosts 文件，这四种方法都不会出现权限提示，而且 Mac OS X Snow Leopard(10.6) 用户也完全可以使用这些方法。</p>
+
+<h3>1、通过 VI 编辑器修改</h3>
+
+<p>打开终端（应用程序——实用工具），运行：(<em>vim也行</em>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vi /etc/hosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>屏幕上会提示你输入密码（输入密码的时候不会有任何字符显示，甚至*都不会显示，输完之后按回车就是了），打开 hosts 文件之后按 i 键进入插入模式（可理解为编辑模式），然后按照你的需要对该文件进行编辑，编辑完成之后按 ESC 键退出插入模式，之后按 :wq+回车保存退出，记得英文的冒号也是要输入的哦。</p>
+
+<p>这是笔者一直都在使用的方法，VI 编辑器对于经常使用 Linux 的用户应该不会陌生，而且该编辑器是默认内置在 Mac 系统中的。但是，对于没有使用过 VI 的用户，还真得花一会儿功夫来学习其基本使用方法。另外VI编辑器是一个很好很强大的工具，想要玩好 Mac 的话，最好掌握这个工具的使用。</p>
+
+<!-- more -->
+
+
+<h3>2、使用 nano 编辑器修改</h3>
+
+<p>和上面的方法类似，这个编辑器相比 vi 更加简单易用，但是功能不强大，似乎也没有 vi 流行。方法同样是在终端中运行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo nano /etc/hosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同样是输入密码，打开 hosts 文件，按照你的需要对该文件进行编辑，编辑完毕之后按 ctrl+o 保存，出现 File Name to Write: /etc/hosts 的时候按回车确认，再按 ctrl+x 退出即可。</p>
+
+<h3>3、使用 cat 命令合并文件</h3>
+
+<p>这个方法比较适合当你想往 Hosts 文件中添加一些内容的情况，首先你需要把需要添加到 Hosts 文件中的内容保存为一个TXT文本文件（建议直接保存在你的用户目录），我这里拿保存在用户目录中的123.txt为例说明。</p>
+
+<p>同样是启动终端，然后运行下面两条命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo -s
+</span><span class='line'>cat ~/123.txt&gt;&gt;/etc/hosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>顺便说一下，~ 符号在 Mac 甚至所有基于 Unix 和 Linux 的系统中都是代表当前用户的用户目录，.代表当前目录，这回你就应该明白上面的命令中为什么是 ~/123.txt 了吧。</p>
+
+<h3>4、直接在图形界面中修改</h3>
+
+<p>打开 Finder，然后点击菜单栏中的 前往——前往文件夹（或者快捷键 Shift+Command+G），在路径中输入 /private，进入之后在 etc 文件夹上点击右键——显示简介，在文件夹简介窗口的最下面找到“共享与权限”，将 everyone 的权限修改为“读与写”，如果你发现不能修改的话，将右下角的那把小锁解开就可以修改了。</p>
+
+<p>修改 etc 文件夹的权限之后，再进入 etc 文件夹下面，修改名为 hosts 文件的权限（同样是everyone读与写），修改完成之后，你就可以直接在 hosts 文件上点右键，通过“文本编辑”打开并编辑该文件了，不会出现没有权限的提示。修改并保存完成之后，记得将该文件和 etc 文件夹的权限还原。</p>
+
+<h3>最后的话</h3>
+
+<p>本文分享的这几种 Lion 系统下修改 Hosts 的方法都不会出现没有文件修改权限的提示，这个提示其实也是 Lion 安全性更高的表现，以上几种方法在 10.6 系统中都可以使用，至少算得上 Lion 系统下几个最简单修改 Hosts 文件的方法了。另外大家可以看到以上三种方法都需要在终端中操作，而对于刚刚使用 Mac，且没有玩过 Linux 的用户来说可能会觉得很麻烦，实际上终端很简单，莫非就是几个命令，并且功能非常强大，能够实现很多意想不到的功能。所以，对于刚刚用 Mac 的同学来说一定不要被终端这种命令行操作所吓倒，基本上你只需要复制命令，然后粘贴进去按回车就可以了，这有什么难的呢？</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[深入浅出 Cocoa 多线程编程之 block 与 dispatch quene]]></title>
+    <link href="http://saick.net/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/"/>
+    <updated>2013-11-12T22:20:00+08:00</updated>
+    <id>http://saick.net/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene</id>
+    <content type="html"><![CDATA[<p>深入浅出 Cocoa 多线程编程之 block 与 dispatch quene
+罗朝辉(<a href="http://blog.csdn.net/kesalin">http://blog.csdn.net/kesalin</a>)
+CC 许可，转载请注明出处</p>
+
+<p>block 是 Apple 在 GCC 4.2 中扩充的新语法特性，其目的是支持多核并行编程。我们可以将
+dispatch_queue 与 block 结合起来使用，方便进行多线程编程。</p>
+
+<!-- more -->
+
+
+<p>本文源代码下载：<a href="http://www.cppblog.com/Files/kesalin/StudyBlocks.zip">点击下载</a></p>
+
+<h3>1，实验工程准备</h3>
+
+<p>在 XCode 4.0 中，我们建立一个 Mac OS X Application 类型的 Command Line Tool，在 Type 里面我们选择 Foundation 就好，工程名字暂且为 StudyBlocks.默认生成的工程代码 main.m 内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>int main (int argc, const char * argv[])  
+</span><span class='line'>{  
+</span><span class='line'>    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>    // insert code here...  
+</span><span class='line'>    NSLog(@"Hello, World!");  
+</span><span class='line'>  
+</span><span class='line'>    [pool drain];  
+</span><span class='line'>    return 0;  
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2，如何编写 block</h3>
+
+<p>在自动生成的工程代码中，默认打印一条语句&#8221;Hello, World!&ldquo;，这个任务可以不可以用 block 语法来实现呢？答案是肯定的，请看：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^aBlock)(void) = ^(void){ NSLog(@"Hello, World!"); };  
+</span><span class='line'>aBlock();  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>用上面的这两行语句替换 main.m 中的 NSLog(@&ldquo;Hello, World!&rdquo;); 语句，编译运行，结果是一样的。</p>
+
+<p>这两行语句是什么意思呢？首先，等号左边的 void (^aBlock)(void) 表示声明了一个 block，这个 block 不带参数(void)且也无返回参数(void)；等号右边的 ^(void){ } 结构表示一个 block 的实现体，至于这个 block 具体要做的事情就都在 {} 之间了。在这里我们仅仅是打印一条语句。整个语句就是声明一个 block，并对其赋值。第二个语句就是调用这个 block 做实际的事情，就像我们调用函数一样。block 很有点像 C++0X 中的 Lambda 表达式。</p>
+
+<p>我们也可以这么写：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^aBlock)(void) = 0;  
+</span><span class='line'>aBlock = ^(void){  
+</span><span class='line'>    NSLog(@" &gt;&gt; Hello, World!");  
+</span><span class='line'>};  
+</span><span class='line'>aBlock();  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在我们知道了一个 block 该如何编写了，那么 block 数组呢？也很简单，请看：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^blocks[2])(void) = {  
+</span><span class='line'>    ^(void){ NSLog(@" &gt;&gt; This is block 1!"); },  
+</span><span class='line'>    ^(void){ NSLog(@" &gt;&gt; This is block 2!"); }  
+</span><span class='line'>};
+</span><span class='line'>blocks[0]();  
+</span><span class='line'>blocks[1]();  </span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>谨记！</strong></p>
+
+<p>block 是分配在 <em>stack</em> 上的，这意味着我们必须小心里处理 block 的生命周期。
+比如如下的做法是不对的，因为 stack 分配的 block 在 if 或 else 内是有效的，但是到大括号 } 退出时就可能无效了：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_block_t block;  
+</span><span class='line'>  
+</span><span class='line'>if (x) {  
+</span><span class='line'>    block = ^{ printf("true\n"); };  
+</span><span class='line'>} else {  
+</span><span class='line'>    block = ^{ printf("false\n"); };  
+</span><span class='line'>}  
+</span><span class='line'>block();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码就相当于下面这样的 unsafe 代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (x) {  
+</span><span class='line'>    struct Block __tmp_1 = ...; // setup details  
+</span><span class='line'>    block = &__tmp_1;  
+</span><span class='line'>} else {  
+</span><span class='line'>    struct Block __tmp_2 = ...; // setup details  
+</span><span class='line'>    block = &__tmp_2;  
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3，如何在 block 中修改外部变量</h3>
+
+<p>考虑到 block 的目的是为了支持并行编程，对于普通的 local 变量，我们就不能在 block 里面随意修改（原因很简单，block 可以被多个线程并行运行，会有问题的），而且如果你在 block 中修改普通的 local 变量，编译器也会报错。那么该如何修改外部变量呢？有两种办法，第一种是可以修改 static 全局变量；第二种是可以修改用新关键字 __block 修饰的变量。请看：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>__block int blockLocal  = 100;  
+</span><span class='line'>static int staticLocal  = 100;  
+</span><span class='line'>  
+</span><span class='line'>void (^aBlock)(void) = ^(void){   
+</span><span class='line'>    NSLog(@" >> Sum: %d\n", global + staticLocal);  
+</span><span class='line'>      
+</span><span class='line'>    global++;  
+</span><span class='line'>    blockLocal++;  
+</span><span class='line'>    staticLocal++;  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>aBlock();  
+</span><span class='line'>  
+</span><span class='line'>NSLog(@"After modified, global: %d, block local: %d, static local: %d\n", global, blockLocal, staticLocal);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>相似的情况，我们也可以引用 static block 或 __block block。比如我们可以用他们来实现 block 递归：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 1  
+</span><span class='line'>void (^aBlock)(int) = 0;  
+</span><span class='line'>static void (^ const staticBlock)(int) = ^(int i) {  
+</span><span class='line'>    if (i > 0) {  
+</span><span class='line'>        NSLog(@" >> static %d", i);  
+</span><span class='line'>        staticBlock(i - 1);  
+</span><span class='line'>    }  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>aBlock = staticBlock;  
+</span><span class='line'>aBlock(5);  
+</span><span class='line'>  
+</span><span class='line'>// 2  
+</span><span class='line'>__block void (^blockBlock)(int);  
+</span><span class='line'>blockBlock = ^(int i) {  
+</span><span class='line'>    if (i > 0) {  
+</span><span class='line'>        NSLog(@" >> block %d", i);  
+</span><span class='line'>        blockBlock(i - 1);  
+</span><span class='line'>    }  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>blockBlock(5);</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4，上面我们介绍了 block 及其基本用法，但还没有涉及并行编程。 block 与 Dispatch Queue 分发队列结合起来使用，是 iOS 中并行编程的利器。请看代码：</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch queue  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_async(queue, ^(void) {  
+</span><span class='line'>    int sum = 0;  
+</span><span class='line'>    for(int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        sum += data[i];  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> Sum: %d", sum);  
+</span><span class='line'>      
+</span><span class='line'>    flag = YES;  
+</span><span class='line'>});  
+</span><span class='line'>  
+</span><span class='line'>// wait util work is done.  
+</span><span class='line'>//  
+</span><span class='line'>while (!flag);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的 block 仅仅是将数组求和。</p>
+
+<p>首先，我们创建一个串行分发队列，然后将一个 block 任务加入到其中并行运行，这样 block 就会在新的线程中运行，直到结束返回主线程。在这里要注意 flag 的使用。flag 是 static 的，所以我们可以 block 中修改它。 语句 while (!flag); 的目的是保证主线程不会 blcok 所在线程之前结束。</p>
+
+<p>dispatch_queue_t 的定义如下：
+typedef void (^dispatch_block_t)( void);
+这意味着加入 dispatch_queue 中的 block 必须是无参数也无返回值的。</p>
+
+<p>dispatch_queue_create 的定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t dispatch_queue_create(const char *label, dispatch_queue_attr_t attr);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个函数带有两个参数：一个用于标识 dispatch_queue 的字符串；一个是保留的 dispatch_queue 属性，将其设置为 NULL 即可。</p>
+
+<p>我们也可以使用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t dispatch_get_global_queue(long priority, unsigned long flags);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>来获得全局的 dispatch_queue，参数 priority 表示优先级，值得注意的是：我们不能修改该函数返回的 dispatch_queue。</p>
+
+<p>dispatch_async 函数的定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void dispatch_async(dispatch_queue_t queue, dispatch_block_t block);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>它是将一个 block 加入一个 dispatch_queue，这个 block 会再其后得到调度时，并行运行。
+相应的 dispatch_sync 函数就是同步执行了，一般很少用到。比如上面的代码如果我们修改为 dispatch_sync，那么就无需编写 flag 同步代码了。</p>
+
+<h3>5，dispatch_queue 的运作机制及线程间同步</h3>
+
+<p>我们可以将许多 blocks 用 dispatch_async 函数提交到到 dispatch_queue 串行运行。这些 blocks 是按照 FIFO(先入先出)规则调度的，也就是说，先加入的先执行，后加入的一定后执行，但在某一个时刻，可能有多个 block 同时在执行。</p>
+
+<p>在上面的例子中，我们的主线程一直在轮询 flag 以便知晓 block 线程是否执行完毕，这样做的效率是很低的，严重浪费 CPU 资源。我们可以使用一些通信机制来解决这个问题，如：semaphore（信号量）。 semaphore 的原理很简单，就是生产-消费模式，必须生产一些资源才能消费，没有资源的时候，那我就啥也不干，直到资源就绪。下面来看代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>// Create a semaphore with 0 resource  
+</span><span class='line'>//  
+</span><span class='line'>__block dispatch_semaphore_t sem = dispatch_semaphore_create(0);  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch semaphore  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_async(queue, ^(void) {  
+</span><span class='line'>    int sum = 0;  
+</span><span class='line'>    for(int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        sum += data[i];  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> Sum: %d", sum);  
+</span><span class='line'>      
+</span><span class='line'>    // signal the semaphore: add 1 resource  
+</span><span class='line'>    //  
+</span><span class='line'>    dispatch_semaphore_signal(sem);  
+</span><span class='line'>});  
+</span><span class='line'>  
+</span><span class='line'>// wait for the semaphore: wait until resource is ready.  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(sem);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>首先我们创建一个 <code>__block semaphore</code>，并将其资源初始值设置为 0 (不能少于 0)，在这里表示任务还没有完成，没有资源可用主线程不要做事情。然后在 block 任务完成之后，使用 dispatch_semaphore_signal 增加 semaphore 计数（可理解为资源数），表明任务完成，有资源可用主线程可以做事情了。而主线程中的 dispatch_semaphore_wait 就是减少 semaphore 的计数，如果资源数少于 0，则表明资源还可不得，我得按照FIFO（先等先得）的规则等待资源就绪，一旦资源就绪并且得到调度了，我再执行。</p>
+
+<h3>6 示例：</h3>
+
+<p>下面我们来看一个按照 FIFO 顺序执行并用 semaphore 同步的例子：先将数组求和再依次减去数组。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>__block int sum = 0;  
+</span><span class='line'>  
+</span><span class='line'>// Create a semaphore with 0 resource  
+</span><span class='line'>//  
+</span><span class='line'>__block dispatch_semaphore_t sem = dispatch_semaphore_create(0);  
+</span><span class='line'>__block dispatch_semaphore_t taskSem = dispatch_semaphore_create(0);  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch semaphore  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task1 = ^(void) {  
+</span><span class='line'>    int s = 0;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s += data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> after add: %d", sum);  
+</span><span class='line'>  
+</span><span class='line'>    dispatch_semaphore_signal(taskSem);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task2 = ^(void) {  
+</span><span class='line'>    dispatch_semaphore_wait(taskSem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>      
+</span><span class='line'>    int s = sum;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s -= data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>  
+</span><span class='line'>    NSLog(@" >> after subtract: %d", sum);  
+</span><span class='line'>    dispatch_semaphore_signal(sem);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>dispatch_async(queue, task1);  
+</span><span class='line'>dispatch_async(queue, task2);  
+</span><span class='line'>  
+</span><span class='line'>// wait for the semaphore: wait until resource is ready.  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(taskSem);  
+</span><span class='line'>dispatch_release(sem);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的代码中，我们利用了 dispatch_queue 的 FIFO 特性，确保 task1 先于 task2 执行，而 task2 必须等待直到 task1 执行完毕才开始干正事，主线程又必须等待 task2 才能干正事。 这样我们就可以保证先求和，再相减，然后再让主线程运行结束这个顺序。</p>
+
+<h3>7，使用 dispatch_apply 进行并发迭代：</h3>
+
+<p>对于上面的求和操作，我们也可以使用 dispatch_apply 来简化代码的编写：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);  
+</span><span class='line'>  
+</span><span class='line'>__block int sum = 0;  
+</span><span class='line'>__block int *pArray = data;  
+</span><span class='line'>  
+</span><span class='line'>// iterations  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_apply(Length, queue, ^(size_t i) {  
+</span><span class='line'>    sum += pArray[i];  
+</span><span class='line'>});  
+</span><span class='line'>  
+</span><span class='line'>NSLog(@" >> sum: %d", sum);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意这里使用了全局 dispatch_queue。</p>
+
+<p>dispatch_apply 的定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_apply(size_t iterations, dispatch_queue_t queue, void (^block)(size_t));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参数 iterations 表示迭代的次数，void (^block)(size_t) 是 block 循环体。这么做与 for 循环相比有什么好处呢？答案是：并行，这里的求和是并行的，并不是按照顺序依次执行求和的。</p>
+
+<h3>8, dispatch group</h3>
+
+<p>我们可以将完成一组相关任务的 block 添加到一个 dispatch group 中去，这样可以在 group 中所有 block 任务都完成之后，再做其他事情。比如 6 中的示例也可以使用 dispatch group 实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>__block int sum = 0;  
+</span><span class='line'>  
+</span><span class='line'>// Create a semaphore with 0 resource  
+</span><span class='line'>//  
+</span><span class='line'>__block dispatch_semaphore_t taskSem = dispatch_semaphore_create(0);  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch semaphore  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>dispatch_group_t group = dispatch_group_create();  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task1 = ^(void) {  
+</span><span class='line'>    int s = 0;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s += data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> after add: %d", sum);  
+</span><span class='line'>      
+</span><span class='line'>    dispatch_semaphore_signal(taskSem);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task2 = ^(void) {  
+</span><span class='line'>    dispatch_semaphore_wait(taskSem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>      
+</span><span class='line'>    int s = sum;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s -= data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> after subtract: %d", sum);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>// Fork  
+</span><span class='line'>dispatch_group_async(group, queue, task1);  
+</span><span class='line'>dispatch_group_async(group, queue, task2);  
+</span><span class='line'>  
+</span><span class='line'>// Join  
+</span><span class='line'>dispatch_group_wait(group, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(taskSem);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>dispatch_release(group);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的代码中，我们使用 dispatch_group_create 创建一个 dispatch_group_t，然后使用语句：dispatch_group_async(group, queue, task1); 将 block 任务加入队列中，并与组关联，这样我们就可以使用 dispatch_group_wait(group, DISPATCH_TIME_FOREVER); 来等待组中所有的 block 任务完成再继续执行。</p>
+
+<p>至此我们了解了 dispatch queue 以及 block 并行编程相关基本知识，开始在项目中运用它们吧，</p>
+
+<p><em>参考资料：</em>
+Concurrency Programming Guide：
+<a href="http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html">http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用]]></title>
@@ -2137,198 +2842,6 @@ With push access</p>
 
 
 <p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题]]></title>
-    <link href="http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/"/>
-    <updated>2013-10-14T16:28:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi</id>
-    <content type="html"><![CDATA[<h4>序：状态栏白边问题解决</h4>
-
-<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
-
-<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
-
-<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
-
-<p>具体办法：</p>
-
-<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
-
-<!-- more -->
-
-
-<p>   这里要记住一点，当你改变过一个<code>view.transform</code>属性或者<code>view.layer.transform</code>的时候需要恢复默认状态的话，记得先把他们重置可以使用<code>view.transform = CGAffineTransformIdentity</code>，或者<code>view.layer.transform = CATransform3DIdentity</code>，假设你一直不断的改变一个<code>view.transform</code>的属性，而每次改变之前没有重置的话，你会发现后来的改变和你想要的发生变化了，不是你真正想要的结果。</p>
-
-<p>   好了，上面介绍了旋转的属性，接下来就是关键了。官方提供了一个办法就是查看当前电池条的状态<code>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;</code>通过这个办法，你可以知道当前屏幕的电池条的显示方向，而且你还可以强制设置他的显示方向，通过设置这个属性就OK了，可以选择是否动画改变电池条方向。有了这两个那我们就可以任意的改变我们想要的显示方式了。</p>
-
-<ul>
-<li>1.获取当前电池条的方向</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>2.获取当前屏幕的大小</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGRect frame = [UIScreen mainScreen].applicationFrame;</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>3.设置我们的View的中心点</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>4.根据当前电池条的方向，获取需要旋转的角度的大小。通常</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (orientation == UIInterfaceOrientationLandscapeLeft) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI*1.5);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(M_PI/2);
-</span><span class='line'>} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-</span><span class='line'>    return CGAffineTransformMakeRotation(-M_PI);
-</span><span class='line'>} else {
-</span><span class='line'>    return CGAffineTransformIdentity;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>5.可以动画的改变我们view的显示方式了</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationLandscapeRight animated:YES];
-</span><span class='line'>
-</span><span class='line'>CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;（获取当前电池条动画改变的时间）
-</span><span class='line'>[UIView beginAnimations:nil context:nil];
-</span><span class='line'>[UIView setAnimationDuration:duration];
-</span><span class='line'>
-</span><span class='line'>//在这里设置view.transform需要匹配的旋转角度的大小就可以了。
-</span><span class='line'>[UIView commitAnimations];</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>第二种：通过setOrientation:的办法强制性的旋转到一个特定的方向。</h3>
-
-<p>   注意：Apple在3.0以后都不支持这个办法了，这个办法已经成为了私有的了，但是要跳过App Stroe的审核，需要一点巧妙的办法。</p>
-
-<p>   不要直接调用<code>[[UIDevice currentDevice] setOrientation: UIInterfaceOrientationLandscapeRight]</code>这样的办法来强制性的横屏，这样导致你的程序是很难通过App Store审核的。但是你可以选择使用performSelector的办法来调用它。具体就几行代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//强制横屏
-</span><span class='line'>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-</span><span class='line'>        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-</span><span class='line'>                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
-</span><span class='line'>    }
-</span><span class='line'>    
-</span><span class='line'>    // 更保险的写法 add by Eric
-</span><span class='line'>    + (void)changeOrientation:(UIInterfaceOrientation)toOrientation
-</span><span class='line'>    {
-</span><span class='line'>      if ([[UIDevice currentDevice] respondsToSelector:NSSelectorFromString(@"setOrientation:")]) {
-</span><span class='line'>      [[UIDevice currentDevice] performSelector:NSSelectorFromString(@"setOrientation:")
-</span><span class='line'>                                   withObject:(id)toOrientation];
-</span><span class='line'>      }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>   总结:如果第一种办法可以满足你需要的话，最好使用第一种办法，因为那个上 App Store肯定没问问题，但是第二种的话是需要冒风险的，但是如果你的结构太复杂了，导致使用第一种办法人为很难控制的话，可以尝试简单的使用第二种办法。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[怎么查看在mac上连接过的wifi密码]]></title>
-    <link href="http://saick.net/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/"/>
-    <updated>2013-10-14T16:16:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma</id>
-    <content type="html"><![CDATA[<p>Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
-<strong>其它密码也可使用同样方法获得</strong></p>
-
-<p>方法/步骤</p>
-
-<ul>
-<li>1.打开“钥匙串访问”</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
-
-<!-- more -->
-
-
-<ul>
-<li>2.选中左侧“登陆”、“密码”</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374769125/" title="2013-10-14-11 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3791/10374769125_fb2339510e.jpg" width="500" height="183" alt="2013-10-14-11"></a></p>
-
-<ul>
-<li>3.找到要查看密码的wifi</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968363/" title="2013-10-14-12 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3790/10374968363_675b5904c4.jpg" width="500" height="111" alt="2013-10-14-12"></a></p>
-
-<ul>
-<li>4.点击键，选中“显示简介”，或者双击</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968173/" title="2013-10-14-13 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7431/10374968173_9c2b4957c3.jpg" width="500" height="113" alt="2013-10-14-13"></a></p>
-
-<ul>
-<li>5.在弹出的对话框选择“显示密码”，系统会让你输入电脑帐号的密码，然后密码就显示出来了。</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374784386/" title="2013-10-14-14 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7305/10374784386_8757b04a56.jpg" width="500" height="333" alt="2013-10-14-14"></a></p>
-
-<p>参考资料
-<a href="http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html">http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html</a></p>
 ]]></content>
   </entry>
   

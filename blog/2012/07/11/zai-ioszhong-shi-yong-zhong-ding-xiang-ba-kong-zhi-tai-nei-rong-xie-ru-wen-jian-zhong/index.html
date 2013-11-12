@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Property 使用注意事项 - Saick Blog - 专注技术，乐在其中</title>
+  <title>在iOS中使用重定向，把控制台内容写入文件中 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="NSString property的属性必须是copy
-delegate property的属性是assign
-dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
-init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
+  <meta name="description" content="转自：http://mmz06.blog.163.com/blog/static/121416962011111210462288/ 引入 在做j2ee开发的时候，会用到log4j或其它类似工具去记录程序运行日志，以便调试时或在程序运行出错后，通过日志查询出错原因。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">
+  <link rel="canonical" href="http://saick.net/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +82,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Property 使用注意事项</h1>
+      <h1 class="entry-title">在iOS中使用重定向，把控制台内容写入文件中</h1>
     
     
       <p class="meta">
@@ -101,29 +98,29 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2012-07-11T17:39:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
+<div class="entry-content"><p>转自：<a href="http://mmz06.blog.163.com/blog/static/121416962011111210462288/">http://mmz06.blog.163.com/blog/static/121416962011111210462288/</a></p>
 
+<h3>引入</h3>
 
-<h4>NSCoping</h4>
+<p>在做j2ee开发的时候，会用到log4j或其它类似工具去记录程序运行日志，以便调试时或在程序运行出错后，通过日志查询出错原因。那在IOS开发中是否有类似的方式来记录日志呢？下面将简单的说明：</p>
+
+<h3>说明</h3>
+
+<p>在Objective-c开发程序的时候，有专门的日志操作类NSLog，它将指定的输出，输出到（stderr）,我们可以利用Xcode的日志输出窗口，那么既然是要记录到具体日志文件，我们就想输出日志写入到具体的日志文件即可。</p>
 
 <!-- more -->
 
 
-<p>Any object that you wish to set for a copy property must support NSCopying, which means that it should conform to the NSCopying protocol.</p>
+<h3>1、  宏定义（下面是我在程序中常用到的日志宏，用DEBUG开关管理，</h3>
 
-<p>If you need to set a copy property’s instance variable directly, for example in an initializer method, don’t forget to set a copy of the original object:</p>
+<p>也就是说只有在DEBUG模式下才让日志输出 ：）</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -132,16 +129,77 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)initWithSomeOriginalString:(NSString *)aString {
-</span><span class='line'>    self = [super init];
-</span><span class='line'>    if (self) {
-</span><span class='line'>        _instanceVariableForCopyProperty = [aString copy];
-</span><span class='line'>    }
-</span><span class='line'>    return self;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#ifdef DEBUG 
+</span><span class='line'>#  define LOG(fmt, ...) do {                                            \ 
+</span><span class='line'>        NSString* file = [[NSString alloc] initWithFormat:@"%s", __FILE__]; \ 
+</span><span class='line'>        NSLog((@"%@(%d) " fmt), [file lastPathComponent], __LINE__, ##__VA_ARGS__); \ 
+</span><span class='line'>        [file release];                                                 \ 
+</span><span class='line'>    } while(0) 
+</span><span class='line'>#  define LOG_METHOD NSLog(@"%s", __func__) 
+</span><span class='line'>#  define LOG_CMETHOD NSLog(@"%@/%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd)) 
+</span><span class='line'>#  define COUNT(p) NSLog(@"%s(%d): count = %d\n", __func__, __LINE__, [p retainCount]); 
+</span><span class='line'>#  define LOG_TRACE(x) do {printf x; putchar('\n'); fflush(stdout);} while (0) 
+</span><span class='line'>#else 
+</span><span class='line'>#  define LOG(...) 
+</span><span class='line'>#  define LOG_METHOD 
+</span><span class='line'>#  define LOG_CMETHOD 
+</span><span class='line'>#  define COUNT(p) 
+</span><span class='line'>#  define LOG_TRACE(x) 
+</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
 
 
+<p>可以看到，除了标准的用户定义输出外，我还加入了许多有用的信息，
+比如源程序文件位置，行号，类名，函数名等。具体的应用可以在具体的开发过程中添加、删除。</p>
 
+<h3>2、  应用：</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)redirectNSLogToDocumentFolder{ 
+</span><span class='line'>    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES); 
+</span><span class='line'>    NSString *documentsDirectory = [paths objectAtIndex:0]; 
+</span><span class='line'>    NSString *fileName =[NSString stringWithFormat:@"%@.log",[NSDate date]]; 
+</span><span class='line'>    NSString *logFilePath = [documentsDirectory stringByAppendingPathComponent:fileName]; 
+</span><span class='line'>    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); 
+</span><span class='line'>} 
+</span><span class='line'> 
+</span><span class='line'>- (void)applicationDidFinishLaunching:(UIApplication *)application { 
+</span><span class='line'>    // 真机测试时保存日志 
+</span><span class='line'>    if ([CDeviceInfo getModelType] != SIMULATOR) { 
+</span><span class='line'>        [self redirectNSLogToDocumentFolder]; 
+</span><span class='line'>} 
+</span><span class='line'>}
+</span><span class='line'>```</span></code></pre></td></tr></table></div></figure>
+
+
+<p>真机测试的时候，可以利用freopen将标准错误输出保存到指定的文件当中，这样就可以在问题发生后分析日志文件。</p>
+
+<h3>3、  设置DEBUG标志是否正确定义</h3>
+
+<p>Xcode 一般会在 debug 运行配置项里面已经定义号了DEBUG 标志，如果没定义我们就自己写上，以我的 Xcode 4 为例，在项目get Info中找到 PreProcessor Macros 这个属性，对于 Debug 配置我们给他写上 DEBUG，而在 Release 配置中把它留空。 这样我们刚才那段预处理命令就可以根据这个标志来判断我们编译的时调试版本还是发布版本，从而控制 NSLog 的输出。 (因为 Xcode 4 会把 debug/release 两个配置项同时对比展现出来，而 3.x 版本的只能分别设置，如果你用的时xcode 3.x 开发工具， 那么就分别对 Debug/Release 都检查一下)。</p>
 </div>
 
 
@@ -164,7 +222,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
   
 
 
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2012-07-11T17:39:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2012</time>
       
 
 <span class="categories">
@@ -182,7 +240,7 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/" data-via="eric_shj" data-counturl="http://saick.net/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/" >Tweet</a>
   
   
   
@@ -209,10 +267,8 @@ init 和dealloc中不要用self.XX=; NSCoping Any &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Previous Post: Category 巧用-调试程序">&laquo; Category 巧用-调试程序</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/isecret-jian-jie/" title="Next Post: iSecret 简介 Updated at Oct 14, 2013">iSecret 简介 Updated at Oct 14, 2013 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/" title="Next Post: iOS应用内置AppStore以及iOS Safari内置Banner进行推广">iOS应用内置AppStore以及iOS Safari内置Banner进行推广 &raquo;</a>
       
     </p>
   </footer>

@@ -9,7 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="显示效果见源网页：http://www.java3z.com/cwbwebhome/article/article9/ht26.html 用DIV把元素定义为块对象，用CSS设置对象的格式和位置。 CSS+DIV的排版方式是目前应用很广的排版方式，它的使用非常灵活，可制作非常复杂的版面。 &hellip;">
+  <meta name="description" content="更新（转自威锋论坛）：
+最近老的DNS方案已不行，已有解决方案，不怕麻烦的弄一下就好。 传送门 工作原理： 通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。 本程序给Apple tv访问的网址 : http://4.appletv3.sinaapp. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,110 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/">让Apple TV直接收看中国视频</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-20T14:09:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>更新（转自威锋论坛）：<br/>
+最近老的DNS方案已不行，已有解决方案，不怕麻烦的弄一下就好。 <a href="http://bbs.weiphone.com/read-htm-tid-6876174.html">传送门</a></p>
+
+<h4>工作原理：</h4>
+
+<p>通过程序将视频网站的HTML转换成XML给Apple TV,于是ATV就能收看贵国视频网站了。</p>
+
+<p>本程序给Apple tv访问的网址 : <a href="http://4.appletv3.sinaapp.com/index.php">http://4.appletv3.sinaapp.com/index.php</a>(其他设备浏览器无效)</p>
+
+<p>此方法许多人都设想过，但是TTVast是第一位做出并共享者！由于有了TTVast的工作，我们后来者的工作就轻松许多，感谢TT!为了方便新研究的朋友，特分享我的源码，链接在页面底部。</p>
+
+<p>TT的微博：<a href="http://weibo.com/u/1400101157">http://weibo.com/u/1400101157</a>
+<a href="http://www.ottnt.com/">http://www.ottnt.com/</a> Apple TV论坛</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/20/rang-apple-tvzhi-jie-shou-kan-zhong-guo-shi-pin/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">JSP中java代码与js之间的传值</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-17T15:04:00+08:00" pubdate data-updated="true">Jun 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h5>java   &mdash;&mdash;>   js:</h5>
+
+<p>List的传递：直接赋值就行，如下：</p>
+
+<p>Js代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var userIdList = "&lt;%=archiveNameList%&gt;";  //不加引号是错误的！  </span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/17/jspzhong-javadai-ma-yu-jszhi-jian-de-chuan-zhi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -485,100 +590,6 @@ iSecret does not require any network.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
-<li>NSString property的属性必须是copy</li>
-<li>delegate property的属性是assign</li>
-<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
-<li>init 和dealloc中不要用self.XX=;</li>
-</ul>
-
-
-<h4>NSCoping</h4>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Category 巧用-调试程序</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Category可以用来调试</h3>
-
-<p>除了隐藏私有方法外，我主要用它截住函数。</p>
-
-<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -598,10 +609,10 @@ iSecret does not require any network.</p>
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (4)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (32)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (34)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -614,6 +625,14 @@ iSecret does not require any network.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 hosts文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">深入浅出 Cocoa 多线程编程之 block 与 dispatch quene</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
       </li>
     
@@ -623,14 +642,6 @@ iSecret does not require any network.</p>
     
       <li class="post">
         <a href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Dash：程序员的的好帮手</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacs-30fen-zhong-ji-chu-jiao-cheng/">Emacs 30分钟基础教程</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
       </li>
     
   </ul>

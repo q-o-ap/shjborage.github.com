@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="介绍： Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。 设计： GCD的工作原理是： &hellip;">
+  <meta name="description" content="一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者，因此没有权限写到该文件”的提示，要解决这个权限问题又比较麻烦，对于刚刚使用 Mac 的用户来说并不容易整明白。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,105 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 Hosts文件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T22:34:00+08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者，因此没有权限写到该文件”的提示，要解决这个权限问题又比较麻烦，对于刚刚使用 Mac 的用户来说并不容易整明白。因此，就有了这篇小贴士，下面我分享四种方法来修改 Mac OS X Lion 系统中的 Hosts 文件，这四种方法都不会出现权限提示，而且 Mac OS X Snow Leopard(10.6) 用户也完全可以使用这些方法。</p>
+
+<h3>1、通过 VI 编辑器修改</h3>
+
+<p>打开终端（应用程序——实用工具），运行：(<em>vim也行</em>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vi /etc/hosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>屏幕上会提示你输入密码（输入密码的时候不会有任何字符显示，甚至*都不会显示，输完之后按回车就是了），打开 hosts 文件之后按 i 键进入插入模式（可理解为编辑模式），然后按照你的需要对该文件进行编辑，编辑完成之后按 ESC 键退出插入模式，之后按 :wq+回车保存退出，记得英文的冒号也是要输入的哦。</p>
+
+<p>这是笔者一直都在使用的方法，VI 编辑器对于经常使用 Linux 的用户应该不会陌生，而且该编辑器是默认内置在 Mac 系统中的。但是，对于没有使用过 VI 的用户，还真得花一会儿功夫来学习其基本使用方法。另外VI编辑器是一个很好很强大的工具，想要玩好 Mac 的话，最好掌握这个工具的使用。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">深入浅出 Cocoa 多线程编程之 Block 与 Dispatch Quene</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T22:20:00+08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>深入浅出 Cocoa 多线程编程之 block 与 dispatch quene
+罗朝辉(<a href="http://blog.csdn.net/kesalin">http://blog.csdn.net/kesalin</a>)
+CC 许可，转载请注明出处</p>
+
+<p>block 是 Apple 在 GCC 4.2 中扩充的新语法特性，其目的是支持多核并行编程。我们可以将
+dispatch_queue 与 block 结合起来使用，方便进行多线程编程。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -473,105 +572,6 @@ sudo chmod +x XXX</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/">Mac OS X: 停止响应的处理（包含强制重启机器）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-23T22:47:00+08:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>Mac OS X: 如果您的计算机停止响应、“悬挂”或“冻结”</em></p>
-
-<p>本文章已经归档，因此 Apple 将不再对其进行更新。</p>
-
-<h4>症状</h4>
-
-<p>了解如何消除计算机停止响应（“悬挂”或“冻结”）的情况。解决频发问题可能需要本文以外的解决方法。
-重要：
-所打开的应用程序中未保存的更改将会丢失。这些步骤适用于 Mac OS X 和 Mac OS X Server。“没有响应”通常是以一个旋转的指针和（或）输入响应时间缓慢（或者根本没有响应）来界定的。
-解决方法</p>
-
-<h4>1. 退出打开的应用程序</h4>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/23/qian-tan-wu-da-python-webkuang-jia/">浅谈五大Python Web框架</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-23T00:14:00+08:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>摘要：作者飞龙写了一篇《浅谈Python Web框架》，文中他介绍了几个Python Web框架和自己对选择框架的分析。在他看来，用Django来快速开发一些Web运用是很不错的选择。</p>
-
-<p>导读：作者飞龙写了一篇《浅谈Python Web框架》，文中他介绍了几个Python Web框架和自己对选择框架的分析。在他看来，用Django来快速开发一些Web运用是很不错的选择。以下是文章内容：</p>
-
-<p>说到Web Framework，Ruby的世界Rails一统江湖，而Python则是一个百花齐放的世界，各种micro-framework、framework不可胜数，不完全列表见：</p>
-
-<p><a href="http://wiki.python.org/moin/WebFrameworks%E3%80%82">http://wiki.python.org/moin/WebFrameworks%E3%80%82</a></p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/23/qian-tan-wu-da-python-webkuang-jia/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -589,10 +589,10 @@ sudo chmod +x XXX</p>
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (4)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (32)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (34)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -605,6 +605,14 @@ sudo chmod +x XXX</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 hosts文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">深入浅出 Cocoa 多线程编程之 block 与 dispatch quene</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
       </li>
     
@@ -614,14 +622,6 @@ sudo chmod +x XXX</p>
     
       <li class="post">
         <a href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Dash：程序员的的好帮手</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacs-30fen-zhong-ji-chu-jiao-cheng/">Emacs 30分钟基础教程</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a>
       </li>
     
   </ul>
