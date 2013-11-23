@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>遭遇SIGPIPE - Saick Blog - 专注技术，乐在其中</title>
+  <title>iOS Quick Tip: 7 Tips to Speed Up Your Development - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="《转》 我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出. 用gdb执行程序, 退出时提示&#8221;Broken pipe&# &hellip;">
+  <meta name="description" content="origin Most developers are always looking for ways to improve or automate their workflow being it with a simple script to automate a common task or &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/">
+  <link rel="canonical" href="http://saick.net/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -84,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">遭遇SIGPIPE</h1>
+      <h1 class="entry-title">iOS Quick Tip: 7 Tips to Speed Up Your Development</h1>
     
     
       <p class="meta">
@@ -100,94 +98,88 @@
   
 
 
-<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+<time datetime="2013-11-23T16:18:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>《转》</p>
+<div class="entry-content"><p><a href="http://mobile.tutsplus.com/tutorials/iphone/ios-quick-tip-7-tips-to-speed-up-your-development/">origin</a></p>
 
-<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
-然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
-但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
-
-<p>用gdb执行程序, 退出时提示&#8221;Broken pipe&#8221;.
-最后问题确定为, 对一个对端已经关闭的socket调用两次write,
-第二次将会生成SIGPIPE信号, 该信号默认结束进程.</p>
+<p>Most developers are always looking for ways to improve or automate their workflow being it with a simple script to automate a common task or by learning every possible keyboard shortcut of their favorite text editor. In this article, I will show you seven tips that will speed up and streamline your workflow in Xcode.</p>
 
 <!-- more -->
 
 
-<p>具体的分析可以结合TCP的&#8221;四次握手&#8221;关闭. TCP是全双工的信道,
-可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
-虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
-表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
+<h3>1. Keyboard Shortcuts</h3>
 
-<p>也就是说, 因为TCP协议的限制,
-一个端点无法获知对端的socket是调用了close还是shutdown.
-对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
-这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
-会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
-因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
-第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
+<p>Virtually every Xcode command has a keyboard shortcut that you can learn and even customize. Investing the time to learn keyboard shortcuts will increase your efficiency tremendously. If you are like me, and a lot of other developers, you prefer to keep your hands on the keyboard when you’re writing code and that is exactly what most key bindings are for.</p>
 
-<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
-给它设置SIG_IGN信号处理函数:
-<code>signal(SIGPIPE, SIG_IGN);</code>
-这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
-程序便能知道对端已经关闭.</p>
+<p>If you don’t like the default keyboard shortcuts, then you’ll be happy to learn that you can customize Xcode’s default keyboard shortcuts in the <strong>Preferences</strong> window under the <strong>Key Bindings</strong> tab.</p>
 
-<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006344093/" title="2013-11-23-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3817/11006344093_814a28a77f.jpg" width="500" height="367" alt="2013-11-23-1"></a>
+iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Managing Key Bindings in Xcode&rsquo;s Preferences Window</p>
 
-<h5>忽略SIGPIPE信号的方法</h5>
+<p>If you don’t want to scroll through the long list of keyboard shortcuts to learn the most important ones, then I recommend browsing through this <a href="http://stackoverflow.com/questions/146297/hidden-features-of-xcode">question on Stack Overflow</a>. It lists the most important key bindings in Xcode and also includes a number of other neat tips and tricks.</p>
 
-<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
+<h3>2. Cocoapods</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>struct sigaction sa;
-</span><span class='line'>sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
-</span><span class='line'>sa.sa_flags = 0;
-</span><span class='line'>if (sigemptyset(&sa.sa_mask) == -1 || //初始化信号集为空
-</span><span class='line'>sigaction(SIGPIPE, &sa, 0) == -1) { //屏蔽SIGPIPE信号
-</span><span class='line'>perror("failed to ignore SIGPIPE; sigaction");
-</span><span class='line'>exit(EXIT_FAILURE);
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<p>Cocoapods, a great project started by Eloy Durán, has gained significant traction in the Cocoa community. What is Cocoapods? Cocoapods is a tool for managing dependencies in Xcode projects. Due to Cocoapods’ popularity, hundreds of third party libraries have been updated to support Cocoapods. Even though Cocoapods is distributed as a Ruby gem, you don’t need to understand Ruby to benefit from Cocoapods.</p>
 
+<p>If you are tired of manually managing third party libraries in your iOS or OS X projects, or you’re looking for a solution that makes updating third party libraries easier, then Cocoapods is the best solution available. If you want to learn about Cocoapods, then I recommend reading <a href="http://mobile.tutsplus.com/tutorials/iphone/streamlining-cocoa-development-with-cocoapods/">a post about Cocoapods</a> that I wrote earlier this year. It will get you up and running in minutes.</p>
 
-<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
+<h3>3. Code Snippets</h3>
 
-<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
-<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
+<p>Chances are that you use a text or code snippet manager, such as <strong>TextExpander</strong> or <strong>CodeBox</strong>. I use TextExpander all the time and it has saved me countless keystrokes over the years. <em>I use Dash to manage my document sets and code snippets.</em> However, Xcode also has a snippet manager. It lives in Xcode’s right sidebar next to the Object Library.</p>
 
-<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
-pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
+<p>Why should you use Xcode’s snippet manager instead of the alternatives I mentioned earlier? In Xcode, each snippet has a number of additional attributes that really make snippets powerful and flexible. Each snippet has a Platform and Language attribute as well as a completion scope. A snippet’s completion scope is especially useful and integrates neatly with Xcode’s editor. Did I mention that each snippet can have multiple placeholders?</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef WIN32
-</span><span class='line'>sigset_t signal_mask;
-</span><span class='line'>sigemptyset (&signal_mask);
-</span><span class='line'>sigaddset (&signal_mask, SIGPIPE);
-</span><span class='line'>int rc = pthread_sigmask (SIG_BLOCK, &signal_mask, NULL);
-</span><span class='line'>if (rc != 0) {
-</span><span class='line'>printf("block sigpipe error\n");
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006222706/" title="2013-11-23-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7364/11006222706_6e4d20315d.jpg" width="500" height="212" alt="2013-11-23-2"></a></p>
 
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Creating and Managing Code Snippets is Very Easy in Xcode</p>
+
+<h3>4. Learn Git</h3>
+
+<p>If you’ve just started to learn how to program and the concept source control is new to you, then I strongly recommend that you take some time to learn the basics of Git. Git is <a href="http://en.wikipedia.org/wiki/Git_(software">a distributed version control and source code management system</a>). Euh … what? In short, Git helps you manage your source code easily and efficiently. Combine Git with GitHub or BitBucket and you are starting to look like a professional programmer. The added benefit is that Xcode integrates nicely with Git and this integration will only improve over time.</p>
+
+<p>Once you’ve learned the basics of Git, it is recommended to include a proper .gitignore file in your Xcode project. A good place to start is this question on Stack Overflow.</p>
+
+<p>Even though Git is commonly used through the command line, there are a number of applications that provide a GUI (Graphical User Interface). My favorite is <a href="http://www.git-tower.com/">Tower</a>, developed by Fournova, which recently reached version 1.5. Atlassian‘s <a href="https://www.atlassian.com/software/sourcetree/overview">SourceTree</a> is another great and free alternative.</p>
+
+<h3>5. Xcode Behaviors</h3>
+
+<p>Xcode is an incredibly powerful editor and it only gets better over the years. One of the aspects that I use frequently is Xcode’s <strong>Behaviors</strong> feature. By defining behaviors, you can tell Xcode what it should do when a particular event occurs, such as when a crash occurs while debugging or when you’ve successfully archived an application.</p>
+
+<p>You can configure these behaviors in Xcode’s Preferences Window. If you don’t like it when Xcode shows the console when output is generated, you can disable this behavior in the <strong>Behaviors</strong> panel. Do you want Xcode to show the <strong>Issues Navigator</strong> when one or more tests fail? This is all possible with Xcode Behaviors.</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006291054/" title="2013-11-23-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3812/11006291054_0794190295.jpg" width="500" height="367" alt="2013-11-23-3"></a></p>
+
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Managing Behaviors in Xcode&rsquo;s Preferences Window</p>
+
+<p>Xcode predefines a number of common behaviors for you, such as Build, Testing, and Running. However, you can also define custom behaviors and assign a keyboard shortcut to it. This is a convenient way to set up Xcode the way you want with a single key binding.</p>
+
+<h3>6. Tabs and Windows</h3>
+
+<p>I really like the unified look of Xcode 4 and the integration of Interface Builder. However, it is sometimes useful to have more than one window at hand, for example, when you are working in the console and the editor at the same time or you use multiple monitors. In Xcode 4, it is still possible to work with multiple windows. You can create a new window using the keyboard shortcut <code>Shift + Cmd + T</code> or use the menu, <strong>File > New > Window</strong>.</p>
+
+<p>Even more useful are tabs. Almost every code editor has tabs these days and Xcode is no exception. I rarely find myself in an Xcode window that has no, or one, tab. What few people know is that Xcode tabs can be named. You can even tie named tabs and Xcode behaviors together, which is especially useful during debugging.</p>
+
+<h3>7. Documentation</h3>
+
+<p>Even if you’ve been developing Cocoa applications for years, the documentation should never be more than a click away. There are a number of ways to quickly access Xcode’s documentation browser. The solution I use most often is holding the option key and clicking a method in Xcode’s code editor. This presents you with a summary of the particular method. If you want to read more or open the documentation browser, you can click one of the links in the pop up window.</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006118705/" title="2013-11-23-4 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7341/11006118705_ee2259bfdf.jpg" width="500" height="309" alt="2013-11-23-4"></a></p>
+
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; The Documentation is Your Friend</p>
+
+<p>You can achieve the same by opening Xcode’s right sidebar and open the Quick Help Inspector tab. The help inspector updates as the cursor moves. As with the pop up window, clicking on one of the links in the help inspector takes you to the respective section in the documentation in the documentation browser.</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006118685/" title="2013-11-23-5 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3782/11006118685_ec1975ac10.jpg" width="500" height="422" alt="2013-11-23-5"></a></p>
+
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; The Quick Help Inspector</p>
+
+<p>One of the downsides of Xcode’s documentation browser is that it can be slow at times. For this reason, I frequently use Dash, a dedicated documentation and snippet manager. Dash is very fast and provides support for more than eighty languages, libraries, frameworks, and APIs. It is well worth checking out.</p>
 </div>
 
 
@@ -210,7 +202,7 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
   
 
 
-<time datetime="2013-10-10T23:35:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+<time datetime="2013-11-23T16:18:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
       
 
 <span class="categories">
@@ -228,7 +220,7 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/10/zao-yu-sigpipe/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/" >Tweet</a>
   
   
   
@@ -255,10 +247,8 @@ pipe的问题，解决方法是每一个线程启动之前时，先执行下面�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/10/nanwen-ti-not-a-number/" title="Previous Post: NaN问题 Not a Number">&laquo; NaN问题 Not a Number</a>
+        <a class="basic-alignment left" href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/" title="Previous Post: Mac OS X 改 hosts文件">&laquo; Mac OS X 改 hosts文件</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/" title="Next Post: iOS 5 : UIImage and resizableImageWithCapInsets">iOS 5 : UIImage and resizableImageWithCapInsets &raquo;</a>
       
     </p>
   </footer>

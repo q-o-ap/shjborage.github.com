@@ -9,8 +9,9 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
-来上图看下吧 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？ ">
+  <meta name="description" content="问了好多人，都不知道group_concat这个函数。
+这个函数好啊，能将相同的行组合起来，省老事了。
+MySQL中group_concat函数(SQLite或其它数据亦可) 完整的语法如下： group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +81,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Group_concat函数详解</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-24T00:06:00+08:00" pubdate data-updated="true">Sep 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>问了好多人，都不知道group_concat这个函数。
+这个函数好啊，能将相同的行组合起来，省老事了。
+MySQL中group_concat函数(SQLite或其它数据亦可)</p>
+
+<p>完整的语法如下：</p>
+
+<p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
+
+<p> </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -513,60 +561,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/">Cocoa 自省机制</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T16:30:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>内省</h3>
-
-<p>内省（Introspection）是面向对象语言和环境的一个强大特性，Objective-C和Cocoa在这个方面尤其的丰富。内省是对象揭示自己作为一个运行时对象的详细信息的一种能力。这些详细信息包括对象在继承树上的位置，对象是否遵循特定的协议，以及是否可以响应特定的消息。NSObject协议和类定义了很多内省方法，用于查询运行时信息，以便根据对象的特征进行识别。</p>
-
-<p>明智地使用内省可以使面向对象的程序更加高效和强壮。它有助于避免错误地进行消息派发、错误地假设对象相等、以及类似的问题。下面的部分将介绍如何在代码中有效地使用NSObject的内省方法。</p>
-
-<p><strong><em>本部分包括如下内容：</em></strong></p>
-
-<ul>
-<li>评估继承关系</li>
-<li>方法实现和协议遵循</li>
-<li>对象的比较</li>
-</ul>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -600,7 +594,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (34)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (35)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -611,6 +605,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/">iOS Quick Tip: 7 Tips to Speed Up Your Development</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 hosts文件</a>
@@ -626,10 +624,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/">Python MySQLdb安装以及问题汇总</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Dash：程序员的的好帮手</a>
       </li>
     
   </ul>

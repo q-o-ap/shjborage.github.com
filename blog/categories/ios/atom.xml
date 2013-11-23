@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-11-17T00:00:02+08:00</updated>
+  <updated>2013-11-23T17:10:54+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS Quick Tip: 7 Tips to Speed Up Your Development]]></title>
+    <link href="http://saick.net/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/"/>
+    <updated>2013-11-23T16:18:00+08:00</updated>
+    <id>http://saick.net/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development</id>
+    <content type="html"><![CDATA[<p><a href="http://mobile.tutsplus.com/tutorials/iphone/ios-quick-tip-7-tips-to-speed-up-your-development/">origin</a></p>
+
+<p>Most developers are always looking for ways to improve or automate their workflow being it with a simple script to automate a common task or by learning every possible keyboard shortcut of their favorite text editor. In this article, I will show you seven tips that will speed up and streamline your workflow in Xcode.</p>
+
+<!-- more -->
+
+
+<h3>1. Keyboard Shortcuts</h3>
+
+<p>Virtually every Xcode command has a keyboard shortcut that you can learn and even customize. Investing the time to learn keyboard shortcuts will increase your efficiency tremendously. If you are like me, and a lot of other developers, you prefer to keep your hands on the keyboard when you’re writing code and that is exactly what most key bindings are for.</p>
+
+<p>If you don’t like the default keyboard shortcuts, then you’ll be happy to learn that you can customize Xcode’s default keyboard shortcuts in the <strong>Preferences</strong> window under the <strong>Key Bindings</strong> tab.</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006344093/" title="2013-11-23-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3817/11006344093_814a28a77f.jpg" width="500" height="367" alt="2013-11-23-1"></a>
+iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Managing Key Bindings in Xcode&rsquo;s Preferences Window</p>
+
+<p>If you don’t want to scroll through the long list of keyboard shortcuts to learn the most important ones, then I recommend browsing through this <a href="http://stackoverflow.com/questions/146297/hidden-features-of-xcode">question on Stack Overflow</a>. It lists the most important key bindings in Xcode and also includes a number of other neat tips and tricks.</p>
+
+<h3>2. Cocoapods</h3>
+
+<p>Cocoapods, a great project started by Eloy Durán, has gained significant traction in the Cocoa community. What is Cocoapods? Cocoapods is a tool for managing dependencies in Xcode projects. Due to Cocoapods’ popularity, hundreds of third party libraries have been updated to support Cocoapods. Even though Cocoapods is distributed as a Ruby gem, you don’t need to understand Ruby to benefit from Cocoapods.</p>
+
+<p>If you are tired of manually managing third party libraries in your iOS or OS X projects, or you’re looking for a solution that makes updating third party libraries easier, then Cocoapods is the best solution available. If you want to learn about Cocoapods, then I recommend reading <a href="http://mobile.tutsplus.com/tutorials/iphone/streamlining-cocoa-development-with-cocoapods/">a post about Cocoapods</a> that I wrote earlier this year. It will get you up and running in minutes.</p>
+
+<h3>3. Code Snippets</h3>
+
+<p>Chances are that you use a text or code snippet manager, such as <strong>TextExpander</strong> or <strong>CodeBox</strong>. I use TextExpander all the time and it has saved me countless keystrokes over the years. <em>I use Dash to manage my document sets and code snippets.</em> However, Xcode also has a snippet manager. It lives in Xcode’s right sidebar next to the Object Library.</p>
+
+<p>Why should you use Xcode’s snippet manager instead of the alternatives I mentioned earlier? In Xcode, each snippet has a number of additional attributes that really make snippets powerful and flexible. Each snippet has a Platform and Language attribute as well as a completion scope. A snippet’s completion scope is especially useful and integrates neatly with Xcode’s editor. Did I mention that each snippet can have multiple placeholders?</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006222706/" title="2013-11-23-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7364/11006222706_6e4d20315d.jpg" width="500" height="212" alt="2013-11-23-2"></a></p>
+
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Creating and Managing Code Snippets is Very Easy in Xcode</p>
+
+<h3>4. Learn Git</h3>
+
+<p>If you’ve just started to learn how to program and the concept source control is new to you, then I strongly recommend that you take some time to learn the basics of Git. Git is <a href="http://en.wikipedia.org/wiki/Git_(software">a distributed version control and source code management system</a>). Euh … what? In short, Git helps you manage your source code easily and efficiently. Combine Git with GitHub or BitBucket and you are starting to look like a professional programmer. The added benefit is that Xcode integrates nicely with Git and this integration will only improve over time.</p>
+
+<p>Once you’ve learned the basics of Git, it is recommended to include a proper .gitignore file in your Xcode project. A good place to start is this question on Stack Overflow.</p>
+
+<p>Even though Git is commonly used through the command line, there are a number of applications that provide a GUI (Graphical User Interface). My favorite is <a href="http://www.git-tower.com/">Tower</a>, developed by Fournova, which recently reached version 1.5. Atlassian‘s <a href="https://www.atlassian.com/software/sourcetree/overview">SourceTree</a> is another great and free alternative.</p>
+
+<h3>5. Xcode Behaviors</h3>
+
+<p>Xcode is an incredibly powerful editor and it only gets better over the years. One of the aspects that I use frequently is Xcode’s <strong>Behaviors</strong> feature. By defining behaviors, you can tell Xcode what it should do when a particular event occurs, such as when a crash occurs while debugging or when you’ve successfully archived an application.</p>
+
+<p>You can configure these behaviors in Xcode’s Preferences Window. If you don’t like it when Xcode shows the console when output is generated, you can disable this behavior in the <strong>Behaviors</strong> panel. Do you want Xcode to show the <strong>Issues Navigator</strong> when one or more tests fail? This is all possible with Xcode Behaviors.</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006291054/" title="2013-11-23-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3812/11006291054_0794190295.jpg" width="500" height="367" alt="2013-11-23-3"></a></p>
+
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Managing Behaviors in Xcode&rsquo;s Preferences Window</p>
+
+<p>Xcode predefines a number of common behaviors for you, such as Build, Testing, and Running. However, you can also define custom behaviors and assign a keyboard shortcut to it. This is a convenient way to set up Xcode the way you want with a single key binding.</p>
+
+<h3>6. Tabs and Windows</h3>
+
+<p>I really like the unified look of Xcode 4 and the integration of Interface Builder. However, it is sometimes useful to have more than one window at hand, for example, when you are working in the console and the editor at the same time or you use multiple monitors. In Xcode 4, it is still possible to work with multiple windows. You can create a new window using the keyboard shortcut <code>Shift + Cmd + T</code> or use the menu, <strong>File > New > Window</strong>.</p>
+
+<p>Even more useful are tabs. Almost every code editor has tabs these days and Xcode is no exception. I rarely find myself in an Xcode window that has no, or one, tab. What few people know is that Xcode tabs can be named. You can even tie named tabs and Xcode behaviors together, which is especially useful during debugging.</p>
+
+<h3>7. Documentation</h3>
+
+<p>Even if you’ve been developing Cocoa applications for years, the documentation should never be more than a click away. There are a number of ways to quickly access Xcode’s documentation browser. The solution I use most often is holding the option key and clicking a method in Xcode’s code editor. This presents you with a summary of the particular method. If you want to read more or open the documentation browser, you can click one of the links in the pop up window.</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006118705/" title="2013-11-23-4 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7341/11006118705_ee2259bfdf.jpg" width="500" height="309" alt="2013-11-23-4"></a></p>
+
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; The Documentation is Your Friend</p>
+
+<p>You can achieve the same by opening Xcode’s right sidebar and open the Quick Help Inspector tab. The help inspector updates as the cursor moves. As with the pop up window, clicking on one of the links in the help inspector takes you to the respective section in the documentation in the documentation browser.</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11006118685/" title="2013-11-23-5 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3782/11006118685_ec1975ac10.jpg" width="500" height="422" alt="2013-11-23-5"></a></p>
+
+<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; The Quick Help Inspector</p>
+
+<p>One of the downsides of Xcode’s documentation browser is that it can be slow at times. For this reason, I frequently use Dash, a dedicated documentation and snippet manager. Dash is very fast and provides support for more than eighty languages, libraries, frameworks, and APIs. It is well worth checking out.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[深入浅出 Cocoa 多线程编程之 block 与 dispatch quene]]></title>
@@ -1140,219 +1223,6 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 <p>高嘉峻（微博：@gaosboy），SegmentFault.com联合创始人，杭州iOS开发者沙龙发起人，资深iOS开发者。</p>
 
 <p><a href="http://www.infoq.com/cn/articles/afn_vs_asi">http://www.infoq.com/cn/articles/afn_vs_asi</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Objective-C的新特性(Object Literals等)]]></title>
-    <link href="http://saick.net/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/"/>
-    <updated>2013-10-20T22:28:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/20/objective-cde-xin-te-xing-object-literals</id>
-    <content type="html"><![CDATA[<p>转自：<a href="http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/">http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/</a> (Posted by 唐巧 Aug 5th, 2012  iOS)</p>
-
-<p>苹果在今年的WWDC2012大会上介绍了大量Objective-C的新特性，能够帮助iOS程序员更加高效地编写代码。在不久前更新的XCode4.4版本中，这些新特性已经可以使用了。让我们看看这些新特性有哪些：</p>
-
-<h3>Object Literals</h3>
-
-<p>这个是我认为最赞的一个改进。Object Literals允许你方便地定义数字、数组和字典对象。这个功能类似于java5提供的auto boxing功能。这虽然是一个语法糖，但我认为对提高写代码效率帮助很大。让我们先来看看以前定义数字、数组和字典对象的方法：</p>
-
-<p><code>
-123NSNumber * number = [NSNumber numberWithInt:1];
-NSArray * array = [NSArray arrayWithObjects:@"one", @"two", nil];
-NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:@"value1", @"key1", @"value2", @"key2", nil];
-</code></p>
-
-<p>是不是很恶心？现在以上代码可以简化成以下形式，注意到没有，不用再在参数的最后加恶心的nil了，字典的key和value也不再是倒着先写value,再写key了：</p>
-
-<!-- more -->
-
-
-<p><code>
-NSNumber * number = @1;
-NSArray * array = @[@"one", @"two"];
-NSDictionary * dict = @{@"key1":@"value1", @"key2":@"value2"};
-</code></p>
-
-<p>更多的示例如下：</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// 整数&lt;br/>
-</span><span class='line'>NSNumber &lt;em>fortyTwo = @42;             // 等价于 [NSNumber numberWithInt:42]  NSNumber &lt;/em>fortyTwoUnsigned = @42U;    // 等价于 [NSNumber numberWithUnsignedInt:42U]  NSNumber &lt;em>fortyTwoLong = @42L;        // 等价于 [NSNumber numberWithLong:42L]  NSNumber &lt;/em>fortyTwoLongLong = @42LL;   // 等价于 [NSNumber numberWithLongLong:42LL]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>// 浮点数&lt;br/>
-</span><span class='line'>NSNumber &lt;em>piFloat = @3.141592654F;    // 等价于 [NSNumber numberWithFloat:3.141592654F]&lt;br/>
-</span><span class='line'>NSNumber &lt;/em>piDouble = @3.1415926535;   // 等价于 [NSNumber numberWithDouble:3.1415926535]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>// 布尔值&lt;br/>
-</span><span class='line'>NSNumber &lt;em>yesNumber = @YES;           // 等价于 [NSNumber numberWithBool:YES]  NSNumber &lt;/em>noNumber = @NO;             // 等价于 [NSNumber numberWithBool:NO]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>// 空数组&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>NSArray * array = @[];                // 等价于 [NSArray array]  // 空的字典  NSDictionary * dict = @{};            // 等价于 [NSDictionary dictionary]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>怎么样？是不是简单多了？而且，为了方便你的旧代码迁移到新的写法，xcode专门还提供了转换工具，在xcode4.4中，选择 Edit &ndash;> Refactor &ndash;> Convert to Modern Objective-C Syntax即可。</p>
-
-<h3>局部的函数调用不用前向申明</h3>
-
-<p>这虽然是一个挺小的改进，但是很贴心。假如我们在一个源文件中有2个函数：分别名为foo 和 bar，其中foo的定义在bar前面。那如果在foo函数内部直接调用bar，编译器会报警告说找不到函数bar。
-而现在，我们可以随意地在源文件中放置函数bar的位置。编译器在找不到bar时，会再源码后面找，如果找到了bar，就不会报错了。</p>
-
-<h3>带有类型的enum</h3>
-
-<p>现在我们可以定义enum是无符号整数还是整数，这样编译器会更加智能的做类型检查。如下所示：</p>
-
-<p><code>
-typedef enum TableViewCellType : NSInteger {    
-TableViewCellTypeQueue,    
-TableViewCellTypeNewFans,    
-TableViewCellTypeUserInfo,    
-TableViewCellTypeOrganization,    
-TableViewCellTypeFeedback,    
-TableViewCellTypeRateApp,    
-TableViewCellTypeRecommendation,    
-TableViewCellTypeLogout}TableViewCellType;
-</code></p>
-
-<h3>默认生成@synthesize代码</h3>
-
-<p>以前写完一个诸如 @property (nonatomic, strong) NSString * username; 变量定义后，马上得转到 .m文件中去增加相应的 @synthesize username = _username; 代码。</p>
-
-<p>现在，编辑器发现你没有写 @synthesize时，会自动帮你加上这一行。这同时在另一方面，起到了鼓励大家使用以下划线开头的变量名作为成员变量名的作用。</p>
-
-<p>当然，为了向下兼容，如果你的程序里面已经有了 @property 变量对应的 @synthesize 代码时，编辑器就不会自动帮你增加这个代码了。
-另外有2种特殊情况下，即使你没有写 @synthesize ，编辑器也不会自动帮你加上，这2种情况是：</p>
-
-<ul>
-<li>你同时提供了该property的setter 和 getter方法。</li>
-<li>你的这个property是 readonly 的。</li>
-</ul>
-
-
-<h3>遍历元素</h3>
-
-<p>你是如何遍历数组的元素的？通常我们有2种做法，一种是用 for in，另一种是用一个变量来循环数组下标。如下：</p>
-
-<p>```
-// 12345678    NSArray * lines = &hellip;  <br/>
-for (NSString * line in lines) {</p>
-
-<pre><code>   // ...    
-</code></pre>
-
-<p>}
-for (int i = 0; i &lt; lines.count; ++i) {</p>
-
-<pre><code>NSString * s = [lines objectAtIndex:i];        
-...    
-</code></pre>
-
-<p>}
-```</p>
-
-<p>如果是字典，遍历的代码就要稍微复杂一点了：</p>
-
-<p>```
-NSDictionary * dict = …    NSArray * keys = [dict allKeys];
-for (NSString * key in keys) {</p>
-
-<pre><code>NSString * value = [dict objectForKey:key];    
-</code></pre>
-
-<p>}
-```</p>
-
-<p>现在，xcode对于iOS4.0以上的系统，支持用block来遍历元素了。用block来遍历字典可以简化代码的编写，建议大家都使用上这个新特性。</p>
-
-<p><code>
-[lines enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL *stop) {}];[_urlArguments enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {}];
-</code></p>
-
-<h3>Subscripting Methods</h3>
-
-<p>这个新特性在WWDC2012的视频中提到了，但是在XCode4.4中没有实现（在XCode4.5中实现了）。也是一个很体贴的语法糖，它允许你用中括号来代替原本的方法来获取和设置数组元素。</p>
-
-<p>简单来说，以前的 [array objectAtIndex:idx] 和 [array replaceObjectAtIndex:idx withObject:obj]，可以直接写作 array[idx] 和 array[idx] = obj了。其实这个特性在很多高级语言中都实现了，只是Objective-C生于80年代，一直没改进这个。</p>
-
-<p>以下是一些示例代码：</p>
-
-<p>```
-NSArray * array = @[ @&ldquo;111&rdquo;, @&ldquo;222&rdquo;, @&ldquo;333&rdquo;];
-for (int i = 0; i &lt; 3; ++i) {</p>
-
-<pre><code>NSLog(@"array[i] = %@", array[i]);
-</code></pre>
-
-<p>}
-NSMutableDictionary * dict =[@{  @1: @&ldquo;value1&rdquo;, @2: @&ldquo;value2&rdquo;,                                 @3: @&ldquo;value3&rdquo; } mutableCopy];
-for (int i = 0; i &lt; 3; ++i) {</p>
-
-<pre><code>NSLog(@"dict[%d] = %@", i, dict[@(i+1)]);
-dict[@(i+1)] = [NSString stringWithFormat:@"new %@", dict[@(i+1)]];}
-[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop{
-    NSLog(@"dict[%@] = %@", key, dict[key]);
-}];
-</code></pre>
-
-<p>}
-```</p>
-
-<p>这个改进同样对NSDictionary有效。甚至，你也可以给你自己的类提供中括号操作符对应的方法。具体做法是实现如下两个方法：</p>
-
-<p><code>
-- (id)objectAtIndexedSubscript:(NSUInterger)idx;- (void)setObject:(id)value atIndexedSubscript:(NSUInteger)idx;
-</code></p>
-
-<h3>Tips</h3>
-
-<p>上面提到了不用写 @synthesize 了，那原本写的那么多 @synthesize 怎么办呢？作为有代码洁癖的我很想把它们删掉，但怎么删呢？一个文件一个文件打开，然后行一行删掉吗？放心，苹果已经帮我们想了解决方案。在WWDC2012 Session 400 Developer Tools Kickoff 中，苹果介绍了具体做法。步骤如下：</p>
-
-<ul>
-<li>首先使用区域查找，因为一般项目都会依赖第三方的开源库，我们可不想更改别人的库，所以我们只查找我们库中的文件，如下图所示：</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382148323/" title="2013-10-20-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3803/10382148323_3e5d2aabbc.jpg" width="317" height="449" alt="2013-10-20-1"></a></p>
-
-<ul>
-<li>接着我们用正则匹配，找到以 @synthesize开头，后面接着是 var = _var; 格式的行。插入正则表达式很简单，直接点击查找输入框左边的放大镜，选择“insert pattern”，苹果就会把常见的正则表达式都列出来，你直接选择就可以了，非常方便。如下图所示：</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382148463/" title="2013-10-20-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7415/10382148463_a1fe6d797a.jpg" width="441" height="181" alt="2013-10-20-2"></a></p>
-
-<p>在插入好合适的正则表达式后，我们按回车，就可以搜索到结果。
-<a href="http://www.flickr.com/photos/105999540@N03/10382148643/" title="2013-10-20-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3724/10382148643_1604c7809b.jpg" width="296" height="315" alt="2013-10-20-3"></a></p>
-
-<ul>
-<li>我们点击搜索界面的preview按钮，查看替换效果，可以看到，对于我们测试代码，XCode生成的预览图已经正确地当对应代码删掉了。然后我们就可以点击替换，去掉所有的 @synthesize 代码了。</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382148923/" title="2013-10-20-4 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3769/10382148923_5836e42c21.jpg" width="500" height="97" alt="2013-10-20-4"></a></p>
-
-<p>在下载完XCode4.4后，我就把我们的工程代码都转换成了新特性的语法。在转换后，我发现原本25000行的代码少了将近1000行。心里还是很开心的，因为又可以少写一些体力活类型的代码了。
-还是那句话，希望这些新特性能够让大家玩得开心。
-参考资料</p>
-
-<ul>
-<li> LLVM官方网站比较全面地介绍了 Object Literal： <a href="http://clang.llvm.org/docs/ObjectiveCLiterals.html">http://clang.llvm.org/docs/ObjectiveCLiterals.html</a></li>
-<li> WWDC2012 Session 400 Developer Tools Kickoff</li>
-<li> WWDC2012 Session 405 Modern Objective-C</li>
-<li> WWDC2012 Session 413 Migrating to Modern Objective-C</li>
-</ul>
-
 ]]></content>
   </entry>
   
