@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-11-23T17:21:19+08:00</updated>
+  <updated>2013-11-23T17:43:36+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发：从新手到专家的一些建议]]></title>
+    <link href="http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/"/>
+    <updated>2013-11-23T17:32:00+08:00</updated>
+    <id>http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi</id>
+    <content type="html"><![CDATA[<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1118/7371.html">Origin</a></p>
+
+<p>虽然你有可能在一周内学习到iOS开发的本质，但想要精通iOS开发需则要花费更长的时间。问题是你如何从新手变成专家？在这篇文章中，我们主要就这个主题给出一些建议（如果你有好的建议和相关文章欢迎分享给更多开发者）</p>
+
+<!-- more -->
+
+
+<h3>1.练习，练习还是练习</h3>
+
+<p>iOS开发没有捷径可走。这是我在继续这个话题之前需要强调的东西，因为摆脱任何常常浮现于你脑海的幻想很重要。如果你仅仅在星期天的4PM和5PM之间学习/练习编程，那么你不会成为一个熟练的iOS开发者。不要误会我的意思，这么做可能会很有趣，但是它很难让你成为一个老练的专业的iOS开发者。除了极少数的人，大部分人都需要不断的练习和实践。如果你还没有准备好投入大量时间，这时候最好重新审视你的目标和理想。</p>
+
+<h3>2.向其他人学习</h3>
+
+<p>提升开发技能和采用最佳实践的最好策略之一是学习别人的代码。这不仅仅意味着浏览Stack Overflow，但更重要的是其他开发者的各种开源类库和代码片段。</p>
+
+<p>不管何时你一头扎进各种类库的学习，比如AFNetworking或者Magical Record，很关键的一点是不要被各种代码淹没。有可能你不理解各种库中的代码，但这不是真正的关键，重点是从一个更高的层次来看源码和尽可能多地学习，比如<em>命名规范</em>、<em>最佳实践</em>&amp;以及<em>设计模式</em>等。</p>
+
+<p>除了学习别人的代码外，创建你自己的类库是一个最好的学习方法。不久前，我用Core Data作为数据层开发了一款app，我没有使用Magical Record，我决定通过学习Magical Record创建自己的库，并重新创建了我需要的功能。这种方法不仅帮我创建了一个更加灵活的库，也让我学习到很多Magical Record内部的工作原理。</p>
+
+<h3>3. 不要仅仅复制和粘贴</h3>
+
+<p>这一点让我看到了正确学习方式的另一个关键面：不要不动脑子简单地复制和粘贴。我们常常会使用我们在Stack Overflow或者苹果开发者论坛找到的各种代码片段，但是不要为了偷懒简单地复制粘贴你从网络上找到的代码，这样你很难彻底理解它。最大的危险在于这可能会导致意外的行为，以致于你的代码以后都很难调试和修复。</p>
+
+<p>有时候，复制别人的代码片段看着可能已经解决了你遇到的问题，但是我强烈建议不要这么做。阅读代码，理解你往代码库添加的东西，可能的话定制你需要的解决方案。不用说，这并不适用于开发者积极维护的库或框架。在项目中使用Magical Record前，如果你需要仔细检查它，那么我确信你已经理解了不同之处。使用你自己的常识。</p>
+
+<h3>4. 模式</h3>
+
+<p>Cocoa和Objective-C在很多方面都不同于其他编程语言和环境。这意味着他们有自己独特的模式和最佳实践。我确信你已经熟悉了一些常见的模式，比如委托和通知。但还有很多模式可以开发过程中帮助你，比如单例模式、观察者模式以及通用模式等。Cocoa Fundamentals Guide很好地概述了Cocoa中大部分常用模式。</p>
+
+<h3>5.了解你的工具</h3>
+
+<p>作为一个开发者并不仅仅是理解语言和框架，理解你每天使用的工具同样重要。对于iOS开发来说，这意味着你需要很好地理解Xcode和其他可能用到的工具，比如PonyDebugger和Charles。如果你想学习一些额外的技巧，你可能会对我此前的一篇文章（iOS Quick Tip: 7 Tips to Speed Up Your Development）感兴趣。</p>
+
+<h3>6.与时俱进</h3>
+
+<p>即使你不能参加苹果一年一度的开发者大会&mdash;WWDC，但浏览大量的会议视频是个很好的学习方法，你可以观看你感兴趣的专题视频，它们都是由在某方面擅长的工程师演讲，他们可以告诉你一些细节信息以及相关使用说明。另外，你还可以多关注优秀的开发者，他们会定期写一些技术文章，比如比如Matt Gemmell、 Aaron Hillegass以及Mike Ash，你可以在我为Mobiletuts+写的这篇“Where To Go Next”文章中找到更多学习资源。</p>
+
+<h3>7.学习其他语言</h3>
+
+<p>我已经注意到学习新语言或者使用新框架让我对软件开发的整体理解有了明显提高。这种方法的优点在于不会限制你对最熟悉语言的认知和它潜在可能性的理解。我最近在研究Ember.js，并了解到它的创建者 Yehuda Katz和Tom Dale是从Cocoa获得的灵感。Ember.js对mvc的实现并没有遵循JavaScript framework，不过如果你熟悉cocoa的话，就不会感觉到奇怪了。</p>
+
+<p>对于软件开发来说，没有最好的语言，每种语言都有自己的优势和劣势。但是好的一面在于或多或少他们都有所不同，这使得学习新语言变得更加有趣和更有启发性。比如对我来说，Ruby在写DRY (Don’t Repeat Yourself)、易读的、干净的代码方面让我大开眼界。</p>
+
+<h3>总结</h3>
+
+<p>如果你不想花费时间成为一个更好的程序员，那么你可能要重新考虑下为什么你把成为一个程序员摆在首位。但如果你会因为一个可以帮你的新类库或者开发工具而兴奋，那么随着时间的流逝，你在提高自身技能方面可能不会有什么问题。你真的必须热爱你所做的事情，并在这面擅长，这一点尤其适用于编程。不管什么人告诉你，你不会在一夜之间成为一个老练的开发者，但如果你保持不间断的学习，并细心打磨自己的“手艺”，我想你的技术会有很好的提高。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS Quick Tip: 7 Tips to Speed Up Your Development]]></title>
@@ -1100,129 +1154,6 @@ dispatch_apply(5, globalQ, ^(size_t index) {</p>
 <p>介绍到这里，各位看官，你应该已经深深滴爱上Dash了吧？每个苦逼的程序员，都应该有这么一只可爱贴心的叮当猫，您说是不是？其实个人不是很喜欢它的图标，实在是有点太诡异了，嘿嘿……</p>
 
 <p>最后再说一句，Dash在Mac App Store里面免费提供下载，不过作者包含了一个IAP（应用程序内购买）插件，作者挺幽默的，看介绍是说的Dash的双胞胎伙伴Pinky比较调皮，会时不时的跳出来打扰你一下，囧……反正我运行了一晚上，还没见到这只传说中的猫呢。其实这只不过是给你提供了赞助作者的机会，毕竟这么好的软件，如果经济条件允许，支持一下也无可厚非，同是软件开发者，其中的辛酸你我都懂的。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[对比iOS网络组件：AFNetworking VS ASIHTTPRequest]]></title>
-    <link href="http://saick.net/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-%3Aafnetworking-vs-asihttprequest/"/>
-    <updated>2013-10-20T22:55:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/20/dui-bi-ioswang-luo-zu-jian-:afnetworking-vs-asihttprequest</id>
-    <content type="html"><![CDATA[<p>在开发iOS应用过程中，如何高效的与服务端API进行数据交换，是一个常见问题。一般开发者都会选择一个第三方的网络组件作为服务，以提高开发效率和稳定性。这些组件把复杂的网络底层操作封装成友好的类和方法，并且加入异常处理等。</p>
-
-<p>那么，大家最常用的组件是什么？这些组件是如何提升开发效率和稳定性的？哪一款组件适合自己，是 AFNetworking（AFN）还是 ASIHTTPRequest（ASI）？几乎每一个iOS互联网应用开发者都会面对这样的选择题，要从这两个最常用的组件里选出一个好的还真不是那么容易。</p>
-
-<p>单单从两个控件版本提交的时间节点来看，AFN的第一个提交是2011年的1月1日，那个时候ASI早已是1.8+的版本了；而当AFN发布1.0版，2012年10月份的时候，ASI早早的已经停止更新了。这样看起来，AFN是ASI的继任者，似乎不存在之前提到的选择困难的问题，而事实并非如此。本文将从用法、功能、性能和原理几个方面对二者进行简单对比，看看二者之间到底存在着怎样的区别，到底应该如何选择。</p>
-
-<!-- more -->
-
-
-<ul>
-<li>首先，从推荐用法上就可以看出二者设计理念上大有不同。</li>
-</ul>
-
-
-<h3>1、用法对比</h3>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705763/" title="2013-10-20-5 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2867/10382705763_25114b14ed.jpg" width="464" height="309" alt="2013-10-20-5"></a></p>
-
-<p>图1，AFN的示例代码，发起请求（出自：Posts.m）</p>
-
-<p>AFN官方推荐的使用方法是，为一系列相关的请求定义一个HTTPClient，共用一个BaseURL。每次请求把URL中除BaseURL的Path部分做为参数传给HTTPClient的静态方法，并注册一个Block用于回调。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705703/" title="2013-10-20-6 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3724/10382705703_90269d2bbe.jpg" width="464" height="143" alt="2013-10-20-6"></a></p>
-
-<p>图2，ASI示例代码，发起异步请求（出自：ASIHTTPRequestTests.m）</p>
-
-<p>ASI推荐使用方法就非常传统，每一个请求都由构造方法初始化一个（共享）实例，通过这个实例配置参数并发起请求。ASI最初使用delegate模式回调，在iOS SDK支持Block之后也提供了注册Block的实例方法。</p>
-
-<p>以上引用的两段代码都出自各自项目的示例工程。对比两段代码可以很清楚的看出，同样是发起一个最普通的异步请求，使用AFN只需要调用一个静态方法，但代码可读性较差；而ASI的示例看起来更清晰，但需要调用多个实例方法才能完成一次请求。AFN的设计更加工程化，或者说对使用者更友好，而ASI的设计更经典，典型的OOP。
-除了初级用法上的区别，二者的高级功能和对扩展的支持也颇有不同。</p>
-
-<h3>2、高级功能</h3>
-
-<p>AFN只封装了一些常用功能，满足基本需求，而直接忽略了很多扩展功能。例如：AFN默认没有封装同步请求，如果开发者需要使用同步请求，则需要重写getPath:parameters:success:failure方法，对AFHTTPRequestOperation进行同步处理；而ASI则是直接通过调用一个startSynchronous方法。
-此外AFN针对JSON、XML、PList和Image四种数据结构封装了各自处理器，开发者可以把处理器注册到操作队列中，直接在回调方法中获得格式化以后的数据。在示例工程中就使用了JSON处理器：把AFJSONRequestOperation注册到操作队列里。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382500994/" title="2013-10-20-7 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7419/10382500994_16a83e90d4.jpg" width="464" height="192" alt="2013-10-20-7"></a></p>
-
-<p>图3，AFN示例代码，初始化自定义的HTTPClient（出自：AFAppDotNetAPIClient.m）</p>
-
-<p>而ASI在这方面显得更原始，没有针对任何数据类型做特别封装，只是预留了各种接口和工具供开发者自行扩展。ASI比AFN提供更多扩展功能还有一个原因，它把许多内部用到的功能也抽象成类和方法。例如：
-ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用于压缩本地文件，构造POST Body和解压缩返回数据，但这两个类仍然被设计为独立功能，提供了对多种数据结构进行压缩和解压缩的方法。</p>
-
-<p>对比二者的高级功能和对扩展的支持后，可以看出AFN把初级功能（或者叫常用功能）做到了90分。调用方式够简单，处理器够丰富，使用者用起来可以算是轻松加愉快。但它放弃了对高级功能的支持，要满足较复杂的需求，就要大费周折了，在这方面最多只有40分。而ASI显然不满足于做好初级功能，但为了提供更丰富的可扩展接口，导致初级功能用起来也要花上一些力气。虽然ASI单独提供了支持Amazon S3和Rackspace Cloud Files的控件，但对于生在红旗下的我朝开发者来说基本没用，所以在初级功能的支持上ASI能得个70分，牺牲了初级功能的易用性，换来的是良好的扩展性，在高级功能的使用上远远好于AFN，也能得个70分。</p>
-
-<p>从使用角度对比过后，基本上对这两个项目有一个整体上的认识，再深入下去看看二者的性能如何。</p>
-
-<h3>3、性能对比</h3>
-
-<p>我分别用AFN和ASI进行了测试，测试环境如下：iPhone5，联通3G信号全满，室内静止状态，请求国内双线机房独立服务器的静态文件，1~20K共20个文件，每个文件请求20次，记录从创建请求到完全下载文件的耗时，结果如下：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705653/" title="2013-10-20-8 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3715/10382705653_fa58c22d18.jpg" width="464" height="146" alt="2013-10-20-8"></a></p>
-
-<p>图4，AFN连续访问1 ~ 20K文件耗时</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382545196/" title="2013-10-20-9 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7296/10382545196_4c6f799013.jpg" width="464" height="146" alt="2013-10-20-9"></a></p>
-
-<p>图5，ASI连续访问1 ~ 20K文件耗时</p>
-
-<p>图4是AFN的记录图，绿色为20次请求中耗时最久的一次，蓝色为耗时最短的一次，黄色为去除最大值和最小值的18次平均值。从这个图可以看出，AFN最开始创建对象耗时近2.5秒，随后稳定下来，在3K、7K、15K和20K时出现了抖动。图5是ASI做相同测试的结果，首次创建对象近2.25秒，略优于AFN，同样在5K、11K、13K、14K和16K发生了一些抖动，但抖动幅度似乎小于AFN，可见稳定性更好一些。
-下边是把二者的测试结果放在一起的对比图，可以更直观的比较二者的区别。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382500714/" title="2013-10-20-10 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7317/10382500714_0725ae4480.jpg" width="464" height="147" alt="2013-10-20-10"></a></p>
-
-<p>图6，ASI和AFN耗时最大值对比</p>
-
-<p>图6的最大值对比可以更明显的看出二者的抖动对比，ASI略好一些。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382525995/" title="2013-10-20-11 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5476/10382525995_1a6cd98274.jpg" width="464" height="146" alt="2013-10-20-11"></a></p>
-
-<p>图7，ASI和AFN耗时最小值对比</p>
-
-<p>图7的最小值对比可以看出，在每一个大小的测试中ASI的最佳性能似乎都要优于AFN。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382705193/" title="2013-10-20-12 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2880/10382705193_25f55ba5b3.jpg" width="464" height="147" alt="2013-10-20-12"></a></p>
-
-<p>图8，ASI和AFN耗时平均值对比</p>
-
-<p>图8是耗时平均值的对比，更能够说明问题。文件小于12K的测试中ASI的性能优势并没有非常明显，超过12K以后，ASI优势开始明显起来，每一次请求都要比AFN节约20% ~ 30%，近0.1秒。同时从这张图上还可以看出，随着下载文件变大，请求耗时并不是线形增长的，这是由于一次请求大部分时间都消耗在建立连接上，而真正接收数据只占用了极少时间，这个问题不在本篇文章的讨论范围，所以不多说，有兴趣的读者可以<a href="http://segmentfault.com/t/ios">移步</a>进一步讨论。</p>
-
-<h3>4、原理分析</h3>
-
-<p>ASI的性能似乎全面优于AFN，那下边从二者的实现原理上看一下到底是什么原因造成这种差距。ASI基于CFNetwork框架开发，而AFN基于NSURL，底层的区别是导致二者性能差距的重要原因之一。</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10382544986/" title="2013-10-20-13 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7325/10382544986_92a3d7bf99.jpg" width="464" height="289" alt="2013-10-20-13"></a></p>
-
-<p>图9，ASI和AFN以及底层框架的关系</p>
-
-<p>我们知道所有网络通信的基础是Socket，一个Socket与另一个连接并传送数据。BSD Socket是一类最常见的Socket抽象接口。</p>
-
-<p>Core Foundation框架中的CFSocket就是基于BSD Socket开发的。它几乎涵盖了BSD Socket的全部功能，更重要的是把Socket整合到事件的处理循环中。Core Founda-tion中较高层的CFStream是基于CFSocket开发的读写流支持。</p>
-
-<p>CFNetwork是基于Core Foundation中CFStream的一个底层高性能网络框架，它由提供基础服务的CFSocketStream，支持HTTP协议的CFHTTP，基于CFHTTP用于身份认证的CFHTTPAuthentication和支持FTP协议的CFFTP组成。</p>
-
-<p>正如图9所示，ASI是基于CFHTTP开发的一个组件；而AFN的基础——NSURL，也是基于CFNetwork开发的。也就是说ASI相比AFN更加底层，这就从一定程度上造成二者的性能差距。
-另一个方面，虽然二者都使用NSOperation和NSOperationQueue实现但底层的区别也导致实现方式上有非常大的差别。</p>
-
-<p>ASI的直接操作对象ASIHTTPRequest是NSOperation的子类，实现了NSCopying协议。在initialize和initWithURL:方法中初始化相关属性并配置一系列请求相关参数默认值。此外，ASIHTTPRequest还提供了一系列的实例方法用来配置请求对象。在异步请求的处理上，ASIHTTPRequest对象初始化结束后，在startAsynchronous方法中把对象加入共享操作队列。此后，包括创建CFHTTPMessageRef，也就是处理网络请求的主要对象（事实上是一个指向__CFHTTPMessage结构的指针），在内的所有操作都在ASIHTTPRequest对象所属的子线程中完成。</p>
-
-<p>AFN的直接操作对象AFHTTPClient不同于ASI，是一个实现了NSCoding和NSCopying协议的NSObject子类。AFHTTPClient是一个封装了一系列操作方法的“工具类”，处理请求的操作类是一系列单独的，基于NSOperation封装的，AFURLConnectionOperation的子类。AFN的示例代码中通过一个静态方法，使用dispatch_once()的方式创建AFHTTPClient的共享实例，这也是官方建议的使用方法。在创建AFHTTPClient的初始化方法中，创建了OperationQueue并设置一系列参数默认值。在getPath:parameters:success:failure方法中创建NSURLRequest，以NSURLRequest对象实例作为参数，创建一个NSOperation，并加入在初始化发方中创建的NSOperationQueue。以上操作都是在主线程中完成的。在NSOperation的start方法中，以此前创建的NSURLRequest对象为参数创建NSURLConnection并开启连结。</p>
-
-<p>在异步回调的处理上二者也有区别，ASI采取的是CFHTTP请求完成，直接回调ASIHTTPRequest的实例方法，通过储存的实例对象记录的信息完成Delegate模式或Block模式的回调。而AFN则直接使用了NSOperation的completionBlock属性。</p>
-
-<p>这些实现方式也可以看出，ASI显得更加底层，并没有过多使用Cocoa框架中已经封装的API，而AFN则更加实用主义，逻辑简单清晰，大量使用了框架API。这一点也是造成二者性能差别的原因之一。</p>
-
-<h3>总结</h3>
-
-<p>通过以上的对比，基本可以这样评价：AFN适合逻辑简单的应用，或者更适合开发资源尚不丰富的团队，因为AFN的易用性要比ASI好很多，而这样的应用（或团队）对底层网络控件的定制化要求也非常低。ASI更适合已经发展了一段时间的应用，或者开发资源相对丰富的团队，因为往往这些团队（或他们的应用）已经积累了一定的经验，无论是产品上还是技术上的。需求复杂度就是在这种时候高起来，而且底层订制的需求也越来越多，此时AFN就很难满足需求，需要牺牲一定的易用性，使用ASI作为网络底层控件。SegmentFault开源客户端现在被设计为一款简单的阅读客户端，几乎没有定制要求，因此，目前我选择了AFN作为网络控件。
-以上对ASI和AFN两款最常用的iOS底层网络控件做了初步的介绍，要更深入的了解两款控件，还需要大家继续研究各自的源码。大家遇到任何关于iOS的技术问题都可以在<a href="http://segmentfault.com/t/ios">这里</a>进行讨论。另外大家也可以持续关注SegmentFault的开源客户端，与更多的开发者共同探讨iOS开发技术。</p>
-
-<p>作者简介</p>
-
-<p>高嘉峻（微博：@gaosboy），SegmentFault.com联合创始人，杭州iOS开发者沙龙发起人，资深iOS开发者。</p>
-
-<p><a href="http://www.infoq.com/cn/articles/afn_vs_asi">http://www.infoq.com/cn/articles/afn_vs_asi</a></p>
 ]]></content>
   </entry>
   

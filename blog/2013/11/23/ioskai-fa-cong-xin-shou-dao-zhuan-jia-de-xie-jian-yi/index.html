@@ -5,20 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category 巧用-调试程序 - Saick Blog - 专注技术，乐在其中</title>
+  <title>iOS开发：从新手到专家的一些建议 - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category可以用来调试 除了隐藏私有方法外，我主要用它截住函数。 例1：测试时我想知道TableViewCell有没有释放，就可以这样写 1
-2
-3
-4
-5
-6
-7
-8
-9
-@implementation UITableViewCell(dealloc) -(void)dealloc { &hellip;">
+  <meta name="description" content="Origin 虽然你有可能在一周内学习到iOS开发的本质，但想要精通iOS开发需则要花费更长的时间。问题是你如何从新手变成专家？在这篇文章中，我们主要就这个主题给出一些建议（如果你有好的建议和相关文章欢迎分享给更多开发者） 1.练习，练习还是练习 iOS开发没有捷径可走。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -27,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">
+  <link rel="canonical" href="http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -91,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Category 巧用-调试程序</h1>
+      <h1 class="entry-title">iOS开发：从新手到专家的一些建议</h1>
     
     
       <p class="meta">
@@ -107,65 +98,59 @@
   
 
 
-<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-11-23T17:32:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>Category可以用来调试</h3>
+<div class="entry-content"><p><a href="http://www.cocoachina.com/applenews/devnews/2013/1118/7371.html">Origin</a></p>
 
-<p>除了隐藏私有方法外，我主要用它截住函数。</p>
-
-<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
+<p>虽然你有可能在一周内学习到iOS开发的本质，但想要精通iOS开发需则要花费更长的时间。问题是你如何从新手变成专家？在这篇文章中，我们主要就这个主题给出一些建议（如果你有好的建议和相关文章欢迎分享给更多开发者）</p>
 
 <!-- more -->
 
 
+<h3>1.练习，练习还是练习</h3>
 
+<p>iOS开发没有捷径可走。这是我在继续这个话题之前需要强调的东西，因为摆脱任何常常浮现于你脑海的幻想很重要。如果你仅仅在星期天的4PM和5PM之间学习/练习编程，那么你不会成为一个熟练的iOS开发者。不要误会我的意思，这么做可能会很有趣，但是它很难让你成为一个老练的专业的iOS开发者。除了极少数的人，大部分人都需要不断的练习和实践。如果你还没有准备好投入大量时间，这时候最好重新审视你的目标和理想。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UITableViewCell(dealloc) 
-</span><span class='line'>-(void)dealloc 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(@"%@",NSStringFromSelector(_cmd)); 
-</span><span class='line'>    NSArray *array = allSubviews(self);       // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有
-</span><span class='line'>    NSLog(@"%@",array); 
-</span><span class='line'>    [super dealloc]; 
-</span><span class='line'>}
-</span><span class='line'>@end </span></code></pre></td></tr></table></div></figure>
+<h3>2.向其他人学习</h3>
 
+<p>提升开发技能和采用最佳实践的最好策略之一是学习别人的代码。这不仅仅意味着浏览Stack Overflow，但更重要的是其他开发者的各种开源类库和代码片段。</p>
 
-<p>其它的类也可以这样写，你随便输出什么</p>
+<p>不管何时你一头扎进各种类库的学习，比如AFNetworking或者Magical Record，很关键的一点是不要被各种代码淹没。有可能你不理解各种库中的代码，但这不是真正的关键，重点是从一个更高的层次来看源码和尽可能多地学习，比如<em>命名规范</em>、<em>最佳实践</em>&amp;以及<em>设计模式</em>等。</p>
 
-<p>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：</p>
+<p>除了学习别人的代码外，创建你自己的类库是一个最好的学习方法。不久前，我用Core Data作为数据层开发了一款app，我没有使用Magical Record，我决定通过学习Magical Record创建自己的库，并重新创建了我需要的功能。这种方法不仅帮我创建了一个更加灵活的库，也让我学习到很多Magical Record内部的工作原理。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> @implementation UITableView(setframe) 
-</span><span class='line'>-(void)setFrame:(CGRect)frame 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(%"%@",self); 
-</span><span class='line'>    [super setFrame: frame]; 
-</span><span class='line'>} 
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+<h3>3. 不要仅仅复制和粘贴</h3>
 
+<p>这一点让我看到了正确学习方式的另一个关键面：不要不动脑子简单地复制和粘贴。我们常常会使用我们在Stack Overflow或者苹果开发者论坛找到的各种代码片段，但是不要为了偷懒简单地复制粘贴你从网络上找到的代码，这样你很难彻底理解它。最大的危险在于这可能会导致意外的行为，以致于你的代码以后都很难调试和修复。</p>
 
-<p></p>
+<p>有时候，复制别人的代码片段看着可能已经解决了你遇到的问题，但是我强烈建议不要这么做。阅读代码，理解你往代码库添加的东西，可能的话定制你需要的解决方案。不用说，这并不适用于开发者积极维护的库或框架。在项目中使用Magical Record前，如果你需要仔细检查它，那么我确信你已经理解了不同之处。使用你自己的常识。</p>
+
+<h3>4. 模式</h3>
+
+<p>Cocoa和Objective-C在很多方面都不同于其他编程语言和环境。这意味着他们有自己独特的模式和最佳实践。我确信你已经熟悉了一些常见的模式，比如委托和通知。但还有很多模式可以开发过程中帮助你，比如单例模式、观察者模式以及通用模式等。Cocoa Fundamentals Guide很好地概述了Cocoa中大部分常用模式。</p>
+
+<h3>5.了解你的工具</h3>
+
+<p>作为一个开发者并不仅仅是理解语言和框架，理解你每天使用的工具同样重要。对于iOS开发来说，这意味着你需要很好地理解Xcode和其他可能用到的工具，比如PonyDebugger和Charles。如果你想学习一些额外的技巧，你可能会对我此前的一篇文章（iOS Quick Tip: 7 Tips to Speed Up Your Development）感兴趣。</p>
+
+<h3>6.与时俱进</h3>
+
+<p>即使你不能参加苹果一年一度的开发者大会&mdash;WWDC，但浏览大量的会议视频是个很好的学习方法，你可以观看你感兴趣的专题视频，它们都是由在某方面擅长的工程师演讲，他们可以告诉你一些细节信息以及相关使用说明。另外，你还可以多关注优秀的开发者，他们会定期写一些技术文章，比如比如Matt Gemmell、 Aaron Hillegass以及Mike Ash，你可以在我为Mobiletuts+写的这篇“Where To Go Next”文章中找到更多学习资源。</p>
+
+<h3>7.学习其他语言</h3>
+
+<p>我已经注意到学习新语言或者使用新框架让我对软件开发的整体理解有了明显提高。这种方法的优点在于不会限制你对最熟悉语言的认知和它潜在可能性的理解。我最近在研究Ember.js，并了解到它的创建者 Yehuda Katz和Tom Dale是从Cocoa获得的灵感。Ember.js对mvc的实现并没有遵循JavaScript framework，不过如果你熟悉cocoa的话，就不会感觉到奇怪了。</p>
+
+<p>对于软件开发来说，没有最好的语言，每种语言都有自己的优势和劣势。但是好的一面在于或多或少他们都有所不同，这使得学习新语言变得更加有趣和更有启发性。比如对我来说，Ruby在写DRY (Don’t Repeat Yourself)、易读的、干净的代码方面让我大开眼界。</p>
+
+<h3>总结</h3>
+
+<p>如果你不想花费时间成为一个更好的程序员，那么你可能要重新考虑下为什么你把成为一个程序员摆在首位。但如果你会因为一个可以帮你的新类库或者开发工具而兴奋，那么随着时间的流逝，你在提高自身技能方面可能不会有什么问题。你真的必须热爱你所做的事情，并在这面擅长，这一点尤其适用于编程。不管什么人告诉你，你不会在一夜之间成为一个老练的开发者，但如果你保持不间断的学习，并细心打磨自己的“手艺”，我想你的技术会有很好的提高。</p>
 </div>
 
 
@@ -188,7 +173,7 @@
   
 
 
-<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2013-11-23T17:32:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
       
 
 <span class="categories">
@@ -206,7 +191,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/" >Tweet</a>
   
   
   
@@ -233,10 +218,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" title="Previous Post: iOS 开发常见低级错误">&laquo; iOS 开发常见低级错误</a>
+        <a class="basic-alignment left" href="/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/" title="Previous Post: iOS Quick Tip: 7 Tips to Speed Up Your Development">&laquo; iOS Quick Tip: 7 Tips to Speed Up Your Development</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" title="Next Post: Property 使用注意事项">Property 使用注意事项 &raquo;</a>
       
     </p>
   </footer>

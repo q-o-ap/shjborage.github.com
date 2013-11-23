@@ -283,12 +283,18 @@
         <lastmod>2013-11-23T17:10:38+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/
+        </loc>
+        <lastmod>2013-11-23T17:34:53+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-11-23T17:10:38+08:00</lastmod>
+        <lastmod>2013-11-23T17:34:53+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -300,7 +306,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-11-23T17:10:38+08:00</lastmod>
+        <lastmod>2013-11-23T17:34:53+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

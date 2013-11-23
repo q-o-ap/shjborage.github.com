@@ -5,20 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category 巧用-调试程序 - Saick Blog - 专注技术，乐在其中</title>
+  <title>Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category可以用来调试 除了隐藏私有方法外，我主要用它截住函数。 例1：测试时我想知道TableViewCell有没有释放，就可以这样写 1
-2
-3
-4
-5
-6
-7
-8
-9
-@implementation UITableViewCell(dealloc) -(void)dealloc { &hellip;">
+  <meta name="description" content="转自：http://mmz06.blog.163.com/blog/static/121416962011111210462288/ 引入 在做j2ee开发的时候，会用到log4j或其它类似工具去记录程序运行日志，以便调试时或在程序运行出错后，通过日志查询出错原因。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -27,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/">
+  <link rel="canonical" href="http://saick.net/blog/page/7/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -86,12 +77,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">Category 巧用-调试程序</h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/">在iOS中使用重定向，把控制台内容写入文件中</a></h1>
     
     
       <p class="meta">
@@ -107,165 +101,42 @@
   
 
 
-<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2012-07-11T17:39:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>Category可以用来调试</h3>
+  <div class="entry-content"><p>转自：<a href="http://mmz06.blog.163.com/blog/static/121416962011111210462288/">http://mmz06.blog.163.com/blog/static/121416962011111210462288/</a></p>
 
-<p>除了隐藏私有方法外，我主要用它截住函数。</p>
+<h3>引入</h3>
 
-<p>例1：测试时我想知道TableViewCell有没有释放，就可以这样写</p>
+<p>在做j2ee开发的时候，会用到log4j或其它类似工具去记录程序运行日志，以便调试时或在程序运行出错后，通过日志查询出错原因。那在IOS开发中是否有类似的方式来记录日志呢？下面将简单的说明：</p>
 
-<!-- more -->
+<h3>说明</h3>
 
+<p>在Objective-c开发程序的时候，有专门的日志操作类NSLog，它将指定的输出，输出到（stderr）,我们可以利用Xcode的日志输出窗口，那么既然是要记录到具体日志文件，我们就想输出日志写入到具体的日志文件即可。</p>
 
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UITableViewCell(dealloc) 
-</span><span class='line'>-(void)dealloc 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(@"%@",NSStringFromSelector(_cmd)); 
-</span><span class='line'>    NSArray *array = allSubviews(self);       // allSubviews是cookBook里的函数，可以取一个view的所有subView ,在这个文档后面也有
-</span><span class='line'>    NSLog(@"%@",array); 
-</span><span class='line'>    [super dealloc]; 
-</span><span class='line'>}
-</span><span class='line'>@end </span></code></pre></td></tr></table></div></figure>
-
-
-<p>其它的类也可以这样写，你随便输出什么</p>
-
-<p>例2：我调试程序，觉得table的大小变了，想找到在哪改变的，这样做：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> @implementation UITableView(setframe) 
-</span><span class='line'>-(void)setFrame:(CGRect)frame 
-</span><span class='line'>{ 
-</span><span class='line'>   NSLog(%"%@",self); 
-</span><span class='line'>    [super setFrame: frame]; 
-</span><span class='line'>} 
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
-
-      
-
-
-
-
-
-
-
-
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/">Read on &rarr;</a>
+    </footer>
   
 
 
-<time datetime="2013-05-28T10:52:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
-  
-</span>
-
-  
-    </p>
-    <p class="meta">
-	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
-    </p>
+  <div class="pagination">
     
+    <a href="/blog/archives">Blog Archives</a>
     
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" >Tweet</a>
-  
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-  
-  
-  <!-- JiaThis Button BEGIN -->
-  <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_googleplus">Google+</a>
-    <a class="jiathis_button_renren">人人网</a>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
+    <a class="next" href="/blog/page/6/">Newer &rarr;</a>
+    
   </div>
-  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
-  <!-- JiaThis Button END -->
-
 </div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" title="Previous Post: iOS 开发常见低级错误">&laquo; iOS 开发常见低级错误</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" title="Next Post: Property 使用注意事项">Property 使用注意事项 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section id="comment">
-    <h1>Comments</h1>
-    
-<!-- Duoshuo Comment BEGIN -->
-    <div class="ds-thread"></div>
-    <script type="text/javascript">
-    var duoshuoQuery = {short_name:"saick"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = 'http://static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-        || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-<!-- Duoshuo Comment END -->
-
-  </section>
-
-
-
-</div>
-
 <aside class="sidebar">
   
     
@@ -275,7 +146,7 @@
 var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColor="light",sText="填写您的邮件地址，订阅精彩内容：" ;;
 </script>
 <script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>
--->
+&#8211;>
 
 <!--QQ邮件列表订阅嵌入代码--><a target="_blank" href="http://list.qq.com/cgi-bin/qf_invite?id=cd51c6966346e0f99d051042a4e333ff2c27e747e9bbec00"><img alt="填写您的邮件地址，订阅我们的精彩内容：" border="0" src="http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_light_l.png"/></a>
 
@@ -375,7 +246,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 
   
 </aside>
-
 
     </div>
   </div>
