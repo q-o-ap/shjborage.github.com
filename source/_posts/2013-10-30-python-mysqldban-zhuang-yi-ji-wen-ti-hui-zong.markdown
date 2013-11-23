@@ -1,6 +1,6 @@
 ---
 layout: post
-title: " python MySQLdb安装以及问题汇总"
+title: "Python MySQLdb安装以及问题汇总"
 date: 2013-10-30 23:17
 comments: true
 categories: python Database
