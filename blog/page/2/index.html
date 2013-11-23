@@ -9,9 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="解决办法:
-sudo vim /etc/paths 将路径添加到里面去， 一行一个路径 注意：即便添加成功，未必运行成功；在制定路径下得脚本必须具是executable, 否则就会被在搜索时被忽略。
-sudo chmod +x XXX 而在Ubuntu下，则只需要修改/etc/.profile或者 &hellip;">
+  <meta name="description" content="曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
+PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用0.0.0.0这个来监听所有IP地址， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +80,45 @@ sudo chmod +x XXX 而在Ubuntu下，则只需要修改/etc/.profile或者 &helli
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/">IP地址，0.0.0.0 监听，所有地址</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-25T01:07:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
+PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用<strong>0.0.0.0</strong>这个来监听所有IP地址，解决这个问题。</p>
+
+<p>不能再出现同样的问题了，不用怕被别人笑话，哈哈</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -526,54 +564,6 @@ sudo chmod +x XXX</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/19/ios-cookieshi-yong/">iOS Cookie使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-19T01:08:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>转自：<a href="http://geeklu.com/2013/04/ios-cookie/">http://geeklu.com/2013/04/ios-cookie/</a></p>
-
-<p>关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
-和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。
-一个Cookie对应一个NSHTTPCookie实体，并通过NSHTTPCookieStorage进行管理。
-那些需要持久化的Cookie是存放在 ~/Library/Cookies/Cookies.binarycookies 文件中的，二进制格式。</p>
-
-<p>Cookie生成的有两个途径，一个是访问一个网页，这个网页返回的HTTP Header中有Set-Cookie指令进行Cookie的设置，这里Cookie的本地处理其实是由WebKit进行的；还有一种途径就是客户端通过代码手动设置Cookie。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/19/ios-cookieshi-yong/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -607,7 +597,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (36)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (37)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -618,6 +608,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/">Autolayout及VFL经验分享</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/">iOS开发：从新手到专家的一些建议</a>
@@ -633,10 +627,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">深入浅出 Cocoa 多线程编程之 block 与 dispatch quene</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/">iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-11-23T17:43:36+08:00</updated>
+  <updated>2013-11-23T18:11:26+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,224 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Autolayout及VFL经验分享]]></title>
+    <link href="http://saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/"/>
+    <updated>2013-11-23T17:53:00+08:00</updated>
+    <id>http://saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang</id>
+    <content type="html"><![CDATA[<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1108/7322.html">Origin</a></p>
+
+<p>这篇不是什么教程, Cocoa autolayout出来蛮久了。以前多次想去深入研究一下，每次都很蛋疼无序。这东西是在有些搞。尤其习惯了code写布局的。看到Visual format language，简直要掀桌子。搜教程，满世界都是，没有一个讲得透彻的。例子空洞。你们就只会３个控件横向布局对法？浑浑噩噩看了多篇。有了点总结。槽不多吐了。简单讲讲。</p>
+
+<!--more-->
+
+
+<h3>Autolayout，开始于iOS6.0</h3>
+
+<h4>一.什么时候用autolayout比较适合</h4>
+
+<ul>
+<li>１.不负责任的骑墙派说法：apple的设备越来越多了，你的应用应该都使用al。（并且用sb）</li>
+<li>２.要看应用内容决定。如果你的内容是信息众多，同时需要展示的类别也很多，尺寸动态不定，甚至这些是在列表中的。（如社交应用）。Al能给于很大的帮助。</li>
+<li>３.Mac os的应用。现在都做iOS了。mac app的窗口，会有大小变化。al比较合适。</li>
+<li>４.支持多向转屏的iPad应用。（有需要支持多方向iphone场景么？那么长，脑残了？）</li>
+<li>５.其他业务不复杂,页面较少的应用，其实，cocoa程序员写了多年code都有自己的ui编程习惯，这些习惯对于他们来说是很高效的。就算是第一项所说，布局的坐标都是相对的。</li>
+</ul>
+
+
+<p>如果是习惯于code写布局的，建议可以继续沿用，同时也要学习al。自我感觉al和传统布局写法，工作量不会相差太多。但是VFL用熟练了以后会有很大的改善。</p>
+
+<h4>二.autolayout的基础理论</h4>
+
+<p>al的核心出发点是</p>
+
+<ul>
+<li>1.view具有自我计算尺寸，布局的能力。通过它自身的内容，能够得到尺寸。</li>
+<li>2.view的布局位置，确定于它与superview及其他view的关系。</li>
+<li>3.与传统的autoresizingmask自适应相比，al更精确，能绝对的确定view的布局。</li>
+<li>4.view不一定需要一个初始的rect。al中，view如果有足够的constraint，便可以确定自己的尺寸和位置，并且知道自己和其他view的关系。即，想确定view的布局，就给它（们）添加constraint。</li>
+</ul>
+
+
+<h4>三.xib下的autolayout</h4>
+
+<p>似乎al和xib布局模式生来就是要搞在一起的。用xib加al，view布局非常简单容易。编程工作立刻变成了美工的连线拼图游戏。</p>
+
+<p>开启xib或者sb后，选择需要view(s)。选择menu的Editor，选择Pin。子菜单的项目就是可用的constraints。</p>
+
+<p>Width:固定自身宽度</p>
+
+<p>Height:。。。</p>
+
+<p>H- Spacing: 固定两个view的水平间距</p>
+
+<p>V- Spacing:。。。</p>
+
+<p>下面４个分别是view相对于superview的左、右、上、下的间距</p>
+
+<p>Widths Equally:两个view保持宽度相同</p>
+
+<p>Heights Equally:。。。</p>
+
+<p>xib界面右下角工具条也有可以编辑constraint的方式：</p>
+
+<p>每个constraint添加后都是可以编辑的。选中某个constraint后开启右边栏选inspector。可以修改数值。（这个数值是view间的偏移量）和优先级。</p>
+
+<p>自己慢慢拖着玩去。这不是傻瓜教程。点到位，自己研究。</p>
+
+<p>xib下的al比较直观。可以基本看到效果和误差值。还有不正确的constraint的提示。少了constraint编译器会补，多了会提示报错。（不过都会引起界面布局不对，自己慢慢调吧，哥现在还是满篇alert，没有让编译器感觉矛盾费解的constraint，都是可以work的。）</p>
+
+<p>还有resolve的方式解决constraint的问题，抱歉，我不会。</p>
+
+<h4>四.编码方式使用autolayout</h4>
+
+<p>对于页面不多，的普通应用。xib/sb加al。拖拖拽拽。娱乐中就可以完成UI的工作。al的确给于了不少方便。</p>
+
+<p>不过多年的强迫症程序猿怎么会忍受这种很逊的方式。（拖积木？不敲代码？好像一天没做事。）</p>
+
+<p>1.Visual format language　（应该不算语言）
+Apple的工程师很有爱，发明了这种哭笑不得的象形文字。感觉它就是种解析方式。</p>
+
+<p>Apple的官方文档给出了少之又少的文档和坑爹的例子。（视频我没看，不知道怎么样）网上的同学们也写了点不痛不痒的几句代码。你这是学了１＋１就让人搞微积分的节奏么？要写不写清楚，不如不写。</p>
+
+<p>从厚道的老外那看了几篇。自己体会了些，分享给大家。只是个基本水平吧，会了这些，代码写al应该没有问题了。深入的我也还不会，希望遇到更有爱的牛人分享。</p>
+
+<p>VFL在程序中由支持：</p>
+
+<p><code>
++ (NSArray *)constraintsWithVisualFormat:(NSString *)format options:(NSLayoutFormatOptions)opts metrics:(NSDictionary *)metrics views:(NSDictionary *)views;   
+</code></p>
+
+<ul>
+<li>它返回一组constraint.</li>
+<li>format是你的VFL字串，等下讲。</li>
+<li>opts自己点去头文件看。有些情况会用，等下有例子。</li>
+<li>metrics是一个奇妙的字典，是你自己定义的。这个字典里面的key可以写在format字串中。编译器解析时，自动替换为metrics字典中的value。等下有例子。</li>
+<li>views是需要constraint关系的所有view.(也可以是一个)</li>
+</ul>
+
+
+<p>2.VFL例子</p>
+
+<p>写vfl字串的时候，脑海里要想象出画面的合理性。不合理的constraint会导致程序运行时报错或者直接崩溃。</p>
+
+<p>随便写几个</p>
+
+<p><code>
+NSDictionary *dict1 = NSDictionaryOfVariableBindings(_boxV,_headerL,_imageV,_backBtn,_doneBtn);   
+NSDictionary *metrics = @{@"hPadding":@5,@"vPadding":@5,@"imageEdge":@150.0};   
+NSString *vfl = @"|-hPadding-[_boxV]-hPadding-|";   
+NSString *vfl0 = @"V:|-25-[_boxV]";   
+NSString *vfl3 = @"V:|-vPadding-[_headerL]-vPadding-[_imageV(imageEdge)]-vPadding-[_backBtn]-vPadding-|";   
+</code></p>
+
+<p>dict1就是api 中需要的最后一个参数views。由上述宏来完成。</p>
+
+<p>metrics定义了一些vfl中要用的参数。
+下面有些vfl字串，一看便知如何使用metrics。</p>
+
+<p>看到：</p>
+
+<p>1) &ldquo;|"表示superview. |-间距-[view1对象名]&ndash;(>=20)&ndash;[view2对象名] 不写H/V就表示横向，间距可以写固定值也可写>/&lt;。形象化的理解，&rdquo;|&ldquo;是用来确定view上、下、左、右关系的。 想要确定从上到下的关系，就加V:|。那么这个vfl字串就可以描述从上到下的view们的关系。</p>
+
+<p>2) 看到vfl3里面，方括号表示view，圆括号表示尺寸数值。支持大小等于。或者另一个view　|&ndash;[view1(view2)]，v１的宽度等于v２。</p>
+
+<p>3) 优先级用＠表示。如V:|-50@750-[view(55)]，或者写到metrics里面更好。 具体定义查看UILayoutPriority。有几个固定的数值。1000表示必须支持。</p>
+
+<p>4) options，这个要看具体需要。如果是竖排V布局，可以添加NSLayoutFormatAlignAllLeft，让他们对齐。根据需要也可以添加按位或NSLayoutFormatAlignAllLeft | NSLayoutFormatAlignAllRight。（鬼知道什么需要，自己看经验吧）</p>
+
+<p>5) 写好以后一般把constraint添加给superview：</p>
+
+<p><code>
+NSString *vfl1 = @"|-hPadding-[_headerL]-hPadding-|";   
+[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:vfl1 options:0 metrics:metrics views:dict1]];   
+</code></p>
+
+<p>6)还有一个api用于生成单个constaint</p>
+
+<p><code>
++(id)constraintWithItem:(id)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;  
+</code></p>
+
+<p>对于参数，记得，view1.attr1 = view2.attr2 * multiplier + constant就好。
+这个是不用VFL的，好理解，但是不方便。如果用这个写。工作两不会比传统布局少多少。</p>
+
+<h4>五.实际操作中的问题</h4>
+
+<p>上面都是理论，世界操作会有些奇怪的问题要注意。这节才是重点。</p>
+
+<p>xib模式，没啥要注意的，xib里报warning就报吧，我也不知道怎么弄，一切正常就好。</p>
+
+<p><strong>编码模式中，注意</strong></p>
+
+<ul>
+<li>1.addConstraint(s)前，view应该去部被addSubView上去了。</li>
+<li>2.不必给views写frame</li>
+<li>3.给必要的view关掉AutoresizeingMask。[_aView setTranslatesAutoresizingMaskIntoConstraints:NO];</li>
+<li>4.UILabel换行要写linebreakMode,要写numberOfLines(iOS7.0默认好像是1，坑爹了)</li>
+<li>5.UILabel要想换行，一定要添加preferredMaxLayoutWidth。否则没法初始化宽度。</li>
+</ul>
+
+
+<p>编码模式感受到的最大方便。label换行不用写行高计算了。完全自动适应。label所在的superview也会自动计算rect。这才是al的精华。</p>
+
+<p>所以，可以不用写这些了：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/*&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>if([[UIDevice currentDevice].systemVersion floatValue]&lt;7.0){  
+</span><span class='line'>    CGSize titleS = [title sizeWithFont:[_headerL font]  
+</span><span class='line'>                       constrainedToSize:CGSizeMake(270.0, CGFLOAT_MAX)  
+</span><span class='line'>                           lineBreakMode:NSLineBreakByWordWrapping];  
+</span><span class='line'>
+</span><span class='line'>    _headerL.frame = CGRectMake(_headerL.frame.origin.x, _headerL.frame.origin.y,  
+</span><span class='line'>                                _headerL.frame.size.width, titleS.height);  
+</span><span class='line'>}else{  
+</span><span class='line'>    CGRect titleR = [title boundingRectWithSize:CGSizeMake(270.0, CGFLOAT_MAX)  
+</span><span class='line'>                                        options:NSStringDrawingUsesLineFragmentOrigin  
+</span><span class='line'>                                     attributes:nil  
+</span><span class='line'>                                        context:nil];  
+</span><span class='line'>    headerL.frame = CGRectMake(_headerL.frame.origin.x, _headerL.frame.origin.y,  
+</span><span class='line'>                               _headerL.frame.size.width, titleR.size.height);  
+</span><span class='line'>}  
+</span><span class='line'>*/
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>我遇到了些问题，至今没有解决：</p>
+
+<p>纯代码写的Viewcontroller 无法正常显示al布局。用空白的xib做了vc后，其余再用code写，就正常了。怀疑自己写的self.view，还需要针对autolayout做什么处理。至此，al，基本功能已经可以为你服务了。的确方便很多，建议还是使用VFL代码模式，熟练后能够提高很多效率。</p>
+
+<p>引用别的同学的评论：</p>
+
+<p><em>最后一个问题：可以试一下self.view=自定义的视图； 不要用[self.view addSubview:&hellip;];</em></p>
+
+<p><a href="https://www.dropbox.com/s/vizq53ig4e1z7io/20131123_AutoLayoutTest.zip">demo</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS开发：从新手到专家的一些建议]]></title>
@@ -1090,70 +1308,6 @@ dispatch_apply(5, globalQ, ^(size_t index) {</p>
 <p>GCD还有很多其他用法，可以参考官方文档<br/>
 参考的文档还有：<a href="http://en.wikipedia.org/wiki/Grand_Central_Dispatch  ">http://en.wikipedia.org/wiki/Grand_Central_Dispatch  </a>
 著作权声明：本文由<a href="http://blog.csdn.net/totogo2010/">http://blog.csdn.net/totogo2010/</a> 原创，欢迎转载分享。请尊重作者劳动，转载时保留该声明和作者博客链接，谢谢!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Dash：程序员的的好帮手]]></title>
-    <link href="http://saick.net/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/"/>
-    <updated>2013-10-27T20:08:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou</id>
-    <content type="html"><![CDATA[<p>现在最新版UI比以前好一些，不过总体差异不大。</p>
-
-<p>转自：<a href="http://blog.csdn.net/meegomeego/article/details/8798665">http://blog.csdn.net/meegomeego/article/details/8798665</a></p>
-
-<p>作为一Coder，每天最常见的动作就是查看各种API文档，你一定也有过同时打开N个窗口（HTML、PDF、CHM），不停的在编辑器与文档之间切换的感受吧？怎么说呢，其实我很讨厌这种枯燥无味的动作，那么如何才能提高效率，减少无用功呢？下面就给大家介绍一款非常好用的Mac小工具：<em>Dash</em>，相比这个英文名，我跟喜欢叫它“叮当猫”，嘿嘿。</p>
-
-<p><a href="http://itunes.apple.com/cn/app/dash-docs-snippets/id458034879?mt=12">点我直达AppStore介绍页面</a></p>
-
-<h3>功能简介</h3>
-
-<p>官方用一句话就概括了它的用途：Dash是一个API文档浏览器（ API Documentation Browser），以及代码片段管理工具（Code Snippet Manager）。你没看错，它就只有这两个功能，但确实是程序员（至少对于我来说）最为关心的特性，自己之前也用过了不少类似的工具，可以毫不夸张地说，Dash是它们之中做的最好的一个！</p>
-
-<!-- more -->
-
-
-<h4>强悍的API文档浏览、搜索功能</h4>
-
-<p>想必这个功能是大家最常用的了吧，每天要反复查看、搜索那么多的API细节，没有一个好工具，单靠自己的双手如何应付得来？窗口不停的切来切去，很烦啊！Dash采用集成单一窗口的方式，很好的解决了这个问题。看下面的截图：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511272486/" title="2013-10-27-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3789/10511272486_dc57f954a1.jpg" width="500" height="300" alt="2013-10-27-1"></a></p>
-
-<p>上图便是Dash的API浏览器主界面：左侧边栏是各种编程语言以及框架（取决于你下载安装了多少文档集合）的导航大纲，点击某个节点，右边的内容区域就是文档的详细信息啦，非常直观。也可以在左上方的搜索框内通过输入关键字，查找相关的API文档，非常类似全文检索的实现方式，Dash的响应速度非常快！关键是可以同时查询不同的语言、框架内容，实在是太方便了。看到这里你也许要问了，这跟我们平常切换到特定的文档窗口（比如一个PDF或者一个CHM文件），再ctrl + f查找有什么区别，不是多此一举吗？其实你错了，Dash可以通过快捷键来显示、隐藏文档窗口，它提供了配置界面以便用户自行设置（我比较习惯alt+space，因为其他软件很少用到这个组合键）：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306334/" title="2013-10-27-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7356/10511306334_106b3b2151.jpg" width="423" height="234" alt="2013-10-27-2"></a></p>
-
-<h4>Dash自带了丰富的API文档，涉及各种主流的编程语言和框架，全列出来很吓人的：</h4>
-
-<p>ActionScript, Android, C++, Cappuccino, Cocos2D, Cocos3D, Corona, CSS, Django, Groovy, HTML, Java, JavaFX, JavaScript, jQuery, Kobold2D, Lua, MySQL, Node.js, Man Pages, Perl, PHP, Python, Ruby, Ruby on Rails, Scala, Sparrow, SQLite, Unity 3D, WordPress, XSLT, XUL</p>
-
-<p>而且它的文档库采用了docset格式，高级用户基于网站提供的教程，很容易就能自行添加其他的扩充文档，其实Dash在最初发布的时候，只支持很少的几个文档浏览，好像只有Java、HTML、CSS这些，是后来通过用户不断贡献，以及作者及时的反馈（Rails API就是我通过Email与作者联系，请求添加的，作者非常nice），逐步壮大，才具备了如此广泛的语言、框架支持。要添加API文档，打开软件配置界面，切换到Docset选项卡即可看到所有内置的文档列表，按需要自行下载即可（如果是自己制作的docset，双击即可导入Dash）：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306294/" title="2013-10-27-3 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2845/10511306294_444ab45252.jpg" width="448" height="413" alt="2013-10-27-3"></a></p>
-
-<h3>牛逼、好用的代码片段管理功能</h3>
-
-<p>前面说完了Dash的文档查询功能，下面再来看一看它带给我们的另一个惊喜：代码片段管理。说到这里，之前的版本其实有个很不好的地方，就是如果不仔细琢磨一下，或者去看官方的帮助文档的话，用户是很难一眼就知道怎么用这个功能，新手引导做得确实不怎么样，不过最新版已经改善了这个问题，在主界面的导航边栏明确地给出了分类提示，创建或者修改代码片段都方便了许多。来看下面这个例子：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306354/" title="2013-10-27-4 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2856/10511306354_5e64bc1f92.jpg" width="500" height="427" alt="2013-10-27-4"></a></p>
-
-<p>利用Dash的代码片段管理功能，我们可以把日常使用频繁（也就是你经常需要复制粘贴）的代码保存起来，然后为其设置一个独一无二的缩写，这样一来原本需要一遍又一遍的敲击键盘重复录入的繁琐工作，就可以交给Dash来帮你搞定啦。比如上面截图中的例子，就是ExtJS中发起Ajax请求的代码片段，哪怕是copy &amp; paste，时间长了也会很烦的，我给它设置了一个缩写（ajax），以后在需要编写这段代码的时候，就只需要敲击这几个字母，它就会魔法般的出现在光标所在位置啦！很神奇吧？嘿嘿，其实这种扩展缩写的功能，还有很多软件都能做到，比如TextExpander（这个我也买了，半价14刀的时候，但是现在已经打入冷宫了，比较后悔），不过就用户体验和各种细节，诸如界面UI，特别是扩展占位符的处理上，目前还没有哪一个能比得过Dash的（Dash is the best!）。来看看使用代码片段的截图吧：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306264/" title="2013-10-27-5 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2885/10511306264_3e3709bce1.jpg" width="500" height="364" alt="2013-10-27-5"></a></p>
-
-<p>Dash的缩写扩展功能很强大，比方说上面那个例子，在保存代码片段的时候，你可以使用双下划线标明占位符，在执行扩展的时候就可以通过tab键来在各个占位符之间切换，根据需要输入实际的值，最后回车即可把片段粘贴到光标所在之处。除了占位符，它还支持下面这些变量符号：</p>
-
-<ul>
-<li> @clipboard 自动插入当前剪贴板中的内容</li>
-<li> @cursor 代码片段粘贴完毕之后，自动将光标定位到此处</li>
-<li> @date 自动插入当前日期</li>
-<li> @time 自动插入当前时间</li>
-</ul>
-
-
-<p>介绍到这里，各位看官，你应该已经深深滴爱上Dash了吧？每个苦逼的程序员，都应该有这么一只可爱贴心的叮当猫，您说是不是？其实个人不是很喜欢它的图标，实在是有点太诡异了，嘿嘿……</p>
-
-<p>最后再说一句，Dash在Mac App Store里面免费提供下载，不过作者包含了一个IAP（应用程序内购买）插件，作者挺幽默的，看介绍是说的Dash的双胞胎伙伴Pinky比较调皮，会时不时的跳出来打扰你一下，囧……反正我运行了一晚上，还没见到这只传说中的猫呢。其实这只不过是给你提供了赞助作者的机会，毕竟这么好的软件，如果经济条件允许，支持一下也无可厚非，同是软件开发者，其中的辛酸你我都懂的。</p>
 ]]></content>
   </entry>
   
