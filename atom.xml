@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-11-23T18:11:26+08:00</updated>
+  <updated>2013-11-24T23:46:01+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,290 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 7教程：浅析Text Kit]]></title>
+    <link href="http://saick.net/blog/2013/11/23/ios-7jiao-cheng-qian-xi-text-kit/"/>
+    <updated>2013-11-23T22:06:00+08:00</updated>
+    <id>http://saick.net/blog/2013/11/23/ios-7jiao-cheng-qian-xi-text-kit</id>
+    <content type="html"><![CDATA[<p>转自<a href="http://beyondvincent.com/blog/2013/11/12/121-brief-analysis-text-kit/">破船</a>的博客</p>
+
+<p>Text Kit是iOS 7中引入的一个新功能，非常值得开发者使用，下面先看看本文的目录结构：</p>
+
+<ul>
+<li>什么是Text Kit</li>
+<li>Text Kit架构</li>
+<li>Text Kit特点</li>
+<li>Text Kit功能概述</li>
+<li>Text Kit中重要的一些对象</li>
+<li>Text Kit示例</li>
+<li>小结</li>
+<li>推荐Text Kit学习资源</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h3>什么是Text Kit</h3>
+
+<p>在iOS7中，苹果引入了Text Kit&mdash;Text Kit是一个快速而又现代化的文字排版和渲染引擎。Text Kit在UIKit framework中的定义了一些类和相关协议，它最主要的作用就是为程序提供文字排版和渲染的功能。在程序中，通过Text Kit可以对文字进行存储(store)、布局(lay out)，以及用最精细的排版方式(例如文字间距、换行和对齐等)来显示文本内容。 苹果引入Text Kit的目的并非要取代已有的Core Text，Core Text的主要作用也是用于文字的排版和渲染中，它是一种先进而又处于底层技术，如果我们需要将文本内容直接渲染到图形上下文(Graphics context)时，从性能和易用性来考虑，最佳方案就是使用Core Text。而如果我们直接利用苹果提供的一些控件(例如UITextView、UILabel和UITextField等)对文字进行排版，无疑就是借助于UIkit framework中Text Kit提供的API。</p>
+
+<h3>Text Kit架构</h3>
+
+<p>下面，我们通过图1(此图来自WWDC2013 Session 210)来了解一下Text Kit的架构。图1是基于iOS 7绘制的，从图中，我们可以看到Text Kit是基于Core Text构建的，它通过Core Text与Core Graphics进行交互。而UI控件(UILabel、UITextField和UITextView)则构建于Text Kit之上，可见这些文本控件可以利用Text Kit提供的API来对文字进行排版和渲染处理。 从图中我们也可以看到SDK提供的UIWebView是基于WebKit的，它不能使用Text Kit提供的功能。</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11028898935/" title="2013-11-24-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7439/11028898935_e836a8c934.jpg" width="500" height="211" alt="2013-11-24-1"></a></p>
+
+<p>图1 Text Kit在iOS 7 SDK中的位置</p>
+
+<p>我们再来看看图1中的相关组件在iOS6里面是如何对应的，如图2所示，可以看出在iOS 6中是没有Text Kit，并且UILabel、UIText和UITextView是基于String Drawing和WebKit构建的。其中String Drawing是与Core Graphics直接通讯。</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11029000326/" title="2013-11-24-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7430/11029000326_f1345af879.jpg" width="500" height="242" alt="2013-11-24-2"></a></p>
+
+<p>图2 在iOS 6中并没有Text Kit</p>
+
+<h3>Text Kit特点</h3>
+
+<p>从上面的介绍中，我们可以了解到Text Kit在UIKit中的作用非常重要。Text Kit在实际开发中具有如下特点：</p>
+
+<ul>
+<li>1.在UI控件中Text Kit完全掌控着文字的排版和渲染</li>
+<li>2.UITextView、UITextField和UILabel是构建于Text Kit之上的</li>
+<li>3.能够与动画、UICollectionView和UITableView做到无缝集成</li>
+<li>4.Text Kit具有这样一些能力：Subclassing、Delegation和Notifcation。</li>
+</ul>
+
+
+<h3>Text Kit功能概述</h3>
+
+<p>下面我们看看通过Text Kit，都能实现那些功能(这里列出了是一些常用和重要功能)：</p>
+
+<ul>
+<li>1.对文字进行分页或多列排版</li>
+<li>2.支持文字的换行、折叠和着色等处理</li>
+<li>3.可以调整字与字之间的距离、行间距、文字大小、指定特定的字体</li>
+<li>4.支持富文本编辑，可以自定义文字截断</li>
+<li>5.支持凸版印刷效果(letterpress)</li>
+<li>6.支持数据类型的检测(例如链接、附件等)</li>
+</ul>
+
+
+<p>如图3，是利用Text Kit对文字做的分页排版</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11028898985/" title="2013-11-24-3 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7420/11028898985_e42af249cf.jpg" width="500" height="303" alt="2013-11-24-3"></a></p>
+
+<p>图3 利用Text Kit做的分页排版效果</p>
+
+<p>再看图4，是利用Text Kit做的换行处理，其中对某个路径范围做了排除。</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11029105983/" title="2013-11-24-4 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5530/11029105983_dba9ffd9fb.jpg" width="500" height="359" alt="2013-11-24-4"></a></p>
+
+<p>图4 利用Text Kit做的换行处理效果</p>
+
+<p>再来看看利用Text Kit做的凸版印刷效果，如图5所示</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11029054444/" title="2013-11-24-5 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2885/11029054444_fd67572185.jpg" width="500" height="365" alt="2013-11-24-5"></a></p>
+
+<p>图5 利用Text Kit做的凸版印刷效果</p>
+
+<h3>Text Kit中重要的一些对象</h3>
+
+<p>下面我们来看看Text Kit中重要的几个对象。</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11029054134/" title="2013-11-24-6 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2849/11029054134_87158b12d4.jpg" width="500" height="293" alt="2013-11-24-6"></a></p>
+
+<p>图6 Text Kit中重要的几个对象</p>
+
+<p>如图6所示，Text Kit中主要有4个重要的对象。</p>
+
+<ul>
+<li>1.Text View是用来显示文本内容的控件，主要包括UILabel、UITextView和UITextField。</li>
+<li>2.Text containers对应着NSTextContainer类。NSTextContainer定义了文本可以排版的区域。一般来说，都是矩形区域，当然，也可以根据需求，通过子类化NSTextContainer来创建别的一些形状，例如圆形、不规则的形状等。NSTextContainer不仅可以创建文本可以填充的区域，它还维护着一个数组——该数组定义了一个区域，排版的时候文字不会填充该区域，因此，我们可以在排版文字的时候，填充非文本元素(例如图片，如图4所示)。</li>
+<li>3.Layout manager对应着NSLayoutManager类。该类负责对文字进行编辑排版处理——通过将存储在NSTextStorage中的数据转换为可以在视图控件中显示的文本内容，并把统一的字符编码映射到对应的字形(glyphs)上，然后将字形排版到NSTextContainer定义的区域中。</li>
+<li>4.Text storage对应着NSTextStorage类。该类定义了Text Kit扩展文本处理系统中的基本存储机制。NSTextStorage继承自NSmutableAttributedString，主要用来存储文本的字符和相关属性。另外，当NSTextStorage中的字符或属性发生了改变，会通知NSLayoutManager，进而做到文本内容的显示更新。</li>
+</ul>
+
+
+<p>通常情况下，NSTextStorage、NSLayoutManager和NSTextContainer是一一对应的。如图7所示关系：</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11028999346/" title="2013-11-24-7 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3722/11028999346_3d78e9639e.jpg" width="500" height="41" alt="2013-11-24-7"></a></p>
+
+<p>图7 普通排版</p>
+
+<p>当然，如果需要将文字显示为多列，或多页，可以按照如图8所示关系——使用多个NSTextContainer。</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11029104793/" title="2013-11-24-8 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5472/11029104793_ed7de38158.jpg" width="500" height="64" alt="2013-11-24-8"></a></p>
+
+<p>图8 多页或者多列排版</p>
+
+<p>如果针对不同的排版方式，则可以使用多个NSLayoutManager，如图9所示</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11029104933/" title="2013-11-24-9 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3826/11029104933_824d194d5f.jpg" width="500" height="59" alt="2013-11-24-9"></a></p>
+
+<p>图9 不同的排版方式</p>
+
+<p>如图10所示，通过形象的方式，对UITextView的组成做了分解。通常，我们在设备上只能看到最右边的文本显示界面，而内部的NSTextStorage、NSLayoutManager和NSTextContainer是看不出来的。通常由NSLayoutManager从NSTextStorage中读取出文本数据，然后根据一定的排版方式，将文本排版到NSTextContainer中，再由NSTextContainer结合UITextView将最终效果显示出来。</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11029105053/" title="2013-11-24-10 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/11029105053_875c954204.jpg" width="500" height="319" alt="2013-11-24-10"></a></p>
+
+<p>图10 UITextView的分解</p>
+
+<h3>Text Kit示例</h3>
+
+<p>前面对Text Kit做了一些介绍，下面我们配合一个例子(图文排版)，来进一步加深对Text Kit的认识。具体实现步骤如下：</p>
+
+<ul>
+<li>1.打开Xcode 5，新建一个Single View Application模板的程序，将工程命名为ExclusionPath。</li>
+<li>2.打开Main.storyboard文件，然后再默认View Controller的View里面分别添加一个UITextView和UIImageView。并将这两个控件连接到ViewController.h中(名称分别为textView何imageView)。然后给textView设置一些字符串，imageView设置一个图片。</li>
+<li>3.打开ViewController.m文件，找到viewDidLoad方法，用如下代码替换该方法：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)viewDidLoad 
+</span><span class='line'>{ 
+</span><span class='line'>    [super viewDidLoad]; 
+</span><span class='line'>  
+</span><span class='line'>    //创建一个平移手势对象，该对象可以调用imagePanned：方法 
+</span><span class='line'>    UIPanGestureRecognizer *panGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(imagePanned:)]; 
+</span><span class='line'>    [self.imageView addGestureRecognizer:panGes]; 
+</span><span class='line'>  
+</span><span class='line'>    self.textView.textContainer.exclusionPaths = @[[self translatedBezierPath]]; 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的代码中，给imageView添加了一个平移手势。另外通过调用translatedBezierPath方法，给textView的textContainer设置exclusionPaths属性值。表示需要排除的区域（也就是图片在排版中显示的位置）。</p>
+
+<ul>
+<li>4.下面来看一下translatedBezierPath方法的实现，如下代码所示</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIBezierPath *)translatedBezierPath 
+</span><span class='line'>{ 
+</span><span class='line'>    CGRect butterflyImageRect = [self.textView convertRect:self.imageView.frame fromView:self.view]; 
+</span><span class='line'>    UIBezierPath *newButterflyPath = [UIBezierPath bezierPathWithRect:butterflyImageRect]; 
+</span><span class='line'>  
+</span><span class='line'>    return newButterflyPath; 
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的代码中，利用imageView的frame属性创建了一个UIBezierPath，然后将该值返回。</p>
+
+<ul>
+<li>5, 还记得第3步中创建的平移手势吗。里面有一个action需要实现imagePanned:，下面来看看这个方法的实现：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)imagePanned:(id)sender 
+</span><span class='line'>{ 
+</span><span class='line'>    if ([sender isKindOfClass:[UIPanGestureRecognizer class]]) { 
+</span><span class='line'>        UIPanGestureRecognizer *localSender = sender; 
+</span><span class='line'>  
+</span><span class='line'>        if (localSender.state == UIGestureRecognizerStateBegan) { 
+</span><span class='line'>            self.gestureStartingPoint = [localSender translationInView:self.textView]; 
+</span><span class='line'>            self.gestureStartingCenter = self.imageView.center; 
+</span><span class='line'>        } else if (localSender.state == UIGestureRecognizerStateChanged) { 
+</span><span class='line'>            CGPoint currentPoint = [localSender translationInView:self.textView]; 
+</span><span class='line'>  
+</span><span class='line'>            CGFloat distanceX = currentPoint.x - self.gestureStartingPoint.x; 
+</span><span class='line'>            CGFloat distanceY = currentPoint.y - self.gestureStartingPoint.y; 
+</span><span class='line'>  
+</span><span class='line'>            CGPoint newCenter = self.gestureStartingCenter; 
+</span><span class='line'>  
+</span><span class='line'>            newCenter.x += distanceX; 
+</span><span class='line'>            newCenter.y += distanceY; 
+</span><span class='line'>  
+</span><span class='line'>            self.imageView.center = newCenter; 
+</span><span class='line'>  
+</span><span class='line'>            self.textView.textContainer.exclusionPaths = @[[self translatedBezierPath]]; 
+</span><span class='line'>        } else if (localSender.state == UIGestureRecognizerStateEnded) { 
+</span><span class='line'>            self.gestureStartingPoint = CGPointZero; 
+</span><span class='line'>            self.gestureStartingCenter = CGPointZero; 
+</span><span class='line'>        } 
+</span><span class='line'>    } 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的代码中首先根据平移的距离来设置imageView的位置，然后利用translatedBezierPath方法重新计算了一下排除区域。</p>
+
+<ul>
+<li>6, 至此代码编写完毕，下面来运行程序，看看实际效果。如图11所示：</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/11028998926/" title="2013-11-24-11 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3709/11028998926_73393ee43a.jpg" width="332" height="500" alt="2013-11-24-11"></a></p>
+
+<p>图11 运行效果</p>
+
+<h3>小结</h3>
+
+<p>实际上，上面的示例，只是揭秘了Text Kit功能的冰山一角。从iOS7及以后的版本中，Text Kit在UIKit framework里面占据重要的地位，Text Kit在文字处理方面，具有非常强大的功能，并且开发者可以对Text Kit进行定制和扩展。据悉，苹果利用了2年的时间来开发Text Kit，相信这对许多开发者来说都是福音。</p>
+
+<p>推荐Text Kit学习资源
+更多关于Text Kit的学习资料，请参考下面的内容：
+wwdc视频:
+Introducing Text Kit
+Advanced Text Layouts and Effects with Text Kit
+Using Fonts with Text Kit</p>
+
+<p>苹果官方参考文档
+Text Programming Guide for iOS.pdf
+NSLayoutManager Class Reference for iOS.pdf
+NSLayoutManagerDelegate Protocol Reference for iOS.pdf
+NSTextContainer Class Reference for iOS.pdf
+NSTextStorage Class Reference for iOS.pdf
+NSTextStorageDelegate Protocol Reference for iOS.pdf</p>
+
+<p>苹果官方示例：
+IntroToTextKit</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Autolayout及VFL经验分享]]></title>
@@ -2626,61 +2910,6 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 <p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
 
 <p>EOF</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MAC 系统的启动过程和系统启动时运行shell 脚本]]></title>
-    <link href="http://saick.net/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/"/>
-    <updated>2013-10-19T01:34:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben</id>
-    <content type="html"><![CDATA[<h4>1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）</h4>
-
-<p>1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置：</p>
-
-<pre><code>system prefernce--&gt;Accounts--&gt;LogItems--&gt;add
-</code></pre>
-
-<p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
-
-<p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
-
-<!-- more -->
-
-
-<p>4）如果只启动shell 程序，还有一种方式，大体流程是这样的。</p>
-
-<pre><code>A) 把Terminate 设置为开机启动。这样当系统启动时，可以自动运行shell。
-B) 在用户目录下创建或修改".profile"。当shell 启动时，先运行".profile" 文件
-C) 在".profile" 中调用想要执行的shell 脚本
-</code></pre>
-
-<p>5)  应用Mac 的launchd，可以参见：<a href="http://cb.esast.com/cb/wiki/10020">http://cb.esast.com/cb/wiki/10020</a></p>
-
-<p>苹果的安全检查：用上面说过的2，3 方法时，必须设置文件的用户id 和组id，还有文件的运行权限。具体方法，下文有述。</p>
-
-<p>当设置完成后，可以在终端上用SystemStarter 来调试配置的信息
-命令为：<code>SystemStarter -n -D</code>
-根据提示的信息可以查看配置的问题。</p>
-
-<h4>2 解决“Insecure Startup Item disabled.错误”</h4>
-
-<p>可以把想要启动的shell 放到/Labrary/Startupitems/ 目录中。
-必须改变文件的用户id 和组id 才可以，并且权限为755</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo chown -R root:wheel /Library/StartupItems/xxx
-</span><span class='line'>sudo chmod -R 755 /Library/StartupItems/xxx</span></code></pre></td></tr></table></div></figure>
-
-
-<p>(如果运行的是shell 文件，则命令中不用加 -R 选项)</p>
-
-<p>注意：环境变量问题。</p>
-
-<p>当然一定要参考苹果的开发者文档：
-[Introduction to System Startup Programming Topics]
-(<a href="http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1">http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1</a>)</p>
 ]]></content>
   </entry>
   
