@@ -35,14 +35,49 @@ i秘密不需要任何的网络访问,进一步加强安全性。
 
 
 
-
-
 ###Release Note:
 
-##### v1.0	2012-02-22 10:08:28
+##### v1.5	2013-10-10 8:55:45
 
-*	第一版本，仅157kb大小。 
-*	功能简单实用
+*	iOS 7 Support
+
+
+
+
+##### v1.4	2013-05-23 7:55:45
+
+*	加强主密码安全性，强烈建议大家升级
+*	默认密码不显示的问题
+
+*	Improve the security of you main passcode, recommend you to update at once.
+*	Fix bug: the default passcode was not show.
+
+
+
+
+##### v1.3	2013-04-25 10:55:45
+
+*	支持图形解锁以及简单数字密码，更加简单方便 
+*	简化用户反馈功能，支持内部反馈 
+*	加入程序版更新提示本 
+*	解决各个版本系统上面UI细节问题 
+*	推荐应用给好友圈 
+*	禁用程序后台运行，更加安全稳定
+
+*	Support simple password and pattern, which is easy to use 
+*	Simply the user feedback in the app without go to the AppStore 
+*	Add new version prompt, you can't miss the new version 
+*	Fix some bugs in the different iOS versions 
+*	Share this app to your friends 
+*	Stop running in the background, much safer
+
+##### v1.2	2012-09-24 14:58:31
+
+*	随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率 
+
+*	Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution
+
+
 
 
 ##### v1.1	2012-08-15 10:16:20
@@ -61,41 +96,12 @@ i秘密不需要任何的网络访问,进一步加强安全性。
 *	Add author's blog and user review interface; 
 *	Some other bugs fixed. 
 
-##### v1.2	2012-09-24 14:58:31
-
-*	随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率 
-
-*	Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution
-
-##### v1.3	2013-04-25 10:55:45
-
-*	支持图形解锁以及简单数字密码，更加简单方便 
-*	简化用户反馈功能，支持内部反馈 
-*	加入程序版更新提示本 
-*	解决各个版本系统上面UI细节问题 
-*	推荐应用给好友圈 
-*	禁用程序后台运行，更加安全稳定
-
-*	Support simple password and pattern, which is easy to use 
-*	Simply the user feedback in the app without go to the AppStore 
-*	Add new version prompt, you can't miss the new version 
-*	Fix some bugs in the different iOS versions 
-*	Share this app to your friends 
-*	Stop running in the background, much safer
-
-##### v1.4	2013-05-23 7:55:45
-
-*	加强主密码安全性，强烈建议大家升级
-*	默认密码不显示的问题
-
-*	Improve the security of you main passcode, recommend you to update at once.
-*	Fix bug: the default passcode was not show.
 
 
-##### v1.5	2013-10-10 8:55:45
+##### v1.0	2012-02-22 10:08:28
 
-*	iOS 7 Support
-
+*	第一版本，仅157kb大小。 
+*	功能简单实用
 
 
 
