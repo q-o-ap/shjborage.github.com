@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-01T01:41:41+08:00</updated>
+  <updated>2013-12-01T01:59:02+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Does ARC support dispatch queues?]]></title>
+    <link href="http://saick.net/blog/2013/12/01/does-arc-support-dispatch-queues/"/>
+    <updated>2013-12-01T01:48:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/01/does-arc-support-dispatch-queues</id>
+    <content type="html"><![CDATA[<p><strong>If your deployment target is lower than iOS 6.0 or Mac OS X 10.8</strong></p>
+
+<p>You need to use dispatch_retain and dispatch_release on your queue. ARC does not manage them.</p>
+
+<p><strong>If your deployment target is iOS 6.0 or Mac OS X 10.8 or later</strong></p>
+
+<p>ARC will manage your queue for you. You do not need to (and cannot) use dispatch_retain or dispatch_release if ARC is enabled.</p>
+
+<!-- more -->
+
+
+<p>Details</p>
+
+<p>Starting in the iOS 6.0 SDK and the Mac OS X 10.8 SDK, every dispatch object (including a dispatch_queue_t) is also an Objective-C object. This is documented in the &lt;os/object.h> header file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> * By default, libSystem objects such as GCD and XPC objects are declared as
+</span><span class='line'> * Objective-C types when building with an Objective-C compiler. This allows
+</span><span class='line'> * them to participate in ARC, in RR management by the Blocks runtime and in
+</span><span class='line'> * leaks checking by the static analyzer, and enables them to be added to Cocoa
+</span><span class='line'> * collections.
+</span><span class='line'> *
+</span><span class='line'> * NOTE: this requires explicit cancellation of dispatch sources and xpc
+</span><span class='line'> *       connections whose handler blocks capture the source/connection object,
+</span><span class='line'> *       resp. ensuring that such captures do not form retain cycles (e.g. by
+</span><span class='line'> *       declaring the source as __weak).
+</span><span class='line'> *
+</span><span class='line'> * To opt-out of this default behavior, add -DOS_OBJECT_USE_OBJC=0 to your
+</span><span class='line'> * compiler flags.
+</span><span class='line'> *
+</span><span class='line'> * This mode requires a platform with the modern Objective-C runtime, the
+</span><span class='line'> * Objective-C GC compiler option to be disabled, and at least a Mac OS X 10.8
+</span><span class='line'> * or iOS 6.0 deployment target.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This means you can store your queue in an NSArray or NSDictionary, or in a property with one of the strong, weak, unsafe_unretained, assign, or retain attributes. It also means that if you refer to your queue from a block, the block will retain the queue automatically.</p>
+
+<p>So <strong>if your deployment target is at least iOS 6.0 or Mac OS X 10.8</strong>, and you have <em>ARC enabled</em>, ARC will retain and release your queue, and the compiler will flag any attempt to use dispatch_retain or dispatch_release as an error.</p>
+
+<p><strong>If your deployment target is at least iOS 6.0 or Mac OS X 10.8</strong>, and you have <em>ARC disabled</em>, you must manually retain and release your queue, either by calling dispatch_retain and dispatch_release, or by sending the queue retain and release messages (like [queue retain] and [queue release]).</p>
+
+<p>For compatibility with old codebases, you can prevent the compiler from seeing your queue as an Objective-C object by defining OS_OBJECT_USE_OBJC to 0. For example, you can put this in your .pch file (before any #import statements):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define OS_OBJECT_USE_OBJC 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or you can add OS_OBJECT_USE_OBJC=0 as a preprocessor macro in your build settings. If you set OS_OBJECT_USE_OBJC to 0, ARC will not retain or release your queue for you, and you will have to do it yourself using dispatch_retain and dispatch_release.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..]]></title>
@@ -2877,47 +2949,6 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 <li> WWDC2012 Session 413 Migrating to Modern Objective-C</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS ARC 兼容处理]]></title>
-    <link href="http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li/"/>
-    <updated>2013-10-19T01:56:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/19/ios-arc-jian-rong-chu-li</id>
-    <content type="html"><![CDATA[<p>From:宋红日（转自：<a href="http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89">http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89</a></p>
-
-<p>我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。其实有一下方法做到兼容处理。统一用下面定义的宏就可以。
-尤其当你决定做一个通用的控件 或 模块的时候。</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// ARC conditions
-</span><span class='line'>#if !__has_feature(objc_arc)
-</span><span class='line'>#define Release(obj) [obj release]
-</span><span class='line'>#define Retain(obj) [obj retain]
-</span><span class='line'>#else 
-</span><span class='line'>#define Release(obj)
-</span><span class='line'>#define Retain(obj) obj
-</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
-
-
-<p>另外，如果是ARC工程，某些文件不支持ARC的话，可以在Target->Build Phases->Complie sources 中对某个文件加入Complier Flags “-fno-objc-arc”</p>
-
-<p>如下图：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a></p>
 ]]></content>
   </entry>
   

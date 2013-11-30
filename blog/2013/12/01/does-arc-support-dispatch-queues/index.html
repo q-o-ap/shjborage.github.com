@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>自定义UITabbarController引发的血案 - Saick Blog - 专注技术，乐在其中</title>
+  <title>Does ARC support dispatch queues? - Saick Blog - 专注技术，乐在其中</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="转自：http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html nested push animation can result in corrupted navigation bar 嵌套的navigation动画会造成 &hellip;">
+  <meta name="description" content="If your deployment target is lower than iOS 6.0 or Mac OS X 10.8 You need to use dispatch_retain and dispatch_release on your queue. ARC does not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/">
+  <link rel="canonical" href="http://saick.net/blog/2013/12/01/does-arc-support-dispatch-queues/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">自定义UITabbarController引发的血案</h1>
+      <h1 class="entry-title">Does ARC Support Dispatch Queues?</h1>
     
     
       <p class="meta">
@@ -98,32 +98,77 @@
   
 
 
-<time datetime="2013-09-02T09:05:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+<time datetime="2013-12-01T01:48:00+08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>转自：<a href="http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html">http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html</a></p>
+<div class="entry-content"><p><strong>If your deployment target is lower than iOS 6.0 or Mac OS X 10.8</strong></p>
 
-<p>nested push animation can result in corrupted navigation bar 嵌套的navigation动画会造成 navigation bar 错误， 具体表现为上一层的titleview 和这一层重叠， navigationbaritem 维持上一层的左按钮， 右按钮 、、、系统警告提示nested push animation can result in corrupted navigation bar ， 大家遇到过这种情况吗？？
-嵌套的动画， 是什么意思呢， 为什么会这样， 要怎么解决</p>
+<p>You need to use dispatch_retain and dispatch_release on your queue. ARC does not manage them.</p>
+
+<p><strong>If your deployment target is iOS 6.0 or Mac OS X 10.8 or later</strong></p>
+
+<p>ARC will manage your queue for you. You do not need to (and cannot) use dispatch_retain or dispatch_release if ARC is enabled.</p>
 
 <!-- more -->
 
 
-<p>结贴~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+<p>Details</p>
 
-<p>有一天，从头到尾分析了整个项目的代码， 最后确认问题根源——自定义UITabbarController引发的血案
-项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，
-整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，
-导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</p>
+<p>Starting in the iOS 6.0 SDK and the Mac OS X 10.8 SDK, every dispatch object (including a dispatch_queue_t) is also an Objective-C object. This is documented in the &lt;os/object.h> header file:</p>
 
-<p>扩展阅读：
-<a href="http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga">http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga</a></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> * By default, libSystem objects such as GCD and XPC objects are declared as
+</span><span class='line'> * Objective-C types when building with an Objective-C compiler. This allows
+</span><span class='line'> * them to participate in ARC, in RR management by the Blocks runtime and in
+</span><span class='line'> * leaks checking by the static analyzer, and enables them to be added to Cocoa
+</span><span class='line'> * collections.
+</span><span class='line'> *
+</span><span class='line'> * NOTE: this requires explicit cancellation of dispatch sources and xpc
+</span><span class='line'> *       connections whose handler blocks capture the source/connection object,
+</span><span class='line'> *       resp. ensuring that such captures do not form retain cycles (e.g. by
+</span><span class='line'> *       declaring the source as __weak).
+</span><span class='line'> *
+</span><span class='line'> * To opt-out of this default behavior, add -DOS_OBJECT_USE_OBJC=0 to your
+</span><span class='line'> * compiler flags.
+</span><span class='line'> *
+</span><span class='line'> * This mode requires a platform with the modern Objective-C runtime, the
+</span><span class='line'> * Objective-C GC compiler option to be disabled, and at least a Mac OS X 10.8
+</span><span class='line'> * or iOS 6.0 deployment target.</span></code></pre></td></tr></table></div></figure>
 
-<p>其实主要还是在用户看不到的时候，多次使用Animate=YES</p>
+
+<p>This means you can store your queue in an NSArray or NSDictionary, or in a property with one of the strong, weak, unsafe_unretained, assign, or retain attributes. It also means that if you refer to your queue from a block, the block will retain the queue automatically.</p>
+
+<p>So <strong>if your deployment target is at least iOS 6.0 or Mac OS X 10.8</strong>, and you have <em>ARC enabled</em>, ARC will retain and release your queue, and the compiler will flag any attempt to use dispatch_retain or dispatch_release as an error.</p>
+
+<p><strong>If your deployment target is at least iOS 6.0 or Mac OS X 10.8</strong>, and you have <em>ARC disabled</em>, you must manually retain and release your queue, either by calling dispatch_retain and dispatch_release, or by sending the queue retain and release messages (like [queue retain] and [queue release]).</p>
+
+<p>For compatibility with old codebases, you can prevent the compiler from seeing your queue as an Objective-C object by defining OS_OBJECT_USE_OBJC to 0. For example, you can put this in your .pch file (before any #import statements):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define OS_OBJECT_USE_OBJC 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or you can add OS_OBJECT_USE_OBJC=0 as a preprocessor macro in your build settings. If you set OS_OBJECT_USE_OBJC to 0, ARC will not retain or release your queue for you, and you will have to do it yourself using dispatch_retain and dispatch_release.</p>
 </div>
 
 
@@ -146,7 +191,7 @@
   
 
 
-<time datetime="2013-09-02T09:05:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+<time datetime="2013-12-01T01:48:00+08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2013</time>
       
 
 <span class="categories">
@@ -164,7 +209,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/12/01/does-arc-support-dispatch-queues/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/12/01/does-arc-support-dispatch-queues/" >Tweet</a>
   
   
   
@@ -191,10 +236,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/09/02/hybird-appyan-jiu/" title="Previous Post: Hybird App研究">&laquo; Hybird App研究</a>
+        <a class="basic-alignment left" href="/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in/" title="Previous Post: iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..">&laquo; iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/09/02/cocoapodsde-shi-yong/" title="Next Post: CocoaPods本身版本的更新">CocoaPods本身版本的更新 &raquo;</a>
       
     </p>
   </footer>
