@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog - 专注技术，乐在其中]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-11-30T23:01:36+08:00</updated>
+  <updated>2013-12-01T01:41:41+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..]]></title>
+    <link href="http://saick.net/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in/"/>
+    <updated>2013-12-01T01:37:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in</id>
+    <content type="html"><![CDATA[<p><a href="http://yul100887.blog.163.com/blog/static/20033613520137205121620/">Origin</a></p>
+
+<p>Nested pop animation can result in corrupted navigation bar</p>
+
+<p>Finishing up a navigation transition in an unexpected state. Navigation Bar subview tree might get corrupted.</p>
+
+<h3>【情况一】</h3>
+
+<p>出现此问题的原因是在A界面弹出B界面完成后，又掉A界面POP出栈，这必然导致以上问题。如下，在弹出personalController后面，又在后面调用了[self.navigationController popViewControllerAnimated:YES];将自己弹出！解决方法，还用说吗？｛删除最后一行代码，要弹出此界面，自然有自己的返回按钮来处理｝，至少在B界面未POP以前，A界面是无论如何也不能将自己POP去消毁！</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSString *memberId = [dictionary objectForKey:@"PlayerNo"];
+</span><span class='line'>PersonalInfoViewController* personalController = [[PersonalInfoViewController alloc] init];
+</span><span class='line'>[personalController.navigationItems etHidesBackButton:YES];
+</span><span class='line'>[personalController setMemberId:memberId];
+</span><span class='line'>[self.navigationController pushViewController:personalController animated:YES];
+</span><span class='line'>[personalController release];
+</span><span class='line'>[self.navigationController popViewControllerAnimated:YES];</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>【情况二】</h3>
+
+<p>nested push animation can result in corrupted navigation bar <br/>
+嵌套的navigation动画会造成  navigation bar 错误<br/>
+具体表现为上一层的titleview 和这一层重叠， navigationbaritem维持上一层的左按钮,右按钮,系统警告提示nested push animation can result in corrupted navigation bar</p>
+
+<p>从头到尾分析了整个项目的代码， 最后确认问题根源——<strong>自定义UITabbarController</strong>引发的血案
+项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，</p>
+
+<ul>
+<li>整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，</li>
+<li>导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)viewWillAppear:(BOOL)animated
+</span><span class='line'>{
+</span><span class='line'>    [super viewWillAppear:animated];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS 7教程：浅析Text Kit]]></title>
@@ -2855,61 +2918,6 @@ ASIHTTPRequestDataCompressor和ASIHTTPRequestDataDecompressor两个类，只用�
 <p>如下图：</p>
 
 <p><a href="http://www.flickr.com/photos/105999540@N03/10374769035/" title="2013-10-19-1 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7294/10374769035_c11c167c38_z.jpg" width="640" height="237" alt="2013-10-19-1"></a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Git fetch和git pull的区别]]></title>
-    <link href="http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/"/>
-    <updated>2013-10-19T01:47:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie</id>
-    <content type="html"><![CDATA[<p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
-
-<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
-
-<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
-</span><span class='line'>git log -p master..origin/master
-</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!-- more -->
-
-
-<p>以上命令的含义：<br/>
-首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
-
-<p>上述过程其实可以用以下更清晰的方式来进行：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master:tmp
-</span><span class='line'>git diff tmp 
-</span><span class='line'>git merge tmp</span></code></pre></td></tr></table></div></figure>
-
-
-<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
-
-<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git pull origin master</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上述命令其实相当于git fetch 和 git merge</p>
-
-<p>在实际使用中，git fetch更安全一些</p>
-
-<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
-
-<p>EOF</p>
 ]]></content>
   </entry>
   

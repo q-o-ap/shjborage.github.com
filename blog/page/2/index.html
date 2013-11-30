@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="本文将介绍，在Emacs中，通过各种扩展，打造强大的Python IDE环境，包括Snippet工具，智能提示，自动补全，重构工具，调试以及GAE的调试，等等。以下各工具的安装前提是你对Emacs的配置文件有一定的了解，所有相关的el文件都必须放在load_path能够加载的地方。 1. &hellip;">
+  <meta name="description" content="简介 没有听说过 Emacs 吗？没有关系，花上30分钟就能了解和熟悉这个古老而强大 的编辑器。他被很多人称作世界上最强大的编辑器。用户从无数高手到IT民工到 普通文本编辑器用户，可以符合几乎所有人的需求。甚至可以在 Emacs 里运行 音乐播放器、网页浏览器等等，Emacs 更像是一个操作平台 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/26/emacs-30fen-zhong-ji-chu-jiao-cheng/">Emacs 30分钟基础教程</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-26T23:36:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>简介</h3>
+
+<p>没有听说过 Emacs 吗？没有关系，花上30分钟就能了解和熟悉这个古老而强大 的编辑器。他被很多人称作世界上最强大的编辑器。用户从无数高手到IT民工到 普通文本编辑器用户，可以符合几乎所有人的需求。甚至可以在 Emacs 里运行 音乐播放器、网页浏览器等等，Emacs 更像是一个操作平台。</p>
+
+<p>使用 Emacs 可以完全抛弃鼠标，不必在打字的同时把手移开键盘找鼠标，不必在 一大堆深藏不露的菜单里寻找那些常用功能，也不必被一条条工具栏遮挡视线。 大多数的 Windows 编辑器都有一条菜单栏，n条工具栏。菜单里有无数选项，很 多选项都会弹出一个对话框，这个对话框又会带有层层叠叠的标签，每个标签里 又有很多输入框很多按钮。一个简单的把所有字母大写的命令就要在菜单里翻半 天，说不定还找不到，而他们的帮助信息又总是不知所云。而 Emacs 的大多数操 作都可以通过快捷键或直接输入命令完成，而且有着极好的帮助系统，可以通过 多种方式找到你想要的命令或按键。</p>
+
+<p>不要被 Emacs 简单的外观和与众不同的操作方式迷惑，上手 Emacs 并不是什么 难事，看一遍 Tutorial 就可以了，Emacs23 已经带着多种语言版本的快速指南， 包括中文。仍然觉得 Tutor 太长？那可以继续看本文。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/26/emacs-30fen-zhong-ji-chu-jiao-cheng/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -508,61 +555,6 @@ sudo chmod +x XXX</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git Fetch和git Pull的区别</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-19T01:47:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
-
-<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
-
-<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
-</span><span class='line'>git log -p master..origin/master
-</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -596,7 +588,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (38)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (39)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -607,6 +599,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in/">iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/11/23/ios-7jiao-cheng-qian-xi-text-kit/">iOS 7教程：浅析Text Kit</a>
@@ -622,10 +618,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/">iOS Quick Tip: 7 Tips to Speed Up Your Development</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 hosts文件</a>
       </li>
     
   </ul>
