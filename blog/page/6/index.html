@@ -502,23 +502,31 @@ iSecret does not require any network.</p>
 
   <div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
 
+<p>Dec 2, 2013</p>
+
+<h4>使用.mm文件编译成.a静态库，或放入CocoaPods中，报错</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>operator delete(void*)", referenced from xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解决方案：引入libc++.dylib</p>
+
+<p><a href="http://stackoverflow.com/questions/16865260/quickblox-linker-error-operator-deletevoid-referenced-from">Origin</a></p>
+
 <p>Aug 5, 2013</p>
 
-<ul>
-<li><h3>如果使用C++代码混编，找不到iostream等</h3>
+<h4>如果使用C++代码混编，找不到iostream等</h4>
 
-<p>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式</p></li>
-</ul>
-
+<pre><code>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式
+</code></pre>
 
 <p>May 28, 2013</p>
 
-<ul>
-<li><h3>不要调用[super  release]</h3>
+<h4>不要调用[super  release]</h4>
 
-<p>在dealloc里要调用[super dealloc]，千万不要调用[super release]</p></li>
-</ul>
-
+<pre><code>在dealloc里要调用[super dealloc]，千万不要调用[super release]
+</code></pre>
 </div>
   
   
