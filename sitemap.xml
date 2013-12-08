@@ -307,12 +307,18 @@
         <lastmod>2013-12-01T01:52:27+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan/
+        </loc>
+        <lastmod>2013-12-08T12:45:38+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-12-02T11:33:46+08:00</lastmod>
+        <lastmod>2013-12-08T12:45:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -324,7 +330,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-12-02T11:33:46+08:00</lastmod>
+        <lastmod>2013-12-08T12:45:38+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

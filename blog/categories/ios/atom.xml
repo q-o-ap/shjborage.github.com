@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-02T11:34:28+08:00</updated>
+  <updated>2013-12-08T13:18:50+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,219 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[定制iOS 7中的导航栏和状态栏]]></title>
+    <link href="http://saick.net/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan/"/>
+    <updated>2013-12-08T02:30:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan</id>
+    <content type="html"><![CDATA[<p>近期，跟大多数开发者一样，我也正忙于对程序进行升级以适配iOS 7。最新的iOS 7外观上有大量的改动。从开发者的角度来看，导航栏和状态栏就发生了明显的变化。状态栏现在是半透明的了，这也就意味着导航栏会显示在状态栏后面。有些情况下，导航栏的背景图片可以延伸显示到状态栏后面。</p>
+
+<p>之前我曾经写过一篇关于如何定制导航栏的文章。
+不过现在是时候对其进行更新了。下面就是本文将要介绍的内容：</p>
+
+<ul>
+<li>iOS 7中默认的导航栏</li>
+<li>设置导航栏的背景颜色</li>
+<li>在导航栏中使用背景图片</li>
+<li>定制返回按钮的颜色</li>
+<li>修改导航栏标题的字体</li>
+<li>修改导航栏标题为图片</li>
+<li>添加多个按钮</li>
+<li>修改状态栏的风格</li>
+<li>隐藏状态栏</li>
+<li>总结</li>
+</ul>
+
+
+<!-- more -->
+
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263366886/" title="2013-12-08-1 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5537/11263366886_50b10421ff.jpg" width="500" height="473" alt="2013-12-08-1"></a></p>
+
+<p>本文提供的代码需要用Xcode 5来执行。如果你还在使用老版本的Xcode，那么在运行示例之前请将Xcode升级到Xcode 5。</p>
+
+<h3>iOS 7中默认的导航栏</h3>
+
+<p>在开始定制之前，我们先来看看iOS 7中默认导航栏的外观。通过Xcode用Single View Controller模板创建一个工程。然后将view controller嵌入到一个navigation controller中。如果你不想从头开始，那么也可以在这里下载到这个<a href="https://dl.dropboxusercontent.com/u/2857188/NavigationBarDemo.zip">示例工程</a>。Xcode 5包含有iOS 6和iOS 7模拟器，我们可以在这两个不同的模拟器版本中运行示例程序，进行对比，如下图所示：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263379574/" title="2013-12-08-2 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5478/11263379574_391625e690.jpg" width="500" height="144" alt="2013-12-08-2"></a></p>
+
+<p>如上图所示，在iOS 7中的导航栏默认情况下跟状态栏是交织在一起的，并且它的颜色也被修改为亮灰色。</p>
+
+<h3>设置导航栏的背景颜色</h3>
+
+<p>在iOS 7中，不再使用tintColor属性来设置导航栏的颜色，而是使用barTintColor属性来修改背景色。我们可以在AppDelegate.m文件中的方法didFinishLaunchingWithOptions:里面添加如下代码来修改颜色：</p>
+
+<p><code>
+[[UINavigationBar appearance] setBarTintColor:[UIColor yellowColor]];
+</code></p>
+
+<p>效果如下图所示：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263420823/" title="2013-12-08-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3775/11263420823_9eb0bab4f9.jpg" width="500" height="242" alt="2013-12-08-3"></a></p>
+
+<p>一般情况，我们都会使用自己的颜色，下面这个宏用来设置RGB颜色非常方便：</p>
+
+<p>```</p>
+
+<h1>define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue &amp; 0xFF0000) >> 16))/255.0 green:((float)((rgbValue &amp; 0xFF00) >> 8))/255.0 blue:((float)(rgbValue &amp; 0xFF))/255.0 alpha:1.0]</h1>
+
+<p>```</p>
+
+<p>将上面这个宏放到AppDelegate.m文件中，然后通过这个宏来创建一个UIColor对象(根据指定的RGB)。如下示例：</p>
+
+<p><code>
+[[UINavigationBar appearance] setBarTintColor:UIColorFromRGB(0x067AB5)];
+</code></p>
+
+<p>默认情况下，导航栏的translucent属性为YES。另外，系统还会对所有的导航栏做模糊处理，这样可以让iOS 7中导航栏的颜色更加饱和。如下图，是translucent值为NO和YES的对比效果：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263366646/" title="2013-12-08-4 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3749/11263366646_9f55687f4e.jpg" width="500" height="109" alt="2013-12-08-4"></a></p>
+
+<p>要想禁用translucent属性，可以在Storyboard中选中导航栏，然后在Attribute Inspectors中，取消translucent的勾选。</p>
+
+<h3>在导航栏中使用背景图片</h3>
+
+<p>如果希望在导航栏中使用一个图片当做背景，那么你需要提供一个稍微高一点的图片(这样可以延伸到导航栏背后)。导航栏的高度从44 points(88 pixels)变为了64 points(128 pixels)。我们依然可以使用setBackgroundImage:方法为导航栏设置自定义图片。如下代码所示：</p>
+
+<p><code>
+[[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] forBarMetrics:UIBarMetricsDefault];
+</code></p>
+
+<p>示例工程中提供了两个背景图片：nav_bg.png 和 nav_bg_ios7.png。运行一下试试看吧，如下效果：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263366636/" title="2013-12-08-5 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3822/11263366636_79a3394899.jpg" width="500" height="155" alt="2013-12-08-5"></a></p>
+
+<h3>定制返回按钮的颜色</h3>
+
+<p>在iOS 7中，所有的按钮都是无边框的。其中返回按钮会有一个V型箭头，以及上一个屏幕中的标题(如果上一屏幕的标题是空，那么就显示”返回”)。要想给返回按钮着色，可以使用tintColor属性。如下代码所示：</p>
+
+<p><code>
+[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+</code></p>
+
+<p>除了返回按钮，tintColor属性会影响到所有按钮标题和图片。</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263366586/" title="2013-12-08-6 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2824/11263366586_d932478c3e.jpg" width="500" height="102" alt="2013-12-08-6"></a></p>
+
+<p>如果想要用自己的图片替换V型，可以设置图片的backIndicatorImage和backIndicatorTransitionMaskImage。如下代码所示：</p>
+
+<p><code>
+[[UINavigationBar appearance] setBackIndicatorImage:[UIImage imageNamed:@"back_btn.png"]];
+[[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:[UIImage imageNamed:@"back_btn.png"]];
+</code></p>
+
+<p>图片的颜色是由tintColor属性控制的。</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263366576/" title="2013-12-08-7 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3679/11263366576_708e24cb31.jpg" width="500" height="102" alt="2013-12-08-7"></a></p>
+
+<h3>修改导航栏标题的字体</h3>
+
+<p>跟iOS 6一样，我们可以使用导航栏的titleTextAttributes属性来定制导航栏的文字风格。在text attributes字典中使用如下一些key，可以指定字体、文字颜色、文字阴影色以及文字阴影偏移量：
+UITextAttributeFont – 字体key
+UITextAttributeTextColor – 文字颜色key
+UITextAttributeTextShadowColor – 文字阴影色key
+UITextAttributeTextShadowOffset – 文字阴影偏移量key</p>
+
+<p>如下代码所示，对导航栏的标题风格做了修改：</p>
+
+<p>```
+NSShadow *shadow = [[NSShadow alloc] init];</p>
+
+<pre><code>shadow.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8]; 
+shadow.shadowOffset = CGSizeMake(0, 1); 
+[[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys: 
+                                                       [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], NSForegroundColorAttributeName, 
+                                                       shadow, NSShadowAttributeName, 
+                                                       [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:21.0], NSFontAttributeName, nil]]; 
+</code></pre>
+
+<p>```</p>
+
+<p>运行效果如下图所示：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263330475/" title="2013-12-08-8 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5491/11263330475_6a2fa2d7a0.jpg" width="500" height="199" alt="2013-12-08-8"></a></p>
+
+<h3>修改导航栏标题为图片</h3>
+
+<p>如果要想将导航栏标题修改为一个图片或者logo，那么只需要使用下面这行代码即可：</p>
+
+<p><code>
+self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"appcoda-logo.png"]];
+</code></p>
+
+<p>上面的代码简单的修改了titleView属性，将一个图片赋值给它。 注意：这不是iOS 7中的新功能，之前的iOS版本就可以已经有了。具体效果如下图所示：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263420343/" title="2013-12-08-9 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5536/11263420343_e744b52709.jpg" width="500" height="194" alt="2013-12-08-9"></a></p>
+
+<h3>添加多个按钮</h3>
+
+<p>同样，这个技巧也不是iOS 7的，开发者经常会在导航栏中添加多个按钮，所以我决定在这里进行介绍。我们可以在导航栏左边或者右边添加多个按钮。例如，我们希望在导航栏右边添加一个照相机和分享按钮，那只需要使用下面的代码即可：</p>
+
+<p><code>
+UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:nil];
+UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:nil];  
+NSArray *actionButtonItems = @[shareItem, cameraItem];
+self.navigationItem.rightBarButtonItems = actionButtonItems;
+</code></p>
+
+<p>如下效果：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263379424/" title="2013-12-08-10 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2810/11263379424_d57a82b2a7.jpg" width="500" height="171" alt="2013-12-08-10"></a></p>
+
+<h3>修改状态栏的风格</h3>
+
+<p>在老版本的iOS中，状态栏永远都是白色风格。而在iOS 7中，我们可以修改每个view controller中状态栏的外观。通过UIStatusBarStyle常量可以指定状态栏的内容是暗色或亮色。默认情况下，状态栏的显示是暗色。也就是说，状态栏上的时间、电池指示器和Wi-Fi信号显示为暗色。如果导航栏中使用暗色为背景，那么看起来的效果如下图所示：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263366266/" title="2013-12-08-11 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7447/11263366266_e0161eb7bf.jpg" width="500" height="174" alt="2013-12-08-11"></a></p>
+
+<p>如上图这种情况下，我们可能希望将导航栏的风格修改为亮色。这里有两个方法可以实现。在iOS 7中，我们可以在每个view controller中overridingpreferredStatusBarStyle:方法，如下所示：</p>
+
+<p>```
+&ndash;(UIStatusBarStyle)preferredStatusBarStyle
+{</p>
+
+<pre><code>return UIStatusBarStyleLightContent; 
+</code></pre>
+
+<p>}
+```</p>
+
+<p>上面代码的效果如下图所示：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11263330045/" title="2013-12-08-12 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3745/11263330045_77ed88449d.jpg" width="500" height="173" alt="2013-12-08-12"></a></p>
+
+<p>在iOS 7中，通过上面的方法来修改状态栏风格非常的棒。另外，我们也可以使用UIApplication的statusBarStyle方法来设置状态栏，不过，首先需要停止使用View controller-based status bar appearance。在project target的Info tab中，插入一个新的key，名字为View controller-based status bar appearance，并将其值设置为NO。</p>
+
+<p>然后就可以使用下面的代码来设置状态栏风格了：</p>
+
+<p><code>
+[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+</code></p>
+
+<h3>隐藏状态栏</h3>
+
+<p>有时候我们需要隐藏状态栏，那么此时我们在view controller中override方法prefersStatusBarHidden:即可，如下代码所示：</p>
+
+<p>```
+&ndash; (BOOL)prefersStatusBarHidden
+{</p>
+
+<pre><code>return YES; 
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>总结</h3>
+
+<p>iOS 7给开发者提供了一些新的自由度来定制导航栏和状态栏的外观。希望上面的这些技巧能对你有用。这里可以下载到<a href="https://dl.dropboxusercontent.com/u/2857188/NavigationBarDemo.zip">示例工程源码</a>。只需要取消相关代码注释即可进行测试。</p>
+
+<p>来源：破船的博客
+原文：<a href="http://www.appcoda.com/customize-navigation-status-bar-ios-7/">Customizing Navigation Bar and Status Bar in iOS 7</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Does ARC support dispatch queues?]]></title>
@@ -592,60 +805,6 @@ NSString *vfl1 = @"|-hPadding-[_headerL]-hPadding-|";
 <p><em>最后一个问题：可以试一下self.view=自定义的视图； 不要用[self.view addSubview:&hellip;];</em></p>
 
 <p><a href="https://www.dropbox.com/s/vizq53ig4e1z7io/20131123_AutoLayoutTest.zip">demo</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发：从新手到专家的一些建议]]></title>
-    <link href="http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/"/>
-    <updated>2013-11-23T17:32:00+08:00</updated>
-    <id>http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi</id>
-    <content type="html"><![CDATA[<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1118/7371.html">Origin</a></p>
-
-<p>虽然你有可能在一周内学习到iOS开发的本质，但想要精通iOS开发需则要花费更长的时间。问题是你如何从新手变成专家？在这篇文章中，我们主要就这个主题给出一些建议（如果你有好的建议和相关文章欢迎分享给更多开发者）</p>
-
-<!-- more -->
-
-
-<h3>1.练习，练习还是练习</h3>
-
-<p>iOS开发没有捷径可走。这是我在继续这个话题之前需要强调的东西，因为摆脱任何常常浮现于你脑海的幻想很重要。如果你仅仅在星期天的4PM和5PM之间学习/练习编程，那么你不会成为一个熟练的iOS开发者。不要误会我的意思，这么做可能会很有趣，但是它很难让你成为一个老练的专业的iOS开发者。除了极少数的人，大部分人都需要不断的练习和实践。如果你还没有准备好投入大量时间，这时候最好重新审视你的目标和理想。</p>
-
-<h3>2.向其他人学习</h3>
-
-<p>提升开发技能和采用最佳实践的最好策略之一是学习别人的代码。这不仅仅意味着浏览Stack Overflow，但更重要的是其他开发者的各种开源类库和代码片段。</p>
-
-<p>不管何时你一头扎进各种类库的学习，比如AFNetworking或者Magical Record，很关键的一点是不要被各种代码淹没。有可能你不理解各种库中的代码，但这不是真正的关键，重点是从一个更高的层次来看源码和尽可能多地学习，比如<em>命名规范</em>、<em>最佳实践</em>&amp;以及<em>设计模式</em>等。</p>
-
-<p>除了学习别人的代码外，创建你自己的类库是一个最好的学习方法。不久前，我用Core Data作为数据层开发了一款app，我没有使用Magical Record，我决定通过学习Magical Record创建自己的库，并重新创建了我需要的功能。这种方法不仅帮我创建了一个更加灵活的库，也让我学习到很多Magical Record内部的工作原理。</p>
-
-<h3>3. 不要仅仅复制和粘贴</h3>
-
-<p>这一点让我看到了正确学习方式的另一个关键面：不要不动脑子简单地复制和粘贴。我们常常会使用我们在Stack Overflow或者苹果开发者论坛找到的各种代码片段，但是不要为了偷懒简单地复制粘贴你从网络上找到的代码，这样你很难彻底理解它。最大的危险在于这可能会导致意外的行为，以致于你的代码以后都很难调试和修复。</p>
-
-<p>有时候，复制别人的代码片段看着可能已经解决了你遇到的问题，但是我强烈建议不要这么做。阅读代码，理解你往代码库添加的东西，可能的话定制你需要的解决方案。不用说，这并不适用于开发者积极维护的库或框架。在项目中使用Magical Record前，如果你需要仔细检查它，那么我确信你已经理解了不同之处。使用你自己的常识。</p>
-
-<h3>4. 模式</h3>
-
-<p>Cocoa和Objective-C在很多方面都不同于其他编程语言和环境。这意味着他们有自己独特的模式和最佳实践。我确信你已经熟悉了一些常见的模式，比如委托和通知。但还有很多模式可以开发过程中帮助你，比如单例模式、观察者模式以及通用模式等。Cocoa Fundamentals Guide很好地概述了Cocoa中大部分常用模式。</p>
-
-<h3>5.了解你的工具</h3>
-
-<p>作为一个开发者并不仅仅是理解语言和框架，理解你每天使用的工具同样重要。对于iOS开发来说，这意味着你需要很好地理解Xcode和其他可能用到的工具，比如PonyDebugger和Charles。如果你想学习一些额外的技巧，你可能会对我此前的一篇文章（iOS Quick Tip: 7 Tips to Speed Up Your Development）感兴趣。</p>
-
-<h3>6.与时俱进</h3>
-
-<p>即使你不能参加苹果一年一度的开发者大会&mdash;WWDC，但浏览大量的会议视频是个很好的学习方法，你可以观看你感兴趣的专题视频，它们都是由在某方面擅长的工程师演讲，他们可以告诉你一些细节信息以及相关使用说明。另外，你还可以多关注优秀的开发者，他们会定期写一些技术文章，比如比如Matt Gemmell、 Aaron Hillegass以及Mike Ash，你可以在我为Mobiletuts+写的这篇“Where To Go Next”文章中找到更多学习资源。</p>
-
-<h3>7.学习其他语言</h3>
-
-<p>我已经注意到学习新语言或者使用新框架让我对软件开发的整体理解有了明显提高。这种方法的优点在于不会限制你对最熟悉语言的认知和它潜在可能性的理解。我最近在研究Ember.js，并了解到它的创建者 Yehuda Katz和Tom Dale是从Cocoa获得的灵感。Ember.js对mvc的实现并没有遵循JavaScript framework，不过如果你熟悉cocoa的话，就不会感觉到奇怪了。</p>
-
-<p>对于软件开发来说，没有最好的语言，每种语言都有自己的优势和劣势。但是好的一面在于或多或少他们都有所不同，这使得学习新语言变得更加有趣和更有启发性。比如对我来说，Ruby在写DRY (Don’t Repeat Yourself)、易读的、干净的代码方面让我大开眼界。</p>
-
-<h3>总结</h3>
-
-<p>如果你不想花费时间成为一个更好的程序员，那么你可能要重新考虑下为什么你把成为一个程序员摆在首位。但如果你会因为一个可以帮你的新类库或者开发工具而兴奋，那么随着时间的流逝，你在提高自身技能方面可能不会有什么问题。你真的必须热爱你所做的事情，并在这面擅长，这一点尤其适用于编程。不管什么人告诉你，你不会在一夜之间成为一个老练的开发者，但如果你保持不间断的学习，并细心打磨自己的“手艺”，我想你的技术会有很好的提高。</p>
 ]]></content>
   </entry>
   
