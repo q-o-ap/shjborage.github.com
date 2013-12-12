@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS 用其它应用打开文件研究 Open In... - Saick Blog</title>
+  <title>在iOS中使用icon font及自定义字体 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="今天上班的状态还没有完全恢复，就拿Reminders里面的提醒来看看，研究一些以前没时间弄的东西，就发现了这个。 这项功能开始不知道是哪个版本的iOS加入的，研究这些方法的时候才发现，原来从iOS3.2（iPad上市时）就开始支持了，真是惭愧啊。 下面慢慢道来 1.注册应用支持的文档类型（ &hellip;">
+  <meta name="description" content="在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和&#97;&#x40;&#50;&#120;&#x2e;&#x70;&#110;&#x67;)， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/">
+  <link rel="canonical" href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS 用其它应用打开文件研究 Open In...</h1>
+      <h1 class="entry-title">在iOS中使用icon Font及自定义字体</h1>
     
     
       <p class="meta">
@@ -98,45 +98,176 @@
   
 
 
-<time datetime="2013-02-17T17:34:00+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+<time datetime="2013-12-11T21:42:00+08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>今天上班的状态还没有完全恢复，就拿Reminders里面的提醒来看看，研究一些以前没时间弄的东西，就发现了这个。</p>
+<div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#64;&#50;&#120;&#46;&#x70;&#x6e;&#103;">&#97;&#x40;&#50;&#120;&#x2e;&#x70;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10709167093/" title="2013-2-17-1 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5535/10709167093_713ae846bd.jpg" width="381" height="28" alt="2013-2-17-1"></a></p>
+<p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
-<p>这项功能开始不知道是哪个版本的iOS加入的，研究这些方法的时候才发现，原来从iOS3.2（iPad上市时）就开始支持了，真是惭愧啊。 下面慢慢道来</p>
+<p>那么它能不能应用到ios开发上来呢？带着这个疑问，我在github上找到了FontasticIcons和ios-fontawesome，但是这两个OC包对icon资源封装都有限，而且扩展也不是很方便。</p>
 
-<p>1.注册应用支持的文档类型（会被系统管理起来）<br/>
-2.打开所用的ViewController</p>
+<p>既然能在ios上使用icon font，那么怎么用呢？经过一番摸索，发现使用原理和自定义字体差不多，只有个别操作不太一样，接下来我给大家详细介绍一下。</p>
 
-<!--more-->
+<!-- more -->
 
 
-<h4>1.注册类型，按需要添加</h4>
+<h3>如何使用自定义字体</h3>
 
-<p>附上本地的文档链接（搜索关键字：Uniform Type Identifier Concepts）
-（file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/understanding_utis/understand_utis_conc/understand_utis_conc.html#//apple_ref/doc/uid/TP40001319-CH202-CHDHIJDE）</p>
+<p>在讲icon font之前，首先先来看看普通自定义字体是如何在ios中使用的，两个原理是一样的。这里以KaushanScript-Regular为例：</p>
 
-<p>All Files这个文件类型，是从Dropbox里面抄来的，你懂的（<a href="http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82">http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82</a></p>
+<h4>Step 1: 导入字体文件</h4>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10708970444/" title="2013-2-17-2 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5488/10708970444_870ea07b91.jpg" width="500" height="284" alt="2013-2-17-2"></a></p>
+<p>将字体文件拖入项目（ios支持的字体格式有：.ttf、.otf，其他格式不确定）：</p>
 
-<h3>2.打开文件ViewController</h3>
+<p><a href="http://www.flickr.com/photos/shjborage/11323775276/" title="2013-12-11-01 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2846/11323775276_b14a547aa1.jpg" width="500" height="354" alt="2013-12-11-01"></a></p>
 
-<p>附本地文件链接：（搜索关键字：Previewing and Opening Files）file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/DocumentInteraction_TopicsForIOS/Articles/PreviewingandOpeningItems.html#//apple_ref/doc/uid/TP40010410-SW1</p>
+<p>然后再在项目的资源池中确认字体文件是否加入项目，打开xcode项目的Build Phases中查看：</p>
 
-<h4>UIDocumentInteractionController</h4>
+<p><a href="http://www.flickr.com/photos/shjborage/11323859283/" title="2013-12-11-02 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3816/11323859283_dff602ee81.jpg" width="500" height="249" alt="2013-12-11-02"></a></p>
 
-<p>不知道的话看一下文档就好了，还是比较容易使用。</p>
+<h4>Step 2: 配置.plist文件</h4>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10708900325/" title="2013-2-17-3 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5478/10708900325_1a55a4d3d8.jpg" width="282" height="500" alt="2013-2-17-3"></a></p>
+<p>在.plist文件中注册新加入的字体，.plist文件往往以“[appname]-Info.plist”的形式存在于“Supporting Files”文件夹内。 在.plist文件中添加新属性“Fonts provided by application”，该属性的值是一个数组，这意味着可以在这里注册多个字体。</p>
 
-<p>再有的话呢，就是HandleOpenUrl的用法了，这个相信大家都比较熟悉了，就不多说了。URL的内容是文件的路径，你自己想干什么都可以咯。</p>
+<p><a href="http://www.flickr.com/photos/shjborage/11323790974/" title="2013-12-11-03 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3692/11323790974_9beda31ccb.jpg" width="500" height="209" alt="2013-12-11-03"></a></p>
+
+<h4>Step 3: 找到字体集名称</h4>
+
+<p>注册完，我们需要检测是否注册成功且取得新字体名称，检测方法就是把所有安装了的字体都打印出来，看看新注册的字体是否在里面：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>for (NSString* family in [UIFont familyNames]) 
+</span><span class='line'>{ 
+</span><span class='line'>  NSLog(@"%@", family); 
+</span><span class='line'>  for (NSString* name in [UIFont fontNamesForFamilyName: family]) 
+</span><span class='line'>  { 
+</span><span class='line'>         NSLog(@"  %@", name); 
+</span><span class='line'>    } 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行完，查看控制台里打印出的所有字体集中是否有新注册的字体，如果有，说明注册成功，并将字体名（在这里是“Kaushan Script”）记住留到后面用。</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323787836/" title="2013-12-11-04 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5481/11323787836_e8fc5ed22a.jpg" width="500" height="392" alt="2013-12-11-04"></a></p>
+
+<h3>Step 4: 使用新字体</h3>
+
+<p>最后，就是使用你最新加入的字体啦：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)]; 
+</span><span class='line'>label.font = [UIFont fontWithName:@"Kaushan Script" size:35]; 
+</span><span class='line'>label.text = @"icon font"; 
+</span><span class='line'>label.textColor = UIColorFromRGB(0xFF7300); 
+</span><span class='line'>[self.view addSubview:label]; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323858493/" title="2013-12-11-05 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5471/11323858493_39eaf9269b.jpg" width="276" height="113" alt="2013-12-11-05"></a></p>
+
+<h3>开始使用icon font</h3>
+
+<p>图标字体也是字体，使用方式和上面所说的差不多，只是在套用上有些差别；这里拿fontello的图标字体库为例。</p>
+
+<ul>
+<li>1.选择需要的图标
+在fontello的图标字体库选择自己需要的图标，并下载生成的字体文件。</li>
+<li>2.按照上面的步骤将图标字体注册到项目中</li>
+<li>3.找到图标对应的unicode码
+使用FontLab Studio 5工具打开字体文件（比如fontello.ttf），就可以看到图标与unicode码之间的对应关系啦。</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323774246/" title="2013-12-11-06 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2824/11323774246_65813b1aab.jpg" width="500" height="126" alt="2013-12-11-06"></a></p>
+
+<ul>
+<li>4.使用图标</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)]; 
+</span><span class='line'>label.font = [UIFont fontWithName:@"fontello" size:35]; 
+</span><span class='line'>label.text = @"\U0000E802 \U0000E801 \U0000E803 \U0000E804 \U0000E805 \U0000E81A"; 
+</span><span class='line'>label.textColor = UIColorFromRGB(0xFF7300); 
+</span><span class='line'>[self.view addSubview:label]; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>在Objective-C中，自定义的unicode码需要以“\U0000E802”这样的格式存在。</p>
+
+<ul>
+<li>5.使用emoji表情库
+这里还可以使用苹果emoji表情库的图标，这里不需要新加字体库，只要找到emoji图标和unicode之间的对应关系就好，但是这些图标都不是矢量图，缩放请自重。</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UILabel *label5 = [[UILabel alloc] initWithFrame:CGRectMake(10, 480, 300, 50)]; 
+</span><span class='line'>label5.text = @"\U0000e42a\U0000e525\U0000e41c"; 
+</span><span class='line'>[self.view addSubview:label5]; </span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>6.效果</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323858703/" title="2013-12-11-07 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5526/11323858703_820c5b3eef.jpg" width="366" height="500" alt="2013-12-11-07"></a></p>
+
+<ul>
+<li>7.使用自制图标字体</li>
+<li><p>如果上面介绍的图标库还满足不了你的需求，或者需要的图标分布在多个图标库而不能集中到一个字体文件中；那么你可能需要自己去制作图标字体文件了。</p></li>
+</ul>
+
+
+<h3>总结</h3>
+
+<p>这样，在iOS开发上，不仅可以直接去开源图标库找现成的图标用到项目中，而且还可以轻松地改变图标的颜色、大小，相信可以解放不少设计师和工程师的工作量。</p>
+
+<p>图标字体库
+<a href="http://fontello.com/">fontello</a>
+etao图标字体库（这里有个问题要注意，etao的图标字体名为“Untitled1”，是不是生成字体的同学疏忽啦？）
+IcoMoon
+<a href="http://www.easyapns.com/iphone-emoji-alerts">emoji表情库</a></p>
+
+<p>参考资料</p>
+
+<p><a href="http://codewithchris.com/common-mistakes-with-adding-custom-fonts-to-your-ios-app/">Common Mistakes With Adding Custom Fonts to Your iOS App</a></p>
+
+<p><a href="http://ux.etao.com/posts/401">Icon font 实践</a></p>
+
+<p>FontasticIcons</p>
+
+<p>ios-fontawesome</p>
+
+<p><a href="https://coderwall.com/p/wrb3pw">Custom Unicode Characters in Objective-C</a></p>
+
+<p><a href="http://www.qianduan.net/css3-icon-font-guide.html">CSS3 icon font完全指南</a></p>
+
+<p>《转》</p>
 </div>
 
 
@@ -159,7 +290,7 @@
   
 
 
-<time datetime="2013-02-17T17:34:00+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+<time datetime="2013-12-11T21:42:00+08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2013</time>
       
 
 <span class="categories">
@@ -177,7 +308,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/" >Tweet</a>
   
   
   
@@ -204,10 +335,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/" title="Previous Post: iOS应用内置AppStore以及iOS Safari内置Banner进行推广">&laquo; iOS应用内置AppStore以及iOS Safari内置Banner进行推广</a>
+        <a class="basic-alignment left" href="/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan/" title="Previous Post: 定制iOS 7中的导航栏和状态栏">&laquo; 定制iOS 7中的导航栏和状态栏</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/05/27/hello-jekyll/" title="Next Post: Hello jekyll">Hello jekyll &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/" title="Next Post: XCode下的iOS单元测试">XCode下的iOS单元测试 &raquo;</a>
       
     </p>
   </footer>
