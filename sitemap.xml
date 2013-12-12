@@ -321,12 +321,18 @@
         <lastmod>2013-12-12T09:53:02+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/
+        </loc>
+        <lastmod>2013-12-12T13:44:34+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-12-12T09:53:02+08:00</lastmod>
+        <lastmod>2013-12-12T13:44:34+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -338,7 +344,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-12-12T09:53:02+08:00</lastmod>
+        <lastmod>2013-12-12T13:44:34+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

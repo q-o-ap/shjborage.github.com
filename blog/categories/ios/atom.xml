@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-12T09:54:08+08:00</updated>
+  <updated>2013-12-12T13:45:10+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,98 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SQLite(FMDB) 线程安全 - 多线程处理]]></title>
+    <link href="http://saick.net/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/"/>
+    <updated>2013-12-12T11:25:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li</id>
+    <content type="html"><![CDATA[<p>在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。</p>
+
+<p>但是，我们在数据库操作的时候，经常遇到多线程访问数据库的状况，常见的有几种处理方法：</p>
+
+<ul>
+<li>1, NSLock或类似方法加锁</li>
+<li>2, FMDatabaseQueue</li>
+<li>3, SQLITE_CONFIG_SERIALIZED</li>
+</ul>
+
+
+<p>下面我们来仔细看一下出现的问题以及相关的解决方案</p>
+
+<!-- more -->
+
+
+<h3>常见问题</h3>
+
+<p>以使用FMDB为例：</p>
+
+<p>The debugger says that the error occurs at [FMResultSet next] at the line, has <code>EXC_BAD_ACCESS</code></p>
+
+<p><code>
+rc = sqlite3_step(statement.statement);
+</code></p>
+
+<p>多线程访问的时候，会在这里报错。</p>
+
+<p>如何解决呢？</p>
+
+<h4>1. NSLock加锁（NSMutex）</h4>
+
+<p>详见苹果官方文档：
+<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Multithreading/ThreadSafety/ThreadSafety.html">Threading Programming Guide</a></p>
+
+<h4>2. FMDatabaseQueue</h4>
+
+<p>这个是我在某项目中用到的，所有查询都走这里。
+可能因为项目较复杂，用了这个还是会时候有问题，但稳定很多。可以有一些别的地方调用，没查清楚。</p>
+
+<p>```
+// 相关引用
+_fmQueue = [FMDatabaseQueue databaseQueueWithPath:sqlitePath];</p>
+
+<p>// 查询数据
+&ndash; (FMResultSet <em>)executeQueryWithSQL:(NSString </em>)sql
+{
+  BFLogVerbose(@&ldquo;executeQuery: %@&rdquo;, sql);</p>
+
+<p>  <strong>block FMResultSet *rs = nil;
+  </strong>block dispatch_semaphore_t sem = dispatch_semaphore_create(0);</p>
+
+<p>  [_fmQueue inDatabase:^(FMDatabase *fmdb){</p>
+
+<pre><code>FMResultSet *tmpRs = [fmdb executeQuery:sql];
+rs = [FMResultSet resultSetWithStatement:tmpRs.statement usingParentDatabase:fmdb];
+[tmpRs close];
+dispatch_semaphore_signal(sem);
+</code></pre>
+
+<p>  }];</p>
+
+<p>  dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+  dispatch_release(sem);</p>
+
+<p>  return rs;
+}
+```</p>
+
+<h3>3. SQLITE_CONFIG_SERIALIZED</h3>
+
+<p>SQLite provides a much simpler serialization. By just setting the sqlite_config() option SQLITE_CONFIG_SERIALIZED you will probably avoid most of these kinds of headaches. I discovered this the hard way after fighting with threading issues for a long while.</p>
+
+<p>```
+if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_ERROR) {</p>
+
+<pre><code>    NSLog(@"couldn't set serialized mode");
+</code></pre>
+
+<p>}
+```</p>
+
+<p>参考：
+<a href="http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0">http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[XCode下的iOS单元测试]]></title>
@@ -262,7 +354,7 @@ returnValue, @"Should have returned the expected string.");
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#97;&#64;&#x32;&#120;&#46;&#112;&#x6e;&#x67;">&#97;&#x40;&#x32;&#x78;&#46;&#x70;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#97;&#64;&#x32;&#x78;&#x2e;&#112;&#x6e;&#103;">&#x61;&#64;&#50;&#x78;&#x2e;&#x70;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -682,61 +774,6 @@ self.navigationItem.rightBarButtonItems = actionButtonItems;
 <p>```</p>
 
 <p>or you can add OS_OBJECT_USE_OBJC=0 as a preprocessor macro in your build settings. If you set OS_OBJECT_USE_OBJC to 0, ARC will not retain or release your queue for you, and you will have to do it yourself using dispatch_retain and dispatch_release.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..]]></title>
-    <link href="http://saick.net/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in/"/>
-    <updated>2013-12-01T01:37:00+08:00</updated>
-    <id>http://saick.net/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in</id>
-    <content type="html"><![CDATA[<p><a href="http://yul100887.blog.163.com/blog/static/20033613520137205121620/">Origin</a></p>
-
-<p>Nested pop animation can result in corrupted navigation bar</p>
-
-<p>Finishing up a navigation transition in an unexpected state. Navigation Bar subview tree might get corrupted.</p>
-
-<h3>【情况一】</h3>
-
-<p>出现此问题的原因是在A界面弹出B界面完成后，又掉A界面POP出栈，这必然导致以上问题。如下，在弹出personalController后面，又在后面调用了[self.navigationController popViewControllerAnimated:YES];将自己弹出！解决方法，还用说吗？｛删除最后一行代码，要弹出此界面，自然有自己的返回按钮来处理｝，至少在B界面未POP以前，A界面是无论如何也不能将自己POP去消毁！</p>
-
-<!-- more -->
-
-
-<p><code>
-NSString *memberId = [dictionary objectForKey:@"PlayerNo"];
-PersonalInfoViewController* personalController = [[PersonalInfoViewController alloc] init];
-[personalController.navigationItems etHidesBackButton:YES];
-[personalController setMemberId:memberId];
-[self.navigationController pushViewController:personalController animated:YES];
-[personalController release];
-[self.navigationController popViewControllerAnimated:YES];
-</code></p>
-
-<h3>【情况二】</h3>
-
-<p>nested push animation can result in corrupted navigation bar <br/>
-嵌套的navigation动画会造成  navigation bar 错误<br/>
-具体表现为上一层的titleview 和这一层重叠， navigationbaritem维持上一层的左按钮,右按钮,系统警告提示nested push animation can result in corrupted navigation bar</p>
-
-<p>从头到尾分析了整个项目的代码， 最后确认问题根源——<strong>自定义UITabbarController</strong>引发的血案
-项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，</p>
-
-<ul>
-<li>整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，</li>
-<li>导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</li>
-</ul>
-
-
-<p>```
-&ndash; (void)viewWillAppear:(BOOL)animated
-{</p>
-
-<pre><code>[super viewWillAppear:animated];
-</code></pre>
-
-<p>}
-```</p>
 ]]></content>
   </entry>
   

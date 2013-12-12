@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-12T09:54:08+08:00</updated>
+  <updated>2013-12-12T13:45:10+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SQLite(FMDB) 线程安全 - 多线程处理]]></title>
+    <link href="http://saick.net/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/"/>
+    <updated>2013-12-12T11:25:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li</id>
+    <content type="html"><![CDATA[<p>在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。</p>
+
+<p>但是，我们在数据库操作的时候，经常遇到多线程访问数据库的状况，常见的有几种处理方法：</p>
+
+<ul>
+<li>1, NSLock或类似方法加锁</li>
+<li>2, FMDatabaseQueue</li>
+<li>3, SQLITE_CONFIG_SERIALIZED</li>
+</ul>
+
+
+<p>下面我们来仔细看一下出现的问题以及相关的解决方案</p>
+
+<!-- more -->
+
+
+<h3>常见问题</h3>
+
+<p>以使用FMDB为例：</p>
+
+<p>The debugger says that the error occurs at [FMResultSet next] at the line, has <code>EXC_BAD_ACCESS</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rc = sqlite3_step(statement.statement);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>多线程访问的时候，会在这里报错。</p>
+
+<p>如何解决呢？</p>
+
+<h4>1. NSLock加锁（NSMutex）</h4>
+
+<p>详见苹果官方文档：
+<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Multithreading/ThreadSafety/ThreadSafety.html">Threading Programming Guide</a></p>
+
+<h4>2. FMDatabaseQueue</h4>
+
+<p>这个是我在某项目中用到的，所有查询都走这里。
+可能因为项目较复杂，用了这个还是会时候有问题，但稳定很多。可以有一些别的地方调用，没查清楚。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 相关引用
+</span><span class='line'>_fmQueue = [FMDatabaseQueue databaseQueueWithPath:sqlitePath];
+</span><span class='line'>
+</span><span class='line'>// 查询数据
+</span><span class='line'>- (FMResultSet *)executeQueryWithSQL:(NSString *)sql
+</span><span class='line'>{
+</span><span class='line'>  BFLogVerbose(@"executeQuery: %@", sql);
+</span><span class='line'>  
+</span><span class='line'>  __block FMResultSet *rs = nil;
+</span><span class='line'>  __block dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+</span><span class='line'>  
+</span><span class='line'>  [_fmQueue inDatabase:^(FMDatabase *fmdb){
+</span><span class='line'>    FMResultSet *tmpRs = [fmdb executeQuery:sql];
+</span><span class='line'>    rs = [FMResultSet resultSetWithStatement:tmpRs.statement usingParentDatabase:fmdb];
+</span><span class='line'>    [tmpRs close];
+</span><span class='line'>    dispatch_semaphore_signal(sem);
+</span><span class='line'>  }];
+</span><span class='line'>  
+</span><span class='line'>  dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+</span><span class='line'>  dispatch_release(sem);
+</span><span class='line'>  
+</span><span class='line'>  return rs;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. SQLITE_CONFIG_SERIALIZED</h3>
+
+<p>SQLite provides a much simpler serialization. By just setting the sqlite_config() option SQLITE_CONFIG_SERIALIZED you will probably avoid most of these kinds of headaches. I discovered this the hard way after fighting with threading issues for a long while.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_ERROR) {
+</span><span class='line'>        NSLog(@"couldn't set serialized mode");
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：
+<a href="http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0">http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[XCode下的iOS单元测试]]></title>
@@ -290,7 +400,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#64;&#50;&#120;&#46;&#x70;&#x6e;&#103;">&#97;&#x40;&#50;&#120;&#x2e;&#x70;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x61;&#x40;&#x32;&#120;&#x2e;&#x70;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#46;&#112;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -3022,102 +3132,6 @@ sudo chmod +x XXX</p>
 <li><p>多数情况下， ｛% extends %｝ 的参数应该是字符串，但是如果直到运行时方能确定父模板名，这个参数也可以是个变量。 这使得你能够实现一些很酷的动态功能。</p></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mac OS X: 停止响应的处理（包含强制重启机器）]]></title>
-    <link href="http://saick.net/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/"/>
-    <updated>2013-10-23T22:47:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi</id>
-    <content type="html"><![CDATA[<p><em>Mac OS X: 如果您的计算机停止响应、“悬挂”或“冻结”</em></p>
-
-<p>本文章已经归档，因此 Apple 将不再对其进行更新。</p>
-
-<h4>症状</h4>
-
-<p>了解如何消除计算机停止响应（“悬挂”或“冻结”）的情况。解决频发问题可能需要本文以外的解决方法。
-重要：
-所打开的应用程序中未保存的更改将会丢失。这些步骤适用于 Mac OS X 和 Mac OS X Server。“没有响应”通常是以一个旋转的指针和（或）输入响应时间缓慢（或者根本没有响应）来界定的。
-解决方法</p>
-
-<h4>1. 退出打开的应用程序</h4>
-
-<!-- more -->
-
-
-<p>如果您的计算机停止响应，那么您有时可以通过退出打开的应用程序来恢复。通过从“文件”菜单中选择“退出”或者按下 Command-Q 组合键，几乎可以退出所有的应用程序。</p>
-
-<p>Classic 环境也可能是没有响应的根源。要确定是否运行了 Classic 环境，可以打开“系统预置”，然后从“显示”菜单中选择 Classic 。单击“启动/停止”选项卡，然后注意 Classic 环境的状态，它将会显示在“请为 Classic 选择系统文件夹”部分的上面。要停止 Classic 环境，请单击“停止”。</p>
-
-<h4>2. 强制退出应用程序</h4>
-
-<p>如果您不能以正常方式退出应用程序，那么请试着通过从 Apple 菜单中选择“强制退出”来强制退出程序。在出现的对话框中，选定没有响应的应用程序，然后单击“强制退出”按钮。</p>
-
-<p>要强制退出 Classic 环境，请打开“系统预置”应用程序，然后从“显示”菜单中选择 Classic 。单击“启动/停止”选项卡，然后单击“强制退出”。</p>
-
-<p>警告：当前文档中未保存的更改将会丢失。</p>
-
-<h4>3. 重新启动计算机</h4>
-
-<p>通常您可以通过重新启动计算机来解决问题，它将会清除它的内存。在重新启动之前，请确保保存所有打开的文档。通常试着采用正确的方式来重新启动：</p>
-
-<ul>
-<li> 从 Apple 菜单中选择“重新启动”，或者</li>
-<li> 在有些计算机中，您可以按下键盘上的电源键，然后在出现的对话框中单击“重新启动”。如果您的计算机使用的是 Apple 专业键盘，那么请按下 Control-Eject 组合键，然后在出现的对话框中单击“重新启动”。</li>
-</ul>
-
-
-<h4>4. 关闭计算机</h4>
-
-<p>正如在重新启动计算机时一样，您可以通过重新启动计算机来解决问题，这将会清除它的内存。在重新启动之前，请确保保存所有打开的文档。通常试着采用正确的方式来重新启动：</p>
-
-<ul>
-<li> 从 Apple 菜单中选择“关机”，或者</li>
-<li> 在有些计算机中，您可以按下键盘上的电源键，然后在出现的对话框中单击“关机”。如果您的计算机使用的是 Apple 专业键盘，那么请按下 Control-Eject 组合键，然后在出现的对话框中单击“关机”。</li>
-</ul>
-
-
-<h4>5. 强制关闭计算机</h4>
-
-<p>您应该只有在上述所有步骤（1 &ndash; 4）都失败的情况下才强制关闭您的计算机。
-1. 按住计算机上的电源键保持 6 秒钟，以关闭计算机。</p>
-
-<p>注意：请不要按下显示器上的电源键。</p>
-
-<ol>
-<li>等待 10 秒钟，然后再打开计算机。
-注意：
-这项技术不适用于某些早期的与 Mac OS X 兼容的计算机。在这些计算机中，可以在按下重置键（参阅下面的内容）后立即按下电源键来关闭计算机。</li>
-</ol>
-
-
-<h4>6. 强制重启计算机</h4>
-
-<p>您应该在只有上述所有步骤（1 &ndash; 5）都失败的情况下才试着强制重启计算机。当您的计算机停止响应时，强制重启计算机并不是首选的解决方法。</p>
-
-<p>如果您不能以正常方式重新启动您的计算机，那么请尝试下面的方法：</p>
-
-<ul>
-<li> 按下 Command-Control-Power 组合键。若您的计算机使用的是 Apple 专业键盘，那么不适用这种方法。</li>
-</ul>
-
-
-<p>如果这种方法无效，那么请执行下面的操作：</p>
-
-<ul>
-<li> 如果您的计算机有“重置”键孔，那么请小心地将伸直的曲别针插入孔中，并轻轻地按一下。取出曲别针。您的计算机就应该重新启动了。关于“重置”键孔的位置，请参阅计算机附带的技术资料。</li>
-<li> 如果您的计算机有“重置”键，那么请按下它。重置键在计算机上，而不在键盘上，并且是用一个三角形标记的。关于“重置”键的位置，请参阅计算机附带的技术资料。</li>
-</ul>
-
-
-<p>注意：
-有些 PowerBook 计算机没有“重置”键。在这种情况下，请按下 Shift-Function-Control-Power 组合键，直到计算机关闭。然后，等待至少 30 秒，然后通过按下电源键重新打开 PowerBook。</p>
-
-<h4>7. 拔掉计算机的电源</h4>
-
-<p>如果重置无效，并且您的计算机是插入到有开关的插座板上的，那么请关闭插座板上的开关。如果没有开关，那么请拔掉计算机的电源。等待至少 30 秒，然后重新打开计算机。可以通过按下键盘或计算机上的电源键来重新打开计算机。
-上次修改时间： 2011-11-22</p>
 ]]></content>
   </entry>
   

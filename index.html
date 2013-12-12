@@ -9,7 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="XCode 内置了 OCUnit 单元测试框架，但目前最好用的测试框架应该是 GHUnit。通过 GHUnit + OCMock 组合，我们可以在 iOS 下进行较强大的单元测试功能。本文将演示如何在 XCode 4.2 下使用 OCUnit， GHUnit 和 OCMock 进行单元测试。 ">
+  <meta name="description" content="在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。 但是，我们在数据库操作的时候，经常遇到多线程访问数据库的状况，常见的有几种处理方法： 1, NSLock或类似方法加锁
+2, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +86,58 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/">SQLite(FMDB) 线程安全 - 多线程处理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-12T11:25:00+08:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。</p>
+
+<p>但是，我们在数据库操作的时候，经常遇到多线程访问数据库的状况，常见的有几种处理方法：</p>
+
+<ul>
+<li>1, NSLock或类似方法加锁</li>
+<li>2, FMDatabaseQueue</li>
+<li>3, SQLITE_CONFIG_SERIALIZED</li>
+</ul>
+
+
+<p>下面我们来仔细看一下出现的问题以及相关的解决方案</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">XCode下的iOS单元测试</a></h1>
     
     
@@ -149,7 +202,7 @@
   </header>
 
 
-  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#64;&#50;&#120;&#46;&#x70;&#x6e;&#103;">&#97;&#x40;&#50;&#120;&#x2e;&#x70;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x61;&#x40;&#x32;&#120;&#x2e;&#x70;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#46;&#112;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -506,59 +559,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 Hosts文件</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-12T22:34:00+08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者，因此没有权限写到该文件”的提示，要解决这个权限问题又比较麻烦，对于刚刚使用 Mac 的用户来说并不容易整明白。因此，就有了这篇小贴士，下面我分享四种方法来修改 Mac OS X Lion 系统中的 Hosts 文件，这四种方法都不会出现权限提示，而且 Mac OS X Snow Leopard(10.6) 用户也完全可以使用这些方法。</p>
-
-<h3>1、通过 VI 编辑器修改</h3>
-
-<p>打开终端（应用程序——实用工具），运行：(<em>vim也行</em>)</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vi /etc/hosts</span></code></pre></td></tr></table></div></figure>
-
-
-<p>屏幕上会提示你输入密码（输入密码的时候不会有任何字符显示，甚至*都不会显示，输完之后按回车就是了），打开 hosts 文件之后按 i 键进入插入模式（可理解为编辑模式），然后按照你的需要对该文件进行编辑，编辑完成之后按 ESC 键退出插入模式，之后按 :wq+回车保存退出，记得英文的冒号也是要输入的哦。</p>
-
-<p>这是笔者一直都在使用的方法，VI 编辑器对于经常使用 Linux 的用户应该不会陌生，而且该编辑器是默认内置在 Mac 系统中的。但是，对于没有使用过 VI 的用户，还真得花一会儿功夫来学习其基本使用方法。另外VI编辑器是一个很好很强大的工具，想要玩好 Mac 的话，最好掌握这个工具的使用。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -590,7 +590,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (43)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (44)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -601,6 +601,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/">SQLite(FMDB) 线程安全 - 多线程处理</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">XCode下的iOS单元测试</a>
@@ -616,10 +620,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/01/does-arc-support-dispatch-queues/">Does ARC support dispatch queues?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in/">iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..</a>
       </li>
     
   </ul>
