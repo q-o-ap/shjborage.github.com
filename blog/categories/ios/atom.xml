@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-18T00:08:12+08:00</updated>
+  <updated>2013-12-18T00:11:49+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -33,6 +33,8 @@ man lipo
 
 <h3>Usage</h3>
 
+<h4>Simple</h4>
+
 <p><strong>lipo -create xxx_arm.a xxx_i386.a -output xxx_universal.a</strong></p>
 
 <p>Example:</p>
@@ -40,6 +42,20 @@ man lipo
 <p><code>
 lipo -create /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphonesimulator/libPrint.a  /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphoneos/libPrint.a  -output /Users/pjk1129/Desktop/libPrint.a
 </code></p>
+
+<h4>Shell</h4>
+
+<p><em>libevent.sh</em>
+```</p>
+
+<h1>! /bin/sh</h1>
+
+<p>mkdir universal
+lipo -create simulator/libevent.a device/libevent.a -o universal/libevent.a
+lipo -create simulator/libevent_extra.a device/libevent_extra.a -o universal/libevent_extra.a
+lipo -create simulator/libevent_core.a device/libevent_core.a -o universal/libevent_core.a
+lipo -create simulator/libevent_pthreads.a device/libevent_pthreads.a -o universal/libevent_pthreads.a
+```</p>
 
 <h3>Review Info</h3>
 
@@ -394,7 +410,7 @@ returnValue, @"Should have returned the expected string.");
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#x61;&#x40;&#50;&#x78;&#46;&#x70;&#x6e;&#x67;">&#97;&#x40;&#x32;&#120;&#46;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#97;&#64;&#x32;&#120;&#x2e;&#112;&#110;&#x67;">&#x61;&#64;&#x32;&#120;&#46;&#x70;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 

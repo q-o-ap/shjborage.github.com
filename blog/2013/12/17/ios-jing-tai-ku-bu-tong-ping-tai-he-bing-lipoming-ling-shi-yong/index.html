@@ -10,7 +10,7 @@
 
   
   <meta name="description" content="Introduction 查看lipo详解 1
-man lipo lipo &ndash; create or operate on universal files Usage lipo -create xxx_arm.a xxx_i386.a -output xxx_universal.a &hellip;">
+man lipo lipo &ndash; create or operate on universal files Usage Simple lipo -create xxx_arm.a xxx_i386.a -output &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -121,12 +121,32 @@ man lipo lipo &ndash; create or operate on universal files Usage lipo -create xx
 
 <h3>Usage</h3>
 
+<h4>Simple</h4>
+
 <p><strong>lipo -create xxx_arm.a xxx_i386.a -output xxx_universal.a</strong></p>
 
 <p>Example:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>lipo -create /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphonesimulator/libPrint.a  /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphoneos/libPrint.a  -output /Users/pjk1129/Desktop/libPrint.a</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Shell</h4>
+
+<p><em>libevent.sh</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#! /bin/sh
+</span><span class='line'>mkdir universal
+</span><span class='line'>lipo -create simulator/libevent.a device/libevent.a -o universal/libevent.a
+</span><span class='line'>lipo -create simulator/libevent_extra.a device/libevent_extra.a -o universal/libevent_extra.a
+</span><span class='line'>lipo -create simulator/libevent_core.a device/libevent_core.a -o universal/libevent_core.a
+</span><span class='line'>lipo -create simulator/libevent_pthreads.a device/libevent_pthreads.a -o universal/libevent_pthreads.a</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>Review Info</h3>

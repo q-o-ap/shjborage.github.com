@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-18T00:08:12+08:00</updated>
+  <updated>2013-12-18T00:11:49+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -33,12 +33,32 @@
 
 <h3>Usage</h3>
 
+<h4>Simple</h4>
+
 <p><strong>lipo -create xxx_arm.a xxx_i386.a -output xxx_universal.a</strong></p>
 
 <p>Example:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>lipo -create /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphonesimulator/libPrint.a  /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphoneos/libPrint.a  -output /Users/pjk1129/Desktop/libPrint.a</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Shell</h4>
+
+<p><em>libevent.sh</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#! /bin/sh
+</span><span class='line'>mkdir universal
+</span><span class='line'>lipo -create simulator/libevent.a device/libevent.a -o universal/libevent.a
+</span><span class='line'>lipo -create simulator/libevent_extra.a device/libevent_extra.a -o universal/libevent_extra.a
+</span><span class='line'>lipo -create simulator/libevent_core.a device/libevent_core.a -o universal/libevent_core.a
+</span><span class='line'>lipo -create simulator/libevent_pthreads.a device/libevent_pthreads.a -o universal/libevent_pthreads.a</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>Review Info</h3>
@@ -440,7 +460,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#97;&#x40;&#x32;&#120;&#46;&#x70;&#x6e;&#x67;">&#x61;&#64;&#x32;&#120;&#x2e;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#97;&#64;&#50;&#120;&#x2e;&#112;&#110;&#103;">&#x61;&#64;&#50;&#120;&#46;&#112;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
