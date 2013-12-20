@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Links - Saick Blog</title>
+  <title>Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Links Aug 1st, 2013 iOS开发资源 http://code4app.com 国内iOS开源代码库
-http://ui4app.com 国内iOS App UI界面设计
-http://developer.apple.com/iOS7_TransitionGuide iOS7 &hellip;">
+  <meta name="description" content="转自：http://mmz06.blog.163.com/blog/static/121416962011111210462288/ 引入 在做j2ee开发的时候，会用到log4j或其它类似工具去记录程序运行日志，以便调试时或在程序运行出错后，通过日志查询出错原因。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ http://developer.apple.com/iOS7_TransitionGuide iOS7 &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/friendlylink.html">
+  <link rel="canonical" href="http://saick.net/blog/page/8/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,70 +77,19 @@ http://developer.apple.com/iOS7_TransitionGuide iOS7 &hellip;">
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
-    <h1 class="entry-title">Links</h1>
-    <p class="meta">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T17:10:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time></p>
-  </header>
-  
-  <h4>iOS开发资源</h4>
-
-<ul>
-<li><a href="http://code4app.com">http://code4app.com</a>         国内iOS开源代码库</li>
-<li><a href="http://ui4app.com">http://ui4app.com</a>           国内iOS App UI界面设计</li>
-<li><a href="https://developer.apple.com/library/ios/documentation/userexperience/conceptual/TransitionGuide/index.html">http://developer.apple.com/iOS7_TransitionGuide</a> iOS7 官方迁移指导</li>
-<li>iOS7 day-by-day 博客：<a href="http://www.shinobicontrols.com/blog/posts/2013/09/19/introducing-ios7-day-by-day/">http://www.shinobicontrols.com/blog/posts/2013/09/19/introducing-ios7-day-by-day/</a> 代码：<a href="https://github.com/ShinobiControls/iOS7-day-by-day">https://github.com/ShinobiControls/iOS7-day-by-day</a></li>
-</ul>
-
-
-<h4>不解释</h4>
-
-<ul>
-<li><a href="http://iamsujie.com">http://iamsujie.com</a>         苏杰-人人都是产品经理</li>
-<li><a href="http://tiny4.org/blog/">http://tiny4.org/blog/</a>      郝培强（Tinyfool-iApp4Me.com创始人）- iOS开发博客</li>
-<li><a href="http://blog.devtang.com">http://blog.devtang.com</a>     唐巧的技术博客</li>
-</ul>
-
-
-<h4>好朋友</h4>
-
-<ul>
-<li><a href="http://blog.csdn.net/songhongri">http://blog.csdn.net/songhongri</a>     宋红日-iOS开发者</li>
-<li><a href="http://iloss.me">http://iloss.me</a>                     王希-iOS开发者</li>
-</ul>
-
-
-<h3>空缺中，需要请联系我。</h3>
-
-<p><strong><em>友链原则</em></strong></p>
-
-<ul>
-<li>自己认可人，平时经常上的</li>
-<li>朋友的博客</li>
-<li>必要时添加的友链（比如某平台上线东西必须添加友链）</li>
-<li>能让我认可的其它模式</li>
-</ul>
-
-
-  
-    <footer>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/">在iOS中使用重定向，把控制台内容写入文件中</a></h1>
+    
+    
       <p class="meta">
         
-        
 
 
 
@@ -154,18 +101,42 @@ http://developer.apple.com/iOS7_TransitionGuide iOS7 &hellip;">
   
 
 
-<time datetime="2013-08-01T17:10:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+<time datetime="2012-07-11T17:39:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2012</time>
         
       </p>
-      
-    </footer>
-  
-</article>
+    
+  </header>
 
 
+  <div class="entry-content"><p>转自：<a href="http://mmz06.blog.163.com/blog/static/121416962011111210462288/">http://mmz06.blog.163.com/blog/static/121416962011111210462288/</a></p>
+
+<h3>引入</h3>
+
+<p>在做j2ee开发的时候，会用到log4j或其它类似工具去记录程序运行日志，以便调试时或在程序运行出错后，通过日志查询出错原因。那在IOS开发中是否有类似的方式来记录日志呢？下面将简单的说明：</p>
+
+<h3>说明</h3>
+
+<p>在Objective-c开发程序的时候，有专门的日志操作类NSLog，它将指定的输出，输出到（stderr）,我们可以利用Xcode的日志输出窗口，那么既然是要记录到具体日志文件，我们就想输出日志写入到具体的日志文件即可。</p>
 
 </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/">Read on &rarr;</a>
+    </footer>
+  
 
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/7/">Newer &rarr;</a>
+    
+  </div>
+</div>
 <aside class="sidebar">
   
     
@@ -175,7 +146,7 @@ http://developer.apple.com/iOS7_TransitionGuide iOS7 &hellip;">
 var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColor="light",sText="填写您的邮件地址，订阅精彩内容：" ;;
 </script>
 <script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>
--->
+&#8211;>
 
 <!--QQ邮件列表订阅嵌入代码--><a target="_blank" href="http://list.qq.com/cgi-bin/qf_invite?id=cd51c6966346e0f99d051042a4e333ff2c27e747e9bbec00"><img alt="填写您的邮件地址，订阅我们的精彩内容：" border="0" src="http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_light_l.png"/></a>
 
@@ -276,7 +247,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 
   
 </aside>
-
 
     </div>
   </div>

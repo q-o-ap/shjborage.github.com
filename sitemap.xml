@@ -333,12 +333,18 @@
         <lastmod>2013-12-18T00:11:40+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/
+        </loc>
+        <lastmod>2013-12-21T01:07:45+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-12-18T00:11:40+08:00</lastmod>
+        <lastmod>2013-12-21T01:07:45+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -350,7 +356,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-12-18T00:11:40+08:00</lastmod>
+        <lastmod>2013-12-21T01:07:45+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

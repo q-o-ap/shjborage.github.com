@@ -9,9 +9,13 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="问了好多人，都不知道group_concat这个函数。
-这个函数好啊，能将相同的行组合起来，省老事了。
-MySQL中group_concat函数(SQLite或其它数据亦可) 完整的语法如下： group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC &hellip;">
+  <meta name="description" content="这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。 主要常见原因： 除以0
+sizeWithFont的字符串为nil
+数学函数不正确运算 解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
+如下 1
+2
+3
+4 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +85,66 @@ MySQL中group_concat函数(SQLite或其它数据亦可) 完整的语法如下：
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/10/nanwen-ti-not-a-number/">NaN问题 Not a Number</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-10T23:26:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。</p>
+
+<p>主要常见原因：</p>
+
+<ul>
+<li>除以0</li>
+<li>sizeWithFont的字符串为nil</li>
+<li>数学函数不正确运算</li>
+</ul>
+
+
+<p>解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
+如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>float _x = NAN;
+</span><span class='line'>if (!isnan(_x)) {
+</span><span class='line'>cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -511,56 +575,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/22/zai-githubshang-shi-yong-octopress/">在github上使用octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-22T10:55:00+08:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Octopress是使用ruby语言编写的一套建立在jekyll之上的博客系统，它有一些很独特的特点：</p>
-
-<ol>
-<li>使用静态页面；</li>
-<li>不使用数据库；</li>
-<li>使用markdown标记语言编写文章；</li>
-<li>可以与git紧密集成，方便地进行博客的版本管理；</li>
-<li>可以于Github Pages集成，不需要单独的web hosting，只要你有github帐号即可。</li>
-</ol>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/22/zai-githubshang-shi-yong-octopress/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -591,7 +605,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
-<li class='category'><a href='/blog/categories/mac/'>Mac (5)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (6)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (45)</a></li>
@@ -607,6 +621,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/">OSX Server - Message Server 研究与故障解决方案</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong/">iOS 静态库不同平台合并 lipo命令使用</a>
       </li>
     
@@ -620,10 +638,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/">在iOS中使用icon font及自定义字体</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan/">定制iOS 7中的导航栏和状态栏</a>
       </li>
     
   </ul>

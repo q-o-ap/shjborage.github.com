@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-18T00:11:49+08:00</updated>
+  <updated>2013-12-21T01:08:32+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,80 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[OSX Server - Message Server 研究与故障解决方案]]></title>
+    <link href="http://saick.net/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/"/>
+    <updated>2013-12-21T00:50:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<p>OSX Server是个出色的小团队服务端解决方案，前两个月发邮件说这个可以让我使用兑换券免费下一个，一定不能错过的机会，平时可是会卖很贵的啊</p>
+
+<p>特分享一下使用的相关事项吧</p>
+
+<!-- more -->
+
+
+<h3>简介</h3>
+
+<p>详见<a href="http://www.apple.com/cn/osx/server/">官方介绍</a></p>
+
+<h3>使用过的服务</h3>
+
+<ul>
+<li>Message Server</li>
+<li>DNS</li>
+<li>FileShare</li>
+<li>WebServer</li>
+<li>Wiki</li>
+<li>。。。</li>
+</ul>
+
+
+<p>可以说每个都能解决我们的某些需求，但是这些东西呢，没有OSX Server我们一样能找到替代方案。 但是苹果就是能在易用性上能帮我们做一些事。比如这个Wiki就比较简单实用</p>
+
+<p>但是呢,有些也做的不是太好，比如Message Server</p>
+
+<h3>Message Server</h3>
+
+<h4>用户</h4>
+
+<p>最开始在10.8上面直接搞上了，但是不知道怎么建用户（第一次玩Jabber，XMPP）
+帮助文档不太好找，上链接，有写用户的使用。</p>
+
+<p><a href="https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7">https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7</a>
+见这段<em>Understand Messages screen names</em></p>
+
+<h4>登录</h4>
+
+<p>无论如何都登录不了，这个更是愁人。。。
+也在上面的帮助文档里有说明，见这段<em>Server-to-server federation</em></p>
+
+<p>需要在设置中把自己的域名也加进去（最好配置DNS，否则需要自己改hosts文件）</p>
+
+<h4>还是登录不了。。</h4>
+
+<p>自己的Mavericks（10.9）还是登录不了，可能是域名设来设去的吧，无论如何也搞不定，查Google也不太好找，找了一些检索词，最后还是放弃，自己搞。
+看文档，日志会写入<strong>system.log</strong>, 打开Console，看到报错如下:</p>
+
+<p><em>SASL callback for non-existing host&#8221;</em></p>
+
+<p>Google之，解决方案如下</p>
+
+<p><a href="https://discussions.apple.com/message/23948580#23948580">https://discussions.apple.com/message/23948580#23948580</a></p>
+
+<p>这里面说的两个文件的路径还不太对，在这个目录下找那俩文件修改相关域名即可</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/Library/Server/Messages/Config/jabberd</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Message Server OK</h3>
+
+<p>可以使用Mac 上面的Message直接登录，团队其它直接使用Server的DNS，这样就不用绑hosts了，然后使用rooms聊天室，这样系统内置了Message，而且还会比较及时的通知到，非常方便。</p>
+
+<p><em>远离QQ吧。</em>  Good night!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS 静态库不同平台合并 lipo命令使用]]></title>
@@ -460,7 +534,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#97;&#64;&#50;&#120;&#x2e;&#112;&#110;&#103;">&#x61;&#64;&#50;&#120;&#46;&#112;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x61;&#64;&#x32;&#120;&#46;&#x70;&#110;&#x67;">&#x61;&#64;&#x32;&#x78;&#x2e;&#x70;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -3116,25 +3190,6 @@ debugger.set_trace(sys._getframe().f_back)
 PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用<strong>0.0.0.0</strong>这个来监听所有IP地址，解决这个问题。</p>
 
 <p>不能再出现同样的问题了，不用怕被别人笑话，哈哈</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mac OS X添加PATH环境变量]]></title>
-    <link href="http://saick.net/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/"/>
-    <updated>2013-10-24T23:53:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang</id>
-    <content type="html"><![CDATA[<p>解决办法:
-sudo vim /etc/paths</p>
-
-<p>将路径添加到里面去， 一行一个路径</p>
-
-<p>注意：即便添加成功，未必运行成功；在制定路径下得脚本必须具是executable, 否则就会被在搜索时被忽略。
-sudo chmod +x XXX</p>
-
-<p>而在Ubuntu下，则只需要修改/etc/.profile或者 ~/.profile或~/.bashrc等修改</p>
-
-<p>如转载文章，请注明本文链接： <a href="http://www.32133.com/skills/575.html">http://www.32133.com/skills/575.html</a></p>
 ]]></content>
   </entry>
   

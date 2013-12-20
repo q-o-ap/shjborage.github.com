@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mac | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/mac/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-18T00:11:49+08:00</updated>
+  <updated>2013-12-21T01:08:32+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,80 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[OSX Server - Message Server 研究与故障解决方案]]></title>
+    <link href="http://saick.net/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/"/>
+    <updated>2013-12-21T00:50:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<p>OSX Server是个出色的小团队服务端解决方案，前两个月发邮件说这个可以让我使用兑换券免费下一个，一定不能错过的机会，平时可是会卖很贵的啊</p>
+
+<p>特分享一下使用的相关事项吧</p>
+
+<!-- more -->
+
+
+<h3>简介</h3>
+
+<p>详见<a href="http://www.apple.com/cn/osx/server/">官方介绍</a></p>
+
+<h3>使用过的服务</h3>
+
+<ul>
+<li>Message Server</li>
+<li>DNS</li>
+<li>FileShare</li>
+<li>WebServer</li>
+<li>Wiki</li>
+<li>。。。</li>
+</ul>
+
+
+<p>可以说每个都能解决我们的某些需求，但是这些东西呢，没有OSX Server我们一样能找到替代方案。 但是苹果就是能在易用性上能帮我们做一些事。比如这个Wiki就比较简单实用</p>
+
+<p>但是呢,有些也做的不是太好，比如Message Server</p>
+
+<h3>Message Server</h3>
+
+<h4>用户</h4>
+
+<p>最开始在10.8上面直接搞上了，但是不知道怎么建用户（第一次玩Jabber，XMPP）
+帮助文档不太好找，上链接，有写用户的使用。</p>
+
+<p><a href="https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7">https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7</a>
+见这段<em>Understand Messages screen names</em></p>
+
+<h4>登录</h4>
+
+<p>无论如何都登录不了，这个更是愁人。。。
+也在上面的帮助文档里有说明，见这段<em>Server-to-server federation</em></p>
+
+<p>需要在设置中把自己的域名也加进去（最好配置DNS，否则需要自己改hosts文件）</p>
+
+<h4>还是登录不了。。</h4>
+
+<p>自己的Mavericks（10.9）还是登录不了，可能是域名设来设去的吧，无论如何也搞不定，查Google也不太好找，找了一些检索词，最后还是放弃，自己搞。
+看文档，日志会写入<strong>system.log</strong>, 打开Console，看到报错如下:</p>
+
+<p><em>SASL callback for non-existing host"</em></p>
+
+<p>Google之，解决方案如下</p>
+
+<p><a href="https://discussions.apple.com/message/23948580#23948580">https://discussions.apple.com/message/23948580#23948580</a></p>
+
+<p>这里面说的两个文件的路径还不太对，在这个目录下找那俩文件修改相关域名即可</p>
+
+<p><code>
+/Library/Server/Messages/Config/jabberd
+</code></p>
+
+<h3>Message Server OK</h3>
+
+<p>可以使用Mac 上面的Message直接登录，团队其它直接使用Server的DNS，这样就不用绑hosts了，然后使用rooms聊天室，这样系统内置了Message，而且还会比较及时的通知到，非常方便。</p>
+
+<p><em>远离QQ吧。</em>  Good night!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mac OS X 改 hosts文件]]></title>
@@ -236,59 +310,6 @@ sudo chmod -R 755 /Library/StartupItems/xxx
 <p>当然一定要参考苹果的开发者文档：
 [Introduction to System Startup Programming Topics]
 (<a href="http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1">http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/BPSystemStartup.html#//apple_ref/doc/uid/10000172-SW1</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[怎么查看在mac上连接过的wifi密码]]></title>
-    <link href="http://saick.net/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/"/>
-    <updated>2013-10-14T16:16:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma</id>
-    <content type="html"><![CDATA[<p>Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
-<strong>其它密码也可使用同样方法获得</strong></p>
-
-<p>方法/步骤</p>
-
-<ul>
-<li>1.打开“钥匙串访问”</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374784546/" title="2013-10-14-10 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5505/10374784546_ac4b66a9e5.jpg" width="483" height="83" alt="2013-10-14-10"></a></p>
-
-<!-- more -->
-
-
-<ul>
-<li>2.选中左侧“登陆”、“密码”</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374769125/" title="2013-10-14-11 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3791/10374769125_fb2339510e.jpg" width="500" height="183" alt="2013-10-14-11"></a></p>
-
-<ul>
-<li>3.找到要查看密码的wifi</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968363/" title="2013-10-14-12 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3790/10374968363_675b5904c4.jpg" width="500" height="111" alt="2013-10-14-12"></a></p>
-
-<ul>
-<li>4.点击键，选中“显示简介”，或者双击</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374968173/" title="2013-10-14-13 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7431/10374968173_9c2b4957c3.jpg" width="500" height="113" alt="2013-10-14-13"></a></p>
-
-<ul>
-<li>5.在弹出的对话框选择“显示密码”，系统会让你输入电脑帐号的密码，然后密码就显示出来了。</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374784386/" title="2013-10-14-14 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7305/10374784386_8757b04a56.jpg" width="500" height="333" alt="2013-10-14-14"></a></p>
-
-<p>参考资料
-<a href="http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html">http://www.xnwai.com/2012/12/how-to-view-the-connection-on-the-mac-wifi-password.html</a></p>
 ]]></content>
   </entry>
   
