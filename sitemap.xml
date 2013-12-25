@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://saick.net/blog/2012/02/28/operation-queue-obj-czhong-bing-fa-de-guan-li/</loc>
+        <lastmod>2013-12-25T22:40:04+08:00</lastmod>
+    </url>
+    <url>
         <loc>
             http://saick.net/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/
         </loc>
@@ -344,7 +348,7 @@
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-12-21T01:07:45+08:00</lastmod>
+        <lastmod>2013-12-25T22:40:04+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -356,7 +360,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-12-21T01:07:45+08:00</lastmod>
+        <lastmod>2013-12-25T22:40:04+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

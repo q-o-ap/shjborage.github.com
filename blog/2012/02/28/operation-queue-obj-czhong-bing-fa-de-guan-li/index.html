@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹的区别) - Saick Blog</title>
+  <title>Operation Queue Obj-C中并发的管理 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
-来上图看下吧 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？ group 和 folder的区别 &hellip;">
+  <meta name="description" content="Operation是一种用面向对象封装的异步操作技术。operation即可以单独使用，也可与operation queue联合使用。因为是用Objective-C实现的，operation主要用于基于Cocoa的iOS/Mac OS X程序中。
+operation queue是Cocoa对&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">
+  <link rel="canonical" href="http://saick.net/blog/2012/02/28/operation-queue-obj-czhong-bing-fa-de-guan-li/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</h1>
+      <h1 class="entry-title">Operation Queue Obj-C中并发的管理</h1>
     
     
       <p class="meta">
@@ -99,48 +99,138 @@
   
 
 
-<time datetime="2013-09-23T23:58:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+<time datetime="2012-02-28T22:29:00+08:00" pubdate data-updated="true">Feb 28<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
-来上图看下吧</p>
+<div class="entry-content"><p><strong><em>Operation</em></strong>是一种用面向对象封装的异步操作技术。operation即可以单独使用，也可与operation queue联合使用。因为是用Objective-C实现的，operation主要用于基于Cocoa的iOS/Mac OS X程序中。
+operation queue是Cocoa对&#8221;并发dispatch queue&#8221;（C语言API）的封装。虽然dispatch queue总是以先进先出的方式执行任务，operation queue会考虑诸如依赖关系，优先级等因素来执行任务。</p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374761534/" title="2013-09-23-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3670/10374761534_909069ee9e.jpg" width="281" height="329" alt="2013-09-23-1"></a></p>
-
-<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？</p>
-
-<p> <!-- more --></p>
-
-<ol>
-<li>group 和 folder的区别
-group 一般只在你的工程中是文件夹的形式，但是在本地的目录中还是以散乱的形式放在一起的，除非你是从外部以group的形式引用进来的。
-folder 只能作为资源，整个引用进项目，不能编译代码，也就是说，以folder形式引用进来的文件，不能被放在complie sources列表里面。</li>
-<li>以folder的形式引用文件
-我拖动外部的文件夹 WebViewJavascriptBridge 到我的xcode工程目录下面
-会弹出对话框，如图</li>
-</ol>
+<!-- more -->
 
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374785846/" title="2013-09-23-2 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3833/10374785846_c3ff3196f7.jpg" width="500" height="337" alt="2013-09-23-2"></a></p>
+<h3>简介</h3>
 
-<p>copy，是指文件不在项目的目录下面，例如项目在桌面上，文件在 Download 下，你 copy 就会被复制到项目里面。如果文件原本就在项目里面，则不执行任何操作。这里不管它，重点是 下面的单选框。
-这里我选择的是以folder的形式引用文件夹，点击完成，如下图所示，文件夹是蓝色的，并且编译文件列表里面没有 webviewjavascriptBridge.m这个文件，证明文件夹引用，只会引用文件夹，文件夹里面的东西都会直接拷贝到 bundle 包，不参与编译。</p>
+<p>Operation对象就是<strong>NSOperation</strong>类的实例。NSOperation定义于Foundation framework之中，实现了一些基础功能，但并不完整，所以必须基于它派生新的子类，才能完成你想要的功能。同时，Foundation framework里提供了两种常用的NSOperation子类——<em>NSInvocationOperation</em>及<em>NSBlockOperation</em>，可供直接使用于代码中。</p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374760404/" title="2013-09-23-3 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7377/10374760404_65debe205e.jpg" width="500" height="268" alt="2013-09-23-3"></a></p>
+<p><em>NSInvocationOperation</em>用于将一个selector包装成operation对象。NSBlockOperation用于将一个或多个block对象包装成operation对象，多个block对象在operation对象中被并发的执行，只有当所有block完成之后operation才算完成。</p>
 
-<ol>
-<li>以group的形式引用文件
-回到1的第一步，选中 create groups for any added folders ，点击完成，则如下图所示，文件夹是黄色的，并且编译文件列表里面神奇的存在了 webviewjavascriptBridge.m这个文件</li>
-</ol>
+<p>所有的operation对象都支持以下特性，</p>
+
+<ul>
+<li>operation对象之间可以建立图状的执行依赖关系</li>
+<li>在整个operation完成后额外执行一个block（用于通知任务完成）</li>
+<li>支持KVO方式来观察operation对象的状态</li>
+<li>按优先级执行</li>
+<li>中止正在执行的operation</li>
+<li>operation对象的设计目的是帮助你提高程序的并发性，让你更专注于业务逻辑开始而非如何实现并发。</li>
+</ul>
 
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374770415/" title="2013-09-23-4 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5515/10374770415_f9f7d6d6c6.jpg" width="500" height="268" alt="2013-09-23-4"></a></p>
+<h3>并发 V.S. 非并发</h3>
 
-<p>现在，终于明白了 folder和 group的区别了。</p>
+<p>可以将Operation对象加入operation queue来执行，也可以手动的调用operation对象的start方法来执行，但这样便不能保证operation与其它代码之间是并发的。isCurrent方法可以查看operation是以同步还是异步的方式运行的。默认情况下，返回值是NO，也就是说是以同步方式执行的。</p>
+
+<p>若要实现并发的operation（即以异步方式执行），需要额外编写一些代码。比如，可能需要创建一个独立的线程，在这个线程里执行start。</p>
+
+<p>对于大多数开发者而言并不需要去自己实现并发的operation，因为直接把operation对象加入operation queue即可，除非你想实现并发但又不想把对象加入到operation queue里。</p>
+
+<p>若提交一个非并发的operation到operation queue里，queue自己会为你创建一个线程来执行，因此，事实上相对于其它operation这仍是异步的（除非operation之间有依赖关系？）。</p>
+
+<h4>创建NSInvocationOperation对象</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSInvocationOperation* operation = [[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(doSomething) object:nil] autorelease];</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>创建NSBlockOperation对象</h4>
+
+<p>在创建时可以指定至少一个block对象，之后可以使用addExecutionBlock:方法来加入更多block。NSBlockOperation里的所有block会以默认优先级加入dispatch queue，等所有block结束之后，NSBlockOperation才结束。</p>
+
+<h4>自定义operation对象</h4>
+
+<p>如果block operation和invocation operation都无法满足你的需求，是时候考虑自己实现一个operation对象了。NSOperation类已经提供了一些基础设备以供重用。
+实现非并发operation对象比实现并发的要简单多了。所要做的工作就是实现operation的业务逻辑和响应“结束”事件。对于并发operation来说，必须用自己的代码替换现有的一些基础功能。
+实现operation的业务逻辑只有两步，自定义initialization方法，实现main方法</p>
+
+<p><em>响应“结束”事件</em></p>
+
+<p>Operation在执行过程中可能被要求终止执行，终止的过程并非是野蛮的kill，而是需要在实现operation时加入一些检测点来“正常”结束。检测方法是在operation里调用isCancelled方法（由父类提供），isCancelled是个轻量级方法，所以你勿须在意性能问题，尽管调用。何时进行检测呢？以下是一些推荐的推测点，在真正开始执行业务逻辑之前对于业务逻辑中存在的循环结构，至少每次循环检测一次代码中任何比较容易处理结束事件的位置</p>
+
+<h3>配置并发operation对象</h3>
+
+<p>虽然operation queue支持非并发operation，但绝大多数operation仍然是以异步方式运行的。然而，如果你是手工执行operation且仍然希望它们是异步的，你还是需要注意一些事项以确保能异步工作。</p>
+
+<h4>与并发operation相关的一些方法</h4>
+
+<p><code>start</code> &ndash; 所有并发operation对象必须重载该方法。如果是手工执行operation，你会调用start方法。因此，这里是整个operation的起点。注意，你不能在start中去调用父类的start，要完全重新实现。
+main &ndash; 因为你是手工执行operation，这个方法就不是必须实现了。但是，把业务逻辑实现在main里，与设置动作分离能使软件的结构更加清晰。</p>
+
+<p><code>isExecuting/isFinished</code> &ndash; 并发operation必须正确维护自己的运行状态。这两个方法必须是线程安全的，因为它可能会在其它线程中调用。同时，支持KVO也是必须的。</p>
+
+<p><code>isConcurrent</code> &ndash; 对于并发operation永远是return YES。</p>
+
+<h4>确保KVO兼容</h4>
+
+<p>NSOperation类兼容KVO标准，具体的属性包括，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>isCancelled
+</span><span class='line'>isConcurrent
+</span><span class='line'>isExecuting
+</span><span class='line'>isFinished
+</span><span class='line'>isReady
+</span><span class='line'>dependencies
+</span><span class='line'>queuePriority
+</span><span class='line'>completionBlock</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因此在继承NSOperation类时要注意保持KVO兼容，特别要注意isExecuting和isFinished。
+isReady一般用于依赖关系的实现，若该属性返回NO，则operation永远不会被operation queue执行，当然前提是你在重用NSOperation提供的依赖关系检测逻辑，如果你实现了自己的依赖关系逻辑，这些就都不是问题了。</p>
+
+<p>贴上一点实际用的代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//NSOperationQueue用来管理要处理的操作
+</span><span class='line'>//NSInvocationOperation 用来创建操作（上传的例子中有自定义操作）
+</span><span class='line'>playStopQueue = [[NSOperationQueue alloc] init];
+</span><span class='line'>[playStopQueue setMaxConcurrentOperationCount:1];
+</span><span class='line'>if([[playStopQueue operations] count] &gt; 0 )
+</span><span class='line'>{
+</span><span class='line'>    NSInvocationOperation* lastOp = [[playStopQueue operations] lastObject];
+</span><span class='line'>    [stopOp addDependency:lastOp];
+</span><span class='line'>}
+</span><span class='line'>[playStopQueue addOperation:stopOp];
+</span><span class='line'>[playStopQueue cancelAllOperations];
+</span><span class='line'>[playStopQueue release];
+</span><span class='line'>playStopQueue = nil;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>附上自定义Operation的示例：</p>
+
+<p><a href="http://ishare.iask.sina.com.cn/f/23306708.html">http://ishare.iask.sina.com.cn/f/23306708.html</a></p>
 </div>
 
 
@@ -163,7 +253,7 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
   
 
 
-<time datetime="2013-09-23T23:58:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+<time datetime="2012-02-28T22:29:00+08:00" pubdate data-updated="true">Feb 28<span>th</span>, 2012</time>
       
 
 <span class="categories">
@@ -181,7 +271,7 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2012/02/28/operation-queue-obj-czhong-bing-fa-de-guan-li/" data-via="eric_shj" data-counturl="http://saick.net/blog/2012/02/28/operation-queue-obj-czhong-bing-fa-de-guan-li/" >Tweet</a>
   
   
   
@@ -208,10 +298,8 @@ folder 只能作为资源，整个引用进项目，不能编译代码，也就�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/09/23/shi-yong-unit-test%2Czi-yuan-huo-qu-zhu-yi-shi-xiang/" title="Previous Post: 使用unit test，资源获取注意事项">&laquo; 使用unit test，资源获取注意事项</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/09/24/group-concathan-shu-xiang-jie/" title="Next Post: group_concat函数详解">group_concat函数详解 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/" title="Next Post: 在iOS中使用重定向，把控制台内容写入文件中">在iOS中使用重定向，把控制台内容写入文件中 &raquo;</a>
       
     </p>
   </footer>
