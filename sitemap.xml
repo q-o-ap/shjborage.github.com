@@ -343,12 +343,18 @@
         <lastmod>2013-12-21T01:07:45+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/
+        </loc>
+        <lastmod>2013-12-26T10:45:20+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-12-25T22:40:04+08:00</lastmod>
+        <lastmod>2013-12-26T10:45:20+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -360,7 +366,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-12-25T22:40:04+08:00</lastmod>
+        <lastmod>2013-12-26T10:45:20+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

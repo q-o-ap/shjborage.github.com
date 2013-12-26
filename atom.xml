@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-25T23:20:12+08:00</updated>
+  <updated>2013-12-26T10:46:26+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Synergy on Mavericks (OSX 10.9) and enable assistive devices]]></title>
+    <link href="http://saick.net/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/"/>
+    <updated>2013-12-26T10:42:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices</id>
+    <content type="html"><![CDATA[<p><a href="http://superuser.com/questions/656912/synergy-on-mavericks-osx-10-9-and-enable-assistive-devices">Origin</a></p>
+
+<h3>Question</h3>
+
+<p>Mavericks handles accessibility on a per-application basis, so instead of enabling assistive devices (option does not even exist) carte-blanche, the app which makes the request shows up in a list in System Preferences > Security &amp; Privacy > Privacy where you can enable the access it&rsquo;s looking for.</p>
+
+<p>Synergy, however, makes a check for the old style of assistive devices setting and fails to start.</p>
+
+<!-- more -->
+
+
+<h3>Answer</h3>
+
+<p>From a terminal:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo open /Applications/Synergy.app/Contents/MacOS/Synergy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then open OSX <em>System Preferences</em> and click <strong>Security and Privacy</strong>, then <strong>Accessibility</strong></p>
+
+<p>Check the checkbox on for <strong>Terminal</strong> and <strong>Synergy</strong>.</p>
+
+<p>You can then close Synergy and start it again in the background through the terminal:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/Applications/Synergy.app/Contents/MacOS/Synergy &</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I expect this will be fixed in the next release (1.4.16 Beta)</p>
+
+<p><a href="http://synergy-foss.org/osqa/questions/1999/error-1410-on-mac-1081">Source</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OSX Server - Message Server 研究与故障解决方案]]></title>
@@ -534,7 +574,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x61;&#x40;&#x32;&#x78;&#46;&#112;&#x6e;&#x67;">&#97;&#x40;&#x32;&#120;&#x2e;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#97;&#x40;&#50;&#x78;&#x2e;&#x70;&#x6e;&#103;">&#97;&#x40;&#50;&#x78;&#46;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -3178,18 +3218,6 @@ debugger.set_trace(sys._getframe().f_back)
 微博：<a href="http://t.sina.com.cn/coderzh">http://t.sina.com.cn/coderzh</a>
 出处：<a href="http://coderzh.cnblogs.com">http://coderzh.cnblogs.com</a>
 文章版权归本人所有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，否则保留追究法律责任的权利。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[IP地址，0.0.0.0 监听，所有地址]]></title>
-    <link href="http://saick.net/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/"/>
-    <updated>2013-10-25T01:07:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/25/ipdi-zhi-,0-dot-0-0-dot-0-jian-ting-,suo-you-di-zhi</id>
-    <content type="html"><![CDATA[<p>曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
-PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用<strong>0.0.0.0</strong>这个来监听所有IP地址，解决这个问题。</p>
-
-<p>不能再出现同样的问题了，不用怕被别人笑话，哈哈</p>
 ]]></content>
   </entry>
   
