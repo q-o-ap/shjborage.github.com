@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-26T10:46:26+08:00</updated>
+  <updated>2013-12-31T13:43:12+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Android SDK Manager更新检测失败解决]]></title>
+    <link href="http://saick.net/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/"/>
+    <updated>2013-12-31T13:39:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue</id>
+    <content type="html"><![CDATA[<p>好久没弄Eclipse开发Android了，最近弄了个天猫的盒子，就拿出来玩玩，没想到新的SDK下不下来，悲剧。</p>
+
+<h3>Ｑ：</h3>
+
+<p>Failed to fetch URL <a href="https://dl-ssl.google.com/android/repository/repository.xml,">https://dl-ssl.google.com/android/repository/repository.xml,</a>
+reason: HTTPS SSL error. You might want to force download through HTTP
+in the settings.</p>
+
+<h3>A:</h3>
+
+<p>Check file <code>~/.android/androidtool.cfg</code></p>
+
+<p>try to create it manually and add one line to it:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sdkman.force.http=true </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Reference:<a href="https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk">https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Synergy on Mavericks (OSX 10.9) and enable assistive devices]]></title>
@@ -574,7 +601,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#97;&#x40;&#50;&#x78;&#x2e;&#x70;&#x6e;&#103;">&#97;&#x40;&#50;&#x78;&#46;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x61;&#64;&#x32;&#x78;&#46;&#x70;&#110;&#x67;">&#x61;&#64;&#50;&#x78;&#x2e;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -3014,210 +3041,6 @@ Emacs 配置使用的语言是 Elisp，Emacs 附带非常详细的 Elisp 手册�
 <h3>总结</h3>
 
 <p>到这里差不多就是30分钟吧，介绍一些文本编辑的基本操作。只是为了说明上手 Emacs 其实很简单，而且几乎每一样操作都有比普通 Windows 文本编辑器更好 的特性，比如可以任意调整已选定的区域，更好的复制粘贴机制，更好的撤销机 制，更好的 isearch 查找方式，可以在区域内替换，强大得多的帮助系统，没 有任何限制的扩展性。用了几天或几个星期后就会觉得其他的编辑是多么麻烦和 弱小。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Emacs中打造强大的Python IDE]]></title>
-    <link href="http://saick.net/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/"/>
-    <updated>2013-10-26T22:26:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide</id>
-    <content type="html"><![CDATA[<p>本文将介绍，在Emacs中，通过各种扩展，打造强大的Python IDE环境，包括Snippet工具，智能提示，自动补全，重构工具，调试以及GAE的调试，等等。以下各工具的安装前提是你对Emacs的配置文件有一定的了解，所有相关的el文件都必须放在load_path能够加载的地方。</p>
-
-<h3>1. YASnippet</h3>
-
-<p>snippet工具，可自定义一些模板，必不可少的好东西！看了下面这个很酷的演示动画就明白了：</p>
-
-<p><a href="http://yasnippet.googlecode.com/files/yasnippet.avi">http://yasnippet.googlecode.com/files/yasnippet.avi</a></p>
-
-<p>安装方法：
-(Add by Eric 建议看GitHub上的安装说明：<a href="https://github.com/capitaomorte/yasnippet">https://github.com/capitaomorte/yasnippet</a>)</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>(require 'yasnippet)
-</span><span class='line'>(yas/initialize)
-</span><span class='line'>(yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>2. AutoComplete</h3>
-
-<p>自动完成工具，会像VS里一样，弹出一个列表框让你去选择。
-<a href="http://www.flickr.com/photos/105999540@N03/10493765485/" title="2013-10-26-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3678/10493765485_ce80f8cd35.jpg" width="414" height="309" alt="2013-10-26-1"></a></p>
-
-<p>安装方法：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>(require 'auto-complete)
-</span><span class='line'>(require 'auto-complete-config)
-</span><span class='line'>(global-auto-complete-mode t)
-</span><span class='line'>(setq-default ac-sources '(ac-source-words-in-same-mode-buffers))
-</span><span class='line'>(add-hook 'emacs-lisp-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-symbols)))
-</span><span class='line'>(add-hook 'auto-complete-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-filename)))
-</span><span class='line'>(set-face-background 'ac-candidate-face "lightgray")
-</span><span class='line'>(set-face-underline 'ac-candidate-face "darkgray")
-</span><span class='line'>(set-face-background 'ac-selection-face "steelblue") ;;; 设置比上面截图中更好看的背景颜色
-</span><span class='line'>(define-key ac-completing-map "\M-n" 'ac-next)  ;;; 列表中通过按M-n来向下移动
-</span><span class='line'>(define-key ac-completing-map "\M-p" 'ac-previous)
-</span><span class='line'>(setq ac-auto-start 2)
-</span><span class='line'>(setq ac-dwim t)
-</span><span class='line'>(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>3. Rope and Ropemacs</h3>
-
-<p>非常棒的重构工具，比如rename,move,extract method等等。还有非常好用的goto difinition(跳到定义)，show documents(显示文档)等等。安装Ropemacs前，必须先安装rope和pymacs 。</p>
-
-<p>rope的安装方法：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
-
-
-<p>pymacs的安装方法：</p>
-
-<p>python setup.py install
-.emacs中：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>(autoload 'pymacs-apply "pymacs")
-</span><span class='line'>(autoload 'pymacs-call "pymacs")
-</span><span class='line'>(autoload 'pymacs-eval "pymacs" nil t)
-</span><span class='line'>(autoload 'pymacs-exec "pymacs" nil t)
-</span><span class='line'>(autoload 'pymacs-load "pymacs" nil t)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ropmacs的安装方法：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py install</span></code></pre></td></tr></table></div></figure>
-
-
-<p>.emacs中：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>(pymacs-load "ropemacs" "rope-")
-</span><span class='line'>(setq ropemacs-enable-autoimport t)</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>4. pycomplete</h3>
-
-<p>一个更加强大的智能提示工具，比如，输入time.cl 然后按TAB键，会列出time模块所有cl开头的函数名。在调用函数时，还会在mini buffer中提示函数的参数类型。这个东西需要先安装pymacs。</p>
-
-<p>安装方法：</p>
-
-<ol>
-<li>拷贝 python-mode.el and pycomplete.el 到Emacs的load_path中</li>
-<li>拷贝 pycomplete.py 到PYTHONPATH (比如： c:/python25/Lib/site-packages)</li>
-<li>.emacs中添加：</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>(require 'pycomplete)
-</span><span class='line'>(setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
-</span><span class='line'>(autoload 'python-mode "python-mode" "Python editing mode." t)
-</span><span class='line'>(setq interpreter-mode-alist(cons '("python" . python-mode)
-</span><span class='line'>                           interpreter-mode-alist))</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>5. pdb调试</h3>
-
-<p>在Emacs中，通过M-x pdb可调出pdb对python代码进行调试。但是发现在Windows系统中，总进入不了调试模式。主要原因有：</p>
-
-<h4>1. windows中，找不到pdb.py位置。需自己制定pdb的路径。可以通过下面的方法设置pdb的路径：</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>;; pdb setup, note the python version
-</span><span class='line'>(setq pdb-path 'c:/python25/Lib/pdb.py
-</span><span class='line'>       gud-pdb-command-name (symbol-name pdb-path))
-</span><span class='line'> (defadvice pdb (before gud-query-cmdline activate)
-</span><span class='line'>   "Provide a better default command line when called interactively."
-</span><span class='line'>   (interactive
-</span><span class='line'>    (list (gud-query-cmdline pdb-path
-</span><span class='line'>                 (file-name-nondirectory buffer-file-name)))))</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>2. windows中，调用pdb时，未使用python -i 参数。</h4>
-
-<p>针对上面两个问题，我的解决办法是，不设置pdb具体路径，M-x pdb 回车后，出现下面命令:</p>
-
-<p>Run pdb (like this): pdb
-然后手动修改一下：</p>
-
-<p>Run pdb (like this): python -i -m pdb test.py
-这样就搞定了。</p>
-
-<h3>6. 如何调试GAE程序</h3>
-
-<p>GAE是一个Web应用，需要跨线程进行调试，而pdb本身对线程调试支持不好。使用pdb进行线程调试时，只有在需要调试的地方插入下面代码：</p>
-
-<p>import pdb
-pdb.set_trace()</p>
-
-<p>然后直接运行被调试代码，而不是通过python pdb来执行，就可以多线程代码进行调试了。</p>
-
-<p>但是Google App Engine这样的Web应用，使用这个方法还是不能调试，和stdin和stdout有关，最后找到一个很好的解决方法：</p>
-
-<p>def set_trace():</p>
-
-<pre><code>import pdb, sys
-debugger = pdb.Pdb(stdin=sys.__stdin__,
-    stdout=sys.__stdout__)
-debugger.set_trace(sys._getframe().f_back)
-</code></pre>
-
-<p>在任何需要调试的地方，调用上面的set_trace()函数。</p>
-
-<p>如果你还有更好玩的东西，一定要告诉我！</p>
-
-<h3>参考文档：</h3>
-
-<p><a href="http://www.emacswiki.org/emacs/PythonMode">http://www.emacswiki.org/emacs/PythonMode</a></p>
-
-<p><a href="http://www.enigmacurry.com/2008/05/09/emacs-as-a-powerful-python-ide/">http://www.enigmacurry.com/2008/05/09/emacs-as-a-powerful-python-ide/</a></p>
-
-<p><a href="http://jjinux.blogspot.com/2008/05/python-debugging-google-app-engine-apps.html">http://jjinux.blogspot.com/2008/05/python-debugging-google-app-engine-apps.html</a></p>
-
-<p>作者：CoderZh（CoderZh的技术博客 &ndash; 博客园）
-微博：<a href="http://t.sina.com.cn/coderzh">http://t.sina.com.cn/coderzh</a>
-出处：<a href="http://coderzh.cnblogs.com">http://coderzh.cnblogs.com</a>
-文章版权归本人所有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，否则保留追究法律责任的权利。</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2013-12-26T10:46:26+08:00</updated>
+  <updated>2013-12-31T13:43:12+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Android SDK Manager更新检测失败解决]]></title>
+    <link href="http://saick.net/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/"/>
+    <updated>2013-12-31T13:39:00+08:00</updated>
+    <id>http://saick.net/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue</id>
+    <content type="html"><![CDATA[<p>好久没弄Eclipse开发Android了，最近弄了个天猫的盒子，就拿出来玩玩，没想到新的SDK下不下来，悲剧。</p>
+
+<h3>Ｑ：</h3>
+
+<p>Failed to fetch URL <a href="https://dl-ssl.google.com/android/repository/repository.xml,">https://dl-ssl.google.com/android/repository/repository.xml,</a>
+reason: HTTPS SSL error. You might want to force download through HTTP
+in the settings.</p>
+
+<h3>A:</h3>
+
+<p>Check file <code>~/.android/androidtool.cfg</code></p>
+
+<p>try to create it manually and add one line to it:</p>
+
+<p><code>
+sdkman.force.http=true
+</code></p>
+
+<p>Reference:<a href="https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk">https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Android 开发环境搭建]]></title>

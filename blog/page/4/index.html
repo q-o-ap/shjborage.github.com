@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="转自：http://geeklu.com/2013/04/ios-cookie/ 关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
-和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。 &hellip;">
+  <meta name="description" content="1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本） 1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置： system prefernce--&gt;Accounts--&gt;LogItems--&gt;add 2）把想要启动的shell &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:34:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）</h4>
+
+<p>1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置：</p>
+
+<pre><code>system prefernce--&gt;Accounts--&gt;LogItems--&gt;add
+</code></pre>
+
+<p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
+
+<p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -546,48 +595,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-10T23:41:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a custom background, title and text to the navbar. Once I had this working, to keep a consist look across my application, I began tweaking the buttons on the navbar using the same Appearance API.
-As I got further into the customization of the buttons, I ran into a method withinUIImage that was introduced in iOS 5, resizableImageWithCapInsets. I found myself getting side-tracked from the original idea of navbar look and feel, to understanding how cap insets work. This post delves into what I learned.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -615,7 +622,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Categories</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
@@ -635,6 +642,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">Synergy on Mavericks (OSX 10.9) and enable assistive devices</a>
       </li>
     
@@ -648,10 +659,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/">SQLite(FMDB) 线程安全 - 多线程处理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">XCode下的iOS单元测试</a>
       </li>
     
   </ul>

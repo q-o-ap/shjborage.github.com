@@ -9,7 +9,14 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Origin 这篇不是什么教程, Cocoa autolayout出来蛮久了。以前多次想去深入研究一下，每次都很蛋疼无序。这东西是在有些搞。尤其习惯了code写布局的。看到Visual format language，简直要掀桌子。搜教程，满世界都是，没有一个讲得透彻的。例子空洞。 &hellip;">
+  <meta name="description" content="转自破船的博客 Text Kit是iOS 7中引入的一个新功能，非常值得开发者使用，下面先看看本文的目录结构： 什么是Text Kit
+Text Kit架构
+Text Kit特点
+Text Kit功能概述
+Text Kit中重要的一些对象
+Text Kit示例
+小结
+推荐Text Kit学习资源 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +86,61 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/23/ios-7jiao-cheng-qian-xi-text-kit/">iOS 7教程：浅析Text Kit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-23T22:06:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>转自<a href="http://beyondvincent.com/blog/2013/11/12/121-brief-analysis-text-kit/">破船</a>的博客</p>
+
+<p>Text Kit是iOS 7中引入的一个新功能，非常值得开发者使用，下面先看看本文的目录结构：</p>
+
+<ul>
+<li>什么是Text Kit</li>
+<li>Text Kit架构</li>
+<li>Text Kit特点</li>
+<li>Text Kit功能概述</li>
+<li>Text Kit中重要的一些对象</li>
+<li>Text Kit示例</li>
+<li>小结</li>
+<li>推荐Text Kit学习资源</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/23/ios-7jiao-cheng-qian-xi-text-kit/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -518,56 +580,6 @@ dispatch_queue 与 block 结合起来使用，方便进行多线程编程。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Emacs中打造强大的Python IDE</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-26T22:26:00+08:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>本文将介绍，在Emacs中，通过各种扩展，打造强大的Python IDE环境，包括Snippet工具，智能提示，自动补全，重构工具，调试以及GAE的调试，等等。以下各工具的安装前提是你对Emacs的配置文件有一定的了解，所有相关的el文件都必须放在load_path能够加载的地方。</p>
-
-<h3>1. YASnippet</h3>
-
-<p>snippet工具，可自定义一些模板，必不可少的好东西！看了下面这个很酷的演示动画就明白了：</p>
-
-<p><a href="http://yasnippet.googlecode.com/files/yasnippet.avi">http://yasnippet.googlecode.com/files/yasnippet.avi</a></p>
-
-<p>安装方法：
-(Add by Eric 建议看GitHub上的安装说明：<a href="https://github.com/capitaomorte/yasnippet">https://github.com/capitaomorte/yasnippet</a>)</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/26/emacszhong-da-zao-qiang-da-de-python-ide/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -595,7 +607,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Categories</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/android/'>Android (1)</a></li>
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
@@ -615,6 +627,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">Synergy on Mavericks (OSX 10.9) and enable assistive devices</a>
       </li>
     
@@ -628,10 +644,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/">SQLite(FMDB) 线程安全 - 多线程处理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">XCode下的iOS单元测试</a>
       </li>
     
   </ul>
