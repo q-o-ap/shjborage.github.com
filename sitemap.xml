@@ -346,7 +346,7 @@
         <loc>
             http://saick.net/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/
         </loc>
-        <lastmod>2013-12-26T10:45:20+08:00</lastmod>
+        <lastmod>2014-01-04T00:04:12+08:00</lastmod>
     </url>
     <url>
         <loc>
@@ -355,12 +355,18 @@
         <lastmod>2013-12-31T13:42:03+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/
+        </loc>
+        <lastmod>2014-01-04T00:01:23+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2013-12-31T13:42:03+08:00</lastmod>
+        <lastmod>2014-01-04T00:04:12+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -372,7 +378,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2013-12-31T13:42:03+08:00</lastmod>
+        <lastmod>2014-01-04T00:04:12+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

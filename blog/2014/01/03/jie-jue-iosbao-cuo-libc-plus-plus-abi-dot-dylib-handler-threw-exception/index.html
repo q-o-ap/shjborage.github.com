@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Q&A - Saick Blog</title>
+  <title>解决iOS报错libc++abi.dylib handler threw exception - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category: Q&A">
+  <meta name="description" content="这个错有时很奇怪，有时比较正常的情况也会报这个，可能与XCode版本有关。
+下文列举一些情况吧 可能引起的情况 如果是多语言的话，要查看xib是否支持改语言～就是要在xib里面的Localiztion选项里面检查。（至少xcode4.5里面是这样的，或许对someone 有帮助）
+因为子类需要横屏 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.netblog/categories/q-and-a/">
+  <link rel="canonical" href="http://saick.net/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,36 +80,161 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Q&A</h1>
+    
+      <h1 class="entry-title">解决iOS报错libc++abi.dylib Handler Threw Exception</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-03T23:57:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>这个错有时很奇怪，有时比较正常的情况也会报这个，可能与XCode版本有关。
+下文列举一些情况吧</p>
 
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">Synergy on Mavericks (OSX 10.9) and enable assistive devices</a></h1>
-<time datetime="2013-12-26T10:42:00+08:00" pubdate><span class='month'>Dec</span> <span class='day'>26</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a>, <a class='category' href='/blog/categories/q-and-a/'>Q&A</a></span>
-</footer>
+<!-- more -->
 
 
-</article>
+<h3>可能引起的情况</h3>
+
+<ul>
+<li>如果是多语言的话，要查看xib是否支持改语言～就是要在xib里面的Localiztion选项里面检查。（至少xcode4.5里面是这样的，或许对someone 有帮助）</li>
+<li>因为子类需要横屏，父类没设置横屏，所以爆出异常来。Supported orientations has no common orientation with the application, and shouldAutorotate is returning YES</li>
+<li>@｛｝ 语法糖，数据出错后也会报这个错</li>
+<li>数据越界</li>
+</ul>
+
+
+<h3>定位异常的方法</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@try {  
+</span><span class='line'>}  
+</span><span class='line'>@catch(NSException *exception) {  
+</span><span class='line'>  NSLog(@"exception:%@", exception);  
+</span><span class='line'>}
+</span><span class='line'>@finally {            
+</span><span class='line'>}  </span></code></pre></td></tr></table></div></figure>
+
+
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-03T23:57:00+08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+  
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
+    
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/" title="Previous Post: Android SDK Manager更新检测失败解决">&laquo; Android SDK Manager更新检测失败解决</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
 
 
 
@@ -135,9 +262,8 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
-<li class='category'><a href='/blog/categories/q-a/'>Q&A (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (46)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (47)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (2)</a></li>
@@ -148,6 +274,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a>
@@ -163,10 +293,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong/">iOS 静态库不同平台合并 lipo命令使用</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/">SQLite(FMDB) 线程安全 - 多线程处理</a>
       </li>
     
   </ul>
@@ -229,7 +355,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Eric Shi -
+  Copyright &copy; 2014 - Eric Shi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
   <span class="credit">Theme by <a href="http://www.gehaxelt.in/">Gehaxelt</a> and <a href="http://www.it-solutions-neef.de/">IT Solutions Neef</a>
   
