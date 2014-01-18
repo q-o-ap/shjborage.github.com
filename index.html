@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="这个错有时很奇怪，有时比较正常的情况也会报这个，可能与XCode版本有关。
-下文列举一些情况吧 ">
+  <meta name="description" content="Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。 如果某个地方看不明白可以留言给我，我翻译并给大家讲 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-18T16:21:00+08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。</p>
+
+<p>如果某个地方看不明白可以留言给我，我翻译并给大家讲。</p>
+
+<p>ScrollView这块我暂时没有用，没细看，下面Size适配那个我试了，并且写了Demo，大家感兴趣下文下载研究。</p>
+
+<p>Auto Layout makes it easy to solve many complex layout problems automatically, without the need for manual view manipulation. By creating the right combination of constraints, you can create layouts that are traditionally difficult to manage in code, such as equally spaced views that adjust to changes in orientation or size, elements inside scroll views that affect the size of the scrolling content, or elements inside scroll views that don’t scroll with the rest of the contents.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/18/auto-layout-by-example/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -437,7 +483,7 @@ in the settings.</p>
   </header>
 
 
-  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#97;&#64;&#x32;&#x78;&#46;&#x70;&#110;&#103;">&#97;&#64;&#x32;&#x78;&#46;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#x40;&#x32;&#x78;&#46;&#x70;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#46;&#x70;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -514,53 +560,6 @@ in the settings.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/01/does-arc-support-dispatch-queues/">Does ARC Support Dispatch Queues?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-01T01:48:00+08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>If your deployment target is lower than iOS 6.0 or Mac OS X 10.8</strong></p>
-
-<p>You need to use dispatch_retain and dispatch_release on your queue. ARC does not manage them.</p>
-
-<p><strong>If your deployment target is iOS 6.0 or Mac OS X 10.8 or later</strong></p>
-
-<p>ARC will manage your queue for you. You do not need to (and cannot) use dispatch_retain or dispatch_release if ARC is enabled.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/01/does-arc-support-dispatch-queues/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -592,7 +591,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (49)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (50)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -602,6 +601,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
@@ -617,10 +620,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/">OSX Server - Message Server 研究与故障解决方案</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong/">iOS 静态库不同平台合并 lipo命令使用</a>
       </li>
     
   </ul>

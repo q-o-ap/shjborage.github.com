@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-18T13:18:32+08:00</updated>
+  <updated>2014-01-18T16:52:06+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,215 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Auto Layout by Example]]></title>
+    <link href="http://saick.net/blog/2014/01/18/auto-layout-by-example/"/>
+    <updated>2014-01-18T16:21:00+08:00</updated>
+    <id>http://saick.net/blog/2014/01/18/auto-layout-by-example</id>
+    <content type="html"><![CDATA[<p>Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。</p>
+
+<p>如果某个地方看不明白可以留言给我，我翻译并给大家讲。</p>
+
+<p>ScrollView这块我暂时没有用，没细看，下面Size适配那个我试了，并且写了Demo，大家感兴趣下文下载研究。</p>
+
+<p>Auto Layout makes it easy to solve many complex layout problems automatically, without the need for manual view manipulation. By creating the right combination of constraints, you can create layouts that are traditionally difficult to manage in code, such as equally spaced views that adjust to changes in orientation or size, elements inside scroll views that affect the size of the scrolling content, or elements inside scroll views that don’t scroll with the rest of the contents.</p>
+
+<!-- more -->
+
+
+<h3>Using Scroll Views with Auto Layout</h3>
+
+<p>When you are creating an app using Auto Layout, scroll views can present a unique challenge. The size of the scrolling content must be set correctly so that the user can scroll through all of the available content, for example, and if you need to lock a contextual view in place on top of a scroll view, such as the scale and legend for a map, it’s difficult to ensure that the element doesn’t scroll with the rest of the content.</p>
+
+<h4>Controlling Scroll View Content Size</h4>
+
+<p>The size of the content inside of a scroll view is determined by the constraints of its descendants.</p>
+
+<p><em>To set the size of a scroll view</em></p>
+
+<ul>
+<li>Create the scroll view.</li>
+<li>Place the UI element inside it.</li>
+<li>Create constraints that fully define the width and height of the scroll view content.</li>
+</ul>
+
+
+<p>You must make sure you create constraints for all the subviews inside a scroll view. For example, when defining the constraints for a view that doesn’t have an intrinsic content size, you’ll need more than just a leading edge constraint—you must also create trailing edge, width, and height constraints. There cannot be any missing constraints, starting from one edge of the scroll view to the other.</p>
+
+<h4>Creating Anchored Views Inside a Scroll View</h4>
+
+<p>You may find you want to create an area inside a scroll view that doesn’t move when a user scrolls the contents of the scroll view. You accomplish this by using a separate <strong>container view</strong>.</p>
+
+<p><em>To lock a view inside a scroll view</em>
+*   Create a container view to hold the scroll view.
+*   Create the scroll view and place it in the container view with all edges equal to zero points.
+*   Create and place a subview inside of the scroll view.
+*   Create constraints from the subview to the container view.</p>
+
+<p>The following example uses the steps in the above task to show how to position a text view inside of a scroll view. In this example, the text view stays at the bottom of the scroll view and doesn’t move when the scroll view contents are moved.</p>
+
+<p>First, create the container view that will contain the scroll view. Set the size of the container view equal to the desired size of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008276023/player/b1ddbeff09" height="500" width="291"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After the container view is created, create a scroll view and place it inside of the container view. Resize the scroll view so that all of the edges are flush with the container view’s edges, by setting the distance to 0.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810786/player/1202126aa8" height="500" width="290"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create another view and place it inside of the scroll view. In this example, a text view is placed inside of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999315/player/ddc38c3ea6" height="500" width="288"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After placing the text view, create constraints from the text view to the container view. Creating constraints that anchor the text view to the container view (skipping the scroll view) anchors the text view relative to the container view, which ensures that the scroll view won’t scroll the text view.</p>
+
+<p>To create a constraint that crosses multiple views in the view hierarchy, it is generally easier to Control-drag from the view to the container view in the Interface Builder outline view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810736/player/e32e620ff4" height="298" width="270"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In the constraint overlay that appears, set the required constraints for the view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275923/player/194c48615c" height="273" width="158"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In this example, constraints are created from the leading, trailing, and bottom edges of the text view to the container view. The height of the text view is also constrained.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810686/player/bdc0cae834" height="500" width="287"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>The following two figures show the app in iOS Simulator, both in normal and landscape positions. The text view is constrained at the bottom of the scroll view and doesn’t move as the scroll view is moved.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999185/player/a051895080" height="296" width="495"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999135/player/4f87b36fa7" height="495" width="296"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<h3>Spacing and Wrapping</h3>
+
+<p>Auto Layout provides several techniques for automatically spacing views and resizing items based on their content. The following sections describe how to create constraints that keep visible views proportionally spaced based on the orientation of the device.</p>
+
+<h4>Creating Equal Spacing Between Views</h4>
+
+<p>To lay out several views that are proportionally spaced based on the orientation of a device, create spacer views between the visible views. Set the constraints of these spacer views correctly to ensure that the visible views are able to stay spaced apart based on the orientation of the device.</p>
+
+<p><em>To space views proportionally</em>
+*   Create the visible views.
+*   Create the spacer views equal to the number of visible views plus one.
+*   Alternate placing your views, starting with a spacer view.</p>
+
+<pre><code>To space two visible views, place all of the views in the following pattern, starting from the left side of the screen and moving right:
+</code></pre>
+
+<p><code>spacer1 | view1 | spacer2 | view2 | spacer3.</code></p>
+
+<ul>
+<li>Constrain the spacer views so that their lengths are equal to each other.</li>
+</ul>
+
+
+<p><code>
+Note: The height of the spacer views can be any value, including 0. However, you must create constraints for the height of the views—don’t leave the height ambiguous.
+Create a leading constraint from the first spacer view to the container view.
+</code></p>
+
+<ul>
+<li>Create a trailing constraint from the last spacer view to the container view.</li>
+<li>Create constraints between the spacer views and the visible views.</li>
+</ul>
+
+
+<p><code>
+Note: When spacing views vertically, start from the top of the screen and place each view below the previous view. Set the heights of the spacer views equal to each other.
+The following example uses the steps in the above task to show how to position two views proportionally spaced. The spacer views are annotated for the example, but are normally left empty with no background. First, create the two views and place them in the storyboard.
+</code></p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351964/player/6cff17637e" height="310" width="236"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Add the three spacer views—one to the left of the leftmost view, one between the two views, and one to the right of the rightmost view. The spacer views don’t have to be the same size at this time because their size will be set through constraints.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275823/player/bdda53d7d0" height="310" width="235"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create the following constraints for the spacer views:</p>
+
+<ul>
+<li>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1.</li>
+<li>Constrain the width of spacer view 1 to be greater than or equal to the minimum desired width.</li>
+<li>Create a Leading Space to Container constraint from spacer view 1 to the container.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 1 to view 1. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create Horizontal Spacing constraints from spacer view 2 to view 1 and view 2. Set these constraints to be a less-than-or-equal-to constraint with a priority of 999.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 3 to view 2. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create a Trailing Space to Container constraint from spacer view 3 to the container.</li>
+</ul>
+
+
+<p>These constraints create two visible views and three invisible views (spacer views). These spacer views automatically resize as the orientation of the device changes, keeping the visible views proportionally spaced, as shown in the following two figures:</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275833/player/7290ca4711" height="337" width="261"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351904/player/a2b7a82a10" height="261" width="337"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p><a href="https://www.dropbox.com/s/23vrbep9khfyvb6/AutoLayoutDemo.zip">Demo</a></p>
+
+<h3>Animating Changes Made by Auto Layout</h3>
+
+<p>If you need full control over animating changes made by Auto Layout, you must make your constraint changes programmatically. The basic concept is the same for both iOS and OS X, but there are a few minor differences.</p>
+
+<p>In an iOS app, your code would look something like the following:</p>
+
+<p>```
+[containerView layoutSubtreeIfNeeded]; // Ensures that all pending layout operations have been completed
+[UIView animateWithDuration:1.0 animations:^{</p>
+
+<pre><code> // Make all constraint changes here
+ [containerView layoutSubtreeIfNeeded]; // Forces the layout of the subtree animation block and then captures all of the frame changes
+</code></pre>
+
+<p>}];
+```</p>
+
+<p>In OS X, use the following code when using layer-backed animations:</p>
+
+<p>```
+[containterView layoutIfNeeded];
+NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {</p>
+
+<pre><code> [context setAllowsImplicitAnimation: YES];
+ // Make all constraint changes here
+ [containerView layoutIfNeeded];
+</code></pre>
+
+<p>}];
+```</p>
+
+<p>When you aren’t using layer-backed animations, you must animate the constant using the constraint’s animator:</p>
+
+<p><code>
+[[constraint animator] setConstant:42];
+</code></p>
+
+<h3>个人总结</h3>
+
+<ol>
+<li>所有相关Contraints都加好后再自动让XCode补全，或者干脆在没问题的时候忽略警告</li>
+<li><code>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1</code>. 这意思是让三个视频的width相等，并不是给他们三个都加上width的Contraints。</li>
+<li>最后是在3.5寸屏幕下开发，再适应4寸，这样直接拉开。（在开发时，点那个大小切换那个可能会带来Contraints警告，要小心。不行就Commond+Z）</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[解决iOS报错libc++abi.dylib handler threw exception]]></title>
@@ -437,163 +646,6 @@ returnValue, @"Should have returned the expected string.");
 <p>GHUnit Reference: <a href="http://gabriel.github.com/gh-unit/">http://gabriel.github.com/gh-unit/</a></p>
 
 <p>转自：<a href="http://www.uml.org.cn/mobiledev/201201093.asp">http://www.uml.org.cn/mobiledev/201201093.asp</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[在iOS中使用icon font及自定义字体]]></title>
-    <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
-    <updated>2013-12-11T21:42:00+08:00</updated>
-    <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x61;&#64;&#50;&#x78;&#x2e;&#x70;&#110;&#x67;">&#x61;&#x40;&#x32;&#120;&#46;&#112;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
-
-<p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
-
-<p>那么它能不能应用到ios开发上来呢？带着这个疑问，我在github上找到了FontasticIcons和ios-fontawesome，但是这两个OC包对icon资源封装都有限，而且扩展也不是很方便。</p>
-
-<p>既然能在ios上使用icon font，那么怎么用呢？经过一番摸索，发现使用原理和自定义字体差不多，只有个别操作不太一样，接下来我给大家详细介绍一下。</p>
-
-<!-- more -->
-
-
-<h3>如何使用自定义字体</h3>
-
-<p>在讲icon font之前，首先先来看看普通自定义字体是如何在ios中使用的，两个原理是一样的。这里以KaushanScript-Regular为例：</p>
-
-<h4>Step 1: 导入字体文件</h4>
-
-<p>将字体文件拖入项目（ios支持的字体格式有：.ttf、.otf，其他格式不确定）：</p>
-
-<p><a href="http://www.flickr.com/photos/shjborage/11323775276/" title="2013-12-11-01 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2846/11323775276_b14a547aa1.jpg" width="500" height="354" alt="2013-12-11-01"></a></p>
-
-<p>然后再在项目的资源池中确认字体文件是否加入项目，打开xcode项目的Build Phases中查看：</p>
-
-<p><a href="http://www.flickr.com/photos/shjborage/11323859283/" title="2013-12-11-02 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3816/11323859283_dff602ee81.jpg" width="500" height="249" alt="2013-12-11-02"></a></p>
-
-<h4>Step 2: 配置.plist文件</h4>
-
-<p>在.plist文件中注册新加入的字体，.plist文件往往以“[appname]-Info.plist”的形式存在于“Supporting Files”文件夹内。 在.plist文件中添加新属性“Fonts provided by application”，该属性的值是一个数组，这意味着可以在这里注册多个字体。</p>
-
-<p><a href="http://www.flickr.com/photos/shjborage/11323790974/" title="2013-12-11-03 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3692/11323790974_9beda31ccb.jpg" width="500" height="209" alt="2013-12-11-03"></a></p>
-
-<h4>Step 3: 找到字体集名称</h4>
-
-<p>注册完，我们需要检测是否注册成功且取得新字体名称，检测方法就是把所有安装了的字体都打印出来，看看新注册的字体是否在里面：</p>
-
-<p>```
-for (NSString* family in [UIFont familyNames])
-{</p>
-
-<pre><code>NSLog(@"%@", family); 
-for (NSString* name in [UIFont fontNamesForFamilyName: family]) 
-{ 
-     NSLog(@"  %@", name); 
-} 
-</code></pre>
-
-<p>}
-```</p>
-
-<p>运行完，查看控制台里打印出的所有字体集中是否有新注册的字体，如果有，说明注册成功，并将字体名（在这里是“Kaushan Script”）记住留到后面用。</p>
-
-<p><a href="http://www.flickr.com/photos/shjborage/11323787836/" title="2013-12-11-04 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5481/11323787836_e8fc5ed22a.jpg" width="500" height="392" alt="2013-12-11-04"></a></p>
-
-<h3>Step 4: 使用新字体</h3>
-
-<p>最后，就是使用你最新加入的字体啦：</p>
-
-<p><code>
-UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)];
-label.font = [UIFont fontWithName:@"Kaushan Script" size:35];
-label.text = @"icon font";
-label.textColor = UIColorFromRGB(0xFF7300);
-[self.view addSubview:label];
-</code></p>
-
-<p>效果：</p>
-
-<p><a href="http://www.flickr.com/photos/shjborage/11323858493/" title="2013-12-11-05 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5471/11323858493_39eaf9269b.jpg" width="276" height="113" alt="2013-12-11-05"></a></p>
-
-<h3>开始使用icon font</h3>
-
-<p>图标字体也是字体，使用方式和上面所说的差不多，只是在套用上有些差别；这里拿fontello的图标字体库为例。</p>
-
-<ul>
-<li>1.选择需要的图标
-在fontello的图标字体库选择自己需要的图标，并下载生成的字体文件。</li>
-<li>2.按照上面的步骤将图标字体注册到项目中</li>
-<li>3.找到图标对应的unicode码
-使用FontLab Studio 5工具打开字体文件（比如fontello.ttf），就可以看到图标与unicode码之间的对应关系啦。</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/shjborage/11323774246/" title="2013-12-11-06 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2824/11323774246_65813b1aab.jpg" width="500" height="126" alt="2013-12-11-06"></a></p>
-
-<ul>
-<li>4.使用图标</li>
-</ul>
-
-
-<p><code>
-UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)];
-label.font = [UIFont fontWithName:@"fontello" size:35];
-label.text = @"\U0000E802 \U0000E801 \U0000E803 \U0000E804 \U0000E805 \U0000E81A";
-label.textColor = UIColorFromRGB(0xFF7300);
-[self.view addSubview:label];
-</code></p>
-
-<p>在Objective-C中，自定义的unicode码需要以“\U0000E802”这样的格式存在。</p>
-
-<ul>
-<li>5.使用emoji表情库
-这里还可以使用苹果emoji表情库的图标，这里不需要新加字体库，只要找到emoji图标和unicode之间的对应关系就好，但是这些图标都不是矢量图，缩放请自重。</li>
-</ul>
-
-
-<p><code>
-UILabel *label5 = [[UILabel alloc] initWithFrame:CGRectMake(10, 480, 300, 50)];
-label5.text = @"\U0000e42a\U0000e525\U0000e41c";
-[self.view addSubview:label5];
-</code></p>
-
-<ul>
-<li>6.效果</li>
-</ul>
-
-
-<p><a href="http://www.flickr.com/photos/shjborage/11323858703/" title="2013-12-11-07 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5526/11323858703_820c5b3eef.jpg" width="366" height="500" alt="2013-12-11-07"></a></p>
-
-<ul>
-<li>7.使用自制图标字体</li>
-<li><p>如果上面介绍的图标库还满足不了你的需求，或者需要的图标分布在多个图标库而不能集中到一个字体文件中；那么你可能需要自己去制作图标字体文件了。</p></li>
-</ul>
-
-
-<h3>总结</h3>
-
-<p>这样，在iOS开发上，不仅可以直接去开源图标库找现成的图标用到项目中，而且还可以轻松地改变图标的颜色、大小，相信可以解放不少设计师和工程师的工作量。</p>
-
-<p>图标字体库
-<a href="http://fontello.com/">fontello</a>
-etao图标字体库（这里有个问题要注意，etao的图标字体名为“Untitled1”，是不是生成字体的同学疏忽啦？）
-IcoMoon
-<a href="http://www.easyapns.com/iphone-emoji-alerts">emoji表情库</a></p>
-
-<p>参考资料</p>
-
-<p><a href="http://codewithchris.com/common-mistakes-with-adding-custom-fonts-to-your-ios-app/">Common Mistakes With Adding Custom Fonts to Your iOS App</a></p>
-
-<p><a href="http://ux.etao.com/posts/401">Icon font 实践</a></p>
-
-<p>FontasticIcons</p>
-
-<p>ios-fontawesome</p>
-
-<p><a href="https://coderwall.com/p/wrb3pw">Custom Unicode Characters in Objective-C</a></p>
-
-<p><a href="http://www.qianduan.net/css3-icon-font-guide.html">CSS3 icon font完全指南</a></p>
-
-<p>《转》</p>
 ]]></content>
   </entry>
   

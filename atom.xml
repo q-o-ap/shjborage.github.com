@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-18T13:18:32+08:00</updated>
+  <updated>2014-01-18T16:52:06+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,218 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Auto Layout by Example]]></title>
+    <link href="http://saick.net/blog/2014/01/18/auto-layout-by-example/"/>
+    <updated>2014-01-18T16:21:00+08:00</updated>
+    <id>http://saick.net/blog/2014/01/18/auto-layout-by-example</id>
+    <content type="html"><![CDATA[<p>Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。</p>
+
+<p>如果某个地方看不明白可以留言给我，我翻译并给大家讲。</p>
+
+<p>ScrollView这块我暂时没有用，没细看，下面Size适配那个我试了，并且写了Demo，大家感兴趣下文下载研究。</p>
+
+<p>Auto Layout makes it easy to solve many complex layout problems automatically, without the need for manual view manipulation. By creating the right combination of constraints, you can create layouts that are traditionally difficult to manage in code, such as equally spaced views that adjust to changes in orientation or size, elements inside scroll views that affect the size of the scrolling content, or elements inside scroll views that don’t scroll with the rest of the contents.</p>
+
+<!-- more -->
+
+
+<h3>Using Scroll Views with Auto Layout</h3>
+
+<p>When you are creating an app using Auto Layout, scroll views can present a unique challenge. The size of the scrolling content must be set correctly so that the user can scroll through all of the available content, for example, and if you need to lock a contextual view in place on top of a scroll view, such as the scale and legend for a map, it’s difficult to ensure that the element doesn’t scroll with the rest of the content.</p>
+
+<h4>Controlling Scroll View Content Size</h4>
+
+<p>The size of the content inside of a scroll view is determined by the constraints of its descendants.</p>
+
+<p><em>To set the size of a scroll view</em></p>
+
+<ul>
+<li>Create the scroll view.</li>
+<li>Place the UI element inside it.</li>
+<li>Create constraints that fully define the width and height of the scroll view content.</li>
+</ul>
+
+
+<p>You must make sure you create constraints for all the subviews inside a scroll view. For example, when defining the constraints for a view that doesn’t have an intrinsic content size, you’ll need more than just a leading edge constraint—you must also create trailing edge, width, and height constraints. There cannot be any missing constraints, starting from one edge of the scroll view to the other.</p>
+
+<h4>Creating Anchored Views Inside a Scroll View</h4>
+
+<p>You may find you want to create an area inside a scroll view that doesn’t move when a user scrolls the contents of the scroll view. You accomplish this by using a separate <strong>container view</strong>.</p>
+
+<p><em>To lock a view inside a scroll view</em>
+*   Create a container view to hold the scroll view.
+*   Create the scroll view and place it in the container view with all edges equal to zero points.
+*   Create and place a subview inside of the scroll view.
+*   Create constraints from the subview to the container view.</p>
+
+<p>The following example uses the steps in the above task to show how to position a text view inside of a scroll view. In this example, the text view stays at the bottom of the scroll view and doesn’t move when the scroll view contents are moved.</p>
+
+<p>First, create the container view that will contain the scroll view. Set the size of the container view equal to the desired size of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008276023/player/b1ddbeff09" height="500" width="291"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After the container view is created, create a scroll view and place it inside of the container view. Resize the scroll view so that all of the edges are flush with the container view’s edges, by setting the distance to 0.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810786/player/1202126aa8" height="500" width="290"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create another view and place it inside of the scroll view. In this example, a text view is placed inside of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999315/player/ddc38c3ea6" height="500" width="288"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After placing the text view, create constraints from the text view to the container view. Creating constraints that anchor the text view to the container view (skipping the scroll view) anchors the text view relative to the container view, which ensures that the scroll view won’t scroll the text view.</p>
+
+<p>To create a constraint that crosses multiple views in the view hierarchy, it is generally easier to Control-drag from the view to the container view in the Interface Builder outline view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810736/player/e32e620ff4" height="298" width="270"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In the constraint overlay that appears, set the required constraints for the view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275923/player/194c48615c" height="273" width="158"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In this example, constraints are created from the leading, trailing, and bottom edges of the text view to the container view. The height of the text view is also constrained.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810686/player/bdc0cae834" height="500" width="287"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>The following two figures show the app in iOS Simulator, both in normal and landscape positions. The text view is constrained at the bottom of the scroll view and doesn’t move as the scroll view is moved.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999185/player/a051895080" height="296" width="495"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999135/player/4f87b36fa7" height="495" width="296"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<h3>Spacing and Wrapping</h3>
+
+<p>Auto Layout provides several techniques for automatically spacing views and resizing items based on their content. The following sections describe how to create constraints that keep visible views proportionally spaced based on the orientation of the device.</p>
+
+<h4>Creating Equal Spacing Between Views</h4>
+
+<p>To lay out several views that are proportionally spaced based on the orientation of a device, create spacer views between the visible views. Set the constraints of these spacer views correctly to ensure that the visible views are able to stay spaced apart based on the orientation of the device.</p>
+
+<p><em>To space views proportionally</em>
+*   Create the visible views.
+*   Create the spacer views equal to the number of visible views plus one.
+*   Alternate placing your views, starting with a spacer view.</p>
+
+<pre><code>To space two visible views, place all of the views in the following pattern, starting from the left side of the screen and moving right:
+</code></pre>
+
+<p><code>spacer1 | view1 | spacer2 | view2 | spacer3.</code></p>
+
+<ul>
+<li>Constrain the spacer views so that their lengths are equal to each other.</li>
+</ul>
+
+
+<p><code>
+Note: The height of the spacer views can be any value, including 0. However, you must create constraints for the height of the views—don’t leave the height ambiguous.
+Create a leading constraint from the first spacer view to the container view.
+</code></p>
+
+<ul>
+<li>Create a trailing constraint from the last spacer view to the container view.</li>
+<li>Create constraints between the spacer views and the visible views.</li>
+</ul>
+
+
+<p><code>
+Note: When spacing views vertically, start from the top of the screen and place each view below the previous view. Set the heights of the spacer views equal to each other.
+The following example uses the steps in the above task to show how to position two views proportionally spaced. The spacer views are annotated for the example, but are normally left empty with no background. First, create the two views and place them in the storyboard.
+</code></p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351964/player/6cff17637e" height="310" width="236"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Add the three spacer views—one to the left of the leftmost view, one between the two views, and one to the right of the rightmost view. The spacer views don’t have to be the same size at this time because their size will be set through constraints.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275823/player/bdda53d7d0" height="310" width="235"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create the following constraints for the spacer views:</p>
+
+<ul>
+<li>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1.</li>
+<li>Constrain the width of spacer view 1 to be greater than or equal to the minimum desired width.</li>
+<li>Create a Leading Space to Container constraint from spacer view 1 to the container.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 1 to view 1. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create Horizontal Spacing constraints from spacer view 2 to view 1 and view 2. Set these constraints to be a less-than-or-equal-to constraint with a priority of 999.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 3 to view 2. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create a Trailing Space to Container constraint from spacer view 3 to the container.</li>
+</ul>
+
+
+<p>These constraints create two visible views and three invisible views (spacer views). These spacer views automatically resize as the orientation of the device changes, keeping the visible views proportionally spaced, as shown in the following two figures:</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275833/player/7290ca4711" height="337" width="261"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351904/player/a2b7a82a10" height="261" width="337"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p><a href="https://www.dropbox.com/s/23vrbep9khfyvb6/AutoLayoutDemo.zip">Demo</a></p>
+
+<h3>Animating Changes Made by Auto Layout</h3>
+
+<p>If you need full control over animating changes made by Auto Layout, you must make your constraint changes programmatically. The basic concept is the same for both iOS and OS X, but there are a few minor differences.</p>
+
+<p>In an iOS app, your code would look something like the following:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[containerView layoutSubtreeIfNeeded]; // Ensures that all pending layout operations have been completed
+</span><span class='line'>[UIView animateWithDuration:1.0 animations:^{
+</span><span class='line'>     // Make all constraint changes here
+</span><span class='line'>     [containerView layoutSubtreeIfNeeded]; // Forces the layout of the subtree animation block and then captures all of the frame changes
+</span><span class='line'>}];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In OS X, use the following code when using layer-backed animations:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[containterView layoutIfNeeded];
+</span><span class='line'>NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+</span><span class='line'>     [context setAllowsImplicitAnimation: YES];
+</span><span class='line'>     // Make all constraint changes here
+</span><span class='line'>     [containerView layoutIfNeeded];
+</span><span class='line'>}];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you aren’t using layer-backed animations, you must animate the constant using the constraint’s animator:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[constraint animator] setConstant:42];</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>个人总结</h3>
+
+<ol>
+<li>所有相关Contraints都加好后再自动让XCode补全，或者干脆在没问题的时候忽略警告</li>
+<li><code>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1</code>. 这意思是让三个视频的width相等，并不是给他们三个都加上width的Contraints。</li>
+<li>最后是在3.5寸屏幕下开发，再适应4寸，这样直接拉开。（在开发时，点那个大小切换那个可能会带来Contraints警告，要小心。不行就Commond+Z）</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[解决iOS报错libc++abi.dylib handler threw exception]]></title>
@@ -644,7 +856,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#97;&#64;&#x32;&#x78;&#46;&#x70;&#110;&#103;">&#97;&#64;&#x32;&#x78;&#46;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#x40;&#x32;&#x78;&#46;&#x70;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#46;&#x70;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -2828,70 +3040,6 @@ vi /etc/ld.so.conf    //加入libmysqlclient.so.18 所在的目录
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib</span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Dash：程序员的的好帮手]]></title>
-    <link href="http://saick.net/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/"/>
-    <updated>2013-10-27T20:08:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou</id>
-    <content type="html"><![CDATA[<p>现在最新版UI比以前好一些，不过总体差异不大。</p>
-
-<p>转自：<a href="http://blog.csdn.net/meegomeego/article/details/8798665">http://blog.csdn.net/meegomeego/article/details/8798665</a></p>
-
-<p>作为一Coder，每天最常见的动作就是查看各种API文档，你一定也有过同时打开N个窗口（HTML、PDF、CHM），不停的在编辑器与文档之间切换的感受吧？怎么说呢，其实我很讨厌这种枯燥无味的动作，那么如何才能提高效率，减少无用功呢？下面就给大家介绍一款非常好用的Mac小工具：<em>Dash</em>，相比这个英文名，我跟喜欢叫它“叮当猫”，嘿嘿。</p>
-
-<p><a href="http://itunes.apple.com/cn/app/dash-docs-snippets/id458034879?mt=12">点我直达AppStore介绍页面</a></p>
-
-<h3>功能简介</h3>
-
-<p>官方用一句话就概括了它的用途：Dash是一个API文档浏览器（ API Documentation Browser），以及代码片段管理工具（Code Snippet Manager）。你没看错，它就只有这两个功能，但确实是程序员（至少对于我来说）最为关心的特性，自己之前也用过了不少类似的工具，可以毫不夸张地说，Dash是它们之中做的最好的一个！</p>
-
-<!-- more -->
-
-
-<h4>强悍的API文档浏览、搜索功能</h4>
-
-<p>想必这个功能是大家最常用的了吧，每天要反复查看、搜索那么多的API细节，没有一个好工具，单靠自己的双手如何应付得来？窗口不停的切来切去，很烦啊！Dash采用集成单一窗口的方式，很好的解决了这个问题。看下面的截图：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511272486/" title="2013-10-27-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3789/10511272486_dc57f954a1.jpg" width="500" height="300" alt="2013-10-27-1"></a></p>
-
-<p>上图便是Dash的API浏览器主界面：左侧边栏是各种编程语言以及框架（取决于你下载安装了多少文档集合）的导航大纲，点击某个节点，右边的内容区域就是文档的详细信息啦，非常直观。也可以在左上方的搜索框内通过输入关键字，查找相关的API文档，非常类似全文检索的实现方式，Dash的响应速度非常快！关键是可以同时查询不同的语言、框架内容，实在是太方便了。看到这里你也许要问了，这跟我们平常切换到特定的文档窗口（比如一个PDF或者一个CHM文件），再ctrl + f查找有什么区别，不是多此一举吗？其实你错了，Dash可以通过快捷键来显示、隐藏文档窗口，它提供了配置界面以便用户自行设置（我比较习惯alt+space，因为其他软件很少用到这个组合键）：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306334/" title="2013-10-27-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7356/10511306334_106b3b2151.jpg" width="423" height="234" alt="2013-10-27-2"></a></p>
-
-<h4>Dash自带了丰富的API文档，涉及各种主流的编程语言和框架，全列出来很吓人的：</h4>
-
-<p>ActionScript, Android, C++, Cappuccino, Cocos2D, Cocos3D, Corona, CSS, Django, Groovy, HTML, Java, JavaFX, JavaScript, jQuery, Kobold2D, Lua, MySQL, Node.js, Man Pages, Perl, PHP, Python, Ruby, Ruby on Rails, Scala, Sparrow, SQLite, Unity 3D, WordPress, XSLT, XUL</p>
-
-<p>而且它的文档库采用了docset格式，高级用户基于网站提供的教程，很容易就能自行添加其他的扩充文档，其实Dash在最初发布的时候，只支持很少的几个文档浏览，好像只有Java、HTML、CSS这些，是后来通过用户不断贡献，以及作者及时的反馈（Rails API就是我通过Email与作者联系，请求添加的，作者非常nice），逐步壮大，才具备了如此广泛的语言、框架支持。要添加API文档，打开软件配置界面，切换到Docset选项卡即可看到所有内置的文档列表，按需要自行下载即可（如果是自己制作的docset，双击即可导入Dash）：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306294/" title="2013-10-27-3 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2845/10511306294_444ab45252.jpg" width="448" height="413" alt="2013-10-27-3"></a></p>
-
-<h3>牛逼、好用的代码片段管理功能</h3>
-
-<p>前面说完了Dash的文档查询功能，下面再来看一看它带给我们的另一个惊喜：代码片段管理。说到这里，之前的版本其实有个很不好的地方，就是如果不仔细琢磨一下，或者去看官方的帮助文档的话，用户是很难一眼就知道怎么用这个功能，新手引导做得确实不怎么样，不过最新版已经改善了这个问题，在主界面的导航边栏明确地给出了分类提示，创建或者修改代码片段都方便了许多。来看下面这个例子：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306354/" title="2013-10-27-4 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2856/10511306354_5e64bc1f92.jpg" width="500" height="427" alt="2013-10-27-4"></a></p>
-
-<p>利用Dash的代码片段管理功能，我们可以把日常使用频繁（也就是你经常需要复制粘贴）的代码保存起来，然后为其设置一个独一无二的缩写，这样一来原本需要一遍又一遍的敲击键盘重复录入的繁琐工作，就可以交给Dash来帮你搞定啦。比如上面截图中的例子，就是ExtJS中发起Ajax请求的代码片段，哪怕是copy &amp; paste，时间长了也会很烦的，我给它设置了一个缩写（ajax），以后在需要编写这段代码的时候，就只需要敲击这几个字母，它就会魔法般的出现在光标所在位置啦！很神奇吧？嘿嘿，其实这种扩展缩写的功能，还有很多软件都能做到，比如TextExpander（这个我也买了，半价14刀的时候，但是现在已经打入冷宫了，比较后悔），不过就用户体验和各种细节，诸如界面UI，特别是扩展占位符的处理上，目前还没有哪一个能比得过Dash的（Dash is the best!）。来看看使用代码片段的截图吧：</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10511306264/" title="2013-10-27-5 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2885/10511306264_3e3709bce1.jpg" width="500" height="364" alt="2013-10-27-5"></a></p>
-
-<p>Dash的缩写扩展功能很强大，比方说上面那个例子，在保存代码片段的时候，你可以使用双下划线标明占位符，在执行扩展的时候就可以通过tab键来在各个占位符之间切换，根据需要输入实际的值，最后回车即可把片段粘贴到光标所在之处。除了占位符，它还支持下面这些变量符号：</p>
-
-<ul>
-<li> @clipboard 自动插入当前剪贴板中的内容</li>
-<li> @cursor 代码片段粘贴完毕之后，自动将光标定位到此处</li>
-<li> @date 自动插入当前日期</li>
-<li> @time 自动插入当前时间</li>
-</ul>
-
-
-<p>介绍到这里，各位看官，你应该已经深深滴爱上Dash了吧？每个苦逼的程序员，都应该有这么一只可爱贴心的叮当猫，您说是不是？其实个人不是很喜欢它的图标，实在是有点太诡异了，嘿嘿……</p>
-
-<p>最后再说一句，Dash在Mac App Store里面免费提供下载，不过作者包含了一个IAP（应用程序内购买）插件，作者挺幽默的，看介绍是说的Dash的双胞胎伙伴Pinky比较调皮，会时不时的跳出来打扰你一下，囧……反正我运行了一晚上，还没见到这只传说中的猫呢。其实这只不过是给你提供了赞助作者的机会，毕竟这么好的软件，如果经济条件允许，支持一下也无可厚非，同是软件开发者，其中的辛酸你我都懂的。</p>
 ]]></content>
   </entry>
   

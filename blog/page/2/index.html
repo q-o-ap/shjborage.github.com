@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Origin Nested pop animation can result in corrupted navigation bar Finishing up a navigation transition in an unexpected state. Navigation Bar &hellip;">
+  <meta name="description" content="If your deployment target is lower than iOS 6.0 or Mac OS X 10.8 You need to use dispatch_retain and dispatch_release on your queue. ARC does not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/01/does-arc-support-dispatch-queues/">Does ARC Support Dispatch Queues?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-01T01:48:00+08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>If your deployment target is lower than iOS 6.0 or Mac OS X 10.8</strong></p>
+
+<p>You need to use dispatch_retain and dispatch_release on your queue. ARC does not manage them.</p>
+
+<p><strong>If your deployment target is iOS 6.0 or Mac OS X 10.8 or later</strong></p>
+
+<p>ARC will manage your queue for you. You do not need to (and cannot) use dispatch_retain or dispatch_release if ARC is enabled.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/01/does-arc-support-dispatch-queues/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -524,57 +571,6 @@ dispatch_queue 与 block 结合起来使用，方便进行多线程编程。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Dash：程序员的的好帮手</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-27T20:08:00+08:00" pubdate data-updated="true">Oct 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>现在最新版UI比以前好一些，不过总体差异不大。</p>
-
-<p>转自：<a href="http://blog.csdn.net/meegomeego/article/details/8798665">http://blog.csdn.net/meegomeego/article/details/8798665</a></p>
-
-<p>作为一Coder，每天最常见的动作就是查看各种API文档，你一定也有过同时打开N个窗口（HTML、PDF、CHM），不停的在编辑器与文档之间切换的感受吧？怎么说呢，其实我很讨厌这种枯燥无味的动作，那么如何才能提高效率，减少无用功呢？下面就给大家介绍一款非常好用的Mac小工具：<em>Dash</em>，相比这个英文名，我跟喜欢叫它“叮当猫”，嘿嘿。</p>
-
-<p><a href="http://itunes.apple.com/cn/app/dash-docs-snippets/id458034879?mt=12">点我直达AppStore介绍页面</a></p>
-
-<h3>功能简介</h3>
-
-<p>官方用一句话就概括了它的用途：Dash是一个API文档浏览器（ API Documentation Browser），以及代码片段管理工具（Code Snippet Manager）。你没看错，它就只有这两个功能，但确实是程序员（至少对于我来说）最为关心的特性，自己之前也用过了不少类似的工具，可以毫不夸张地说，Dash是它们之中做的最好的一个！</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -608,7 +604,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (49)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (50)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -618,6 +614,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
@@ -633,10 +633,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/">OSX Server - Message Server 研究与故障解决方案</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong/">iOS 静态库不同平台合并 lipo命令使用</a>
       </li>
     
   </ul>
