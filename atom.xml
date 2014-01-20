@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-20T23:51:42+08:00</updated>
+  <updated>2014-01-21T00:13:54+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -42,9 +42,28 @@
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface UINavigationItem (margin)
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UINavigationItem+margin.h
+</span><span class='line'>//
+</span><span class='line'>//  Created by shjborage on 1/20/14.
+</span><span class='line'>//  Copyright (c) 2014 Saick. All rights reserved.
+</span><span class='line'>//
 </span><span class='line'>
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>#import &lt;UIKit/UIKit.h&gt;
+</span><span class='line'>
+</span><span class='line'>@interface UINavigationItem (margin)
+</span><span class='line'>
+</span><span class='line'>@end
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p><em>UINavigationItem+margin.m</em></p>
@@ -100,57 +119,124 @@
 <span class='line-number'>49</span>
 <span class='line-number'>50</span>
 <span class='line-number'>51</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UINavigationItem (margin)
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UINavigationItem+margin.m
+</span><span class='line'>//
+</span><span class='line'>//  Created by shjborage on 1/20/14.
+</span><span class='line'>//  Copyright (c) 2014 Saick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'>
+</span><span class='line'>#import "UINavigationItem+margin.h"
+</span><span class='line'>
+</span><span class='line'>@implementation UINavigationItem (margin)
 </span><span class='line'>
 </span><span class='line'>#if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1
+</span><span class='line'>
 </span><span class='line'>- (void)setLeftBarButtonItem:(UIBarButtonItem *)_leftBarButtonItem
 </span><span class='line'>{
-</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
-</span><span class='line'>    {
-</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-</span><span class='line'>        negativeSeperator.width = -10.0f;
-</span><span class='line'>        
-</span><span class='line'>        if (_leftBarButtonItem)
-</span><span class='line'>        {
-</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
-</span><span class='line'>        }
-</span><span class='line'>        else
-</span><span class='line'>        {
-</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator]];
-</span><span class='line'>        }
-</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>    negativeSeperator.width = -10.0f;
+</span><span class='line'>    
+</span><span class='line'>    if (_leftBarButtonItem) {
+</span><span class='line'>      [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
+</span><span class='line'>    } else {
+</span><span class='line'>      [self setLeftBarButtonItems:@[negativeSeperator]];
 </span><span class='line'>    }
-</span><span class='line'>    else
-</span><span class='line'>    {
-</span><span class='line'>        [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
-</span><span class='line'>    }
+</span><span class='line'>  } else {
+</span><span class='line'>    [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
+</span><span class='line'>  }
 </span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>//- (void)setLeftBarButtonItems:(NSArray *)leftBarButtonItems
+</span><span class='line'>//{
+</span><span class='line'>//  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>//    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>//    negativeSeperator.width = -10.0f;
+</span><span class='line'>//    
+</span><span class='line'>//    if ([_leftBarButtonItems count] &gt; 0) {
+</span><span class='line'>//      NSMutableArray *items = [NSMutableArray arrayWithArray:leftBarButtonItems];
+</span><span class='line'>//      [items insertObject:negativeSeperator atIndex:0];
+</span><span class='line'>//      [self setLeftBarButtonItems:items animated:NO];
+</span><span class='line'>//    } else {
+</span><span class='line'>//      [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
+</span><span class='line'>//    }
+</span><span class='line'>//  } else {
+</span><span class='line'>//    [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
+</span><span class='line'>//  }
+</span><span class='line'>//}
 </span><span class='line'>
 </span><span class='line'>- (void)setRightBarButtonItem:(UIBarButtonItem *)_rightBarButtonItem
 </span><span class='line'>{
-</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
-</span><span class='line'>    {
-</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-</span><span class='line'>        negativeSeperator.width = -10.0f;
-</span><span class='line'>        
-</span><span class='line'>        if (_rightBarButtonItem)
-</span><span class='line'>        {
-</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
-</span><span class='line'>        }
-</span><span class='line'>        else
-</span><span class='line'>        {
-</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator]];
-</span><span class='line'>        }
-</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>    negativeSeperator.width = -10.0f;
+</span><span class='line'>    
+</span><span class='line'>    if (_rightBarButtonItem) {
+</span><span class='line'>      [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
+</span><span class='line'>    } else {
+</span><span class='line'>      [self setRightBarButtonItems:@[negativeSeperator]];
 </span><span class='line'>    }
-</span><span class='line'>    else
-</span><span class='line'>    {
-</span><span class='line'>        [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
-</span><span class='line'>    }
+</span><span class='line'>  } else {
+</span><span class='line'>    [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
+</span><span class='line'>  }
 </span><span class='line'>}
 </span><span class='line'>
+</span><span class='line'>//- (void)setRightBarButtonItems:(NSArray *)rightBarButtonItems
+</span><span class='line'>//{
+</span><span class='line'>//  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>//    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>//    negativeSeperator.width = -10.0f;
+</span><span class='line'>//    
+</span><span class='line'>//    if ([_leftBarButtonItems count] &gt; 0) {
+</span><span class='line'>//      NSMutableArray *items = [NSMutableArray arrayWithArray:rightBarButtonItems];
+</span><span class='line'>//      [items insertObject:negativeSeperator atIndex:0];
+</span><span class='line'>//      [self setRightBarButtonItems:items animated:NO];
+</span><span class='line'>//    } else {
+</span><span class='line'>//      [self setRightBarButtonItems:rightBarButtonItems animated:NO];
+</span><span class='line'>//    }
+</span><span class='line'>//  } else {
+</span><span class='line'>//    [self setRightBarButtonItems:rightBarButtonItems animated:NO];
+</span><span class='line'>//  }
+</span><span class='line'>//}
+</span><span class='line'>
 </span><span class='line'>#endif
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>
+</span><span class='line'>@end
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>项目源码不做任何修改，问题解决；</p>
@@ -164,6 +250,8 @@
 </span><span class='line'>self.navigationItem.leftBarButtonItem = leftBarItem;
 </span><span class='line'>[leftBarItem release];</span></code></pre></td></tr></table></div></figure>
 
+
+<p>如果原来项目中有使用<code>self.navigationItem.leftBarButtonItems</code>或<code>self.navigationItem.rightBarButtonItems</code>可参考注释部分内容。如果都是多个的，那么直接换把注释解开，把单个的给注释掉。<strong>搞懂原理才是重要的</strong></p>
 
 <p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
 ]]></content>
@@ -1328,7 +1416,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x61;&#64;&#x32;&#x78;&#x2e;&#x70;&#110;&#x67;">&#x61;&#x40;&#x32;&#x78;&#46;&#x70;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#97;&#64;&#x32;&#120;&#x2e;&#x70;&#x6e;&#103;">&#x61;&#64;&#x32;&#x78;&#x2e;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 

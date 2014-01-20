@@ -129,9 +129,28 @@
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface UINavigationItem (margin)
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UINavigationItem+margin.h
+</span><span class='line'>//
+</span><span class='line'>//  Created by shjborage on 1/20/14.
+</span><span class='line'>//  Copyright (c) 2014 Saick. All rights reserved.
+</span><span class='line'>//
 </span><span class='line'>
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>#import &lt;UIKit/UIKit.h&gt;
+</span><span class='line'>
+</span><span class='line'>@interface UINavigationItem (margin)
+</span><span class='line'>
+</span><span class='line'>@end
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p><em>UINavigationItem+margin.m</em></p>
@@ -187,57 +206,124 @@
 <span class='line-number'>49</span>
 <span class='line-number'>50</span>
 <span class='line-number'>51</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UINavigationItem (margin)
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UINavigationItem+margin.m
+</span><span class='line'>//
+</span><span class='line'>//  Created by shjborage on 1/20/14.
+</span><span class='line'>//  Copyright (c) 2014 Saick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'>
+</span><span class='line'>#import "UINavigationItem+margin.h"
+</span><span class='line'>
+</span><span class='line'>@implementation UINavigationItem (margin)
 </span><span class='line'>
 </span><span class='line'>#if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1
+</span><span class='line'>
 </span><span class='line'>- (void)setLeftBarButtonItem:(UIBarButtonItem *)_leftBarButtonItem
 </span><span class='line'>{
-</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
-</span><span class='line'>    {
-</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-</span><span class='line'>        negativeSeperator.width = -10.0f;
-</span><span class='line'>        
-</span><span class='line'>        if (_leftBarButtonItem)
-</span><span class='line'>        {
-</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
-</span><span class='line'>        }
-</span><span class='line'>        else
-</span><span class='line'>        {
-</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator]];
-</span><span class='line'>        }
-</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>    negativeSeperator.width = -10.0f;
+</span><span class='line'>    
+</span><span class='line'>    if (_leftBarButtonItem) {
+</span><span class='line'>      [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
+</span><span class='line'>    } else {
+</span><span class='line'>      [self setLeftBarButtonItems:@[negativeSeperator]];
 </span><span class='line'>    }
-</span><span class='line'>    else
-</span><span class='line'>    {
-</span><span class='line'>        [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
-</span><span class='line'>    }
+</span><span class='line'>  } else {
+</span><span class='line'>    [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
+</span><span class='line'>  }
 </span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>//- (void)setLeftBarButtonItems:(NSArray *)leftBarButtonItems
+</span><span class='line'>//{
+</span><span class='line'>//  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>//    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>//    negativeSeperator.width = -10.0f;
+</span><span class='line'>//    
+</span><span class='line'>//    if ([_leftBarButtonItems count] &gt; 0) {
+</span><span class='line'>//      NSMutableArray *items = [NSMutableArray arrayWithArray:leftBarButtonItems];
+</span><span class='line'>//      [items insertObject:negativeSeperator atIndex:0];
+</span><span class='line'>//      [self setLeftBarButtonItems:items animated:NO];
+</span><span class='line'>//    } else {
+</span><span class='line'>//      [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
+</span><span class='line'>//    }
+</span><span class='line'>//  } else {
+</span><span class='line'>//    [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
+</span><span class='line'>//  }
+</span><span class='line'>//}
 </span><span class='line'>
 </span><span class='line'>- (void)setRightBarButtonItem:(UIBarButtonItem *)_rightBarButtonItem
 </span><span class='line'>{
-</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
-</span><span class='line'>    {
-</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-</span><span class='line'>        negativeSeperator.width = -10.0f;
-</span><span class='line'>        
-</span><span class='line'>        if (_rightBarButtonItem)
-</span><span class='line'>        {
-</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
-</span><span class='line'>        }
-</span><span class='line'>        else
-</span><span class='line'>        {
-</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator]];
-</span><span class='line'>        }
-</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>    negativeSeperator.width = -10.0f;
+</span><span class='line'>    
+</span><span class='line'>    if (_rightBarButtonItem) {
+</span><span class='line'>      [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
+</span><span class='line'>    } else {
+</span><span class='line'>      [self setRightBarButtonItems:@[negativeSeperator]];
 </span><span class='line'>    }
-</span><span class='line'>    else
-</span><span class='line'>    {
-</span><span class='line'>        [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
-</span><span class='line'>    }
+</span><span class='line'>  } else {
+</span><span class='line'>    [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
+</span><span class='line'>  }
 </span><span class='line'>}
 </span><span class='line'>
+</span><span class='line'>//- (void)setRightBarButtonItems:(NSArray *)rightBarButtonItems
+</span><span class='line'>//{
+</span><span class='line'>//  if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0) {
+</span><span class='line'>//    UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>//    negativeSeperator.width = -10.0f;
+</span><span class='line'>//    
+</span><span class='line'>//    if ([_leftBarButtonItems count] &gt; 0) {
+</span><span class='line'>//      NSMutableArray *items = [NSMutableArray arrayWithArray:rightBarButtonItems];
+</span><span class='line'>//      [items insertObject:negativeSeperator atIndex:0];
+</span><span class='line'>//      [self setRightBarButtonItems:items animated:NO];
+</span><span class='line'>//    } else {
+</span><span class='line'>//      [self setRightBarButtonItems:rightBarButtonItems animated:NO];
+</span><span class='line'>//    }
+</span><span class='line'>//  } else {
+</span><span class='line'>//    [self setRightBarButtonItems:rightBarButtonItems animated:NO];
+</span><span class='line'>//  }
+</span><span class='line'>//}
+</span><span class='line'>
 </span><span class='line'>#endif
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>
+</span><span class='line'>@end
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>项目源码不做任何修改，问题解决；</p>
@@ -251,6 +337,8 @@
 </span><span class='line'>self.navigationItem.leftBarButtonItem = leftBarItem;
 </span><span class='line'>[leftBarItem release];</span></code></pre></td></tr></table></div></figure>
 
+
+<p>如果原来项目中有使用<code>self.navigationItem.leftBarButtonItems</code>或<code>self.navigationItem.rightBarButtonItems</code>可参考注释部分内容。如果都是多个的，那么直接换把注释解开，把单个的给注释掉。<strong>搞懂原理才是重要的</strong></p>
 
 <p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
 </div>

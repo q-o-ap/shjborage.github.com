@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-20T23:51:42+08:00</updated>
+  <updated>2014-01-21T00:13:54+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -40,74 +40,116 @@
 <p><em>UINavigationItem+margin.h</em></p>
 
 <p>```
-@interface UINavigationItem (margin)</p>
+//
+//  UINavigationItem+margin.h
+//
+//  Created by shjborage on 1/20/14.
+//  Copyright &copy; 2014 Saick. All rights reserved.
+//</p>
 
-<p>@end
-```</p>
+<h1>import &lt;UIKit/UIKit.h></h1>
+
+<p>@interface UINavigationItem (margin)</p>
+
+<p>@end</p>
+
+<p>```</p>
 
 <p><em>UINavigationItem+margin.m</em></p>
 
 <p>```
-@implementation UINavigationItem (margin)</p>
+//
+//  UINavigationItem+margin.m
+//
+//  Created by shjborage on 1/20/14.
+//  Copyright &copy; 2014 Saick. All rights reserved.
+//</p>
+
+<h1>import &ldquo;UINavigationItem+margin.h&rdquo;</h1>
+
+<p>@implementation UINavigationItem (margin)</p>
 
 <h1>if <strong>IPHONE_OS_VERSION_MAX_ALLOWED > </strong>IPHONE_6_1</h1>
 
 <ul>
 <li><p>(void)setLeftBarButtonItem:(UIBarButtonItem <em>)_leftBarButtonItem
 {
-  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-  {
-      UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-      negativeSeperator.width = -10.0f;</p>
+if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+  UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+  negativeSeperator.width = -10.0f;</p>
 
-<pre><code>  if (_leftBarButtonItem)
-  {
-      [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
+<p>  if (<em>leftBarButtonItem) {
+    [self setLeftBarButtonItems:@[negativeSeperator, </em>leftBarButtonItem]];
+  } else {
+    [self setLeftBarButtonItems:@[negativeSeperator]];
   }
-  else
-  {
-      [self setLeftBarButtonItems:@[negativeSeperator]];
-  }
-  [negativeSeperator release];
-</code></pre>
-
-<p>  }
-  else
-  {
-      [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
-  }
-}</p></li>
-<li><p>(void)setRightBarButtonItem:(UIBarButtonItem <em>)_rightBarButtonItem
-{
-  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-  {
-      UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-      negativeSeperator.width = -10.0f;</p>
-
-<pre><code>  if (_rightBarButtonItem)
-  {
-      [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
-  }
-  else
-  {
-      [self setRightBarButtonItems:@[negativeSeperator]];
-  }
-  [negativeSeperator release];
-</code></pre>
-
-<p>  }
-  else
-  {
-      [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
-  }
+} else {
+  [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
+}
 }</p></li>
 </ul>
 
 
+<p>//&ndash; (void)setLeftBarButtonItems:(NSArray <em>)leftBarButtonItems
+//{
+//  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+//    UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+//    negativeSeperator.width = -10.0f;
+//  <br/>
+//    if ([_leftBarButtonItems count] > 0) {
+//      NSMutableArray *items = [NSMutableArray arrayWithArray:leftBarButtonItems];
+//      [items insertObject:negativeSeperator atIndex:0];
+//      [self setLeftBarButtonItems:items animated:NO];
+//    } else {
+//      [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
+//    }
+//  } else {
+//    [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
+//  }
+//}</p>
+
+<ul>
+<li><p>(void)setRightBarButtonItem:(UIBarButtonItem <em>)_rightBarButtonItem
+{
+if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+  UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+  negativeSeperator.width = -10.0f;</p>
+
+<p>  if (<em>rightBarButtonItem) {
+    [self setRightBarButtonItems:@[negativeSeperator, </em>rightBarButtonItem]];
+  } else {
+    [self setRightBarButtonItems:@[negativeSeperator]];
+  }
+} else {
+  [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
+}
+}</p></li>
+</ul>
+
+
+<p>//&ndash; (void)setRightBarButtonItems:(NSArray <em>)rightBarButtonItems
+//{
+//  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+//    UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+//    negativeSeperator.width = -10.0f;
+//  <br/>
+//    if ([_leftBarButtonItems count] > 0) {
+//      NSMutableArray *items = [NSMutableArray arrayWithArray:rightBarButtonItems];
+//      [items insertObject:negativeSeperator atIndex:0];
+//      [self setRightBarButtonItems:items animated:NO];
+//    } else {
+//      [self setRightBarButtonItems:rightBarButtonItems animated:NO];
+//    }
+//  } else {
+//    [self setRightBarButtonItems:rightBarButtonItems animated:NO];
+//  }
+//}</p>
+
 <h1>endif</h1>
 
-<p>@end
-```</p>
+<p>@end</p>
+
+<p>```</p>
 
 <p>项目源码不做任何修改，问题解决；</p>
 
@@ -118,6 +160,8 @@ UIBarButtonItem *leftBarItem = [[UIBarButtonItem alloc] initWithCustomView:btnBa
 self.navigationItem.leftBarButtonItem = leftBarItem;
 [leftBarItem release];
 </code></p>
+
+<p>如果原来项目中有使用<code>self.navigationItem.leftBarButtonItems</code>或<code>self.navigationItem.rightBarButtonItems</code>可参考注释部分内容。如果都是多个的，那么直接换把注释解开，把单个的给注释掉。<strong>搞懂原理才是重要的</strong></p>
 
 <p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
 ]]></content>
