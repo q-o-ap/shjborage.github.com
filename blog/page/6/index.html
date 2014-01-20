@@ -9,14 +9,10 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="CocoaPods本身也不断在更新，在项目进行中不建议进行更新。但是不得已时也得为之。
-具体方法如下： 1
-2
-3
-gem update --system
-gem install cocoapods
-pod setup 和安装其实一样的，注意版本的变化 1
-pod --version ">
+  <meta name="description" content="前言 每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如 Java: maven，Ivy
+Ruby: gems
+Python: pip, easy_install
+Nodejs: npm 随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫： &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -86,6 +82,59 @@ pod --version ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">使用CocoaPods进行iOS程序的开源库依懒管理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-03T11:49:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>前言</h3>
+
+<p>每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如</p>
+
+<ul>
+<li>Java: maven，Ivy</li>
+<li>Ruby: gems</li>
+<li>Python: pip, easy_install</li>
+<li>Nodejs: npm</li>
+</ul>
+
+
+<p>随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫：CocoaPods。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -536,61 +585,6 @@ pod --version ">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Git No Branch 解决方案</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-07T18:03:00+08:00" pubdate data-updated="true">Jun 7<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
-
-<h5>事件经过：</h5>
-
-<ol>
-<li>正常开发，branch:master</li>
-<li>在Eclipse中，使用插件checkout某版本出来</li>
-<li>再checkout到最近一次提交的版本</li>
-<li>不断Commit多次，一直不能push，以为工具出了问题</li>
-<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
-</ol>
-
-
-<p>每次都提交，数据肯定不会丢，也没有担心。
-就找个问题的解决方案，果然有。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -624,7 +618,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (50)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (51)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -634,6 +628,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">iOS客户端的gzip处理-gzip-ungzip</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a>
@@ -649,10 +647,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">Synergy on Mavericks (OSX 10.9) and enable assistive devices</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/">OSX Server - Message Server 研究与故障解决方案</a>
       </li>
     
   </ul>

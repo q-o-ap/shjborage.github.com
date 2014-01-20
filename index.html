@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。 如果某个地方看不明白可以留言给我，我翻译并给大家讲 &hellip;">
+  <meta name="description" content="服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的&#8221;Content-Encoding&#8221; 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">iOS客户端的gzip处理-gzip-ungzip</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-20T20:28:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的&#8221;Content-Encoding&#8221; 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了，这样gzip就没有起到作用。因此可以约定其他策略，防止网关解压，例如在别的头属性中标记gzip。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -483,7 +524,7 @@ in the settings.</p>
   </header>
 
 
-  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#x40;&#x32;&#x78;&#46;&#x70;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#46;&#x70;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x61;&#64;&#50;&#x78;&#46;&#112;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#x2e;&#112;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -496,64 +537,6 @@ in the settings.</p>
   
     <footer>
       <a rel="full-article" href="/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan/">定制iOS 7中的导航栏和状态栏</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-08T02:30:00+08:00" pubdate data-updated="true">Dec 8<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>近期，跟大多数开发者一样，我也正忙于对程序进行升级以适配iOS 7。最新的iOS 7外观上有大量的改动。从开发者的角度来看，导航栏和状态栏就发生了明显的变化。状态栏现在是半透明的了，这也就意味着导航栏会显示在状态栏后面。有些情况下，导航栏的背景图片可以延伸显示到状态栏后面。</p>
-
-<p>之前我曾经写过一篇关于如何定制导航栏的文章。
-不过现在是时候对其进行更新了。下面就是本文将要介绍的内容：</p>
-
-<ul>
-<li>iOS 7中默认的导航栏</li>
-<li>设置导航栏的背景颜色</li>
-<li>在导航栏中使用背景图片</li>
-<li>定制返回按钮的颜色</li>
-<li>修改导航栏标题的字体</li>
-<li>修改导航栏标题为图片</li>
-<li>添加多个按钮</li>
-<li>修改状态栏的风格</li>
-<li>隐藏状态栏</li>
-<li>总结</li>
-</ul>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan/">Read on &rarr;</a>
     </footer>
   
 
@@ -591,7 +574,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (50)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (51)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -601,6 +584,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">iOS客户端的gzip处理-gzip-ungzip</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a>
@@ -616,10 +603,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">Synergy on Mavericks (OSX 10.9) and enable assistive devices</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/">OSX Server - Message Server 研究与故障解决方案</a>
       </li>
     
   </ul>

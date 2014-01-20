@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS应用处理崩溃的几种方法 - Saick Blog</title>
+  <title>iOS客户端的gzip处理-gzip-ungzip - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
-在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。 1.在XCode中使用一个通用断点 在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception &hellip;">
+  <meta name="description" content="服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的&#8221;Content-Encoding&#8221; 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">
+  <link rel="canonical" href="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS应用处理崩溃的几种方法</h1>
+      <h1 class="entry-title">iOS客户端的gzip处理-gzip-ungzip</h1>
     
     
       <p class="meta">
@@ -99,64 +98,23 @@
   
 
 
-<time datetime="2013-10-16T23:31:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
+<time datetime="2014-01-20T20:28:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
-在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
-
-<h3>1.在XCode中使用一个通用断点</h3>
-
-<p>在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception BreakPoint”。点done即可。</p>
-
-<h3>2.开启NSZombieEnabled等调试选项</h3>
-
-<p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
-在Environment Variables中增加下面属性并都配置为YES。</p>
+<div class="entry-content"><p>服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的&#8221;Content-Encoding&#8221; 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了，这样gzip就没有起到作用。因此可以约定其他策略，防止网关解压，例如在别的头属性中标记gzip。</p>
 
 <!-- more -->
 
 
+<p>如此，就需要我们自己来解压gzip数据。方法如下：添加framework库中的libbz2.1.0.dylib；</p>
 
+<p>添加以下静态方法：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>MallocStackLogging
-</span><span class='line'>MallocStackLoggingNoCompact
-</span><span class='line'>NSAutoreleaseFreedObjectCheckEnabled
-</span><span class='line'>NSDebugEnabled
-</span><span class='line'>NSZombieEnabled</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在实际使用中发现，使用了上述配置之后，如果能在模拟器上运行效果更佳。比如,真机调试时遇到过如下错误：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-[CALayer retain]: message sent to deallocated instance 0x1d418a30</span></code></pre></td></tr></table></div></figure>
-
-
-<p>使用网上很多地方都提到的方法：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>info malloc-history 0x1d418a30
-</span><span class='line'>XCode提示:Undefined info command: "malloc-history".  Try "help info".</span></code></pre></td></tr></table></div></figure>
-
-
-<p>针对这种情况可以参考:<a href="http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82">http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82</a></p>
-
-<p><strong>其中最主要的还是</strong> <em>NSZombieEnabled</em>, 这个解决EXC_BAD_ACCESS还是很有用的。
-具体参考这个：<a href="http://www.cocoachina.com/macdev/objc/2011/0219/2661.html">http://www.cocoachina.com/macdev/objc/2011/0219/2661.html</a></p>
-
-<h3>3.增加异常处理[理论上和&#8221;在XCode中使用一个通用断点&#8221;效果类似]</h3>
-
-<p>写iOS代码的时候,经常会遇到程序崩溃在main函数的入口处并出现类似&#8221;First throw call stack&#8221;这样的错误。为了更好的知道崩溃的原因,我们可以在AppDelegate中定义一个方法, 用于处理异常:</p>
+<h4>gzip解压：</h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -164,49 +122,95 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void caughtException(NSException *exception) 
-</span><span class='line'>{  
-</span><span class='line'>  NSLog(@"CRASH: %@", exception);  
-</span><span class='line'>  NSLog(@"Stack Trace: %@", [exception callStackSymbols]);  
-</span><span class='line'>  // Internal error reporting 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSData *)ungzipData:(NSData *)compressedData
+</span><span class='line'>{
+</span><span class='line'>  if ([compressedData length] == 0)
+</span><span class='line'>    return compressedData;
+</span><span class='line'>  
+</span><span class='line'>  unsigned full_length = [compressedData length];
+</span><span class='line'>  unsigned half_length = [compressedData length] / 2;
+</span><span class='line'>  
+</span><span class='line'>  NSMutableData *decompressed = [NSMutableData dataWithLength: full_length + half_length];
+</span><span class='line'>  BOOL done = NO;
+</span><span class='line'>  int status;
+</span><span class='line'>  
+</span><span class='line'>  z_stream strm;
+</span><span class='line'>  strm.next_in = (Bytef *)[compressedData bytes];
+</span><span class='line'>  strm.avail_in = [compressedData length];
+</span><span class='line'>  strm.total_out = 0;
+</span><span class='line'>  strm.zalloc = Z_NULL;
+</span><span class='line'>  strm.zfree = Z_NULL;
+</span><span class='line'>  if (inflateInit2(&strm, (15+32)) != Z_OK)
+</span><span class='line'>    return nil;
+</span><span class='line'>  
+</span><span class='line'>  while (!done) {
+</span><span class='line'>    // Make sure we have enough room and reset the lengths.
+</span><span class='line'>    if (strm.total_out &gt;= [decompressed length]) {
+</span><span class='line'>      [decompressed increaseLengthBy: half_length];
+</span><span class='line'>    }
+</span><span class='line'>    strm.next_out = [decompressed mutableBytes] + strm.total_out;
+</span><span class='line'>    strm.avail_out = [decompressed length] - strm.total_out;
+</span><span class='line'>    // Inflate another chunk.
+</span><span class='line'>    status = inflate (&strm, Z_SYNC_FLUSH);
+</span><span class='line'>    if (status == Z_STREAM_END) {
+</span><span class='line'>      done = YES;
+</span><span class='line'>    } else if (status != Z_OK) {
+</span><span class='line'>      break;
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  if (inflateEnd (&strm) != Z_OK)
+</span><span class='line'>    return nil;
+</span><span class='line'>  // Set real length.
+</span><span class='line'>  if (done) {
+</span><span class='line'>    [decompressed setLength: strm.total_out];
+</span><span class='line'>    return [NSData dataWithData: decompressed];
+</span><span class='line'>  }
+</span><span class='line'>  return nil;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>另外，在打印时，也可以使用GTM，GTMStackTraceFromException(exception)，跟系统的类似。</p>
-
-<p>然后在应用启动时，设置这个方法作为自己的自定义异常回调：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
-</span><span class='line'>{  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(& caughtException); 
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>在定义了这个回调之后，崩溃是的控制台信息一般都会一目了然，我们甚至可以看出是那个类的哪一行出问题了。</p>
-
-<h3>4.signal处理，并提示。</h3>
-
-<p>启动信号处理</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>signal(SIGABRT, signalHandler);
-</span><span class='line'>signal(SIGILL, signalHandler);
-</span><span class='line'>signal(SIGSEGV, signalHandler);
-</span><span class='line'>signal(SIGFPE, signalHandler);
-</span><span class='line'>signal(SIGBUS, signalHandler);
-</span><span class='line'>signal(SIGPIPE, signalHandler);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>其它相关代码</p>
+<h4><em>顺便附上gzip压缩：</em></h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -308,127 +312,107 @@
 <span class='line-number'>98</span>
 <span class='line-number'>99</span>
 <span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include &lt;libkern/OSAtomic.h>
-</span><span class='line'>#include &lt;execinfo.h>
-</span><span class='line'>
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
-</span><span class='line'>NSString * const UncaughtExceptionHandlerAddressesKey = @"UncaughtExceptionHandlerAddressesKey";
-</span><span class='line'>
-</span><span class='line'>volatile int32_t UncaughtExceptionCount = 0;
-</span><span class='line'>const int32_t UncaughtExceptionMaximum = 10;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerSkipAddressCount = 0;
-</span><span class='line'>const NSInteger UncaughtExceptionHandlerReportAddressCount = 100;
-</span><span class='line'>
-</span><span class='line'>+ (NSArray *)backTrace
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSData*)gzipData:(NSData*)pUncompressedData
 </span><span class='line'>{
-</span><span class='line'>  void* callstack[1024];
-</span><span class='line'>  int frames = backtrace(callstack, 1024);
-</span><span class='line'>  char **strs = backtrace_symbols(callstack, frames);
-</span><span class='line'>  
-</span><span class='line'>  int i;
-</span><span class='line'>  NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
-</span><span class='line'>  for (i = UncaughtExceptionHandlerSkipAddressCount;
-</span><span class='line'>       i &lt; UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount;
-</span><span class='line'>       i++)
+</span><span class='line'>  if (!pUncompressedData || [pUncompressedData length] == 0)
 </span><span class='line'>  {
-</span><span class='line'>    if (frames &lt;= i)
-</span><span class='line'>      break;
-</span><span class='line'>    [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
+</span><span class='line'>    NSLog(@"%s: Error: Can't compress an empty or null NSData object.", __func__);
+</span><span class='line'>    return nil;
 </span><span class='line'>  }
 </span><span class='line'>  
-</span><span class='line'>  free(strs);
+</span><span class='line'>  z_stream zlibStreamStruct;
+</span><span class='line'>  zlibStreamStruct.zalloc    = Z_NULL; // Set zalloc, zfree, and opaque to Z_NULL so
+</span><span class='line'>  zlibStreamStruct.zfree     = Z_NULL; // that when we call deflateInit2 they will be
+</span><span class='line'>  zlibStreamStruct.opaque    = Z_NULL; // updated to use default allocation functions.
+</span><span class='line'>  zlibStreamStruct.total_out = 0; // Total number of output bytes produced so far
+</span><span class='line'>  zlibStreamStruct.next_in   = (Bytef*)[pUncompressedData bytes]; // Pointer to input bytes
+</span><span class='line'>  zlibStreamStruct.avail_in  = [pUncompressedData length]; // Number of input bytes left to process
 </span><span class='line'>  
-</span><span class='line'>  return backtrace;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>- (void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex
-</span><span class='line'>{
-</span><span class='line'>  if (anIndex == 0) {
-</span><span class='line'>    _dismissed = YES;
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>- (void)handleException:(NSException *)exception
-</span><span class='line'>{
-</span><span class='line'>  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unhandled exception", nil)
-</span><span class='line'>                                                  message:[NSString stringWithFormat:NSLocalizedString(@"You can try to continue but the application may be unstable.\n" @"%@\n%@", nil), [exception reason], [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]
-</span><span class='line'>                                                 delegate:self
-</span><span class='line'>                                        cancelButtonTitle:NSLocalizedString(@"Quit", nil)
-</span><span class='line'>                                        otherButtonTitles:NSLocalizedString(@"Continue", nil), nil];
-</span><span class='line'>  
-</span><span class='line'>  [alert show];
-</span><span class='line'>  
-</span><span class='line'>  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
-</span><span class='line'>  CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);
-</span><span class='line'>  
-</span><span class='line'>  while (!_dismissed) {
-</span><span class='line'>    for (NSString *mode in (NSArray *)CFBridgingRelease(allModes)) {
-</span><span class='line'>      CFRunLoopRunInMode((CFStringRef)CFBridgingRetain(mode), 0.001, false);
+</span><span class='line'>  int initError = deflateInit2(&zlibStreamStruct, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (15+16), 8, Z_DEFAULT_STRATEGY);
+</span><span class='line'>  if (initError != Z_OK)
+</span><span class='line'>  {
+</span><span class='line'>    NSString *errorMsg = nil;
+</span><span class='line'>    switch (initError)
+</span><span class='line'>    {
+</span><span class='line'>      case Z_STREAM_ERROR:
+</span><span class='line'>        errorMsg = @"Invalid parameter passed in to function.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_MEM_ERROR:
+</span><span class='line'>        errorMsg = @"Insufficient memory.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_VERSION_ERROR:
+</span><span class='line'>        errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
+</span><span class='line'>        break;
+</span><span class='line'>      default:
+</span><span class='line'>        errorMsg = @"Unknown error code.";
+</span><span class='line'>        break;
 </span><span class='line'>    }
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  CFRelease(allModes);
-</span><span class='line'>  
-</span><span class='line'>  NSString *log = [NSString stringWithFormat:@"%@\n\n info:\n%@", exception, exception.userInfo];
-</span><span class='line'>  [[DebugUtil sharedDebug] LogException:log];
-</span><span class='line'>  
-</span><span class='line'>  NSSetUncaughtExceptionHandler(NULL);
-</span><span class='line'>  signal(SIGABRT, SIG_DFL);
-</span><span class='line'>  signal(SIGILL, SIG_DFL);
-</span><span class='line'>  signal(SIGSEGV, SIG_DFL);
-</span><span class='line'>  signal(SIGFPE, SIG_DFL);
-</span><span class='line'>  signal(SIGBUS, SIG_DFL);
-</span><span class='line'>  signal(SIGPIPE, SIG_DFL);
-</span><span class='line'>  
-</span><span class='line'>  if ([[exception name] isEqual:UncaughtExceptionHandlerSignalExceptionName]) {
-</span><span class='line'>    kill(getpid(), [[[exception userInfo] objectForKey:UncaughtExceptionHandlerSignalKey] intValue]);
-</span><span class='line'>  } else {
-</span><span class='line'>    [exception raise];
-</span><span class='line'>  }
-</span><span class='line'>}
+</span><span class='line'>    NSLog(@"%s: deflateInit2() Error: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
 </span><span class='line'>
-</span><span class='line'>NSString * getAppInfo()
-</span><span class='line'>{
-</span><span class='line'>  NSString *appInfo = [NSString stringWithFormat:@"App : %@ %@(%@)\nDevice : %@\nOS Version : %@ %@\nUDID : %@\n",
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-</span><span class='line'>                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-</span><span class='line'>                       [UIDevice currentDevice].model,
-</span><span class='line'>                       [UIDevice currentDevice].systemName,
-</span><span class='line'>                       [UIDevice currentDevice].systemVersion,
-</span><span class='line'>                       /*[UIDevice currentDevice].uniqueIdentifier*/@""];
-</span><span class='line'>  return appInfo;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>void signalHandler(int signal)
-</span><span class='line'>{
-</span><span class='line'>  int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
-</span><span class='line'>  
-</span><span class='line'>  if (exceptionCount > UncaughtExceptionMaximum) {
-</span><span class='line'>    return;
+</span><span class='line'>    return nil;
 </span><span class='line'>  }
 </span><span class='line'>  
-</span><span class='line'>  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:signal] forKey:UncaughtExceptionHandlerSignalKey];
+</span><span class='line'>  // Create output memory buffer for compressed data. The zlib documentation states that
+</span><span class='line'>  // destination buffer size must be at least 0.1% larger than avail_in plus 12 bytes.
+</span><span class='line'>  NSMutableData *compressedData = [NSMutableData dataWithLength:[pUncompressedData length] * 1.01 + 12];
 </span><span class='line'>  
-</span><span class='line'>  NSArray *callStack = [DebugUtil backTrace];
+</span><span class='line'>  int deflateStatus;
+</span><span class='line'>  do
+</span><span class='line'>  {
+</span><span class='line'>    // Store location where next byte should be put in next_out
+</span><span class='line'>    zlibStreamStruct.next_out = [compressedData mutableBytes] + zlibStreamStruct.total_out;
+</span><span class='line'>    
+</span><span class='line'>    // Calculate the amount of remaining free space in the output buffer
+</span><span class='line'>    // by subtracting the number of bytes that have been written so far
+</span><span class='line'>    // from the buffer's total capacity
+</span><span class='line'>    zlibStreamStruct.avail_out = [compressedData length] - zlibStreamStruct.total_out;
+</span><span class='line'>    deflateStatus = deflate(&zlibStreamStruct, Z_FINISH);
+</span><span class='line'>    
+</span><span class='line'>  } while ( deflateStatus == Z_OK );
 </span><span class='line'>  
-</span><span class='line'>  [userInfo setObject:callStack forKey:UncaughtExceptionHandlerAddressesKey];
+</span><span class='line'>  // Check for zlib error and convert code to usable error message if appropriate
+</span><span class='line'>  if (deflateStatus != Z_STREAM_END)
+</span><span class='line'>  {
+</span><span class='line'>    NSString *errorMsg = nil;
+</span><span class='line'>    switch (deflateStatus)
+</span><span class='line'>    {
+</span><span class='line'>      case Z_ERRNO:
+</span><span class='line'>        errorMsg = @"Error occured while reading file.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_STREAM_ERROR:
+</span><span class='line'>        errorMsg = @"The stream state was inconsistent (e.g., next_in or next_out was NULL).";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_DATA_ERROR:
+</span><span class='line'>        errorMsg = @"The deflate data was invalid or incomplete.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_MEM_ERROR:
+</span><span class='line'>        errorMsg = @"Memory could not be allocated for processing.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_BUF_ERROR:
+</span><span class='line'>        errorMsg = @"Ran out of output buffer for writing compressed bytes.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_VERSION_ERROR:
+</span><span class='line'>        errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
+</span><span class='line'>        break;
+</span><span class='line'>      default:
+</span><span class='line'>        errorMsg = @"Unknown error code.";
+</span><span class='line'>        break;
+</span><span class='line'>    }
+</span><span class='line'>    DDLogError(@"%s: zlib error while attempting compression: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
+</span><span class='line'>
+</span><span class='line'>    // Free data structures that were dynamically created for the stream.
+</span><span class='line'>    deflateEnd(&zlibStreamStruct);
+</span><span class='line'>    
+</span><span class='line'>    return nil;
+</span><span class='line'>  }
+</span><span class='line'>  // Free data structures that were dynamically created for the stream.
+</span><span class='line'>  deflateEnd(&zlibStreamStruct);
+</span><span class='line'>  [compressedData setLength: zlibStreamStruct.total_out];
+</span><span class='line'>  DDLogInfo(@"%s: Compressed file from %d KB to %d KB", __func__, [pUncompressedData length]/1024, [compressedData length]/1024);
 </span><span class='line'>  
-</span><span class='line'>  [[[DebugUtil alloc] init] performSelectorOnMainThread:@selector(handleException:) withObject: [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName reason:[NSString stringWithFormat: NSLocalizedString(@"Signal %d was raised.\n" @"%@", nil), signal, getAppInfo()] userInfo:userInfo] waitUntilDone:YES];
+</span><span class='line'>  return compressedData;
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
-
-<p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
 </div>
 
 
@@ -451,7 +435,7 @@
   
 
 
-<time datetime="2013-10-16T23:31:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
+<time datetime="2014-01-20T20:28:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
       
 
 <span class="categories">
@@ -469,7 +453,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/" >Tweet</a>
   
   
   
@@ -496,10 +480,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/" title="Previous Post: 在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题">&laquo; 在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a>
+        <a class="basic-alignment left" href="/blog/2014/01/18/auto-layout-by-example/" title="Previous Post: Auto Layout by Example">&laquo; Auto Layout by Example</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/" title="Next Post: iOS库添加CocoaPods支持">iOS库添加CocoaPods支持 &raquo;</a>
       
     </p>
   </footer>

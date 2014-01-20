@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-18T16:52:06+08:00</updated>
+  <updated>2014-01-20T20:33:34+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,322 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS客户端的gzip处理-gzip-ungzip]]></title>
+    <link href="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/"/>
+    <updated>2014-01-20T20:28:00+08:00</updated>
+    <id>http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip</id>
+    <content type="html"><![CDATA[<p>服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的&#8221;Content-Encoding&#8221; 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了，这样gzip就没有起到作用。因此可以约定其他策略，防止网关解压，例如在别的头属性中标记gzip。</p>
+
+<!-- more -->
+
+
+<p>如此，就需要我们自己来解压gzip数据。方法如下：添加framework库中的libbz2.1.0.dylib；</p>
+
+<p>添加以下静态方法：</p>
+
+<h4>gzip解压：</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSData *)ungzipData:(NSData *)compressedData
+</span><span class='line'>{
+</span><span class='line'>  if ([compressedData length] == 0)
+</span><span class='line'>    return compressedData;
+</span><span class='line'>  
+</span><span class='line'>  unsigned full_length = [compressedData length];
+</span><span class='line'>  unsigned half_length = [compressedData length] / 2;
+</span><span class='line'>  
+</span><span class='line'>  NSMutableData *decompressed = [NSMutableData dataWithLength: full_length + half_length];
+</span><span class='line'>  BOOL done = NO;
+</span><span class='line'>  int status;
+</span><span class='line'>  
+</span><span class='line'>  z_stream strm;
+</span><span class='line'>  strm.next_in = (Bytef *)[compressedData bytes];
+</span><span class='line'>  strm.avail_in = [compressedData length];
+</span><span class='line'>  strm.total_out = 0;
+</span><span class='line'>  strm.zalloc = Z_NULL;
+</span><span class='line'>  strm.zfree = Z_NULL;
+</span><span class='line'>  if (inflateInit2(&strm, (15+32)) != Z_OK)
+</span><span class='line'>    return nil;
+</span><span class='line'>  
+</span><span class='line'>  while (!done) {
+</span><span class='line'>    // Make sure we have enough room and reset the lengths.
+</span><span class='line'>    if (strm.total_out &gt;= [decompressed length]) {
+</span><span class='line'>      [decompressed increaseLengthBy: half_length];
+</span><span class='line'>    }
+</span><span class='line'>    strm.next_out = [decompressed mutableBytes] + strm.total_out;
+</span><span class='line'>    strm.avail_out = [decompressed length] - strm.total_out;
+</span><span class='line'>    // Inflate another chunk.
+</span><span class='line'>    status = inflate (&strm, Z_SYNC_FLUSH);
+</span><span class='line'>    if (status == Z_STREAM_END) {
+</span><span class='line'>      done = YES;
+</span><span class='line'>    } else if (status != Z_OK) {
+</span><span class='line'>      break;
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  if (inflateEnd (&strm) != Z_OK)
+</span><span class='line'>    return nil;
+</span><span class='line'>  // Set real length.
+</span><span class='line'>  if (done) {
+</span><span class='line'>    [decompressed setLength: strm.total_out];
+</span><span class='line'>    return [NSData dataWithData: decompressed];
+</span><span class='line'>  }
+</span><span class='line'>  return nil;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><em>顺便附上gzip压缩：</em></h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSData*)gzipData:(NSData*)pUncompressedData
+</span><span class='line'>{
+</span><span class='line'>  if (!pUncompressedData || [pUncompressedData length] == 0)
+</span><span class='line'>  {
+</span><span class='line'>    NSLog(@"%s: Error: Can't compress an empty or null NSData object.", __func__);
+</span><span class='line'>    return nil;
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  z_stream zlibStreamStruct;
+</span><span class='line'>  zlibStreamStruct.zalloc    = Z_NULL; // Set zalloc, zfree, and opaque to Z_NULL so
+</span><span class='line'>  zlibStreamStruct.zfree     = Z_NULL; // that when we call deflateInit2 they will be
+</span><span class='line'>  zlibStreamStruct.opaque    = Z_NULL; // updated to use default allocation functions.
+</span><span class='line'>  zlibStreamStruct.total_out = 0; // Total number of output bytes produced so far
+</span><span class='line'>  zlibStreamStruct.next_in   = (Bytef*)[pUncompressedData bytes]; // Pointer to input bytes
+</span><span class='line'>  zlibStreamStruct.avail_in  = [pUncompressedData length]; // Number of input bytes left to process
+</span><span class='line'>  
+</span><span class='line'>  int initError = deflateInit2(&zlibStreamStruct, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (15+16), 8, Z_DEFAULT_STRATEGY);
+</span><span class='line'>  if (initError != Z_OK)
+</span><span class='line'>  {
+</span><span class='line'>    NSString *errorMsg = nil;
+</span><span class='line'>    switch (initError)
+</span><span class='line'>    {
+</span><span class='line'>      case Z_STREAM_ERROR:
+</span><span class='line'>        errorMsg = @"Invalid parameter passed in to function.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_MEM_ERROR:
+</span><span class='line'>        errorMsg = @"Insufficient memory.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_VERSION_ERROR:
+</span><span class='line'>        errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
+</span><span class='line'>        break;
+</span><span class='line'>      default:
+</span><span class='line'>        errorMsg = @"Unknown error code.";
+</span><span class='line'>        break;
+</span><span class='line'>    }
+</span><span class='line'>    NSLog(@"%s: deflateInit2() Error: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
+</span><span class='line'>
+</span><span class='line'>    return nil;
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  // Create output memory buffer for compressed data. The zlib documentation states that
+</span><span class='line'>  // destination buffer size must be at least 0.1% larger than avail_in plus 12 bytes.
+</span><span class='line'>  NSMutableData *compressedData = [NSMutableData dataWithLength:[pUncompressedData length] * 1.01 + 12];
+</span><span class='line'>  
+</span><span class='line'>  int deflateStatus;
+</span><span class='line'>  do
+</span><span class='line'>  {
+</span><span class='line'>    // Store location where next byte should be put in next_out
+</span><span class='line'>    zlibStreamStruct.next_out = [compressedData mutableBytes] + zlibStreamStruct.total_out;
+</span><span class='line'>    
+</span><span class='line'>    // Calculate the amount of remaining free space in the output buffer
+</span><span class='line'>    // by subtracting the number of bytes that have been written so far
+</span><span class='line'>    // from the buffer's total capacity
+</span><span class='line'>    zlibStreamStruct.avail_out = [compressedData length] - zlibStreamStruct.total_out;
+</span><span class='line'>    deflateStatus = deflate(&zlibStreamStruct, Z_FINISH);
+</span><span class='line'>    
+</span><span class='line'>  } while ( deflateStatus == Z_OK );
+</span><span class='line'>  
+</span><span class='line'>  // Check for zlib error and convert code to usable error message if appropriate
+</span><span class='line'>  if (deflateStatus != Z_STREAM_END)
+</span><span class='line'>  {
+</span><span class='line'>    NSString *errorMsg = nil;
+</span><span class='line'>    switch (deflateStatus)
+</span><span class='line'>    {
+</span><span class='line'>      case Z_ERRNO:
+</span><span class='line'>        errorMsg = @"Error occured while reading file.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_STREAM_ERROR:
+</span><span class='line'>        errorMsg = @"The stream state was inconsistent (e.g., next_in or next_out was NULL).";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_DATA_ERROR:
+</span><span class='line'>        errorMsg = @"The deflate data was invalid or incomplete.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_MEM_ERROR:
+</span><span class='line'>        errorMsg = @"Memory could not be allocated for processing.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_BUF_ERROR:
+</span><span class='line'>        errorMsg = @"Ran out of output buffer for writing compressed bytes.";
+</span><span class='line'>        break;
+</span><span class='line'>      case Z_VERSION_ERROR:
+</span><span class='line'>        errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
+</span><span class='line'>        break;
+</span><span class='line'>      default:
+</span><span class='line'>        errorMsg = @"Unknown error code.";
+</span><span class='line'>        break;
+</span><span class='line'>    }
+</span><span class='line'>    DDLogError(@"%s: zlib error while attempting compression: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
+</span><span class='line'>
+</span><span class='line'>    // Free data structures that were dynamically created for the stream.
+</span><span class='line'>    deflateEnd(&zlibStreamStruct);
+</span><span class='line'>    
+</span><span class='line'>    return nil;
+</span><span class='line'>  }
+</span><span class='line'>  // Free data structures that were dynamically created for the stream.
+</span><span class='line'>  deflateEnd(&zlibStreamStruct);
+</span><span class='line'>  [compressedData setLength: zlibStreamStruct.total_out];
+</span><span class='line'>  DDLogInfo(@"%s: Compressed file from %d KB to %d KB", __func__, [pUncompressedData length]/1024, [compressedData length]/1024);
+</span><span class='line'>  
+</span><span class='line'>  return compressedData;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Auto Layout by Example]]></title>
@@ -856,7 +1172,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#x40;&#x32;&#x78;&#46;&#x70;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#46;&#x70;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x61;&#64;&#50;&#x78;&#46;&#112;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#x2e;&#112;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -2943,103 +3259,6 @@ Concurrency Programming Guide：
 <p>GCD还有很多其他用法，可以参考官方文档<br/>
 参考的文档还有：<a href="http://en.wikipedia.org/wiki/Grand_Central_Dispatch  ">http://en.wikipedia.org/wiki/Grand_Central_Dispatch  </a>
 著作权声明：本文由<a href="http://blog.csdn.net/totogo2010/">http://blog.csdn.net/totogo2010/</a> 原创，欢迎转载分享。请尊重作者劳动，转载时保留该声明和作者博客链接，谢谢!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Python MySQLdb安装以及问题汇总]]></title>
-    <link href="http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/"/>
-    <updated>2013-10-30T23:17:00+08:00</updated>
-    <id>http://saick.net/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong</id>
-    <content type="html"><![CDATA[<p>自已备注一些, 斜体</p>
-
-<p>转自：<a href="http://blog.chinaunix.net/uid-8487640-id-3183185.html">http://blog.chinaunix.net/uid-8487640-id-3183185.html</a></p>
-
-<p>MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb：</p>
-
-<p>首先要下载下载：请到官方网站<a href="http://sourceforge.net/projects/mysql-python/">http://sourceforge.net/projects/mysql-python/</a> 或者 <a href="http://downloads.sourceforge.net/project/mysql-python/mysql-python-test/1.2.3c1/MySQL-python-1.2.3c1.tar.gz?use_mirror=nchc">点击链接下载</a></p>
-
-<!-- more -->
-
-
-<p>解压：tar zxvf MySQL-python*</p>
-
-<p>进入文件目录，运行以下命令：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>python setup.py install </span></code></pre></td></tr></table></div></figure>
-
-
-<p>安装完成，到你的python安装目录下的site-packages目录里检查以下文件是否存在，如果存在即代表安装成功了</p>
-
-<p>Linux：MySQL_python-1.2.3c1-py2.6-linux-i686.egg
-Mac OS X：MySQL_python-1.2.3c1-py2.6-macosx-10.4-x86_64.egg</p>
-
-<h4>注：如果碰到mysql_config not found的问题，有两种方法解决：<em>可能两个方法要合一起</em></h4>
-
-<p>1）ln -s /usr/local/mysql/bin/mysql_config /usr/local/bin/mysql_config
-将mysql_confi从你的安装目录链接到/usr/local/bin目录下，这样就可以在任意目录下访问了（也可以放到/usr/bin）</p>
-
-<p>2）编辑源码文件夹的site.cfg文件，去掉#mysql_config = /usr/local/bin/mysql_config前的注释＃，修改后面的路径为你的mysql_config真正的目录就可以了。（如果不知道mysql_config在哪里，运行命令：whereis mysql_config）</p>
-
-<h4>注:如果碰到import error: libmysqlclient.so.18: cannot open shared object file: No such file or directory</h4>
-
-<p>解决方法:</p>
-
-<p>locate or find libmysqlclient.so.18
-link path/libmysqlclient.so.18 /usr/lib/libmysqlclient.so.18
-vi /etc/ld.so.conf    //加入libmysqlclient.so.18 所在的目录
-插入: /usr/lib/</p>
-
-<p>保存退出后执行/sbin/ldconfig生效</p>
-
-<h4><em>后部安装：需要进行一个软连接链接不然会提示报错。</em></h4>
-
-<p>问题如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;&gt;&gt; from django.db import connection
-</span><span class='line'>&gt;&gt;&gt; cursor = connection.cursor()
-</span><span class='line'>Traceback (most recent call last):
-</span><span class='line'>  File "&lt;console&gt;", line 1, in &lt;module&gt;
-</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/__init__.py", line 39, in __getattr__
-</span><span class='line'>    return getattr(connections[DEFAULT_DB_ALIAS], item)
-</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/utils.py", line 193, in __getitem__
-</span><span class='line'>    backend = load_backend(db['ENGINE'])
-</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/utils.py", line 108, in load_backend
-</span><span class='line'>    return import_module('%s.base' % backend_name)
-</span><span class='line'>  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/__init__.py", line 37, in import_module
-</span><span class='line'>    __import__(name)
-</span><span class='line'>  File "/Library/Python/2.7/site-packages/django/db/backends/mysql/base.py", line 17, in &lt;module&gt;
-</span><span class='line'>    raise ImproperlyConfigured("Error loading MySQLdb module: %s" % e)
-</span><span class='line'>ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/_mysql.so, 2): Library not loaded: libmysqlclient.18.dylib
-</span><span class='line'>  Referenced from: /Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/_mysql.so
-</span><span class='line'>  Reason: image not found
-</span><span class='line'>&gt;&gt;&gt; </span></code></pre></td></tr></table></div></figure>
-
-
-<p>解决方案：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
