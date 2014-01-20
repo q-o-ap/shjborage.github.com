@@ -377,12 +377,18 @@
         <lastmod>2014-01-20T20:32:20+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/
+        </loc>
+        <lastmod>2014-01-20T23:40:44+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2014-01-20T20:32:20+08:00</lastmod>
+        <lastmod>2014-01-20T23:40:44+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -394,7 +400,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2014-01-20T20:32:20+08:00</lastmod>
+        <lastmod>2014-01-20T23:40:44+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>

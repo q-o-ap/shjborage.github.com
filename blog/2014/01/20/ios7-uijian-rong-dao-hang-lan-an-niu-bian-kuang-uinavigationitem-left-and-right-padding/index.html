@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS 用其它应用打开文件研究 Open In... - Saick Blog</title>
+  <title>iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="今天上班的状态还没有完全恢复，就拿Reminders里面的提醒来看看，研究一些以前没时间弄的东西，就发现了这个。 这项功能开始不知道是哪个版本的iOS加入的，研究这些方法的时候才发现，原来从iOS3.2（iPad上市时）就开始支持了，真是惭愧啊。 下面慢慢道来 1.注册应用支持的文档类型（ &hellip;">
+  <meta name="description" content="iOS7之前的UI为： 而在iOS7中，由于设计方面的原因，使得UI变为: 修改的方法重写UINavigationItem的setLeftBarButtonItem和setRightBarButtonItem方法，使之与之前版本兼容； 代码如下： UINavigationItem+margin.h &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/">
+  <link rel="canonical" href="http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS 用其它应用打开文件研究 Open In...</h1>
+      <h1 class="entry-title">iOS7 UI兼容 导航栏按钮边框 UINavigationItem Left and Right Padding</h1>
     
     
       <p class="meta">
@@ -98,45 +98,159 @@
   
 
 
-<time datetime="2013-02-17T17:34:00+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+<time datetime="2014-01-20T23:16:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>今天上班的状态还没有完全恢复，就拿Reminders里面的提醒来看看，研究一些以前没时间弄的东西，就发现了这个。</p>
+<div class="entry-content"><p>iOS7之前的UI为：</p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10709167093/" title="2013-2-17-1 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5535/10709167093_713ae846bd.jpg" width="381" height="28" alt="2013-2-17-1"></a></p>
-
-<p>这项功能开始不知道是哪个版本的iOS加入的，研究这些方法的时候才发现，原来从iOS3.2（iPad上市时）就开始支持了，真是惭愧啊。 下面慢慢道来</p>
-
-<p>1.注册应用支持的文档类型（会被系统管理起来）<br/>
-2.打开所用的ViewController</p>
-
-<!--more-->
+<iframe src="https://www.flickr.com/photos/shjborage/12052252814/player/120d793b08" height="44" width="324"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
 
 
-<h4>1.注册类型，按需要添加</h4>
+<p>而在iOS7中，由于设计方面的原因，使得UI变为:</p>
 
-<p>附上本地的文档链接（搜索关键字：Uniform Type Identifier Concepts）
-（file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/understanding_utis/understand_utis_conc/understand_utis_conc.html#//apple_ref/doc/uid/TP40001319-CH202-CHDHIJDE）</p>
+<iframe src="https://www.flickr.com/photos/shjborage/12052149003/player/bb36320bc9" height="44" width="322"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
 
-<p>All Files这个文件类型，是从Dropbox里面抄来的，你懂的（<a href="http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82">http://www.cocoanetics.com/2013/01/open-in-all-files/%EF%BC%89%E3%80%82</a></p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10708970444/" title="2013-2-17-2 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5488/10708970444_870ea07b91.jpg" width="500" height="284" alt="2013-2-17-2"></a></p>
 
-<h3>2.打开文件ViewController</h3>
 
-<p>附本地文件链接：（搜索关键字：Previewing and Opening Files）file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/DocumentInteraction_TopicsForIOS/Articles/PreviewingandOpeningItems.html#//apple_ref/doc/uid/TP40010410-SW1</p>
+<!-- more -->
 
-<h4>UIDocumentInteractionController</h4>
 
-<p>不知道的话看一下文档就好了，还是比较容易使用。</p>
+<p>修改的方法重写UINavigationItem的setLeftBarButtonItem和setRightBarButtonItem方法，使之与之前版本兼容；</p>
 
-<p><a href="http://www.flickr.com/photos/105999540@N03/10708900325/" title="2013-2-17-3 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5478/10708900325_1a55a4d3d8.jpg" width="282" height="500" alt="2013-2-17-3"></a></p>
+<p>代码如下：</p>
 
-<p>再有的话呢，就是HandleOpenUrl的用法了，这个相信大家都比较熟悉了，就不多说了。URL的内容是文件的路径，你自己想干什么都可以咯。</p>
+<p><em>UINavigationItem+margin.h</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface UINavigationItem (margin)
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>UINavigationItem+margin.m</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UINavigationItem (margin)
+</span><span class='line'>
+</span><span class='line'>#if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1
+</span><span class='line'>- (void)setLeftBarButtonItem:(UIBarButtonItem *)_leftBarButtonItem
+</span><span class='line'>{
+</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
+</span><span class='line'>    {
+</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>        negativeSeperator.width = -12;
+</span><span class='line'>        
+</span><span class='line'>        if (_leftBarButtonItem)
+</span><span class='line'>        {
+</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
+</span><span class='line'>        }
+</span><span class='line'>        else
+</span><span class='line'>        {
+</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator]];
+</span><span class='line'>        }
+</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>    }
+</span><span class='line'>    else
+</span><span class='line'>    {
+</span><span class='line'>        [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)setRightBarButtonItem:(UIBarButtonItem *)_rightBarButtonItem
+</span><span class='line'>{
+</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
+</span><span class='line'>    {
+</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>        negativeSeperator.width = -12;
+</span><span class='line'>        
+</span><span class='line'>        if (_rightBarButtonItem)
+</span><span class='line'>        {
+</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
+</span><span class='line'>        }
+</span><span class='line'>        else
+</span><span class='line'>        {
+</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator]];
+</span><span class='line'>        }
+</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>    }
+</span><span class='line'>    else
+</span><span class='line'>    {
+</span><span class='line'>        [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>endif</h1>
+
+<p>@end</p>
+
+<p>项目源码不做任何修改，问题解决；</p>
+
+<p>添加Button：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIBarButtonItem *leftBarItem = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
+</span><span class='line'>self.navigationItem.leftBarButtonItem = leftBarItem;
+</span><span class='line'>[leftBarItem release];</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
 </div>
 
 
@@ -159,7 +273,7 @@
   
 
 
-<time datetime="2013-02-17T17:34:00+08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+<time datetime="2014-01-20T23:16:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
       
 
 <span class="categories">
@@ -177,7 +291,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/02/17/ios-yong-qi-ta-ying-yong-da-kai-wen-jian-yan-jiu-open-in-dot-dot-dot/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/" >Tweet</a>
   
   
   
@@ -204,10 +318,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/" title="Previous Post: iOS应用内置AppStore以及iOS Safari内置Banner进行推广">&laquo; iOS应用内置AppStore以及iOS Safari内置Banner进行推广</a>
+        <a class="basic-alignment left" href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/" title="Previous Post: iOS客户端的gzip处理-gzip-ungzip">&laquo; iOS客户端的gzip处理-gzip-ungzip</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/27/hello-jekyll/" title="Next Post: Hello jekyll">Hello jekyll &raquo;</a>
       
     </p>
   </footer>

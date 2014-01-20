@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-20T20:33:34+08:00</updated>
+  <updated>2014-01-20T23:41:33+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,160 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding]]></title>
+    <link href="http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/"/>
+    <updated>2014-01-20T23:16:00+08:00</updated>
+    <id>http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding</id>
+    <content type="html"><![CDATA[<p>iOS7之前的UI为：</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12052252814/player/120d793b08" height="44" width="324"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>而在iOS7中，由于设计方面的原因，使得UI变为:</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12052149003/player/bb36320bc9" height="44" width="322"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<!-- more -->
+
+
+<p>修改的方法重写UINavigationItem的setLeftBarButtonItem和setRightBarButtonItem方法，使之与之前版本兼容；</p>
+
+<p>代码如下：</p>
+
+<p><em>UINavigationItem+margin.h</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface UINavigationItem (margin)
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>UINavigationItem+margin.m</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation UINavigationItem (margin)
+</span><span class='line'>
+</span><span class='line'>#if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1
+</span><span class='line'>- (void)setLeftBarButtonItem:(UIBarButtonItem *)_leftBarButtonItem
+</span><span class='line'>{
+</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
+</span><span class='line'>    {
+</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>        negativeSeperator.width = -12;
+</span><span class='line'>        
+</span><span class='line'>        if (_leftBarButtonItem)
+</span><span class='line'>        {
+</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
+</span><span class='line'>        }
+</span><span class='line'>        else
+</span><span class='line'>        {
+</span><span class='line'>            [self setLeftBarButtonItems:@[negativeSeperator]];
+</span><span class='line'>        }
+</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>    }
+</span><span class='line'>    else
+</span><span class='line'>    {
+</span><span class='line'>        [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)setRightBarButtonItem:(UIBarButtonItem *)_rightBarButtonItem
+</span><span class='line'>{
+</span><span class='line'>    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 7.0)
+</span><span class='line'>    {
+</span><span class='line'>        UIBarButtonItem *negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+</span><span class='line'>        negativeSeperator.width = -12;
+</span><span class='line'>        
+</span><span class='line'>        if (_rightBarButtonItem)
+</span><span class='line'>        {
+</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
+</span><span class='line'>        }
+</span><span class='line'>        else
+</span><span class='line'>        {
+</span><span class='line'>            [self setRightBarButtonItems:@[negativeSeperator]];
+</span><span class='line'>        }
+</span><span class='line'>        [negativeSeperator release];
+</span><span class='line'>    }
+</span><span class='line'>    else
+</span><span class='line'>    {
+</span><span class='line'>        [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>endif</h1>
+
+<p>@end</p>
+
+<p>项目源码不做任何修改，问题解决；</p>
+
+<p>添加Button：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIBarButtonItem *leftBarItem = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
+</span><span class='line'>self.navigationItem.leftBarButtonItem = leftBarItem;
+</span><span class='line'>[leftBarItem release];</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS客户端的gzip处理-gzip-ungzip]]></title>
@@ -1172,7 +1326,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x61;&#64;&#50;&#x78;&#46;&#112;&#x6e;&#x67;">&#97;&#x40;&#50;&#120;&#x2e;&#112;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#x40;&#50;&#120;&#x2e;&#112;&#x6e;&#103;">&#97;&#x40;&#x32;&#x78;&#46;&#112;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -3032,233 +3186,6 @@ typedef void (^dispatch_block_t)( void);
 <p><em>参考资料：</em>
 Concurrency Programming Guide：
 <a href="http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html">http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用]]></title>
-    <link href="http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/"/>
-    <updated>2013-11-06T23:14:00+08:00</updated>
-    <id>http://saick.net/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong</id>
-    <content type="html"><![CDATA[<h3>介绍：</h3>
-
-<p>Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。</p>
-
-<h4>设计：</h4>
-
-<p>GCD的工作原理是：让程序平行排队的特定任务，根据可用的处理资源，安排他们在任何可用的处理器核心上执行任务。</p>
-
-<p>一个任务可以是一个函数(function)或者是一个block。 GCD的底层依然是用线程实现，不过这样可以让程序员不用关注实现的细节。</p>
-
-<p>GCD中的FIFO队列称为dispatch queue，它可以保证先进来的任务先得到执行</p>
-
-<p>dispatch queue分为下面三种：</p>
-
-<h4>Serial</h4>
-
-<p>又称为private dispatch queues，同时只执行一个任务。Serial queue通常用于同步访问特定的资源或数据。当你创建多个Serial queue时，虽然它们各自是同步执行的，但Serial queue与Serial queue之间是并发执行的。</p>
-
-<h4>Concurrent</h4>
-
-<p>又称为global dispatch queue，可以并发地执行多个任务，但是执行完成的顺序是随机的。</p>
-
-<h4>Main dispatch queue</h4>
-
-<p>它是全局可用的serial queue，它是在应用程序主线程上执行任务的。</p>
-
-<!--more-->
-
-
-<h3>我们看看dispatch queue如何使用</h3>
-
-<h4>1、常用的方法dispatch_async</h4>
-
-<p>为了避免界面在处理耗时的操作时卡死，比如读取网络数据，IO,数据库读写等，我们会在另外一个线程中处理这些操作，然后通知主线程更新界面。<br/>
-用GCD实现这个流程的操作比前面介绍的NSThread  NSOperation的方法都要简单。代码框架结构如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{  
-</span><span class='line'>    // 耗时的操作  
-</span><span class='line'>    dispatch_async(dispatch_get_main_queue(), ^{  
-</span><span class='line'>        // 更新界面  
-</span><span class='line'>    });  
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果这样还不清晰的话，那我们还是用上两篇博客中的下载图片为例子，代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{  
-</span><span class='line'>    NSURL * url = [NSURL URLWithString:@"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"];  
-</span><span class='line'>    NSData * data = [[NSData alloc]initWithContentsOfURL:url];  
-</span><span class='line'>    UIImage *image = [[UIImage alloc]initWithData:data];  
-</span><span class='line'>    if (data != nil) {  
-</span><span class='line'>        dispatch_async(dispatch_get_main_queue(), ^{  
-</span><span class='line'>            self.imageView.image = image;  
-</span><span class='line'>         });  
-</span><span class='line'>    }  
-</span><span class='line'>});  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行显示：</p>
-
-<p>是不是代码比NSThread  NSOperation简洁很多，而且GCD会自动根据任务在多核处理器上分配资源，优化程序。
-系统给每一个应用程序提供了三个concurrent dispatch queues。这三个并发调度队列是全局的，它们只有优先级的不同。因为是全局的，我们不需要去创建。我们只需要通过使用函数dispath_get_global_queue去得到队列，如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t globalQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);    </span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里也用到了系统默认就有一个串行队列main_queue</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t mainQ = dispatch_get_main_queue();    </span></code></pre></td></tr></table></div></figure>
-
-
-<p>虽然dispatch queue是引用计数的对象，但是以上两个都是全局的队列，不用retain或release。</p>
-
-<h4>2、dispatch_group_async的使用</h4>
-
-<p>dispatch_group_async可以实现监听一组任务是否完成，完成后得到通知执行其他的操作。这个方法很有用，比如你执行三个下载任务，当三个任务都下载完成后你才通知界面说完成的了。下面是一段例子代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);  
-</span><span class='line'>dispatch_group_t group = dispatch_group_create();  
-</span><span class='line'>dispatch_group_async(group, queue, ^{  
-</span><span class='line'>    [NSThread sleepForTimeInterval:1];  
-</span><span class='line'>    NSLog(@"group1");  
-</span><span class='line'>});  
-</span><span class='line'>dispatch_group_async(group, queue, ^{  
-</span><span class='line'>    [NSThread sleepForTimeInterval:2];  
-</span><span class='line'>    NSLog(@"group2");  
-</span><span class='line'>});  
-</span><span class='line'>dispatch_group_async(group, queue, ^{  
-</span><span class='line'>    [NSThread sleepForTimeInterval:3];  
-</span><span class='line'>    NSLog(@"group3");  
-</span><span class='line'>});  
-</span><span class='line'>dispatch_group_notify(group, dispatch_get_main_queue(), ^{  
-</span><span class='line'>    NSLog(@"updateUi");  
-</span><span class='line'>});  
-</span><span class='line'>dispatch_release(group);  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>dispatch_group_async是异步的方法，运行后可以看到打印结果：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>2012-09-25 16:04:16.737 gcdTest[43328:11303] group1
-</span><span class='line'>2012-09-25 16:04:17.738 gcdTest[43328:12a1b] group2
-</span><span class='line'>2012-09-25 16:04:18.738 gcdTest[43328:13003] group3
-</span><span class='line'>2012-09-25 16:04:18.739 gcdTest[43328:f803] updateUi</span></code></pre></td></tr></table></div></figure>
-
-
-<p>每个一秒打印一个，当第三个任务执行后，upadteUi被打印。</p>
-
-<h4>3、dispatch_barrier_async的使用</h4>
-
-<p>dispatch_barrier_async是在前面的任务执行结束后它才执行，而且它后面的任务等它执行完成之后才会执行
-例子代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t queue = dispatch_queue_create("gcdtest.rongfzh.yc", DISPATCH_QUEUE_CONCURRENT);  
-</span><span class='line'>dispatch_async(queue, ^{  
-</span><span class='line'>    [NSThread sleepForTimeInterval:2];  
-</span><span class='line'>    NSLog(@"dispatch_async1");  
-</span><span class='line'>});  
-</span><span class='line'>dispatch_async(queue, ^{  
-</span><span class='line'>    [NSThread sleepForTimeInterval:4];  
-</span><span class='line'>    NSLog(@"dispatch_async2");  
-</span><span class='line'>});  
-</span><span class='line'>dispatch_barrier_async(queue, ^{  
-</span><span class='line'>    NSLog(@"dispatch_barrier_async");  
-</span><span class='line'>    [NSThread sleepForTimeInterval:4];
-</span><span class='line'>});  
-</span><span class='line'>dispatch_async(queue, ^{  
-</span><span class='line'>    [NSThread sleepForTimeInterval:1];  
-</span><span class='line'>    NSLog(@"dispatch_async3");  
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>打印结果：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>2012-09-25 16:20:33.967 gcdTest[45547:11203] dispatch_async1
-</span><span class='line'>2012-09-25 16:20:35.967 gcdTest[45547:11303] dispatch_async2
-</span><span class='line'>2012-09-25 16:20:35.967 gcdTest[45547:11303] dispatch_barrier_async
-</span><span class='line'>2012-09-25 16:20:40.970 gcdTest[45547:11303] dispatch_async3</span></code></pre></td></tr></table></div></figure>
-
-
-<p>请注意执行的时间，可以看到执行的顺序如上所述。</p>
-
-<h4>4、dispatch_apply</h4>
-
-<p>执行某个代码片段N次。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_apply(5, globalQ, ^(size_t index) {
-</span><span class='line'>    // 执行5次
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>本篇使用的到的例子代码：<a href="http://download.csdn.net/detail/totogo2010/4596471">http://download.csdn.net/detail/totogo2010/4596471</a></p>
-
-<p>GCD还有很多其他用法，可以参考官方文档<br/>
-参考的文档还有：<a href="http://en.wikipedia.org/wiki/Grand_Central_Dispatch  ">http://en.wikipedia.org/wiki/Grand_Central_Dispatch  </a>
-著作权声明：本文由<a href="http://blog.csdn.net/totogo2010/">http://blog.csdn.net/totogo2010/</a> 原创，欢迎转载分享。请尊重作者劳动，转载时保留该声明和作者博客链接，谢谢!</p>
 ]]></content>
   </entry>
   

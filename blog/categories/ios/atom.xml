@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-20T20:33:34+08:00</updated>
+  <updated>2014-01-20T23:41:33+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding]]></title>
+    <link href="http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/"/>
+    <updated>2014-01-20T23:16:00+08:00</updated>
+    <id>http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding</id>
+    <content type="html"><![CDATA[<p>iOS7之前的UI为：</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12052252814/player/120d793b08" height="44" width="324"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>而在iOS7中，由于设计方面的原因，使得UI变为:</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12052149003/player/bb36320bc9" height="44" width="322"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<!-- more -->
+
+
+<p>修改的方法重写UINavigationItem的setLeftBarButtonItem和setRightBarButtonItem方法，使之与之前版本兼容；</p>
+
+<p>代码如下：</p>
+
+<p><em>UINavigationItem+margin.h</em></p>
+
+<p>```
+@interface UINavigationItem (margin)</p>
+
+<p>@end
+```</p>
+
+<p><em>UINavigationItem+margin.m</em></p>
+
+<p>```
+@implementation UINavigationItem (margin)</p>
+
+<h1>if <strong>IPHONE_OS_VERSION_MAX_ALLOWED > </strong>IPHONE_6_1</h1>
+
+<ul>
+<li><p>(void)setLeftBarButtonItem:(UIBarButtonItem <em>)_leftBarButtonItem
+{
+  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+  {
+      UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+      negativeSeperator.width = -12;</p>
+
+<pre><code>  if (_leftBarButtonItem)
+  {
+      [self setLeftBarButtonItems:@[negativeSeperator, _leftBarButtonItem]];
+  }
+  else
+  {
+      [self setLeftBarButtonItems:@[negativeSeperator]];
+  }
+  [negativeSeperator release];
+</code></pre>
+
+<p>  }
+  else
+  {
+      [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
+  }
+}</p></li>
+<li><p>(void)setRightBarButtonItem:(UIBarButtonItem <em>)_rightBarButtonItem
+{
+  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+  {
+      UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+      negativeSeperator.width = -12;</p>
+
+<pre><code>  if (_rightBarButtonItem)
+  {
+      [self setRightBarButtonItems:@[negativeSeperator, _rightBarButtonItem]];
+  }
+  else
+  {
+      [self setRightBarButtonItems:@[negativeSeperator]];
+  }
+  [negativeSeperator release];
+</code></pre>
+
+<p>  }
+  else
+  {
+      [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
+  }
+}
+```</p></li>
+</ul>
+
+
+<h1>endif</h1>
+
+<p>@end</p>
+
+<p>项目源码不做任何修改，问题解决；</p>
+
+<p>添加Button：</p>
+
+<p><code>
+UIBarButtonItem *leftBarItem = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
+self.navigationItem.leftBarButtonItem = leftBarItem;
+[leftBarItem release];
+</code></p>
+
+<p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS客户端的gzip处理-gzip-ungzip]]></title>
@@ -506,98 +616,6 @@ lipo -create simulator/libevent_pthreads.a device/libevent_pthreads.a -o univers
 <p><code>
 lipo -info /Users/pjk1129/Desktop/libPrint.a
 </code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[SQLite(FMDB) 线程安全 - 多线程处理]]></title>
-    <link href="http://saick.net/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/"/>
-    <updated>2013-12-12T11:25:00+08:00</updated>
-    <id>http://saick.net/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li</id>
-    <content type="html"><![CDATA[<p>在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。</p>
-
-<p>但是，我们在数据库操作的时候，经常遇到多线程访问数据库的状况，常见的有几种处理方法：</p>
-
-<ul>
-<li>1, NSLock或类似方法加锁</li>
-<li>2, FMDatabaseQueue</li>
-<li>3, SQLITE_CONFIG_SERIALIZED</li>
-</ul>
-
-
-<p>下面我们来仔细看一下出现的问题以及相关的解决方案</p>
-
-<!-- more -->
-
-
-<h3>常见问题</h3>
-
-<p>以使用FMDB为例：</p>
-
-<p>The debugger says that the error occurs at [FMResultSet next] at the line, has <code>EXC_BAD_ACCESS</code></p>
-
-<p><code>
-rc = sqlite3_step(statement.statement);
-</code></p>
-
-<p>多线程访问的时候，会在这里报错。</p>
-
-<p>如何解决呢？</p>
-
-<h4>1. NSLock加锁（NSMutex）</h4>
-
-<p>详见苹果官方文档：
-<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Multithreading/ThreadSafety/ThreadSafety.html">Threading Programming Guide</a></p>
-
-<h4>2. FMDatabaseQueue</h4>
-
-<p>这个是我在某项目中用到的，所有查询都走这里。
-可能因为项目较复杂，用了这个还是会时候有问题，但稳定很多。可以有一些别的地方调用，没查清楚。</p>
-
-<p>```
-// 相关引用
-_fmQueue = [FMDatabaseQueue databaseQueueWithPath:sqlitePath];</p>
-
-<p>// 查询数据
-&ndash; (FMResultSet <em>)executeQueryWithSQL:(NSString </em>)sql
-{
-  BFLogVerbose(@&ldquo;executeQuery: %@&rdquo;, sql);</p>
-
-<p>  <strong>block FMResultSet *rs = nil;
-  </strong>block dispatch_semaphore_t sem = dispatch_semaphore_create(0);</p>
-
-<p>  [_fmQueue inDatabase:^(FMDatabase *fmdb){</p>
-
-<pre><code>FMResultSet *tmpRs = [fmdb executeQuery:sql];
-rs = [FMResultSet resultSetWithStatement:tmpRs.statement usingParentDatabase:fmdb];
-[tmpRs close];
-dispatch_semaphore_signal(sem);
-</code></pre>
-
-<p>  }];</p>
-
-<p>  dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-  dispatch_release(sem);</p>
-
-<p>  return rs;
-}
-```</p>
-
-<h3>3. SQLITE_CONFIG_SERIALIZED</h3>
-
-<p>SQLite provides a much simpler serialization. By just setting the sqlite_config() option SQLITE_CONFIG_SERIALIZED you will probably avoid most of these kinds of headaches. I discovered this the hard way after fighting with threading issues for a long while.</p>
-
-<p>```
-if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_ERROR) {</p>
-
-<pre><code>    NSLog(@"couldn't set serialized mode");
-</code></pre>
-
-<p>}
-```</p>
-
-<p>参考：
-<a href="http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0">http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0</a></p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="block Blocks are often used to simplify common tasks such as collection enumeration, sorting and testing. They also make it easy to schedule tasks &hellip;">
+  <meta name="description" content="不断更新中。。。 Dec 2, 2013 使用.mm文件编译成.a静态库，或放入CocoaPods中，报错 1
+operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib Origin Aug 5, 2013 如果使用C++ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">iOS 开发常见低级错误</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
+
+<p>Dec 2, 2013</p>
+
+<h4>使用.mm文件编译成.a静态库，或放入CocoaPods中，报错</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>operator delete(void*)", referenced from xxx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解决方案：引入libc++.dylib</p>
+
+<p><a href="http://stackoverflow.com/questions/16865260/quickblox-linker-error-operator-deletevoid-referenced-from">Origin</a></p>
+
+<p>Aug 5, 2013</p>
+
+<h4>如果使用C++代码混编，找不到iostream等</h4>
+
+<pre><code>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式
+</code></pre>
+
+<p>May 28, 2013</p>
+
+<h4>不要调用[super  release]</h4>
+
+<pre><code>在dealloc里要调用[super dealloc]，千万不要调用[super release]
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -503,7 +566,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (51)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (52)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -513,6 +576,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/">iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">iOS客户端的gzip处理-gzip-ungzip</a>
@@ -528,10 +595,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">Synergy on Mavericks (OSX 10.9) and enable assistive devices</a>
       </li>
     
   </ul>
