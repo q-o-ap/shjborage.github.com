@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-01-21T00:13:54+08:00</updated>
+  <updated>2014-01-21T22:02:48+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS中签名相关-MD5-sha1-10进制与16进制互转]]></title>
+    <link href="http://saick.net/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/"/>
+    <updated>2014-01-21T21:32:00+08:00</updated>
+    <id>http://saick.net/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan</id>
+    <content type="html"><![CDATA[<p>费话少说，直接上代码</p>
+
+<h4>md5, sha1</h4>
+
+<p>```
++ (NSString <em>)md5:(NSString </em>)str
+{
+  if ([str length] == 0)</p>
+
+<pre><code>return @"";
+</code></pre>
+
+<p>  unsigned char result[CC_MD5_DIGEST_LENGTH];
+  CC_MD5([str UTF8String], (CC_LONG)strlen([str UTF8String]) , result);
+  NSMutableString *digest = [NSMutableString string];
+  for (int i = 0; i &lt; CC_MD5_DIGEST_LENGTH; i++)</p>
+
+<pre><code>[digest appendFormat:@"%02X", result[i]];
+</code></pre>
+
+<p>  return [digest lowercaseString];
+}</p>
+
+<ul>
+<li><p>(NSString <em>)sha1:(NSString </em>)input
+{
+if ([input length] == 0)
+  return @&ldquo;&rdquo;;</p>
+
+<p>const char <em>cstr = [input cStringUsingEncoding:NSUTF8StringEncoding];
+NSData </em>data = [NSData dataWithBytes:cstr length:input.length];</p>
+
+<p>uint8_t digest[CC_SHA1_DIGEST_LENGTH];</p>
+
+<p>CC_SHA1(data.bytes, data.length, digest);</p>
+
+<p>NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];</p>
+
+<p>for(int i=0; i&lt;CC_SHA1_DIGEST_LENGTH; i++) {
+  [output appendFormat:@&ldquo;%02X&rdquo;, digest[i]];
+}</p>
+
+<p>return output;
+}
+```</p></li>
+</ul>
+
+
+<h4>10进制转16进制</h4>
+
+<p><code>
+NSString *num16Str = [NSString stringWithFormat:@"%x", numBase10];
+</code></p>
+
+<h4>16进制转10进制</h4>
+
+<p><code>
+NSString *num10Str = [NSString stringWithFormat:@"%d", strtoul([numBase16 UTF8String], 0, 16)];
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding]]></title>
@@ -603,62 +670,6 @@ NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {</p>
 }
 @finally {            
 }  
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS 静态库不同平台合并 lipo命令使用]]></title>
-    <link href="http://saick.net/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong/"/>
-    <updated>2013-12-17T23:54:00+08:00</updated>
-    <id>http://saick.net/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong</id>
-    <content type="html"><![CDATA[<h3>Introduction</h3>
-
-<p>查看<em>lipo</em>详解</p>
-
-<p><code>
-man lipo
-</code></p>
-
-<p><strong>lipo &ndash; create or operate on universal files</strong></p>
-
-<!-- more -->
-
-
-<h3>Usage</h3>
-
-<h4>Simple</h4>
-
-<p><strong>lipo -create xxx_arm.a xxx_i386.a -output xxx_universal.a</strong></p>
-
-<p>Example:</p>
-
-<p><code>
-lipo -create /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphonesimulator/libPrint.a  /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphoneos/libPrint.a  -output /Users/pjk1129/Desktop/libPrint.a
-</code></p>
-
-<h4>Shell</h4>
-
-<p><em>libevent.sh</em>
-```</p>
-
-<h1>! /bin/sh</h1>
-
-<p>mkdir universal
-lipo -create simulator/libevent.a device/libevent.a -o universal/libevent.a
-lipo -create simulator/libevent_extra.a device/libevent_extra.a -o universal/libevent_extra.a
-lipo -create simulator/libevent_core.a device/libevent_core.a -o universal/libevent_core.a
-lipo -create simulator/libevent_pthreads.a device/libevent_pthreads.a -o universal/libevent_pthreads.a
-```</p>
-
-<h3>Review Info</h3>
-
-<p><strong>lipo -info xxx_universal.a</strong></p>
-
-<p>Example:</p>
-
-<p><code>
-lipo -info /Users/pjk1129/Desktop/libPrint.a
 </code></p>
 ]]></content>
   </entry>

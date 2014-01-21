@@ -5,12 +5,45 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS 开发常见低级错误 - Saick Blog</title>
+  <title>iOS中签名相关-MD5-sha1-10进制与16进制互转 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不断更新中。。。 Dec 2, 2013 使用.mm文件编译成.a静态库，或放入CocoaPods中，报错 1
-operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib Origin Aug 5, 2013 如果使用C++ &hellip;">
+  <meta name="description" content="费话少说，直接上代码 md5, sha1 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
++ (NSString *)md5:(NSString *)str
+{ if &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +52,7 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">
+  <link rel="canonical" href="http://saick.net/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +116,7 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
   
   <header>
     
-      <h1 class="entry-title">iOS 开发常见低级错误</h1>
+      <h1 class="entry-title">iOS中签名相关-MD5-sha1-10进制与16进制互转</h1>
     
     
       <p class="meta">
@@ -99,40 +132,96 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
   
 
 
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2014-01-21T21:32:00+08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
+<div class="entry-content"><p>费话少说，直接上代码</p>
 
-<p>Dec 2, 2013</p>
-
-<h4>使用.mm文件编译成.a静态库，或放入CocoaPods中，报错</h4>
+<h4>md5, sha1</h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>operator delete(void*)", referenced from xxx</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSString *)md5:(NSString *)str
+</span><span class='line'>{
+</span><span class='line'>  if ([str length] == 0)
+</span><span class='line'>    return @"";
+</span><span class='line'>  
+</span><span class='line'>  unsigned char result[CC_MD5_DIGEST_LENGTH];
+</span><span class='line'>  CC_MD5([str UTF8String], (CC_LONG)strlen([str UTF8String]) , result);
+</span><span class='line'>  NSMutableString *digest = [NSMutableString string];
+</span><span class='line'>  for (int i = 0; i &lt; CC_MD5_DIGEST_LENGTH; i++)
+</span><span class='line'>    [digest appendFormat:@"%02X", result[i]];
+</span><span class='line'>  return [digest lowercaseString];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>+ (NSString *)sha1:(NSString *)input
+</span><span class='line'>{
+</span><span class='line'>  if ([input length] == 0)
+</span><span class='line'>    return @"";
+</span><span class='line'>  
+</span><span class='line'>  const char *cstr = [input cStringUsingEncoding:NSUTF8StringEncoding];
+</span><span class='line'>  NSData *data = [NSData dataWithBytes:cstr length:input.length];
+</span><span class='line'>  
+</span><span class='line'>  uint8_t digest[CC_SHA1_DIGEST_LENGTH];
+</span><span class='line'>  
+</span><span class='line'>  CC_SHA1(data.bytes, data.length, digest);
+</span><span class='line'>  
+</span><span class='line'>  NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
+</span><span class='line'>  
+</span><span class='line'>  for(int i=0; i&lt;CC_SHA1_DIGEST_LENGTH; i++) {
+</span><span class='line'>    [output appendFormat:@"%02X", digest[i]];
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  return output;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>解决方案：引入libc++.dylib</p>
+<h4>10进制转16进制</h4>
 
-<p><a href="http://stackoverflow.com/questions/16865260/quickblox-linker-error-operator-deletevoid-referenced-from">Origin</a></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSString *num16Str = [NSString stringWithFormat:@"%x", numBase10];</span></code></pre></td></tr></table></div></figure>
 
-<p>Aug 5, 2013</p>
 
-<h4>如果使用C++代码混编，找不到iostream等</h4>
+<h4>16进制转10进制</h4>
 
-<pre><code>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSString *num10Str = [NSString stringWithFormat:@"%d", strtoul([numBase16 UTF8String], 0, 16)]; </span></code></pre></td></tr></table></div></figure>
 
-<p>May 28, 2013</p>
-
-<h4>不要调用[super  release]</h4>
-
-<pre><code>在dealloc里要调用[super dealloc]，千万不要调用[super release]
-</code></pre>
 </div>
 
 
@@ -155,7 +244,7 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
   
 
 
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2014-01-21T21:32:00+08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2014</time>
       
 
 <span class="categories">
@@ -173,7 +262,7 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/" >Tweet</a>
   
   
   
@@ -200,10 +289,8 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/ios-block-bian-cheng/" title="Previous Post: iOS block 编程">&laquo; iOS block 编程</a>
+        <a class="basic-alignment left" href="/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/" title="Previous Post: iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding">&laquo; iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Next Post: Category 巧用-调试程序">Category 巧用-调试程序 &raquo;</a>
       
     </p>
   </footer>

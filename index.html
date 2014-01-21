@@ -9,7 +9,41 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="iOS7之前的UI为： 而在iOS7中，由于设计方面的原因，使得UI变为: ">
+  <meta name="description" content="费话少说，直接上代码 md5, sha1 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
++ (NSString *)md5:(NSString *)str
+{ if &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +113,124 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-21T21:32:00+08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>费话少说，直接上代码</p>
+
+<h4>md5, sha1</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSString *)md5:(NSString *)str
+</span><span class='line'>{
+</span><span class='line'>  if ([str length] == 0)
+</span><span class='line'>    return @"";
+</span><span class='line'>  
+</span><span class='line'>  unsigned char result[CC_MD5_DIGEST_LENGTH];
+</span><span class='line'>  CC_MD5([str UTF8String], (CC_LONG)strlen([str UTF8String]) , result);
+</span><span class='line'>  NSMutableString *digest = [NSMutableString string];
+</span><span class='line'>  for (int i = 0; i &lt; CC_MD5_DIGEST_LENGTH; i++)
+</span><span class='line'>    [digest appendFormat:@"%02X", result[i]];
+</span><span class='line'>  return [digest lowercaseString];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>+ (NSString *)sha1:(NSString *)input
+</span><span class='line'>{
+</span><span class='line'>  if ([input length] == 0)
+</span><span class='line'>    return @"";
+</span><span class='line'>  
+</span><span class='line'>  const char *cstr = [input cStringUsingEncoding:NSUTF8StringEncoding];
+</span><span class='line'>  NSData *data = [NSData dataWithBytes:cstr length:input.length];
+</span><span class='line'>  
+</span><span class='line'>  uint8_t digest[CC_SHA1_DIGEST_LENGTH];
+</span><span class='line'>  
+</span><span class='line'>  CC_SHA1(data.bytes, data.length, digest);
+</span><span class='line'>  
+</span><span class='line'>  NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
+</span><span class='line'>  
+</span><span class='line'>  for(int i=0; i&lt;CC_SHA1_DIGEST_LENGTH; i++) {
+</span><span class='line'>    [output appendFormat:@"%02X", digest[i]];
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  return output;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>10进制转16进制</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSString *num16Str = [NSString stringWithFormat:@"%x", numBase10];</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>16进制转10进制</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSString *num10Str = [NSString stringWithFormat:@"%d", strtoul([numBase16 UTF8String], 0, 16)]; </span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -506,47 +658,6 @@ in the settings.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">XCode下的iOS单元测试</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-12T09:34:00+08:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>XCode 内置了 OCUnit 单元测试框架，但目前最好用的测试框架应该是 GHUnit。通过 GHUnit + OCMock 组合，我们可以在 iOS 下进行较强大的单元测试功能。本文将演示如何在 XCode 4.2 下使用 OCUnit， GHUnit 和 OCMock 进行单元测试。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -578,7 +689,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (52)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (53)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -588,6 +699,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/">iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding</a>
@@ -603,10 +718,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a>
       </li>
     
   </ul>

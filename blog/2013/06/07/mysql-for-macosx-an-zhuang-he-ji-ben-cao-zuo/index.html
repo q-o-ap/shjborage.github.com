@@ -283,20 +283,20 @@ LINUX 如下:</p>
 
 <h5>1)导出数据</h5>
 
-<p>[<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#x72;&#111;&#x6f;&#x74;&#64;&#x77;&#119;&#x77;&#46;&#x63;&#110;&#115;&#x63;&#110;&#x2e;&#111;&#114;&#x67;">&#114;&#111;&#111;&#116;&#64;&#119;&#119;&#119;&#x2e;&#x63;&#110;&#x73;&#x63;&#x6e;&#x2e;&#111;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
+<p>[<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#x6f;&#x6f;&#116;&#x40;&#x77;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#x63;&#110;&#46;&#111;&#114;&#x67;">&#x72;&#x6f;&#x6f;&#x74;&#x40;&#x77;&#x77;&#x77;&#46;&#x63;&#x6e;&#115;&#99;&#110;&#x2e;&#x6f;&#114;&#x67;</a> ~]$ mysqldump -u root -p dbname &mdash;default-character-set=gbk > base_user.sql;</p>
 
 <h5>2)查看导出的sql文件的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#x6f;&#111;&#116;&#x40;&#x77;&#119;&#x77;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#111;&#114;&#x67;">&#x72;&#x6f;&#111;&#x74;&#x40;&#119;&#119;&#x77;&#x2e;&#99;&#110;&#115;&#x63;&#110;&#x2e;&#111;&#114;&#103;</a> ~]$ file base_user.sql
+<p>[<a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#x72;&#x6f;&#x6f;&#x74;&#x40;&#119;&#x77;&#119;&#x2e;&#99;&#110;&#115;&#x63;&#x6e;&#x2e;&#111;&#114;&#x67;">&#114;&#111;&#111;&#116;&#64;&#x77;&#119;&#x77;&#x2e;&#x63;&#x6e;&#115;&#99;&#110;&#46;&#x6f;&#114;&#x67;</a> ~]$ file base_user.sql
 　 base_user.sql: UTF-8 Unicode text, with very long lines</p>
 
 <h5>3)转成要用的编码</h5>
 
-<p>[<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#114;&#x6f;&#x6f;&#116;&#x40;&#119;&#x77;&#119;&#x2e;&#99;&#x6e;&#x73;&#99;&#110;&#46;&#111;&#114;&#103;">&#114;&#111;&#x6f;&#116;&#64;&#x77;&#x77;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#110;&#46;&#111;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
+<p>[<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#114;&#x6f;&#111;&#116;&#64;&#x77;&#119;&#119;&#x2e;&#99;&#x6e;&#x73;&#x63;&#110;&#46;&#111;&#114;&#x67;">&#114;&#111;&#x6f;&#x74;&#64;&#119;&#119;&#x77;&#46;&#99;&#110;&#115;&#x63;&#110;&#46;&#x6f;&#114;&#103;</a> ~]$ iconv -f utf-8 -t gbk base_user.sql >base_user_gbk.sql</p>
 
 <h5>4)连接数据库并查看当前库的编码</h5>
 
-<p>[<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x72;&#111;&#111;&#116;&#x40;&#119;&#119;&#x77;&#x2e;&#99;&#110;&#x73;&#x63;&#x6e;&#46;&#111;&#x72;&#x67;">&#x72;&#x6f;&#111;&#x74;&#x40;&#119;&#x77;&#119;&#46;&#x63;&#x6e;&#115;&#x63;&#110;&#x2e;&#111;&#114;&#103;</a> ~]$ mysql -uroot
+<p>[<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#114;&#111;&#x6f;&#116;&#64;&#119;&#119;&#119;&#x2e;&#x63;&#x6e;&#115;&#x63;&#110;&#46;&#111;&#x72;&#x67;">&#x72;&#x6f;&#x6f;&#x74;&#64;&#x77;&#x77;&#x77;&#x2e;&#x63;&#110;&#x73;&#99;&#x6e;&#x2e;&#111;&#x72;&#x67;</a> ~]$ mysql -uroot
 　mysql> use testdb;
 mysql> status;</p>
 
@@ -596,7 +596,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (52)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (53)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -606,6 +606,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/">iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding</a>
@@ -621,10 +625,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a>
       </li>
     
   </ul>

@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS 开发常见低级错误 - Saick Blog</title>
+  <title>Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="不断更新中。。。 Dec 2, 2013 使用.mm文件编译成.a静态库，或放入CocoaPods中，报错 1
-operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib Origin Aug 5, 2013 如果使用C++ &hellip;">
+  <meta name="description" content="相信很多人会遇到这种情况，当tableView正在滚动的时候，如果reloadData，偶尔发生App crash的情况。 这种情况有时候有，有时候没有，已经难倒了很多人。直至今天，我在stackoverflow上面，仍没有发现真正有说到其本质的帖子。我的处女贴，选择这个问题来阐述一下我的观点。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/">
+  <link rel="canonical" href="http://saick.net/blog/page/9/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,12 +77,15 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">iOS 开发常见低级错误</h1>
+      <h1 class="entry-title"><a href="/blog/2012/02/08/uitableview-reloaddatade-zheng-que-fang-fa/">UITableView reloadData的正确方法</a></h1>
     
     
       <p class="meta">
@@ -99,140 +101,36 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
   
 
 
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2012-02-08T12:04:00+08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><strong><em>不断更新中。。。</em></strong></p>
+  <div class="entry-content"><p>相信很多人会遇到这种情况，当tableView正在滚动的时候，如果reloadData，偶尔发生App crash的情况。 这种情况有时候有，有时候没有，已经难倒了很多人。直至今天，我在stackoverflow上面，仍没有发现真正有说到其本质的帖子。我的处女贴，选择这个问题来阐述一下我的观点。</p>
 
-<p>Dec 2, 2013</p>
+<p>小弟我英语很好，一般都是用英语记笔记，当然，我知道，论坛愤青很多，如果只贴英文出来，肯定找骂。 故简单翻译一下，以显示我的诚意。 原英文笔记附在后面。 请大家不要挑英语语法错误了，笔记就是笔记，不是出书。</p>
 
-<h4>使用.mm文件编译成.a静态库，或放入CocoaPods中，报错</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>operator delete(void*)", referenced from xxx</span></code></pre></td></tr></table></div></figure>
-
-
-<p>解决方案：引入libc++.dylib</p>
-
-<p><a href="http://stackoverflow.com/questions/16865260/quickblox-linker-error-operator-deletevoid-referenced-from">Origin</a></p>
-
-<p>Aug 5, 2013</p>
-
-<h4>如果使用C++代码混编，找不到iostream等</h4>
-
-<pre><code>可能是.m中直接import的，这个需要注意改成mm或者修改编译方式
-</code></pre>
-
-<p>May 28, 2013</p>
-
-<h4>不要调用[super  release]</h4>
-
-<pre><code>在dealloc里要调用[super dealloc]，千万不要调用[super release]
-</code></pre>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
-
-      
-
-
-
-
-
-
-
-
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/02/08/uitableview-reloaddatade-zheng-que-fang-fa/">Read on &rarr;</a>
+    </footer>
   
 
 
-<time datetime="2013-05-28T10:19:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
-  
-</span>
-
-  
-    </p>
-    <p class="meta">
-	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
-    </p>
+  <div class="pagination">
     
+    <a href="/blog/archives">Blog Archives</a>
     
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/ios-kai-fa-chang-jian-di-ji-cuo-wu/" >Tweet</a>
-  
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-  
-  
-  <!-- JiaThis Button BEGIN -->
-  <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_googleplus">Google+</a>
-    <a class="jiathis_button_renren">人人网</a>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
+    <a class="next" href="/blog/page/8/">Newer &rarr;</a>
+    
   </div>
-  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
-  <!-- JiaThis Button END -->
-
 </div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/05/28/ios-block-bian-cheng/" title="Previous Post: iOS block 编程">&laquo; iOS block 编程</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/category-qiao-yong-diao-shi-cheng-xu/" title="Next Post: Category 巧用-调试程序">Category 巧用-调试程序 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section id="comment">
-    <h1>Comments</h1>
-    
-<!-- Duoshuo Comment BEGIN -->
-    <div class="ds-thread"></div>
-    <script type="text/javascript">
-    var duoshuoQuery = {short_name:"saick"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = 'http://static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-        || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-<!-- Duoshuo Comment END -->
-
-  </section>
-
-
-
-</div>
-
 <aside class="sidebar">
   
     
@@ -242,7 +140,7 @@ operator delete(void*)", referenced from xxx 解决方案：引入libc++.dylib O
 var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColor="light",sText="填写您的邮件地址，订阅精彩内容：" ;;
 </script>
 <script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>
--->
+&#8211;>
 
 <!--QQ邮件列表订阅嵌入代码--><a target="_blank" href="http://list.qq.com/cgi-bin/qf_invite?id=cd51c6966346e0f99d051042a4e333ff2c27e747e9bbec00"><img alt="填写您的邮件地址，订阅我们的精彩内容：" border="0" src="http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_light_l.png"/></a>
 
@@ -342,7 +240,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 
   
 </aside>
-
 
     </div>
   </div>

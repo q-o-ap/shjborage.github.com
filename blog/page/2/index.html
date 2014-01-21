@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和&#x61;&#64;&#x32;&#x78;&#x2e;&#x70;&#x6e;&#103;)， &hellip;">
+  <meta name="description" content="XCode 内置了 OCUnit 单元测试框架，但目前最好用的测试框架应该是 GHUnit。通过 GHUnit + OCMock 组合，我们可以在 iOS 下进行较强大的单元测试功能。本文将演示如何在 XCode 4.2 下使用 OCUnit， GHUnit 和 OCMock 进行单元测试。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,47 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">XCode下的iOS单元测试</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-12T09:34:00+08:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>XCode 内置了 OCUnit 单元测试框架，但目前最好用的测试框架应该是 GHUnit。通过 GHUnit + OCMock 组合，我们可以在 iOS 下进行较强大的单元测试功能。本文将演示如何在 XCode 4.2 下使用 OCUnit， GHUnit 和 OCMock 进行单元测试。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/">在iOS中使用icon Font及自定义字体</a></h1>
     
     
@@ -108,7 +149,7 @@
   </header>
 
 
-  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#97;&#64;&#x32;&#120;&#x2e;&#x70;&#x6e;&#103;">&#x61;&#64;&#x32;&#x78;&#x2e;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#x61;&#x40;&#50;&#x78;&#46;&#x70;&#110;&#x67;">&#97;&#x40;&#x32;&#x78;&#x2e;&#112;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -518,52 +559,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">深入浅出 Cocoa 多线程编程之 Block 与 Dispatch Quene</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-12T22:20:00+08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>深入浅出 Cocoa 多线程编程之 block 与 dispatch quene
-罗朝辉(<a href="http://blog.csdn.net/kesalin">http://blog.csdn.net/kesalin</a>)
-CC 许可，转载请注明出处</p>
-
-<p>block 是 Apple 在 GCC 4.2 中扩充的新语法特性，其目的是支持多核并行编程。我们可以将
-dispatch_queue 与 block 结合起来使用，方便进行多线程编程。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -597,7 +592,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (52)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (53)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -607,6 +602,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/">iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding</a>
@@ -622,10 +621,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a>
       </li>
     
   </ul>
