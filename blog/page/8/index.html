@@ -9,7 +9,11 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category可以用来调试 除了隐藏私有方法外，我主要用它截住函数。 例1：测试时我想知道TableViewCell有没有释放，就可以这样写 ">
+  <meta name="description" content="
+NSString property的属性必须是copy
+delegate property的属性是assign
+dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等
+init 和dealloc中不要用self.XX=; NSCoping ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +83,55 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Property 使用注意事项</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T11:04:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><ul>
+<li>NSString property的属性必须是copy</li>
+<li>delegate property的属性是assign</li>
+<li>dealloc 时，如果有delegate，要把delegate置成nilj,避免收到消息等</li>
+<li>init 和dealloc中不要用self.XX=;</li>
+</ul>
+
+
+<h4>NSCoping</h4>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -494,48 +547,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/28/operation-queue-obj-czhong-bing-fa-de-guan-li/">Operation Queue Obj-C中并发的管理</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-28T22:29:00+08:00" pubdate data-updated="true">Feb 28<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong><em>Operation</em></strong>是一种用面向对象封装的异步操作技术。operation即可以单独使用，也可与operation queue联合使用。因为是用Objective-C实现的，operation主要用于基于Cocoa的iOS/Mac OS X程序中。
-operation queue是Cocoa对&#8221;并发dispatch queue&#8221;（C语言API）的封装。虽然dispatch queue总是以先进先出的方式执行任务，operation queue会考虑诸如依赖关系，优先级等因素来执行任务。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/02/28/operation-queue-obj-czhong-bing-fa-de-guan-li/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -569,7 +580,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (53)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (54)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -579,6 +590,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
@@ -594,10 +609,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
       </li>
     
   </ul>

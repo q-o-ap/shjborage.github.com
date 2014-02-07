@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码
-其它密码也可使用同样方法获得 方法/步骤 1.打开“钥匙串访问” ">
+  <meta name="description" content="序：状态栏白边问题解决 在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可） 在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路 第一种：通过人为的办法改变view. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T16:28:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>序：状态栏白边问题解决</h4>
+
+<p>在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可）</p>
+
+<p>在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路</p>
+
+<h3>第一种：通过人为的办法改变view.transform的属性。</h3>
+
+<p>具体办法：</p>
+
+<p><code>view.transform</code>一般是View的旋转，拉伸移动等属性，类似<code>view.layer.transform</code>，区别在于<code>view.transform</code>是二维的，也就是使用仿射的办法通常就是带有前缀CGAffineTransform的类（可以到API文档里面搜索这个前缀的所有类），而<code>view.layer.transform</code>可以在3D模式下面的变化，通常使用的都是前缀为CATransform3D的类。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/zai-ying-yong-zhong-cong-shu-ping-mo-shi-qiang-zhi-zhuan-huan-wei-heng-ping-mo-shi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -541,52 +591,6 @@ MySQL中group_concat函数(SQLite或其它数据亦可)</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Xcode工程目录的 Folder 和 Group的区别(蓝色和黄色文件夹的区别)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-23T23:58:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，
-来上图看下吧</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/10374761534/" title="2013-09-23-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3670/10374761534_909069ee9e.jpg" width="281" height="329" alt="2013-09-23-1"></a></p>
-
-<p> 上图所示，蓝色的是folder 黄色的是group。 那么它们有什么区别呢？</p>
-
-<p> </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/23/xcodegong-cheng-mu-lu-de-folder-he-groupde-qu-bie-lan-se-he-huang-se-wen-jian-jia-de-qu-bie/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -620,7 +624,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (53)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (54)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -630,6 +634,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
@@ -645,10 +653,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/">解决iOS报错libc++abi.dylib handler threw exception</a>
       </li>
     
   </ul>

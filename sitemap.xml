@@ -389,12 +389,18 @@
         <lastmod>2014-01-21T21:36:17+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://saick.net/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/
+        </loc>
+        <lastmod>2014-02-07T18:07:01+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://saick.net/about.html</loc>
         <lastmod>2013-10-21T09:55:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/blog/archives/</loc>
-        <lastmod>2014-01-21T21:36:17+08:00</lastmod>
+        <lastmod>2014-02-07T18:07:01+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/friendlylink.html</loc>
@@ -406,7 +412,7 @@
     </url>
     <url>
         <loc>http://saick.net/</loc>
-        <lastmod>2014-01-21T21:36:17+08:00</lastmod>
+        <lastmod>2014-02-07T18:07:01+08:00</lastmod>
     </url>
     <url>
         <loc>http://saick.net/robots.txt</loc>
