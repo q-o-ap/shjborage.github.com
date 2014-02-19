@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-02-19T22:34:43+08:00</updated>
+  <updated>2014-02-19T22:49:31+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -146,6 +146,8 @@ dispatch_async(_queue, ^{
 
 <p>这样一个for循环，次数超过63就卡死了，啥也执行不了。
 还有，如果关掉<code>TMCacheStartBackgroundTask</code>，并且不使用<code>dispatch_semaphore_t</code>做异步转同步的处理（直接使用<code>[[TMCache sharedCache] setObject:value forKey:key block:NULL];</code>），就没啥问题了。</p>
+
+<p><a href="https://www.dropbox.com/s/59kdkfc3sm2gx1q/test_GCD.zip">测试工程</a></p>
 ]]></content>
   </entry>
   
