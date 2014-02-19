@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-02-17T01:05:30+08:00</updated>
+  <updated>2014-02-19T22:32:05+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,202 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[GCD的坑]]></title>
+    <link href="http://saick.net/blog/2014/02/19/gcdde-keng/"/>
+    <updated>2014-02-19T22:22:00+08:00</updated>
+    <id>http://saick.net/blog/2014/02/19/gcdde-keng</id>
+    <content type="html"><![CDATA[<p>最近用不少GCD的东西，相信很多童鞋也会被GCD的简便给吸引过来。
+但是这玩意使用起来，还是有不少的坑，列举出来，希望能对遇到的有用。</p>
+
+<!-- more -->
+
+
+<p>大多数时间没啥事，但是有时这样使用，就会带来问题了。见测试代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>  
+</span><span class='line'>    for (int i=0; i&lt;=100; i++) {
+</span><span class='line'>//    for (int i=0; i&lt;=62; i++) {
+</span><span class='line'>      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>        NSString *key = [NSString stringWithFormat:@"key%d", i];
+</span><span class='line'>        NSMutableDictionary *value = [NSMutableDictionary dictionary];
+</span><span class='line'>        for (int j=0; j&lt;1/*10000*/; j++) {
+</span><span class='line'>          NSString *subKey = [NSString stringWithFormat:@"subkey%d", j];
+</span><span class='line'>          int random = arc4random();
+</span><span class='line'>          [value setObject:[NSString stringWithFormat:@"%d", random] forKey:subKey];
+</span><span class='line'>        }
+</span><span class='line'>        
+</span><span class='line'>//        int j=100;
+</span><span class='line'>//        while (--j&gt;0) {
+</span><span class='line'>//          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>//            NSLog(@"sub");
+</span><span class='line'>//          });
+</span><span class='line'>//        }
+</span><span class='line'>        
+</span><span class='line'>//        [[TMCache sharedCache] setObject:value forKey:key];
+</span><span class='line'>        
+</span><span class='line'>        [[TMCache sharedCache] setObject:value forKey:key block:NULL];
+</span><span class='line'>        
+</span><span class='line'>//        TMDiskCache *cache = [[TMDiskCache alloc] initWithName:@"test.diskCache"];
+</span><span class='line'>//        [cache setObject:value forKey:key block:NULL];
+</span><span class='line'>        
+</span><span class='line'>        NSLog(@"%@", key);
+</span><span class='line'>      });
+</span><span class='line'>    }
+</span><span class='line'>  
+</span><span class='line'>//  });</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>TMCache setObject:forKey:</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)setObject:(id &lt;NSCoding&gt;)object forKey:(NSString *)key
+</span><span class='line'>{
+</span><span class='line'>    if (!object || !key)
+</span><span class='line'>        return;
+</span><span class='line'>    
+</span><span class='line'>    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+</span><span class='line'>
+</span><span class='line'>    [self setObject:object forKey:key block:^(TMCache *cache, NSString *key, id object) {
+</span><span class='line'>        dispatch_semaphore_signal(semaphore);
+</span><span class='line'>    }];
+</span><span class='line'>
+</span><span class='line'>    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+</span><span class='line'>
+</span><span class='line'>    #if !OS_OBJECT_USE_OBJC
+</span><span class='line'>    dispatch_release(semaphore);
+</span><span class='line'>    #endif
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>TMDiskCache 定义</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//#if __IPHONE_OS_VERSION_MIN_REQUIRED &gt;= __IPHONE_4_0 //这个是默认值
+</span><span class='line'>#if 0
+</span><span class='line'>    #define TMCacheStartBackgroundTask() UIBackgroundTaskIdentifier taskID = UIBackgroundTaskInvalid; \
+</span><span class='line'>            taskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{ \
+</span><span class='line'>            [[UIApplication sharedApplication] endBackgroundTask:taskID]; }];
+</span><span class='line'>    #define TMCacheEndBackgroundTask() [[UIApplication sharedApplication] endBackgroundTask:taskID];
+</span><span class='line'>#else
+</span><span class='line'>    #define TMCacheStartBackgroundTask()
+</span><span class='line'>    #define TMCacheEndBackgroundTask()
+</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>TMDiskCache 使用</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)setObject:(id &lt;NSCoding&gt;)object forKey:(NSString *)key block:(TMDiskCacheObjectBlock)block
+</span><span class='line'>{
+</span><span class='line'>    NSDate *now = [[NSDate alloc] init];
+</span><span class='line'>
+</span><span class='line'>    if (!key || !object)
+</span><span class='line'>        return;
+</span><span class='line'>
+</span><span class='line'>    TMCacheStartBackgroundTask();
+</span><span class='line'>
+</span><span class='line'>    __weak TMDiskCache *weakSelf = self;
+</span><span class='line'>
+</span><span class='line'>    dispatch_async(_queue, ^{
+</span><span class='line'>        TMDiskCache *strongSelf = weakSelf;
+</span><span class='line'>        if (!strongSelf) {
+</span><span class='line'>            TMCacheEndBackgroundTask();
+</span><span class='line'>            return;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>      ...
+</span><span class='line'>     
+</span><span class='line'>        TMCacheEndBackgroundTask();
+</span><span class='line'>    });
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样一个for循环，次数超过63就卡死了，啥也执行不了。
+还有，如果关掉<code>TMCacheStartBackgroundTask</code>，并且不使用<code>dispatch_semaphore_t</code>做异步转同步的处理（直接使用<code>[[TMCache sharedCache] setObject:value forKey:key block:NULL];</code>），就没啥问题了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Objective-C&amp;XCode注释的正确写法]]></title>
@@ -1558,7 +1754,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#58;&#x61;&#64;&#50;&#120;&#46;&#x70;&#110;&#x67;">&#x61;&#x40;&#x32;&#120;&#46;&#x70;&#x6e;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#97;&#x40;&#x32;&#120;&#46;&#112;&#x6e;&#x67;">&#x61;&#x40;&#50;&#x78;&#46;&#112;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -2630,89 +2826,6 @@ Apple的工程师很有爱，发明了这种哭笑不得的象形文字。感觉
 <h3>总结</h3>
 
 <p>如果你不想花费时间成为一个更好的程序员，那么你可能要重新考虑下为什么你把成为一个程序员摆在首位。但如果你会因为一个可以帮你的新类库或者开发工具而兴奋，那么随着时间的流逝，你在提高自身技能方面可能不会有什么问题。你真的必须热爱你所做的事情，并在这面擅长，这一点尤其适用于编程。不管什么人告诉你，你不会在一夜之间成为一个老练的开发者，但如果你保持不间断的学习，并细心打磨自己的“手艺”，我想你的技术会有很好的提高。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS Quick Tip: 7 Tips to Speed Up Your Development]]></title>
-    <link href="http://saick.net/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/"/>
-    <updated>2013-11-23T16:18:00+08:00</updated>
-    <id>http://saick.net/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development</id>
-    <content type="html"><![CDATA[<p><a href="http://mobile.tutsplus.com/tutorials/iphone/ios-quick-tip-7-tips-to-speed-up-your-development/">origin</a></p>
-
-<p>Most developers are always looking for ways to improve or automate their workflow being it with a simple script to automate a common task or by learning every possible keyboard shortcut of their favorite text editor. In this article, I will show you seven tips that will speed up and streamline your workflow in Xcode.</p>
-
-<!-- more -->
-
-
-<h3>1. Keyboard Shortcuts</h3>
-
-<p>Virtually every Xcode command has a keyboard shortcut that you can learn and even customize. Investing the time to learn keyboard shortcuts will increase your efficiency tremendously. If you are like me, and a lot of other developers, you prefer to keep your hands on the keyboard when you’re writing code and that is exactly what most key bindings are for.</p>
-
-<p>If you don’t like the default keyboard shortcuts, then you’ll be happy to learn that you can customize Xcode’s default keyboard shortcuts in the <strong>Preferences</strong> window under the <strong>Key Bindings</strong> tab.</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/11006344093/" title="2013-11-23-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3817/11006344093_814a28a77f.jpg" width="500" height="367" alt="2013-11-23-1"></a>
-iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Managing Key Bindings in Xcode&rsquo;s Preferences Window</p>
-
-<p>If you don’t want to scroll through the long list of keyboard shortcuts to learn the most important ones, then I recommend browsing through this <a href="http://stackoverflow.com/questions/146297/hidden-features-of-xcode">question on Stack Overflow</a>. It lists the most important key bindings in Xcode and also includes a number of other neat tips and tricks.</p>
-
-<h3>2. Cocoapods</h3>
-
-<p>Cocoapods, a great project started by Eloy Durán, has gained significant traction in the Cocoa community. What is Cocoapods? Cocoapods is a tool for managing dependencies in Xcode projects. Due to Cocoapods’ popularity, hundreds of third party libraries have been updated to support Cocoapods. Even though Cocoapods is distributed as a Ruby gem, you don’t need to understand Ruby to benefit from Cocoapods.</p>
-
-<p>If you are tired of manually managing third party libraries in your iOS or OS X projects, or you’re looking for a solution that makes updating third party libraries easier, then Cocoapods is the best solution available. If you want to learn about Cocoapods, then I recommend reading <a href="http://mobile.tutsplus.com/tutorials/iphone/streamlining-cocoa-development-with-cocoapods/">a post about Cocoapods</a> that I wrote earlier this year. It will get you up and running in minutes.</p>
-
-<h3>3. Code Snippets</h3>
-
-<p>Chances are that you use a text or code snippet manager, such as <strong>TextExpander</strong> or <strong>CodeBox</strong>. I use TextExpander all the time and it has saved me countless keystrokes over the years. <em>I use Dash to manage my document sets and code snippets.</em> However, Xcode also has a snippet manager. It lives in Xcode’s right sidebar next to the Object Library.</p>
-
-<p>Why should you use Xcode’s snippet manager instead of the alternatives I mentioned earlier? In Xcode, each snippet has a number of additional attributes that really make snippets powerful and flexible. Each snippet has a Platform and Language attribute as well as a completion scope. A snippet’s completion scope is especially useful and integrates neatly with Xcode’s editor. Did I mention that each snippet can have multiple placeholders?</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/11006222706/" title="2013-11-23-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7364/11006222706_6e4d20315d.jpg" width="500" height="212" alt="2013-11-23-2"></a></p>
-
-<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Creating and Managing Code Snippets is Very Easy in Xcode</p>
-
-<h3>4. Learn Git</h3>
-
-<p>If you’ve just started to learn how to program and the concept source control is new to you, then I strongly recommend that you take some time to learn the basics of Git. Git is <a href="http://en.wikipedia.org/wiki/Git_(software">a distributed version control and source code management system</a>). Euh … what? In short, Git helps you manage your source code easily and efficiently. Combine Git with GitHub or BitBucket and you are starting to look like a professional programmer. The added benefit is that Xcode integrates nicely with Git and this integration will only improve over time.</p>
-
-<p>Once you’ve learned the basics of Git, it is recommended to include a proper .gitignore file in your Xcode project. A good place to start is this question on Stack Overflow.</p>
-
-<p>Even though Git is commonly used through the command line, there are a number of applications that provide a GUI (Graphical User Interface). My favorite is <a href="http://www.git-tower.com/">Tower</a>, developed by Fournova, which recently reached version 1.5. Atlassian‘s <a href="https://www.atlassian.com/software/sourcetree/overview">SourceTree</a> is another great and free alternative.</p>
-
-<h3>5. Xcode Behaviors</h3>
-
-<p>Xcode is an incredibly powerful editor and it only gets better over the years. One of the aspects that I use frequently is Xcode’s <strong>Behaviors</strong> feature. By defining behaviors, you can tell Xcode what it should do when a particular event occurs, such as when a crash occurs while debugging or when you’ve successfully archived an application.</p>
-
-<p>You can configure these behaviors in Xcode’s Preferences Window. If you don’t like it when Xcode shows the console when output is generated, you can disable this behavior in the <strong>Behaviors</strong> panel. Do you want Xcode to show the <strong>Issues Navigator</strong> when one or more tests fail? This is all possible with Xcode Behaviors.</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/11006291054/" title="2013-11-23-3 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3812/11006291054_0794190295.jpg" width="500" height="367" alt="2013-11-23-3"></a></p>
-
-<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; Managing Behaviors in Xcode&rsquo;s Preferences Window</p>
-
-<p>Xcode predefines a number of common behaviors for you, such as Build, Testing, and Running. However, you can also define custom behaviors and assign a keyboard shortcut to it. This is a convenient way to set up Xcode the way you want with a single key binding.</p>
-
-<h3>6. Tabs and Windows</h3>
-
-<p>I really like the unified look of Xcode 4 and the integration of Interface Builder. However, it is sometimes useful to have more than one window at hand, for example, when you are working in the console and the editor at the same time or you use multiple monitors. In Xcode 4, it is still possible to work with multiple windows. You can create a new window using the keyboard shortcut <code>Shift + Cmd + T</code> or use the menu, <strong>File > New > Window</strong>.</p>
-
-<p>Even more useful are tabs. Almost every code editor has tabs these days and Xcode is no exception. I rarely find myself in an Xcode window that has no, or one, tab. What few people know is that Xcode tabs can be named. You can even tie named tabs and Xcode behaviors together, which is especially useful during debugging.</p>
-
-<h3>7. Documentation</h3>
-
-<p>Even if you’ve been developing Cocoa applications for years, the documentation should never be more than a click away. There are a number of ways to quickly access Xcode’s documentation browser. The solution I use most often is holding the option key and clicking a method in Xcode’s code editor. This presents you with a summary of the particular method. If you want to read more or open the documentation browser, you can click one of the links in the pop up window.</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/11006118705/" title="2013-11-23-4 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7341/11006118705_ee2259bfdf.jpg" width="500" height="309" alt="2013-11-23-4"></a></p>
-
-<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; The Documentation is Your Friend</p>
-
-<p>You can achieve the same by opening Xcode’s right sidebar and open the Quick Help Inspector tab. The help inspector updates as the cursor moves. As with the pop up window, clicking on one of the links in the help inspector takes you to the respective section in the documentation in the documentation browser.</p>
-
-<p><a href="http://www.flickr.com/photos/105999540@N03/11006118685/" title="2013-11-23-5 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3782/11006118685_ec1975ac10.jpg" width="500" height="422" alt="2013-11-23-5"></a></p>
-
-<p>iOS Quick Tip: 5 Tips to Speed Up Your Development &ndash; The Quick Help Inspector</p>
-
-<p>One of the downsides of Xcode’s documentation browser is that it can be slow at times. For this reason, I frequently use Dash, a dedicated documentation and snippet manager. Dash is very fast and provides support for more than eighty languages, libraries, frameworks, and APIs. It is well worth checking out.</p>
 ]]></content>
   </entry>
   

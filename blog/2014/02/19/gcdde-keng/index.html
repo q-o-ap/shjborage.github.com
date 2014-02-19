@@ -5,11 +5,30 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>多参数selector - Saick Blog</title>
+  <title>GCD的坑 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 &hellip;">
+  <meta name="description" content="最近用不少GCD的东西，相信很多童鞋也会被GCD的简便给吸引过来。
+但是这玩意使用起来，还是有不少的坑，列举出来，希望能对遇到的有用。 大多数时间没啥事，但是有时这样使用，就会带来问题了。见测试代码： 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +37,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/14/duo-can-shu-selector/">
+  <link rel="canonical" href="http://saick.net/blog/2014/02/19/gcdde-keng/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +101,7 @@
   
   <header>
     
-      <h1 class="entry-title">多参数selector</h1>
+      <h1 class="entry-title">GCD的坑</h1>
     
     
       <p class="meta">
@@ -98,19 +117,20 @@
   
 
 
-<time datetime="2013-10-14T16:09:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+<time datetime="2014-02-19T22:22:00+08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 performSelector可以支持传入参数数组。多个参数就不再是问题了。</p>
+<div class="entry-content"><p>最近用不少GCD的东西，相信很多童鞋也会被GCD的简便给吸引过来。
+但是这玩意使用起来，还是有不少的坑，列举出来，希望能对遇到的有用。</p>
 
 <!-- more -->
 
 
-
+<p>大多数时间没啥事，但是有时这样使用，就会带来问题了。见测试代码：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -144,41 +164,154 @@
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface NSObject (Addition)
-</span><span class='line'>- (id)performSelector:(SEL)selector withObjects:(NSArray *)objects;
-</span><span class='line'>@end
-</span><span class='line'>
-</span><span class='line'>@implementation NSObject (Addition)
-</span><span class='line'>- (id)performSelector:(SEL)selector withObjects:(NSArray *)objects { 
-</span><span class='line'>    NSMethodSignature *signature = [self methodSignatureForSelector:selector]; 
-</span><span class='line'>    if (signature) { 
-</span><span class='line'>        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:signature]; 
-</span><span class='line'>        [invocation setTarget:self]; 
-</span><span class='line'>        [invocation setSelector:selector]; 
+</pre></td><td class='code'><pre><code class=''><span class='line'>//  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>  
+</span><span class='line'>    for (int i=0; i&lt;=100; i++) {
+</span><span class='line'>//    for (int i=0; i&lt;=62; i++) {
+</span><span class='line'>      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>        NSString *key = [NSString stringWithFormat:@"key%d", i];
+</span><span class='line'>        NSMutableDictionary *value = [NSMutableDictionary dictionary];
+</span><span class='line'>        for (int j=0; j&lt;1/*10000*/; j++) {
+</span><span class='line'>          NSString *subKey = [NSString stringWithFormat:@"subkey%d", j];
+</span><span class='line'>          int random = arc4random();
+</span><span class='line'>          [value setObject:[NSString stringWithFormat:@"%d", random] forKey:subKey];
+</span><span class='line'>        }
 </span><span class='line'>        
-</span><span class='line'>        for(int i = 0; i &lt; [objects count]; i++){ 
-</span><span class='line'>            id object = [objects objectAtIndex:i]; 
-</span><span class='line'>            [invocation setArgument:&object atIndex: (i + 2)];        
-</span><span class='line'>        } 
-</span><span class='line'>
-</span><span class='line'>        [invocation invoke]; 
-</span><span class='line'>
-</span><span class='line'>        if (signature.methodReturnLength) { 
-</span><span class='line'>            id anObject; 
-</span><span class='line'>            [invocation getReturnValue:&anObject]; 
-</span><span class='line'>            return anObject; 
-</span><span class='line'>        } else { 
-</span><span class='line'>            return nil; 
-</span><span class='line'>        } 
-</span><span class='line'>    } else { 
-</span><span class='line'>        return nil; 
-</span><span class='line'>    } 
-</span><span class='line'>} 
-</span><span class='line'>
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>//        int j=100;
+</span><span class='line'>//        while (--j&gt;0) {
+</span><span class='line'>//          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>//            NSLog(@"sub");
+</span><span class='line'>//          });
+</span><span class='line'>//        }
+</span><span class='line'>        
+</span><span class='line'>//        [[TMCache sharedCache] setObject:value forKey:key];
+</span><span class='line'>        
+</span><span class='line'>        [[TMCache sharedCache] setObject:value forKey:key block:NULL];
+</span><span class='line'>        
+</span><span class='line'>//        TMDiskCache *cache = [[TMDiskCache alloc] initWithName:@"test.diskCache"];
+</span><span class='line'>//        [cache setObject:value forKey:key block:NULL];
+</span><span class='line'>        
+</span><span class='line'>        NSLog(@"%@", key);
+</span><span class='line'>      });
+</span><span class='line'>    }
+</span><span class='line'>  
+</span><span class='line'>//  });</span></code></pre></td></tr></table></div></figure>
 
 
-<p>本文出自 “林家男孩” 博客，请务必保留此出处<a href="http://bj007.blog.51cto.com/1701577/538995">http://bj007.blog.51cto.com/1701577/538995</a></p>
+<p><em>TMCache setObject:forKey:</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)setObject:(id &lt;NSCoding&gt;)object forKey:(NSString *)key
+</span><span class='line'>{
+</span><span class='line'>    if (!object || !key)
+</span><span class='line'>        return;
+</span><span class='line'>    
+</span><span class='line'>    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+</span><span class='line'>
+</span><span class='line'>    [self setObject:object forKey:key block:^(TMCache *cache, NSString *key, id object) {
+</span><span class='line'>        dispatch_semaphore_signal(semaphore);
+</span><span class='line'>    }];
+</span><span class='line'>
+</span><span class='line'>    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+</span><span class='line'>
+</span><span class='line'>    #if !OS_OBJECT_USE_OBJC
+</span><span class='line'>    dispatch_release(semaphore);
+</span><span class='line'>    #endif
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>TMDiskCache 定义</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//#if __IPHONE_OS_VERSION_MIN_REQUIRED &gt;= __IPHONE_4_0 //这个是默认值
+</span><span class='line'>#if 0
+</span><span class='line'>    #define TMCacheStartBackgroundTask() UIBackgroundTaskIdentifier taskID = UIBackgroundTaskInvalid; \
+</span><span class='line'>            taskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{ \
+</span><span class='line'>            [[UIApplication sharedApplication] endBackgroundTask:taskID]; }];
+</span><span class='line'>    #define TMCacheEndBackgroundTask() [[UIApplication sharedApplication] endBackgroundTask:taskID];
+</span><span class='line'>#else
+</span><span class='line'>    #define TMCacheStartBackgroundTask()
+</span><span class='line'>    #define TMCacheEndBackgroundTask()
+</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>TMDiskCache 使用</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)setObject:(id &lt;NSCoding&gt;)object forKey:(NSString *)key block:(TMDiskCacheObjectBlock)block
+</span><span class='line'>{
+</span><span class='line'>    NSDate *now = [[NSDate alloc] init];
+</span><span class='line'>
+</span><span class='line'>    if (!key || !object)
+</span><span class='line'>        return;
+</span><span class='line'>
+</span><span class='line'>    TMCacheStartBackgroundTask();
+</span><span class='line'>
+</span><span class='line'>    __weak TMDiskCache *weakSelf = self;
+</span><span class='line'>
+</span><span class='line'>    dispatch_async(_queue, ^{
+</span><span class='line'>        TMDiskCache *strongSelf = weakSelf;
+</span><span class='line'>        if (!strongSelf) {
+</span><span class='line'>            TMCacheEndBackgroundTask();
+</span><span class='line'>            return;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>      ...
+</span><span class='line'>     
+</span><span class='line'>        TMCacheEndBackgroundTask();
+</span><span class='line'>    });
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样一个for循环，次数超过63就卡死了，啥也执行不了。
+还有，如果关掉<code>TMCacheStartBackgroundTask</code>，并且不使用<code>dispatch_semaphore_t</code>做异步转同步的处理（直接使用<code>[[TMCache sharedCache] setObject:value forKey:key block:NULL];</code>），就没啥问题了。</p>
 </div>
 
 
@@ -201,7 +334,7 @@
   
 
 
-<time datetime="2013-10-14T16:09:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+<time datetime="2014-02-19T22:22:00+08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
       
 
 <span class="categories">
@@ -219,7 +352,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/14/duo-can-shu-selector/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/14/duo-can-shu-selector/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/02/19/gcdde-keng/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/02/19/gcdde-keng/" >Tweet</a>
   
   
   
@@ -246,10 +379,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/" title="Previous Post: iOS7 初步适配，与iOS6共存">&laquo; iOS7 初步适配，与iOS6共存</a>
+        <a class="basic-alignment left" href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/" title="Previous Post: Objective-C&amp;XCode注释的正确写法">&laquo; Objective-C&amp;XCode注释的正确写法</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/" title="Next Post: 怎么查看在mac上连接过的wifi密码">怎么查看在mac上连接过的wifi密码 &raquo;</a>
       
     </p>
   </footer>

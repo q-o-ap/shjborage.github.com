@@ -9,7 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="序：状态栏白边问题解决 在旋转前，先隐藏掉状态栏，再设置相关的Frame。（别犯低级错误即可） 在 iPhone 应用里，有时我们想强行把显示模式从纵屏改为横屏（反之亦然），CocoaChina 会员 “alienblue” 为我们提供了两种思路 第一种：通过人为的办法改变view. &hellip;">
+  <meta name="description" content="在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
+在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。 1.在XCode中使用一个通用断点 在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">iOS应用处理崩溃的几种方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-16T23:31:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
+在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
+
+<h3>1.在XCode中使用一个通用断点</h3>
+
+<p>在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception BreakPoint”。点done即可。</p>
+
+<h3>2.开启NSZombieEnabled等调试选项</h3>
+
+<p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
+在Environment Variables中增加下面属性并都配置为YES。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -544,53 +596,6 @@ As I got further into the customization of the buttons, I ran into a method with
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Group_concat函数详解</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-24T00:06:00+08:00" pubdate data-updated="true">Sep 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>问了好多人，都不知道group_concat这个函数。
-这个函数好啊，能将相同的行组合起来，省老事了。
-MySQL中group_concat函数(SQLite或其它数据亦可)</p>
-
-<p>完整的语法如下：</p>
-
-<p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
-
-<p> </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/24/group-concathan-shu-xiang-jie/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -624,7 +629,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (54)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (55)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -634,6 +639,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/19/gcdde-keng/">GCD的坑</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
@@ -649,10 +658,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">iOS客户端的gzip处理-gzip-ungzip</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a>
       </li>
     
   </ul>
