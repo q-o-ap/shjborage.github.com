@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Django学习资源以及相关备注 - Saick Blog</title>
+  <title>Category: Interview - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="对于我这个python新手，还是用Django入门比较容易一些，以后熟悉了可以再考虑换别的 Django 相关教程： Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点
-基于 Django 框架的敏捷 Web 开发 上面这俩有点老，参考一下即可。 &hellip;">
+  <meta name="description" content="Category: Interview">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/">
+  <link rel="canonical" href="http://saick.netblog/categories/interview/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,177 +78,36 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Django学习资源以及相关备注</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-24T23:01:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Interview</h1>
     
   </header>
-
-
-<div class="entry-content"><p>对于我这个python新手，还是用Django入门比较容易一些，以后熟悉了可以再考虑换别的</p>
-
-<p>Django 相关教程：</p>
-
-<p><a href="http://www.ibm.com/developerworks/cn/linux/l-django/">Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点</a><br/>
-<a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-django/index.html">基于 Django 框架的敏捷 Web 开发</a></p>
-
-<p>上面这俩有点老，参考一下即可。</p>
-
-<!-- more -->
-
-
-<p><a href="http://haoluobo.com/trac/wiki/Django">http://haoluobo.com/trac/wiki/Django</a></p>
-
-<p>这哥们跟Django好像关系不错，收集了很多东西，起来帮助很大。不过有些链接进去也是广告N多，那种一看就是垃圾站。那个2010年版的Django Step by Step就是那样。</p>
-
-<p>Django book 2.0 的中文翻译<br/>
-<a href="http://djangobook.py3k.cn/2.0/">http://djangobook.py3k.cn/2.0/</a></p>
-
-<p>这本书是我先看的，效果过段时间写入评论吧。
-有些比较重要的，还是写到博文里吧，方便搜索。</p>
-
-<h2>Django book 2.0 的中文翻译 读书笔记</h2>
-
-<h3>模板使用方法及注意事项</h3>
-
-<p>你可以根据需要使用任意多的继承次数。 使用继承的一种常见方式是下面的三层法：</p>
-
-<ul>
-<li>1.创建 base.html 模板，在其中定义站点的主要外观感受。 这些都是不常修改甚至从不修改的部分。</li>
-<li>2.为网站的每个区域创建 base_SECTION.html 模板(例如, base_photos.html 和 base_forum.html )。这些模板对 base.html 进行拓展，并包含区域特定的风格与设计。</li>
-<li>3.为每种类型的页面创建独立的模板，例如论坛页面或者图片库。 这些模板拓展相应的区域模板。</li>
-</ul>
-
-
-<p>这个方法可最大限度地重用代码，并使得向公共区域（如区域级的导航）添加内容成为一件轻松的工作。</p>
-
-<p>以下是使用模板继承的一些诀窍：</p>
-
-<ul>
-<li>如果在模板中使用 ｛% extends %｝ ，必须保证其为模板中的第一个模板标记。 否则，模板继承将不起作用。</li>
-<li><p>一般来说，基础模板中的 ｛% block %｝ 标签越多越好。 记住，子模板不必定义父模板中所有的代码块，因此你可以用合理的缺省值对一些代码块进行填充，然后只对子模板所需的代码块进行（重）定义。 俗话说，钩子越多越好。</p></li>
-<li><p>如果发觉自己在多个模板之间拷贝代码，你应该考虑将该代码段放置到父模板的某个 ｛% block %｝ 中。</p></li>
-<li><p>如果你需要访问父模板中的块的内容，使用 ｛｛ block.super ｝｝这个标签吧，这一个魔法变量将会表现出父模板中的内容。 如果只想在上级代码块基础上添加内容，而不是全部重载，该变量就显得非常有用了。</p></li>
-<li><p>不允许在同一个模板中定义多个同名的 ｛% block %｝ 。 存在这样的限制是因为block 标签的工作方式是双向的。 也就是说，block 标签不仅挖了一个要填的坑，也定义了在父模板中这个坑所填充的内容。如果模板中出现了两个相同名称的 ｛% block %｝ 标签，父模板将无从得知要使用哪个块的内容。</p></li>
-<li><p>｛% extends %｝ 对所传入模板名称使用的加载方法和 get_template() 相同。 也就是说，会将模板名称被添加到 TEMPLATE_DIRS 设置之后。</p></li>
-<li><p>多数情况下， ｛% extends %｝ 的参数应该是字符串，但是如果直到运行时方能确定父模板名，这个参数也可以是个变量。 这使得你能够实现一些很酷的动态功能。</p></li>
-</ul>
-
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2014</h2>
+
+<article>
+  
+<h1><a href="/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/">二分查找最大的坑</a></h1>
+<time datetime="2014-03-06T00:35:00+08:00" pubdate><span class='month'>Mar</span> <span class='day'>06</span> <span class='year'>2014</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/interview/'>Interview</a></span>
+</footer>
 
 
-<time datetime="2013-10-24T23:01:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/python/'>python</a>
-  
-</span>
-
-  
-    </p>
-    <p class="meta">
-	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
-    </p>
-    
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/10/24/djangoxue-xi-zi-yuan-yi-ji-xiang-guan-bei-zhu/" >Tweet</a>
-  
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-  
-  
-  <!-- JiaThis Button BEGIN -->
-  <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_googleplus">Google+</a>
-    <a class="jiathis_button_renren">人人网</a>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-  </div>
-  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
-  <!-- JiaThis Button END -->
-
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/" title="Previous Post: Mac OS X: 停止响应的处理（包含强制重启机器）">&laquo; Mac OS X: 停止响应的处理（包含强制重启机器）</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/" title="Next Post: Mac OS X添加PATH环境变量">Mac OS X添加PATH环境变量 &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section id="comment">
-    <h1>Comments</h1>
-    
-<!-- Duoshuo Comment BEGIN -->
-    <div class="ds-thread"></div>
-    <script type="text/javascript">
-    var duoshuoQuery = {short_name:"saick"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = 'http://static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-        || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-<!-- Duoshuo Comment END -->
+</div>
 
-  </section>
+  
+</article>
 
 
 
