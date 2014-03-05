@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-02-22T22:58:13+08:00</updated>
+  <updated>2014-03-06T00:47:09+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,106 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[二分查找最大的坑]]></title>
+    <link href="http://saick.net/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/"/>
+    <updated>2014-03-06T00:35:00+08:00</updated>
+    <id>http://saick.net/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng</id>
+    <content type="html"><![CDATA[<p>二分法大家都不陌生，每当找工作面试都得看看，被问几遍。但最近从大神那儿了解到这里面最大的坑，写出来让更多的人能受益。</p>
+
+<!-- more -->
+
+
+<p>先贴上很久前对着算法导论上写的算法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>int compare(int x, int y) {
+</span><span class='line'>  return (x &gt; y ? 1 : (x == y ? 0 : -1));
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>int binary_search(int list[], int nFind, int nLeft, int nRight) {
+</span><span class='line'>  int nMiddle = 0;
+</span><span class='line'>//    while (nLeft &lt;= nRight) {
+</span><span class='line'>  if (nLeft &lt;= nRight) {
+</span><span class='line'>      nMiddle =  (nLeft + nRight)/2;
+</span><span class='line'>      switch (compare(list[nMiddle], nFind)) {
+</span><span class='line'>          case 0:
+</span><span class='line'>              {
+</span><span class='line'>                  return nMiddle;
+</span><span class='line'>              }
+</span><span class='line'>              break;
+</span><span class='line'>          case -1:
+</span><span class='line'>              {
+</span><span class='line'>          //      nLeft = nMiddle + 1;
+</span><span class='line'>                  return binary_search(list, nFind, nMiddle+1, nRight);
+</span><span class='line'>              }
+</span><span class='line'>              break;
+</span><span class='line'>          case 1:
+</span><span class='line'>              {
+</span><span class='line'>          //      nRight = nMiddle - 1;
+</span><span class='line'>                  return binary_search(list, nFind, nLeft, nMiddle-1);
+</span><span class='line'>              }
+</span><span class='line'>      }
+</span><span class='line'>  }
+</span><span class='line'>  return -1;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>正常的写法，递归的都有了。</p>
+
+<p>一直这么写，没觉得哪有啥不对。 再仔细看看？？</p>
+
+<p><code>nMiddle =  (nLeft + nRight)/2;</code></p>
+
+<p>看出来了么？
+还没有？</p>
+
+<p>引用：<a href="http://blog.csdn.net/gangbo_5958196/article/details/9135167">http://blog.csdn.net/gangbo_5958196/article/details/9135167</a></p>
+
+<p>这是一个经典的话题，如何计算二分查找中的中值？试卷中，大家一般给出了两种计算方法：</p>
+
+<ul>
+<li>算法一： mid = (low + high) / 2</li>
+<li>算法二： mid = low + (high – low)/2</li>
+</ul>
+
+
+<p>乍看起来，算法一简洁，算法二提取之后，跟算法一没有什么区别。但是实际上，区别是存在的。算法一的做法，在极端情况下，(low + high)存在着溢出的风险，进而得到错误的mid结果，导致程序错误。而算法二能够保证计算出来的mid，一定大于low，小于high，不存在溢出的问题。
+回到数据库二分查找，数据库的一个索引页面(大小一般是8k或者是16k)，能够存储的索引记录是有限的，因此肯定不会出现(low + high)溢出的风险。这也是为什么InnoDB中的中值，采用的就是算法一的实现。但是，作为一个严谨的程序设计人员，还是推荐使用算法二，将任何潜在的风险，扼杀于摇篮之中。</p>
+
+<p><strong>所以</strong>，正确的写法应该是<code>mid = low + (high – low)/2</code>或 <code>mid = low + (high – low)&gt;&gt;1</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[GCD的坑]]></title>
@@ -1756,7 +1856,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#x61;&#x40;&#50;&#x78;&#46;&#x70;&#110;&#x67;">&#97;&#x40;&#50;&#120;&#46;&#112;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x61;&#x40;&#50;&#x78;&#46;&#x70;&#x6e;&#103;">&#97;&#x40;&#x32;&#120;&#x2e;&#112;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -2774,60 +2874,6 @@ Apple的工程师很有爱，发明了这种哭笑不得的象形文字。感觉
 <p><em>最后一个问题：可以试一下self.view=自定义的视图； 不要用[self.view addSubview:&hellip;];</em></p>
 
 <p><a href="https://www.dropbox.com/s/vizq53ig4e1z7io/20131123_AutoLayoutTest.zip">demo</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发：从新手到专家的一些建议]]></title>
-    <link href="http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi/"/>
-    <updated>2013-11-23T17:32:00+08:00</updated>
-    <id>http://saick.net/blog/2013/11/23/ioskai-fa-cong-xin-shou-dao-zhuan-jia-de-xie-jian-yi</id>
-    <content type="html"><![CDATA[<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1118/7371.html">Origin</a></p>
-
-<p>虽然你有可能在一周内学习到iOS开发的本质，但想要精通iOS开发需则要花费更长的时间。问题是你如何从新手变成专家？在这篇文章中，我们主要就这个主题给出一些建议（如果你有好的建议和相关文章欢迎分享给更多开发者）</p>
-
-<!-- more -->
-
-
-<h3>1.练习，练习还是练习</h3>
-
-<p>iOS开发没有捷径可走。这是我在继续这个话题之前需要强调的东西，因为摆脱任何常常浮现于你脑海的幻想很重要。如果你仅仅在星期天的4PM和5PM之间学习/练习编程，那么你不会成为一个熟练的iOS开发者。不要误会我的意思，这么做可能会很有趣，但是它很难让你成为一个老练的专业的iOS开发者。除了极少数的人，大部分人都需要不断的练习和实践。如果你还没有准备好投入大量时间，这时候最好重新审视你的目标和理想。</p>
-
-<h3>2.向其他人学习</h3>
-
-<p>提升开发技能和采用最佳实践的最好策略之一是学习别人的代码。这不仅仅意味着浏览Stack Overflow，但更重要的是其他开发者的各种开源类库和代码片段。</p>
-
-<p>不管何时你一头扎进各种类库的学习，比如AFNetworking或者Magical Record，很关键的一点是不要被各种代码淹没。有可能你不理解各种库中的代码，但这不是真正的关键，重点是从一个更高的层次来看源码和尽可能多地学习，比如<em>命名规范</em>、<em>最佳实践</em>&amp;以及<em>设计模式</em>等。</p>
-
-<p>除了学习别人的代码外，创建你自己的类库是一个最好的学习方法。不久前，我用Core Data作为数据层开发了一款app，我没有使用Magical Record，我决定通过学习Magical Record创建自己的库，并重新创建了我需要的功能。这种方法不仅帮我创建了一个更加灵活的库，也让我学习到很多Magical Record内部的工作原理。</p>
-
-<h3>3. 不要仅仅复制和粘贴</h3>
-
-<p>这一点让我看到了正确学习方式的另一个关键面：不要不动脑子简单地复制和粘贴。我们常常会使用我们在Stack Overflow或者苹果开发者论坛找到的各种代码片段，但是不要为了偷懒简单地复制粘贴你从网络上找到的代码，这样你很难彻底理解它。最大的危险在于这可能会导致意外的行为，以致于你的代码以后都很难调试和修复。</p>
-
-<p>有时候，复制别人的代码片段看着可能已经解决了你遇到的问题，但是我强烈建议不要这么做。阅读代码，理解你往代码库添加的东西，可能的话定制你需要的解决方案。不用说，这并不适用于开发者积极维护的库或框架。在项目中使用Magical Record前，如果你需要仔细检查它，那么我确信你已经理解了不同之处。使用你自己的常识。</p>
-
-<h3>4. 模式</h3>
-
-<p>Cocoa和Objective-C在很多方面都不同于其他编程语言和环境。这意味着他们有自己独特的模式和最佳实践。我确信你已经熟悉了一些常见的模式，比如委托和通知。但还有很多模式可以开发过程中帮助你，比如单例模式、观察者模式以及通用模式等。Cocoa Fundamentals Guide很好地概述了Cocoa中大部分常用模式。</p>
-
-<h3>5.了解你的工具</h3>
-
-<p>作为一个开发者并不仅仅是理解语言和框架，理解你每天使用的工具同样重要。对于iOS开发来说，这意味着你需要很好地理解Xcode和其他可能用到的工具，比如PonyDebugger和Charles。如果你想学习一些额外的技巧，你可能会对我此前的一篇文章（iOS Quick Tip: 7 Tips to Speed Up Your Development）感兴趣。</p>
-
-<h3>6.与时俱进</h3>
-
-<p>即使你不能参加苹果一年一度的开发者大会&mdash;WWDC，但浏览大量的会议视频是个很好的学习方法，你可以观看你感兴趣的专题视频，它们都是由在某方面擅长的工程师演讲，他们可以告诉你一些细节信息以及相关使用说明。另外，你还可以多关注优秀的开发者，他们会定期写一些技术文章，比如比如Matt Gemmell、 Aaron Hillegass以及Mike Ash，你可以在我为Mobiletuts+写的这篇“Where To Go Next”文章中找到更多学习资源。</p>
-
-<h3>7.学习其他语言</h3>
-
-<p>我已经注意到学习新语言或者使用新框架让我对软件开发的整体理解有了明显提高。这种方法的优点在于不会限制你对最熟悉语言的认知和它潜在可能性的理解。我最近在研究Ember.js，并了解到它的创建者 Yehuda Katz和Tom Dale是从Cocoa获得的灵感。Ember.js对mvc的实现并没有遵循JavaScript framework，不过如果你熟悉cocoa的话，就不会感觉到奇怪了。</p>
-
-<p>对于软件开发来说，没有最好的语言，每种语言都有自己的优势和劣势。但是好的一面在于或多或少他们都有所不同，这使得学习新语言变得更加有趣和更有启发性。比如对我来说，Ruby在写DRY (Don’t Repeat Yourself)、易读的、干净的代码方面让我大开眼界。</p>
-
-<h3>总结</h3>
-
-<p>如果你不想花费时间成为一个更好的程序员，那么你可能要重新考虑下为什么你把成为一个程序员摆在首位。但如果你会因为一个可以帮你的新类库或者开发工具而兴奋，那么随着时间的流逝，你在提高自身技能方面可能不会有什么问题。你真的必须热爱你所做的事情，并在这面擅长，这一点尤其适用于编程。不管什么人告诉你，你不会在一夜之间成为一个老练的开发者，但如果你保持不间断的学习，并细心打磨自己的“手艺”，我想你的技术会有很好的提高。</p>
 ]]></content>
   </entry>
   

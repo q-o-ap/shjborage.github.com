@@ -5,12 +5,37 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iSecret 简介 Updated at Oct 14, 2013 - Saick Blog</title>
+  <title>二分查找最大的坑 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="美国区： 中国区： iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them &hellip;">
+  <meta name="description" content="二分法大家都不陌生，每当找工作面试都得看看，被问几遍。但最近从大神那儿了解到这里面最大的坑，写出来让更多的人能受益。 先贴上很久前对着算法导论上写的算法： 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +44,7 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/isecret-jian-jie/">
+  <link rel="canonical" href="http://saick.net/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +108,7 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   
   <header>
     
-      <h1 class="entry-title">iSecret 简介 Updated at Oct 14, 2013</h1>
+      <h1 class="entry-title">二分查找最大的坑</h1>
     
     
       <p class="meta">
@@ -99,112 +124,105 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   
 
 
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2014-03-06T00:35:00+08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
-
-<p>中国区：<a href="https://itunes.apple.com/cn/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
-
-<p>iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them.
-So, iSecret could help you to manage them safely.
-iSecret&rsquo;s all file are encrypted at high level.
-iSecret does not require any network.</p>
+<div class="entry-content"><p>二分法大家都不陌生，每当找工作面试都得看看，被问几遍。但最近从大神那儿了解到这里面最大的坑，写出来让更多的人能受益。</p>
 
 <!-- more -->
 
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#x73;&#x68;&#106;&#98;&#x6f;&#114;&#x61;&#103;&#x65;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#115;&#x68;&#x6a;&#98;&#111;&#x72;&#97;&#x67;&#x65;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>先贴上很久前对着算法导论上写的算法：</p>
 
-<p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
-现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
-所以i秘密帮您把这些帐号密码保管起来,并且全程高强度加密,确保信息安全。
-为了保证密码的安全,首先主密码是通过高强度的加密算法,保存到手机当中。
-即可手机被破解,也能保证数据的安全。
-对于保存的各类网站等的密码信息,全部通过加密文本保存到手机中,并且是全部纯文本解析,没有用
-任何XML、INI等配置文件,让安全性更升一级。
-i秘密不需要任何的网络访问,进一步加强安全性。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>int compare(int x, int y) {
+</span><span class='line'>  return (x &gt; y ? 1 : (x == y ? 0 : -1));
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>int binary_search(int list[], int nFind, int nLeft, int nRight) {
+</span><span class='line'>  int nMiddle = 0;
+</span><span class='line'>//    while (nLeft &lt;= nRight) {
+</span><span class='line'>  if (nLeft &lt;= nRight) {
+</span><span class='line'>      nMiddle =  (nLeft + nRight)/2;
+</span><span class='line'>      switch (compare(list[nMiddle], nFind)) {
+</span><span class='line'>          case 0:
+</span><span class='line'>              {
+</span><span class='line'>                  return nMiddle;
+</span><span class='line'>              }
+</span><span class='line'>              break;
+</span><span class='line'>          case -1:
+</span><span class='line'>              {
+</span><span class='line'>          //      nLeft = nMiddle + 1;
+</span><span class='line'>                  return binary_search(list, nFind, nMiddle+1, nRight);
+</span><span class='line'>              }
+</span><span class='line'>              break;
+</span><span class='line'>          case 1:
+</span><span class='line'>              {
+</span><span class='line'>          //      nRight = nMiddle - 1;
+</span><span class='line'>                  return binary_search(list, nFind, nLeft, nMiddle-1);
+</span><span class='line'>              }
+</span><span class='line'>      }
+</span><span class='line'>  }
+</span><span class='line'>  return -1;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
-<p>欢迎大家提出宝贵意见,共同为好产品而努力。
-<a href="mailto:shjborage@gmail.com">shjborage@gmail.com</a></p>
 
-<h3>Release Note:</h3>
+<p>正常的写法，递归的都有了。</p>
 
-<h5>v1.5  2013-10-10 8:55:45</h5>
+<p>一直这么写，没觉得哪有啥不对。 再仔细看看？？</p>
+
+<p><code>nMiddle =  (nLeft + nRight)/2;</code></p>
+
+<p>看出来了么？
+还没有？</p>
+
+<p>引用：<a href="http://blog.csdn.net/gangbo_5958196/article/details/9135167">http://blog.csdn.net/gangbo_5958196/article/details/9135167</a></p>
+
+<p>这是一个经典的话题，如何计算二分查找中的中值？试卷中，大家一般给出了两种计算方法：</p>
 
 <ul>
-<li>iOS 7 Support</li>
+<li>算法一： mid = (low + high) / 2</li>
+<li>算法二： mid = low + (high – low)/2</li>
 </ul>
 
 
-<h5>v1.4  2013-05-23 7:55:45</h5>
+<p>乍看起来，算法一简洁，算法二提取之后，跟算法一没有什么区别。但是实际上，区别是存在的。算法一的做法，在极端情况下，(low + high)存在着溢出的风险，进而得到错误的mid结果，导致程序错误。而算法二能够保证计算出来的mid，一定大于low，小于high，不存在溢出的问题。
+回到数据库二分查找，数据库的一个索引页面(大小一般是8k或者是16k)，能够存储的索引记录是有限的，因此肯定不会出现(low + high)溢出的风险。这也是为什么InnoDB中的中值，采用的就是算法一的实现。但是，作为一个严谨的程序设计人员，还是推荐使用算法二，将任何潜在的风险，扼杀于摇篮之中。</p>
 
-<ul>
-<li>加强主密码安全性，强烈建议大家升级</li>
-<li><p>默认密码不显示的问题</p></li>
-<li><p>Improve the security of you main passcode, recommend you to update at once.</p></li>
-<li>Fix bug: the default passcode was not show.</li>
-</ul>
-
-
-<h5>v1.3  2013-04-25 10:55:45</h5>
-
-<ul>
-<li>支持图形解锁以及简单数字密码，更加简单方便</li>
-<li>简化用户反馈功能，支持内部反馈</li>
-<li>加入程序版更新提示本</li>
-<li>解决各个版本系统上面UI细节问题</li>
-<li>推荐应用给好友圈</li>
-<li><p>禁用程序后台运行，更加安全稳定</p></li>
-<li><p>Support simple password and pattern, which is easy to use</p></li>
-<li>Simply the user feedback in the app without go to the AppStore</li>
-<li>Add new version prompt, you can&rsquo;t miss the new version</li>
-<li>Fix some bugs in the different iOS versions</li>
-<li>Share this app to your friends</li>
-<li>Stop running in the background, much safer</li>
-</ul>
-
-
-<h5>v1.2  2012-09-24 14:58:31</h5>
-
-<ul>
-<li><p>随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率</p></li>
-<li><p>Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution</p></li>
-</ul>
-
-
-<h5>v1.1  2012-08-15 10:16:20</h5>
-
-<ul>
-<li>在查看秘密时，可直接点击文本内容将其拷贝到剪贴板；</li>
-<li>应用需要输入密码时，如果您输入正确的密码，自动进入；</li>
-<li>当您添加新的秘密时，自动进入编辑模式；</li>
-<li>当您发送邮件时，加入一些提示信息；</li>
-<li>添加开发者博客以及用户评价体系；</li>
-<li><p>其它问题修复。</p></li>
-<li><p>In secret detail view, you can tap some text information to copy it to pasteboard;</p></li>
-<li>In the beginning of the app, when you enter the correct password, it will start working automatically;</li>
-<li>When you add new secret, edit it first;</li>
-<li>Add some presentations when you send emails;</li>
-<li>Add author&rsquo;s blog and user review interface;</li>
-<li>Some other bugs fixed.</li>
-</ul>
-
-
-<h5>v1.0  2012-02-22 10:08:28</h5>
-
-<ul>
-<li>第一版本，仅157kb大小。</li>
-<li>功能简单实用</li>
-</ul>
-
-
-<h3>欢迎留言反馈！</h3>
+<p><strong>所以</strong>，正确的写法应该是<code>mid = low + (high – low)/2</code>或 <code>mid = low + (high – low)&gt;&gt;1</code></p>
 </div>
 
 
@@ -227,12 +245,12 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
   
 
 
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2014-03-06T00:35:00+08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/interview/'>Interview</a>
   
 </span>
 
@@ -245,7 +263,7 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/isecret-jian-jie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/isecret-jian-jie/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/" >Tweet</a>
   
   
   
@@ -272,10 +290,8 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" title="Previous Post: Property 使用注意事项">&laquo; Property 使用注意事项</a>
+        <a class="basic-alignment left" href="/blog/2014/02/19/gcdde-keng/" title="Previous Post: GCD的坑">&laquo; GCD的坑</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/flashlight-powersaving-jian-jie/" title="Next Post: Flashlight(PowerSaving) 简介">Flashlight(PowerSaving) 简介 &raquo;</a>
       
     </p>
   </footer>
