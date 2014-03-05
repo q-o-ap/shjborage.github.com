@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iSecret 简介 Updated at Oct 14, 2013 - Saick Blog</title>
+  <title>iCloud 学习笔记 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="美国区： 中国区： iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them &hellip;">
+  <meta name="description" content="1.准备新的mobileprovision,不能用通配符，并打开iCloud功能，然后在工程里Summary中选中iCloud，并编辑entitlements文件。 2.在后台线程中执行NSURL *urlUC = [[NSFileManager defaultManager] &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/05/28/isecret-jian-jie/">
+  <link rel="canonical" href="http://saick.net/blog/2012/09/20/icloud-xue-xi-bi-ji/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +82,7 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   
   <header>
     
-      <h1 class="entry-title">iSecret 简介 Updated at Oct 14, 2013</h1>
+      <h1 class="entry-title">iCloud 学习笔记</h1>
     
     
       <p class="meta">
@@ -99,112 +98,181 @@ Now, everyone have many accounts and password, hard to remember them &hellip;">
   
 
 
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2012-09-20T17:47:00+08:00" pubdate data-updated="true">Sep 20<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
+<div class="entry-content"><p>1.准备新的mobileprovision,不能用通配符，并打开iCloud功能，然后在工程里Summary中选中iCloud，并编辑entitlements文件。  <br/>
+2.在后台线程中执行<code>NSURL *urlUC = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];</code> 注意只有真机才行，模拟器不行。</p>
 
-<p>中国区：<a href="https://itunes.apple.com/cn/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a></p>
-
-<p>iSecret is a program that save and manage your accounts and passwords.
-Now, everyone have many accounts and password, hard to remember them.
-So, iSecret could help you to manage them safely.
-iSecret&rsquo;s all file are encrypted at high level.
-iSecret does not require any network.</p>
+<p>测试环境，打开网页：<a href="https://developer.icloud.com/#documents">https://developer.icloud.com/#documents</a></p>
 
 <!-- more -->
 
 
-<p>Thanks for you support. No matter what problem, just mail to <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x73;&#104;&#106;&#98;&#x6f;&#114;&#97;&#103;&#x65;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#x6d;">&#x73;&#x68;&#106;&#x62;&#x6f;&#x72;&#x61;&#x67;&#101;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>大概的测试代码如下：</p>
 
-<p>i秘密使用主密码加密,用来保存各种网站、微博、QQ、飞信等的密码信息。
-现如今,密码太多,全部用同样的却不安全,用不一样的却很容易自己都不知道密码是什么。
-所以i秘密帮您把这些帐号密码保管起来,并且全程高强度加密,确保信息安全。
-为了保证密码的安全,首先主密码是通过高强度的加密算法,保存到手机当中。
-即可手机被破解,也能保证数据的安全。
-对于保存的各类网站等的密码信息,全部通过加密文本保存到手机中,并且是全部纯文本解析,没有用
-任何XML、INI等配置文件,让安全性更升一级。
-i秘密不需要任何的网络访问,进一步加强安全性。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)getUbiquityContainerUrl
+</span><span class='line'>{
+</span><span class='line'>    NSURL *urlBase = [[NSFileManagerdefaultManager] URLForUbiquityContainerIdentifier:nil];
+</span><span class='line'>   if (urlBase == nil)
+</span><span class='line'>        return; // 未激活iCloud或模拟器环境
+</span><span class='line'>
+</span><span class='line'>    NSDirectoryEnumerator *dirEnumerater = [[NSFileManagerdefaultManager] enumeratorAtPath:[selfgetDefaultDir]];
+</span><span class='line'>NSString *filePath = nil;
+</span><span class='line'>while((filePath = [dirEnumerater nextObject]) != nil) {
+</span><span class='line'>        NSRange rPosPath = [filePath rangeOfString:@"/"];
+</span><span class='line'>        if (rPosPath.length == 0) {
+</span><span class='line'>            NSURL *urlFile = [NSURL URLWithString:filePath relativeToURL:urlBase];
+</span><span class='line'>            
+</span><span class='line'>            // 判断iCloud里该文件是否存在
+</span><span class='line'>            if ([[NSFileManagerdefaultManager] isUbiquitousItemAtURL:urlFile]) {
+</span><span class='line'>                // 存在则修改
+</span><span class='line'>                if (![[NSStringstringWithContentsOfFile:[[selfgetDefaultDir] stringByAppendingPathComponent:filePath] encoding:NSUTF8StringEncodingerror:nil] writeToURL:urlFile atomically:YES])
+</span><span class='line'>                {
+</span><span class='line'>                    SQTRACE(@"存在则修改");
+</span><span class='line'>                }
+</span><span class='line'>                
+</span><span class='line'>                SQTRACE(@"上传成功");
+</span><span class='line'>                
+</span><span class='line'>                continue;
+</span><span class='line'>            }
+</span><span class='line'>            
+</span><span class='line'>            // 上传至iCloud
+</span><span class='line'>            // 指定本地文件完整路径
+</span><span class='line'>            NSURL *url = [NSURLfileURLWithPath:[[selfgetDefaultDir] stringByAppendingPathComponent:filePath]];
+</span><span class='line'>            NSError *error;
+</span><span class='line'>            // 官方文档建议本方法不要在主进程里执行
+</span><span class='line'>            if (![[NSFileManagerdefaultManager] setUbiquitous:YESitemAtURL:url destinationURL:urlFile error:&error])
+</span><span class='line'>            {
+</span><span class='line'>                NSLog(@"setUbiquitous error %@,\n%@", error, [error userInfo]);
+</span><span class='line'>                SQTRACE(@"上传失败");
+</span><span class='line'>                continue;
+</span><span class='line'>            } else {
+</span><span class='line'>                SQTRACE(@"上传成功");
+</span><span class='line'>            }// end of iCloud upload
+</span><span class='line'>        }
+</span><span class='line'>    } // end of while dir enumerator
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (void)testCloud
+</span><span class='line'>{
+</span><span class='line'>    [selfperformSelectorInBackground:@selector(getUbiquityContainerUrl) withObject:nil];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>// 此方法是官方文档提供,用来检查文件状态并下载
+</span><span class='line'>- (BOOL)downloadFileIfNotAvailable:(NSURL*)file
+</span><span class='line'>{
+</span><span class='line'>    NSNumber*  isIniCloud = nil;
+</span><span class='line'>    
+</span><span class='line'>    if ([file getResourceValue:&isIniCloud forKey:NSURLIsUbiquitousItemKey error:nil]) {
+</span><span class='line'>        // If the item is in iCloud, see if it is downloaded.
+</span><span class='line'>        if ([isIniCloud boolValue]) {
+</span><span class='line'>            NSNumber*  isDownloaded = nil;
+</span><span class='line'>            if ([file getResourceValue:&isDownloaded forKey:NSURLUbiquitousItemIsDownloadedKey error:nil]) {
+</span><span class='line'>                if ([isDownloaded boolValue])
+</span><span class='line'>                    return YES;
+</span><span class='line'>                
+</span><span class='line'>                // Download the file.
+</span><span class='line'>                NSFileManager*  fm = [NSFileManager defaultManager];
+</span><span class='line'>                if (![fm startDownloadingUbiquitousItemAtURL:file error:nil]) {
+</span><span class='line'>                    return NO;
+</span><span class='line'>                }
+</span><span class='line'>                return YES;
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // Return YES as long as an explicit download was not started.
+</span><span class='line'>    returnYES;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
-<p>欢迎大家提出宝贵意见,共同为好产品而努力。
-<a href="mailto:shjborage@gmail.com">shjborage@gmail.com</a></p>
 
-<h3>Release Note:</h3>
+<h3>如何忽略Documents文件夹里面的某些文件或文件夹：</h3>
 
-<h5>v1.5  2013-10-10 8:55:45</h5>
+<p>(Documents中设置某些文件不去同步方法)</p>
 
-<ul>
-<li>iOS 7 Support</li>
-</ul>
-
-
-<h5>v1.4  2013-05-23 7:55:45</h5>
-
-<ul>
-<li>加强主密码安全性，强烈建议大家升级</li>
-<li><p>默认密码不显示的问题</p></li>
-<li><p>Improve the security of you main passcode, recommend you to update at once.</p></li>
-<li>Fix bug: the default passcode was not show.</li>
-</ul>
-
-
-<h5>v1.3  2013-04-25 10:55:45</h5>
-
-<ul>
-<li>支持图形解锁以及简单数字密码，更加简单方便</li>
-<li>简化用户反馈功能，支持内部反馈</li>
-<li>加入程序版更新提示本</li>
-<li>解决各个版本系统上面UI细节问题</li>
-<li>推荐应用给好友圈</li>
-<li><p>禁用程序后台运行，更加安全稳定</p></li>
-<li><p>Support simple password and pattern, which is easy to use</p></li>
-<li>Simply the user feedback in the app without go to the AppStore</li>
-<li>Add new version prompt, you can&rsquo;t miss the new version</li>
-<li>Fix some bugs in the different iOS versions</li>
-<li>Share this app to your friends</li>
-<li>Stop running in the background, much safer</li>
-</ul>
-
-
-<h5>v1.2  2012-09-24 14:58:31</h5>
-
-<ul>
-<li><p>随iPhone5同步上，适配iOS6 iPhone5 4寸 1136*640的分辨率</p></li>
-<li><p>Adapter iOS6 iPhone5 4-inch 1136 * 640 resolution</p></li>
-</ul>
-
-
-<h5>v1.1  2012-08-15 10:16:20</h5>
-
-<ul>
-<li>在查看秘密时，可直接点击文本内容将其拷贝到剪贴板；</li>
-<li>应用需要输入密码时，如果您输入正确的密码，自动进入；</li>
-<li>当您添加新的秘密时，自动进入编辑模式；</li>
-<li>当您发送邮件时，加入一些提示信息；</li>
-<li>添加开发者博客以及用户评价体系；</li>
-<li><p>其它问题修复。</p></li>
-<li><p>In secret detail view, you can tap some text information to copy it to pasteboard;</p></li>
-<li>In the beginning of the app, when you enter the correct password, it will start working automatically;</li>
-<li>When you add new secret, edit it first;</li>
-<li>Add some presentations when you send emails;</li>
-<li>Add author&rsquo;s blog and user review interface;</li>
-<li>Some other bugs fixed.</li>
-</ul>
-
-
-<h5>v1.0  2012-02-22 10:08:28</h5>
-
-<ul>
-<li>第一版本，仅157kb大小。</li>
-<li>功能简单实用</li>
-</ul>
-
-
-<h3>欢迎留言反馈！</h3>
+<p>Documents路径里的文件会被默认同步到iCloud中（如果启用了iCloud功能）
+Documents路径里，文件夹名以.nosync结尾的，将不被同步
+如: Documents/mydata.nosync/ 该路径下的东西不被同步
+Using Core Data with iCloud Release Notes 里有部分提到</p>
 </div>
 
 
@@ -227,7 +295,7 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
   
 
 
-<time datetime="2013-05-28T16:44:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+<time datetime="2012-09-20T17:47:00+08:00" pubdate data-updated="true">Sep 20<span>th</span>, 2012</time>
       
 
 <span class="categories">
@@ -245,7 +313,7 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/05/28/isecret-jian-jie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/05/28/isecret-jian-jie/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2012/09/20/icloud-xue-xi-bi-ji/" data-via="eric_shj" data-counturl="http://saick.net/blog/2012/09/20/icloud-xue-xi-bi-ji/" >Tweet</a>
   
   
   
@@ -272,10 +340,10 @@ i秘密不需要任何的网络访问,进一步加强安全性。</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/28/propertyshi-yong-zhu-yi-shi-xiang/" title="Previous Post: Property 使用注意事项">&laquo; Property 使用注意事项</a>
+        <a class="basic-alignment left" href="/blog/2012/07/11/zai-ioszhong-shi-yong-zhong-ding-xiang-ba-kong-zhi-tai-nei-rong-xie-ru-wen-jian-zhong/" title="Previous Post: 在iOS中使用重定向，把控制台内容写入文件中">&laquo; 在iOS中使用重定向，把控制台内容写入文件中</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/05/28/flashlight-powersaving-jian-jie/" title="Next Post: Flashlight(PowerSaving) 简介">Flashlight(PowerSaving) 简介 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/" title="Next Post: iOS 序列化与反序列化">iOS 序列化与反序列化 &raquo;</a>
       
     </p>
   </footer>
