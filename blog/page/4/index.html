@@ -9,9 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="解决办法:
-sudo vim /etc/paths 将路径添加到里面去， 一行一个路径 注意：即便添加成功，未必运行成功；在制定路径下得脚本必须具是executable, 否则就会被在搜索时被忽略。
-sudo chmod +x XXX 而在Ubuntu下，则只需要修改/etc/.profile或者 &hellip;">
+  <meta name="description" content="对于我这个python新手，还是用Django入门比较容易一些，以后熟悉了可以再考虑换别的 Django 相关教程： Python Web 框架，第 1 部分: 使用 Django 和 Python 开发 Web 站点
+基于 Django 框架的敏捷 Web 开发 上面这俩有点老，参考一下即可。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,52 +80,6 @@ sudo chmod +x XXX 而在Ubuntu下，则只需要修改/etc/.profile或者 &helli
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/">Mac OS X添加PATH环境变量</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-24T23:53:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>解决办法:
-sudo vim /etc/paths</p>
-
-<p>将路径添加到里面去， 一行一个路径</p>
-
-<p>注意：即便添加成功，未必运行成功；在制定路径下得脚本必须具是executable, 否则就会被在搜索时被忽略。
-sudo chmod +x XXX</p>
-
-<p>而在Ubuntu下，则只需要修改/etc/.profile或者 ~/.profile或~/.bashrc等修改</p>
-
-<p>如转载文章，请注明本文链接： <a href="http://www.32133.com/skills/575.html">http://www.32133.com/skills/575.html</a></p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -574,6 +527,59 @@ sudo chmod +x XXX</p>
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">iOS库添加CocoaPods支持</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-17T15:30:00+08:00" pubdate data-updated="true">Oct 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。</p>
+
+<h3>准备好库代码（GitHub上）</h3>
+
+<p>将代码Checkout下来，打开命令行，cd到代码根目录</p>
+
+<h3>创建XXXX.podspec</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod spec create XXXX</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -603,7 +609,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
   <ul id="categories">
     <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
-<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
 <li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
@@ -620,10 +625,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/">二分查找最大的坑</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2014/02/19/gcdde-keng/">GCD的坑</a>
       </li>
     
@@ -637,6 +638,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/">iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">iOS客户端的gzip处理-gzip-ungzip</a>
       </li>
     
   </ul>
