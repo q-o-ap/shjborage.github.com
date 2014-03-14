@@ -5,21 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Objective-C&amp;XCode注释的正确写法 - Saick Blog</title>
+  <title>iOS禁用多按钮同时点击 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="注释对于C体系的同学来说还是不太规范，对于XCode的文档系统来说，规范还是有帮助的，能在QuickHelp等提示中反应出来。所以还是多注意下会比较好。 推荐以下两种写法(主是方法注释，其它的以后遇到再补充吧) 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-/** * @brief update &hellip;">
+  <meta name="description" content="最近测试组的同事，经常提的一个bug就是一个界面上，多个按钮或者可以点击的视图，两个手指同时点下，会出现各种错误异常。好多人的解决方法是，利用一个bool值做判断，这样做太乱了。如果一个界面上的按钮在多个视图中，这种情况下应该怎么做呢。查询可一下文档，苹果给出了解决方法。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -28,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">
+  <link rel="canonical" href="http://saick.net/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -92,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Objective-C&amp;XCode注释的正确写法</h1>
+      <h1 class="entry-title">iOS禁用多按钮同时点击</h1>
     
     
       <p class="meta">
@@ -108,56 +98,18 @@
   
 
 
-<time datetime="2014-02-07T18:02:00+08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time>
+<time datetime="2012-09-21T15:42:00+08:00" pubdate data-updated="true">Sep 21<span>st</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>注释对于C体系的同学来说还是不太规范，对于XCode的文档系统来说，规范还是有帮助的，能在QuickHelp等提示中反应出来。所以还是多注意下会比较好。</p>
+<div class="entry-content"><p>最近测试组的同事，经常提的一个bug就是一个界面上，多个按钮或者可以点击的视图，两个手指同时点下，会出现各种错误异常。好多人的解决方法是，利用一个bool值做判断，这样做太乱了。如果一个界面上的按钮在多个视图中，这种情况下应该怎么做呢。查询可一下文档，苹果给出了解决方法。只需要把那些不能同时点下的按钮或者视图设置一下即可。</p>
 
-<p>推荐以下两种写法(主是方法注释，其它的以后遇到再补充吧)</p>
+<p><code>[view setExclusiveTouch:YES];</code></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/**
-</span><span class='line'> *    @brief update table
-</span><span class='line'> *
-</span><span class='line'> *    @param  model   you want to update the entity
-</span><span class='line'> *    @param  where   can use NSString or NSDictionary or nil
-</span><span class='line'>                    when "where" is nil : update the value based on rowid column or primary key column
-</span><span class='line'> *
-</span><span class='line'> *    @return the updated was successful
-</span><span class='line'> */
-</span><span class='line'>-(BOOL)updateToDB:(NSObject *)model where:(id)where;</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/**
-</span><span class='line'> @brief   每个Section的高度，默认为 0
-</span><span class='line'> @param   niDropDown: NIDropDown，用于区分不同的NI
-</span><span class='line'> @param   indexPath:  定位Section
-</span><span class='line'> @return  高度
-</span><span class='line'> */
-</span><span class='line'>- (CGFloat)niDropDown:(NIDropDown *)niDropDown heightForHeaderInSection:(NSInteger)section;</span></code></pre></td></tr></table></div></figure>
-
+<p>这个方法是<code>UIView</code>中对事件处理的方法，防止把多个View同时处理消息。应该算是比较基础的方法吧，还是多看官方的文档吧。</p>
 </div>
 
 
@@ -180,7 +132,7 @@
   
 
 
-<time datetime="2014-02-07T18:02:00+08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time>
+<time datetime="2012-09-21T15:42:00+08:00" pubdate data-updated="true">Sep 21<span>st</span>, 2012</time>
       
 
 <span class="categories">
@@ -198,7 +150,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/" data-via="eric_shj" data-counturl="http://saick.net/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/" >Tweet</a>
   
   
   
@@ -225,10 +177,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/" title="Previous Post: iOS中签名相关-MD5-sha1-10进制与16进制互转">&laquo; iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
+        <a class="basic-alignment left" href="/blog/2012/09/20/icloud-xue-xi-bi-ji/" title="Previous Post: iCloud 学习笔记">&laquo; iCloud 学习笔记</a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/02/19/gcdde-keng/" title="Next Post: GCD的坑">GCD的坑 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/" title="Next Post: iOS 序列化与反序列化">iOS 序列化与反序列化 &raquo;</a>
       
     </p>
   </footer>

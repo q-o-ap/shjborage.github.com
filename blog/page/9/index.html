@@ -177,6 +177,46 @@ file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/">iOS禁用多按钮同时点击</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-21T15:42:00+08:00" pubdate data-updated="true">Sep 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近测试组的同事，经常提的一个bug就是一个界面上，多个按钮或者可以点击的视图，两个手指同时点下，会出现各种错误异常。好多人的解决方法是，利用一个bool值做判断，这样做太乱了。如果一个界面上的按钮在多个视图中，这种情况下应该怎么做呢。查询可一下文档，苹果给出了解决方法。只需要把那些不能同时点下的按钮或者视图设置一下即可。</p>
+
+<p><code>[view setExclusiveTouch:YES];</code></p>
+
+<p>这个方法是<code>UIView</code>中对事件处理的方法，防止把多个View同时处理消息。应该算是比较基础的方法吧，还是多看官方的文档吧。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/09/20/icloud-xue-xi-bi-ji/">iCloud 学习笔记</a></h1>
     
     
@@ -382,7 +422,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (57)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (58)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
