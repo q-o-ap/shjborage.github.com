@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-03-06T01:03:38+08:00</updated>
+  <updated>2014-03-15T00:16:53+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UITableView的常见优化方式总结]]></title>
+    <link href="http://saick.net/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/"/>
+    <updated>2014-03-15T00:07:00+08:00</updated>
+    <id>http://saick.net/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie</id>
+    <content type="html"><![CDATA[<p>众所周知，我们在iOS开发过程中与面试中，常见的问题就包括UITableView的滚动性能，足以见得这个功能的重要性。
+为了保证table view平滑滚动，确保你采取了以下的措施:</p>
+
+<ul>
+<li>正确使用<code>reuseIdentifier</code>来重用cells</li>
+<li>尽量使所有的view opaque，包括cell自身</li>
+<li>避免渐变，图片缩放，后台选人</li>
+<li>缓存行高</li>
+<li>如果cell内现实的内容来自web，使用异步加载，缓存请求结果</li>
+<li>使用<code>shadowPath</code>来画阴影</li>
+<li>减少subviews的数量</li>
+<li>尽量不适用<code>cellForRowAtIndexPath:</code>，如果你需要用到它，只用一次然后缓存结果</li>
+<li>使用正确的数据结构来存储数据</li>
+<li>使用<code>rowHeight</code>, <code>sectionFooterHeight</code> 和 <code>sectionHeaderHeight</code>来设定固定的高，不要请求delegate</li>
+</ul>
+
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[GCD的坑]]></title>
@@ -422,202 +448,6 @@ self.navigationItem.leftBarButtonItem = leftBarItem;
 <p>如果原来项目中有使用<code>self.navigationItem.leftBarButtonItems</code>或<code>self.navigationItem.rightBarButtonItems</code>可参考注释部分内容。如果都是多个的，那么直接换把注释解开，把单个的给注释掉。<strong>搞懂原理才是重要的</strong></p>
 
 <p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS客户端的gzip处理-gzip-ungzip]]></title>
-    <link href="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/"/>
-    <updated>2014-01-20T20:28:00+08:00</updated>
-    <id>http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip</id>
-    <content type="html"><![CDATA[<p>服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的"Content-Encoding" 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了，这样gzip就没有起到作用。因此可以约定其他策略，防止网关解压，例如在别的头属性中标记gzip。</p>
-
-<!-- more -->
-
-
-<p>如此，就需要我们自己来解压gzip数据。方法如下：添加framework库中的libbz2.1.0.dylib；</p>
-
-<p>添加以下静态方法：</p>
-
-<h4>gzip解压：</h4>
-
-<p>```
-+ (NSData <em>)ungzipData:(NSData </em>)compressedData
-{
-  if ([compressedData length] == 0)</p>
-
-<pre><code>return compressedData;
-</code></pre>
-
-<p>  unsigned full_length = [compressedData length];
-  unsigned half_length = [compressedData length] / 2;</p>
-
-<p>  NSMutableData *decompressed = [NSMutableData dataWithLength: full_length + half_length];
-  BOOL done = NO;
-  int status;</p>
-
-<p>  z_stream strm;
-  strm.next_in = (Bytef *)[compressedData bytes];
-  strm.avail_in = [compressedData length];
-  strm.total_out = 0;
-  strm.zalloc = Z_NULL;
-  strm.zfree = Z_NULL;
-  if (inflateInit2(&amp;strm, (15+32)) != Z_OK)</p>
-
-<pre><code>return nil;
-</code></pre>
-
-<p>  while (!done) {</p>
-
-<pre><code>// Make sure we have enough room and reset the lengths.
-if (strm.total_out &gt;= [decompressed length]) {
-  [decompressed increaseLengthBy: half_length];
-}
-strm.next_out = [decompressed mutableBytes] + strm.total_out;
-strm.avail_out = [decompressed length] - strm.total_out;
-// Inflate another chunk.
-status = inflate (&amp;strm, Z_SYNC_FLUSH);
-if (status == Z_STREAM_END) {
-  done = YES;
-} else if (status != Z_OK) {
-  break;
-}
-</code></pre>
-
-<p>  }</p>
-
-<p>  if (inflateEnd (&amp;strm) != Z_OK)</p>
-
-<pre><code>return nil;
-</code></pre>
-
-<p>  // Set real length.
-  if (done) {</p>
-
-<pre><code>[decompressed setLength: strm.total_out];
-return [NSData dataWithData: decompressed];
-</code></pre>
-
-<p>  }
-  return nil;
-}
-```</p>
-
-<h4><em>顺便附上gzip压缩：</em></h4>
-
-<p>```
-+ (NSData<em>)gzipData:(NSData</em>)pUncompressedData
-{
-  if (!pUncompressedData || [pUncompressedData length] == 0)
-  {</p>
-
-<pre><code>NSLog(@"%s: Error: Can't compress an empty or null NSData object.", __func__);
-return nil;
-</code></pre>
-
-<p>  }</p>
-
-<p>  z_stream zlibStreamStruct;
-  zlibStreamStruct.zalloc    = Z_NULL; // Set zalloc, zfree, and opaque to Z_NULL so
-  zlibStreamStruct.zfree     = Z_NULL; // that when we call deflateInit2 they will be
-  zlibStreamStruct.opaque    = Z_NULL; // updated to use default allocation functions.
-  zlibStreamStruct.total_out = 0; // Total number of output bytes produced so far
-  zlibStreamStruct.next_in   = (Bytef*)[pUncompressedData bytes]; // Pointer to input bytes
-  zlibStreamStruct.avail_in  = [pUncompressedData length]; // Number of input bytes left to process</p>
-
-<p>  int initError = deflateInit2(&amp;zlibStreamStruct, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (15+16), 8, Z_DEFAULT_STRATEGY);
-  if (initError != Z_OK)
-  {</p>
-
-<pre><code>NSString *errorMsg = nil;
-switch (initError)
-{
-  case Z_STREAM_ERROR:
-    errorMsg = @"Invalid parameter passed in to function.";
-    break;
-  case Z_MEM_ERROR:
-    errorMsg = @"Insufficient memory.";
-    break;
-  case Z_VERSION_ERROR:
-    errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
-    break;
-  default:
-    errorMsg = @"Unknown error code.";
-    break;
-}
-NSLog(@"%s: deflateInit2() Error: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
-
-return nil;
-</code></pre>
-
-<p>  }</p>
-
-<p>  // Create output memory buffer for compressed data. The zlib documentation states that
-  // destination buffer size must be at least 0.1% larger than avail_in plus 12 bytes.
-  NSMutableData *compressedData = [NSMutableData dataWithLength:[pUncompressedData length] * 1.01 + 12];</p>
-
-<p>  int deflateStatus;
-  do
-  {</p>
-
-<pre><code>// Store location where next byte should be put in next_out
-zlibStreamStruct.next_out = [compressedData mutableBytes] + zlibStreamStruct.total_out;
-
-// Calculate the amount of remaining free space in the output buffer
-// by subtracting the number of bytes that have been written so far
-// from the buffer's total capacity
-zlibStreamStruct.avail_out = [compressedData length] - zlibStreamStruct.total_out;
-deflateStatus = deflate(&amp;zlibStreamStruct, Z_FINISH);
-</code></pre>
-
-<p>  } while ( deflateStatus == Z_OK );</p>
-
-<p>  // Check for zlib error and convert code to usable error message if appropriate
-  if (deflateStatus != Z_STREAM_END)
-  {</p>
-
-<pre><code>NSString *errorMsg = nil;
-switch (deflateStatus)
-{
-  case Z_ERRNO:
-    errorMsg = @"Error occured while reading file.";
-    break;
-  case Z_STREAM_ERROR:
-    errorMsg = @"The stream state was inconsistent (e.g., next_in or next_out was NULL).";
-    break;
-  case Z_DATA_ERROR:
-    errorMsg = @"The deflate data was invalid or incomplete.";
-    break;
-  case Z_MEM_ERROR:
-    errorMsg = @"Memory could not be allocated for processing.";
-    break;
-  case Z_BUF_ERROR:
-    errorMsg = @"Ran out of output buffer for writing compressed bytes.";
-    break;
-  case Z_VERSION_ERROR:
-    errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
-    break;
-  default:
-    errorMsg = @"Unknown error code.";
-    break;
-}
-DDLogError(@"%s: zlib error while attempting compression: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
-
-// Free data structures that were dynamically created for the stream.
-deflateEnd(&amp;zlibStreamStruct);
-
-return nil;
-</code></pre>
-
-<p>  }
-  // Free data structures that were dynamically created for the stream.
-  deflateEnd(&amp;zlibStreamStruct);
-  [compressedData setLength: zlibStreamStruct.total_out];
-  DDLogInfo(@&ldquo;%s: Compressed file from %d KB to %d KB&rdquo;, <strong>func</strong>, [pUncompressedData length]/1024, [compressedData length]/1024);</p>
-
-<p>  return compressedData;
-}
-```</p>
 ]]></content>
   </entry>
   

@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Mac - Saick Blog</title>
+  <title>UITableView的常见优化方式总结 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Category: Mac">
+  <meta name="description" content="众所周知，我们在iOS开发过程中与面试中，常见的问题就包括UITableView的滚动性能，足以见得这个功能的重要性。
+为了保证table view平滑滚动，确保你采取了以下的措施: 正确使用reuseIdentifier来重用cells
+尽量使所有的view opaque，包括cell自身 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.netblog/categories/mac/">
+  <link rel="canonical" href="http://saick.net/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,120 +80,144 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Mac</h1>
+    
+      <h1 class="entry-title">UITableView的常见优化方式总结</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-15T00:07:00+08:00" pubdate data-updated="true">Mar 15<span>th</span>, 2014</time>
+        
+      </p>
     
   </header>
+
+
+<div class="entry-content"><p>众所周知，我们在iOS开发过程中与面试中，常见的问题就包括UITableView的滚动性能，足以见得这个功能的重要性。
+为了保证table view平滑滚动，确保你采取了以下的措施:</p>
+
+<ul>
+<li>正确使用<code>reuseIdentifier</code>来重用cells</li>
+<li>尽量使所有的view opaque，包括cell自身</li>
+<li>避免渐变，图片缩放，后台选人</li>
+<li>缓存行高</li>
+<li>如果cell内现实的内容来自web，使用异步加载，缓存请求结果</li>
+<li>使用<code>shadowPath</code>来画阴影</li>
+<li>减少subviews的数量</li>
+<li>尽量不适用<code>cellForRowAtIndexPath:</code>，如果你需要用到它，只用一次然后缓存结果</li>
+<li>使用正确的数据结构来存储数据</li>
+<li>使用<code>rowHeight</code>, <code>sectionFooterHeight</code> 和 <code>sectionHeaderHeight</code>来设定固定的高，不要请求delegate</li>
+</ul>
+
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <div id="blog-archives" class="category">
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
 
 
 
   
-  <h2>2013</h2>
 
-<article>
+
+<time datetime="2014-03-15T00:07:00+08:00" pubdate data-updated="true">Mar 15<span>th</span>, 2014</time>
+      
+
+<span class="categories">
   
-<h1><a href="/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">Synergy on Mavericks (OSX 10.9) and enable assistive devices</a></h1>
-<time datetime="2013-12-26T10:42:00+08:00" pubdate><span class='month'>Dec</span> <span class='day'>26</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
   
-<h1><a href="/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/">OSX Server - Message Server 研究与故障解决方案</a></h1>
-<time datetime="2013-12-21T00:50:00+08:00" pubdate><span class='month'>Dec</span> <span class='day'>21</span> <span class='year'>2013</span></time>
+</span>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
   
-<h1><a href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">Mac OS X 改 hosts文件</a></h1>
-<time datetime="2013-11-12T22:34:00+08:00" pubdate><span class='month'>Nov</span> <span class='day'>12</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
+    
+    
+      <div class="sharing">
   
-<h1><a href="/blog/2013/10/24/mac-os-xtian-jia-pathhuan-jing-bian-liang/">Mac OS X添加PATH环境变量</a></h1>
-<time datetime="2013-10-24T23:53:00+08:00" pubdate><span class='month'>Oct</span> <span class='day'>24</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/" >Tweet</a>
   
-<h1><a href="/blog/2013/10/23/mac-os-x-ting-zhi-xiang-ying-de-chu-li-bao-han-qiang-zhi-zhong-qi-ji-qi/">Mac OS X: 停止响应的处理（包含强制重启机器）</a></h1>
-<time datetime="2013-10-23T22:47:00+08:00" pubdate><span class='month'>Oct</span> <span class='day'>23</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
   
-<h1><a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a></h1>
-<time datetime="2013-10-19T01:34:00+08:00" pubdate><span class='month'>Oct</span> <span class='day'>19</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
   
-<h1><a href="/blog/2013/10/14/zen-yao-cha-kan-zai-macshang-lian-jie-guo-de-wifimi-ma/">怎么查看在mac上连接过的wifi密码</a></h1>
-<time datetime="2013-10-14T16:16:00+08:00" pubdate><span class='month'>Oct</span> <span class='day'>14</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
-
-
-</article>
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
 
 </div>
 
-  
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/" title="Previous Post: 二分查找最大的坑">&laquo; 二分查找最大的坑</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
 
 
 
