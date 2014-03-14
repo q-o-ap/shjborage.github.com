@@ -9,7 +9,8 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Origin Question Mavericks handles accessibility on a per-application basis, so instead of enabling assistive devices (option does not even exist) &hellip;">
+  <meta name="description" content="好久没弄Eclipse开发Android了，最近弄了个天猫的盒子，就拿出来玩玩，没想到新的SDK下不下来，悲剧。 Ｑ： Failed to fetch URL https://dl-ssl.google.com/android/repository/repository.xml,
+reason: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-31T13:39:00+08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>好久没弄Eclipse开发Android了，最近弄了个天猫的盒子，就拿出来玩玩，没想到新的SDK下不下来，悲剧。</p>
+
+<h3>Ｑ：</h3>
+
+<p>Failed to fetch URL <a href="https://dl-ssl.google.com/android/repository/repository.xml,">https://dl-ssl.google.com/android/repository/repository.xml,</a>
+reason: HTTPS SSL error. You might want to force download through HTTP
+in the settings.</p>
+
+<h3>A:</h3>
+
+<p>Check file <code>~/.android/androidtool.cfg</code></p>
+
+<p>try to create it manually and add one line to it:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sdkman.force.http=true </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Reference:<a href="https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk">https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -340,7 +395,7 @@
   </header>
 
 
-  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#97;&#64;&#50;&#x78;&#x2e;&#x70;&#x6e;&#103;">&#97;&#64;&#50;&#x78;&#x2e;&#112;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+  <div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#97;&#64;&#50;&#x78;&#46;&#x70;&#110;&#x67;">&#97;&#64;&#x32;&#120;&#x2e;&#x70;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -513,61 +568,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/23/ios-7jiao-cheng-qian-xi-text-kit/">iOS 7教程：浅析Text Kit</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-23T22:06:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>转自<a href="http://beyondvincent.com/blog/2013/11/12/121-brief-analysis-text-kit/">破船</a>的博客</p>
-
-<p>Text Kit是iOS 7中引入的一个新功能，非常值得开发者使用，下面先看看本文的目录结构：</p>
-
-<ul>
-<li>什么是Text Kit</li>
-<li>Text Kit架构</li>
-<li>Text Kit特点</li>
-<li>Text Kit功能概述</li>
-<li>Text Kit中重要的一些对象</li>
-<li>Text Kit示例</li>
-<li>小结</li>
-<li>推荐Text Kit学习资源</li>
-</ul>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/23/ios-7jiao-cheng-qian-xi-text-kit/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -602,7 +602,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (58)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (59)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -612,6 +612,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
@@ -627,10 +631,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-03-15T00:34:30+08:00</updated>
+  <updated>2014-03-15T01:04:16+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别]]></title>
+    <link href="http://saick.net/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/"/>
+    <updated>2014-03-15T01:01:00+08:00</updated>
+    <id>http://saick.net/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie</id>
+    <content type="html"><![CDATA[<p>常见的从bundle中加载图片的方式有两种，一个是用<code>imageNamed</code>，二是用<code>imageWithContentsOfFile</code>，第一种比较常见一点。</p>
+
+<p>既然有两种类似的方法来实现相同的目的，那么他们之间的差别是什么呢？</p>
+
+<p><code>imageNamed</code>的优点是当加载时会缓存图片。<code>imageNamed</code>的文档中这么说:
+这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象如果它存在的话。如果缓存中没有找到相应的图片，这个方法从指定的文档中加载然后缓存并返回这个对象。</p>
+
+<p>相反的，<code>imageWithContentsOfFile</code>仅加载图片。</p>
+
+<p>下面的代码说明了这两种方法的用法:</p>
+
+<p><code>
+UIImage *img = [UIImage imageNamed:@"myImage"];              // caching
+// or
+UIImage *img = [UIImage imageWithContentsOfFile:@"myImage"]; // no caching
+</code>
+那么我们应该如何选择呢？</p>
+
+<p>如果你要加载一个大图片而且是一次性使用，那么就没必要缓存这个图片，用<code>imageWithContentsOfFile</code>足矣，这样不会浪费内存来缓存它。</p>
+
+<p>然而，在图片反复重用的情况下<code>imageNamed</code>是一个好得多的选择。</p>
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UITableView的常见优化方式总结]]></title>
@@ -294,160 +325,6 @@ NSString *num16Str = [NSString stringWithFormat:@"%x", numBase10];
 <p><code>
 NSString *num10Str = [NSString stringWithFormat:@"%d", strtoul([numBase16 UTF8String], 0, 16)];
 </code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding]]></title>
-    <link href="http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/"/>
-    <updated>2014-01-20T23:16:00+08:00</updated>
-    <id>http://saick.net/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding</id>
-    <content type="html"><![CDATA[<p>iOS7之前的UI为：</p>
-
-<iframe src="https://www.flickr.com/photos/shjborage/12052252814/player/120d793b08" height="44" width="324"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
-
-
-<p>而在iOS7中，由于设计方面的原因，使得UI变为:</p>
-
-<iframe src="https://www.flickr.com/photos/shjborage/12052149003/player/bb36320bc9" height="44" width="322"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
-
-
-
-
-<!-- more -->
-
-
-<p>修改的方法重写UINavigationItem的setLeftBarButtonItem和setRightBarButtonItem方法，使之与之前版本兼容；</p>
-
-<p>代码如下：</p>
-
-<p><em>UINavigationItem+margin.h</em></p>
-
-<p>```
-//
-//  UINavigationItem+margin.h
-//
-//  Created by shjborage on 1/20/14.
-//  Copyright &copy; 2014 Saick. All rights reserved.
-//</p>
-
-<h1>import &lt;UIKit/UIKit.h></h1>
-
-<p>@interface UINavigationItem (margin)</p>
-
-<p>@end</p>
-
-<p>```</p>
-
-<p><em>UINavigationItem+margin.m</em></p>
-
-<p>```
-//
-//  UINavigationItem+margin.m
-//
-//  Created by shjborage on 1/20/14.
-//  Copyright &copy; 2014 Saick. All rights reserved.
-//</p>
-
-<h1>import &ldquo;UINavigationItem+margin.h&rdquo;</h1>
-
-<p>@implementation UINavigationItem (margin)</p>
-
-<h1>if <strong>IPHONE_OS_VERSION_MAX_ALLOWED > </strong>IPHONE_6_1</h1>
-
-<ul>
-<li><p>(void)setLeftBarButtonItem:(UIBarButtonItem <em>)_leftBarButtonItem
-{
-if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-  UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-  negativeSeperator.width = -10.0f;</p>
-
-<p>  if (<em>leftBarButtonItem) {
-    [self setLeftBarButtonItems:@[negativeSeperator, </em>leftBarButtonItem]];
-  } else {
-    [self setLeftBarButtonItems:@[negativeSeperator]];
-  }
-} else {
-  [self setLeftBarButtonItem:_leftBarButtonItem animated:NO];
-}
-}</p></li>
-</ul>
-
-
-<p>//&ndash; (void)setLeftBarButtonItems:(NSArray <em>)leftBarButtonItems
-//{
-//  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-//    UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-//    negativeSeperator.width = -10.0f;
-//  <br/>
-//    if ([_leftBarButtonItems count] > 0) {
-//      NSMutableArray *items = [NSMutableArray arrayWithArray:leftBarButtonItems];
-//      [items insertObject:negativeSeperator atIndex:0];
-//      [self setLeftBarButtonItems:items animated:NO];
-//    } else {
-//      [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
-//    }
-//  } else {
-//    [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
-//  }
-//}</p>
-
-<ul>
-<li><p>(void)setRightBarButtonItem:(UIBarButtonItem <em>)_rightBarButtonItem
-{
-if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-  UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-  negativeSeperator.width = -10.0f;</p>
-
-<p>  if (<em>rightBarButtonItem) {
-    [self setRightBarButtonItems:@[negativeSeperator, </em>rightBarButtonItem]];
-  } else {
-    [self setRightBarButtonItems:@[negativeSeperator]];
-  }
-} else {
-  [self setRightBarButtonItem:_rightBarButtonItem animated:NO];
-}
-}</p></li>
-</ul>
-
-
-<p>//&ndash; (void)setRightBarButtonItems:(NSArray <em>)rightBarButtonItems
-//{
-//  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-//    UIBarButtonItem </em>negativeSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-//    negativeSeperator.width = -10.0f;
-//  <br/>
-//    if ([_leftBarButtonItems count] > 0) {
-//      NSMutableArray *items = [NSMutableArray arrayWithArray:rightBarButtonItems];
-//      [items insertObject:negativeSeperator atIndex:0];
-//      [self setRightBarButtonItems:items animated:NO];
-//    } else {
-//      [self setRightBarButtonItems:rightBarButtonItems animated:NO];
-//    }
-//  } else {
-//    [self setRightBarButtonItems:rightBarButtonItems animated:NO];
-//  }
-//}</p>
-
-<h1>endif</h1>
-
-<p>@end</p>
-
-<p>```</p>
-
-<p>项目源码不做任何修改，问题解决；</p>
-
-<p>添加Button：</p>
-
-<p><code>
-UIBarButtonItem *leftBarItem = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
-self.navigationItem.leftBarButtonItem = leftBarItem;
-[leftBarItem release];
-</code></p>
-
-<p>如果原来项目中有使用<code>self.navigationItem.leftBarButtonItems</code>或<code>self.navigationItem.rightBarButtonItems</code>可参考注释部分内容。如果都是多个的，那么直接换把注释解开，把单个的给注释掉。<strong>搞懂原理才是重要的</strong></p>
-
-<p><a href="http://www.cnblogs.com/maxfong/p/3375167.html">原文地址</a></p>
 ]]></content>
   </entry>
   

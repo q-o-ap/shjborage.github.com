@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="转自：http://geeklu.com/2013/04/ios-cookie/ 关于Cookie的标准和原理这里就不细说了，这里只说说在iOS平台下如何进行Cookie相关的编程。
-和Mac上不同，在iOS平台上各个App都有自己的Cookie，App之间不共享Cookie。 &hellip;">
+  <meta name="description" content="1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本） 1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置： system prefernce--&gt;Accounts--&gt;LogItems--&gt;add 2）把想要启动的shell &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">MAC 系统的启动过程和系统启动时运行shell 脚本</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:34:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）</h4>
+
+<p>1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置：</p>
+
+<pre><code>system prefernce--&gt;Accounts--&gt;LogItems--&gt;add
+</code></pre>
+
+<p>2）把想要启动的shell 或应用放到/Labrary/Startupitems/ 目录中。</p>
+
+<p>3）<em>创建/etc/rc.local 文件，把脚本写在文件中</em>。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/19/mac-xi-tong-de-qi-dong-guo-cheng-he-xi-tong-qi-dong-shi-yun-xing-shell-jiao-ben/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -546,48 +595,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">iOS 5 : UIImage and resizableImageWithCapInsets</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-10T23:41:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently began writing a short example to learn more about the iOS 5 Appearance API and customizing UINavigationBar objects. The goal was to add a custom background, title and text to the navbar. Once I had this working, to keep a consist look across my application, I began tweaking the buttons on the navbar using the same Appearance API.
-As I got further into the customization of the buttons, I ran into a method withinUIImage that was introduced in iOS 5, resizableImageWithCapInsets. I found myself getting side-tracked from the original idea of navbar look and feel, to understanding how cap insets work. This post delves into what I learned.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/10/ios-5-uiimage-and-resizableimagewithcapinsets/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -622,7 +629,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (58)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (59)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -632,6 +639,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
@@ -647,10 +658,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
       </li>
     
   </ul>

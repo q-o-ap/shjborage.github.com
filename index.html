@@ -9,9 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="众所周知，我们在iOS开发过程中与面试中，常见的问题就包括UITableView的滚动性能，足以见得这个功能的重要性。
-为了保证table view平滑滚动，确保你采取了以下的措施: 正确使用reuseIdentifier来重用cells
-尽量使所有的view opaque，包括cell自身 &hellip;">
+  <meta name="description" content="常见的从bundle中加载图片的方式有两种，一个是用imageNamed，二是用imageWithContentsOfFile，第一种比较常见一点。 既然有两种类似的方法来实现相同的目的，那么他们之间的差别是什么呢？ imageNamed的优点是当加载时会缓存图片。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +79,67 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-15T01:01:00+08:00" pubdate data-updated="true">Mar 15<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>常见的从bundle中加载图片的方式有两种，一个是用<code>imageNamed</code>，二是用<code>imageWithContentsOfFile</code>，第一种比较常见一点。</p>
+
+<p>既然有两种类似的方法来实现相同的目的，那么他们之间的差别是什么呢？</p>
+
+<p><code>imageNamed</code>的优点是当加载时会缓存图片。<code>imageNamed</code>的文档中这么说:
+这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象如果它存在的话。如果缓存中没有找到相应的图片，这个方法从指定的文档中加载然后缓存并返回这个对象。</p>
+
+<p>相反的，<code>imageWithContentsOfFile</code>仅加载图片。</p>
+
+<p>下面的代码说明了这两种方法的用法:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIImage *img = [UIImage imageNamed:@"myImage"];              // caching
+</span><span class='line'>// or
+</span><span class='line'>UIImage *img = [UIImage imageWithContentsOfFile:@"myImage"]; // no caching</span></code></pre></td></tr></table></div></figure>
+
+
+<p>那么我们应该如何选择呢？</p>
+
+<p>如果你要加载一个大图片而且是一次性使用，那么就没必要缓存这个图片，用<code>imageWithContentsOfFile</code>足矣，这样不会浪费内存来缓存它。</p>
+
+<p>然而，在图片反复重用的情况下<code>imageNamed</code>是一个好得多的选择。</p>
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -595,60 +654,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/">Android SDK Manager更新检测失败解决</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-31T13:39:00+08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>好久没弄Eclipse开发Android了，最近弄了个天猫的盒子，就拿出来玩玩，没想到新的SDK下不下来，悲剧。</p>
-
-<h3>Ｑ：</h3>
-
-<p>Failed to fetch URL <a href="https://dl-ssl.google.com/android/repository/repository.xml,">https://dl-ssl.google.com/android/repository/repository.xml,</a>
-reason: HTTPS SSL error. You might want to force download through HTTP
-in the settings.</p>
-
-<h3>A:</h3>
-
-<p>Check file <code>~/.android/androidtool.cfg</code></p>
-
-<p>try to create it manually and add one line to it:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sdkman.force.http=true </span></code></pre></td></tr></table></div></figure>
-
-
-<p>Reference:<a href="https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk">https://groups.google.com/forum/#!topic/android-developers/Y6RBY6jQfNk</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -681,7 +686,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (58)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (59)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -691,6 +696,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
@@ -706,10 +715,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/">iOS中签名相关-MD5-sha1-10进制与16进制互转</a>
       </li>
     
   </ul>

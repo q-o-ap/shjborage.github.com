@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS禁用多按钮同时点击 - Saick Blog</title>
+  <title>性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="最近测试组的同事，经常提的一个bug就是一个界面上，多个按钮或者可以点击的视图，两个手指同时点下，会出现各种错误异常。好多人的解决方法是，利用一个bool值做判断，这样做太乱了。如果一个界面上的按钮在多个视图中，这种情况下应该怎么做呢。查询可一下文档，苹果给出了解决方法。 &hellip;">
+  <meta name="description" content="常见的从bundle中加载图片的方式有两种，一个是用imageNamed，二是用imageWithContentsOfFile，第一种比较常见一点。 既然有两种类似的方法来实现相同的目的，那么他们之间的差别是什么呢？ imageNamed的优点是当加载时会缓存图片。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/">
+  <link rel="canonical" href="http://saick.net/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS禁用多按钮同时点击</h1>
+      <h1 class="entry-title">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</h1>
     
     
       <p class="meta">
@@ -98,18 +98,39 @@
   
 
 
-<time datetime="2012-09-21T15:42:00+08:00" pubdate data-updated="true">Sep 21<span>st</span>, 2012</time>
+<time datetime="2014-03-15T01:01:00+08:00" pubdate data-updated="true">Mar 15<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>最近测试组的同事，经常提的一个bug就是一个界面上，多个按钮或者可以点击的视图，两个手指同时点下，会出现各种错误异常。好多人的解决方法是，利用一个bool值做判断，这样做太乱了。如果一个界面上的按钮在多个视图中，这种情况下应该怎么做呢。查询可一下文档，苹果给出了解决方法。只需要把那些不能同时点下的按钮或者视图设置一下即可。</p>
+<div class="entry-content"><p>常见的从bundle中加载图片的方式有两种，一个是用<code>imageNamed</code>，二是用<code>imageWithContentsOfFile</code>，第一种比较常见一点。</p>
 
-<p><code>[view setExclusiveTouch:YES];</code></p>
+<p>既然有两种类似的方法来实现相同的目的，那么他们之间的差别是什么呢？</p>
 
-<p>这个方法是<code>UIView</code>中对事件处理的方法，防止把多个View同时处理消息。应该算是比较基础的方法吧，还是多看官方的文档吧。</p>
+<p><code>imageNamed</code>的优点是当加载时会缓存图片。<code>imageNamed</code>的文档中这么说:
+这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象如果它存在的话。如果缓存中没有找到相应的图片，这个方法从指定的文档中加载然后缓存并返回这个对象。</p>
+
+<p>相反的，<code>imageWithContentsOfFile</code>仅加载图片。</p>
+
+<p>下面的代码说明了这两种方法的用法:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UIImage *img = [UIImage imageNamed:@"myImage"];              // caching
+</span><span class='line'>// or
+</span><span class='line'>UIImage *img = [UIImage imageWithContentsOfFile:@"myImage"]; // no caching</span></code></pre></td></tr></table></div></figure>
+
+
+<p>那么我们应该如何选择呢？</p>
+
+<p>如果你要加载一个大图片而且是一次性使用，那么就没必要缓存这个图片，用<code>imageWithContentsOfFile</code>足矣，这样不会浪费内存来缓存它。</p>
+
+<p>然而，在图片反复重用的情况下<code>imageNamed</code>是一个好得多的选择。</p>
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
 </div>
 
 
@@ -132,7 +153,7 @@
   
 
 
-<time datetime="2012-09-21T15:42:00+08:00" pubdate data-updated="true">Sep 21<span>st</span>, 2012</time>
+<time datetime="2014-03-15T01:01:00+08:00" pubdate data-updated="true">Mar 15<span>th</span>, 2014</time>
       
 
 <span class="categories">
@@ -150,7 +171,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/" data-via="eric_shj" data-counturl="http://saick.net/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/" >Tweet</a>
   
   
   
@@ -177,10 +198,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/09/20/icloud-xue-xi-bi-ji/" title="Previous Post: iCloud 学习笔记">&laquo; iCloud 学习笔记</a>
+        <a class="basic-alignment left" href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/" title="Previous Post: UITableView的常见优化方式总结">&laquo; UITableView的常见优化方式总结</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/" title="Next Post: iOS 序列化与反序列化">iOS 序列化与反序列化 &raquo;</a>
       
     </p>
   </footer>
