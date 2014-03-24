@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-03-24T23:08:32+08:00</updated>
+  <updated>2014-03-25T00:08:58+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[编译iOS上的libevent库、openssl库]]></title>
+    <link href="http://saick.net/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/"/>
+    <updated>2014-03-25T00:05:00+08:00</updated>
+    <id>http://saick.net/blog/2014/03/25/bian-yi-iosshang-de-libeventku-,-opensslku</id>
+    <content type="html"><![CDATA[<p><a href="http://www.tuicool.com/articles/fmmQzq">http://www.tuicool.com/articles/fmmQzq</a></p>
+
+<p>附上自己使用的环境：</p>
+
+<p><a href="https://www.dropbox.com/s/809g8rhmk7c7pgo/libevent.zip">libevent</a>
+<a href="https://www.dropbox.com/s/t2xouoj5h4blwi2/openssl.zip">openssl</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别]]></title>
@@ -1916,7 +1930,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x61;&#x40;&#x32;&#120;&#x2e;&#112;&#x6e;&#x67;">&#x61;&#64;&#x32;&#120;&#46;&#112;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#97;&#64;&#50;&#x78;&#x2e;&#x70;&#110;&#103;">&#97;&#64;&#x32;&#120;&#x2e;&#112;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
@@ -2369,69 +2383,6 @@ UITextAttributeTextShadowOffset – 文字阴影偏移量key</p>
 
 
 <p>or you can add OS_OBJECT_USE_OBJC=0 as a preprocessor macro in your build settings. If you set OS_OBJECT_USE_OBJC to 0, ARC will not retain or release your queue for you, and you will have to do it yourself using dispatch_retain and dispatch_release.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..]]></title>
-    <link href="http://saick.net/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in/"/>
-    <updated>2013-12-01T01:37:00+08:00</updated>
-    <id>http://saick.net/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in</id>
-    <content type="html"><![CDATA[<p><a href="http://yul100887.blog.163.com/blog/static/20033613520137205121620/">Origin</a></p>
-
-<p>Nested pop animation can result in corrupted navigation bar</p>
-
-<p>Finishing up a navigation transition in an unexpected state. Navigation Bar subview tree might get corrupted.</p>
-
-<h3>【情况一】</h3>
-
-<p>出现此问题的原因是在A界面弹出B界面完成后，又掉A界面POP出栈，这必然导致以上问题。如下，在弹出personalController后面，又在后面调用了[self.navigationController popViewControllerAnimated:YES];将自己弹出！解决方法，还用说吗？｛删除最后一行代码，要弹出此界面，自然有自己的返回按钮来处理｝，至少在B界面未POP以前，A界面是无论如何也不能将自己POP去消毁！</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>NSString *memberId = [dictionary objectForKey:@"PlayerNo"];
-</span><span class='line'>PersonalInfoViewController* personalController = [[PersonalInfoViewController alloc] init];
-</span><span class='line'>[personalController.navigationItems etHidesBackButton:YES];
-</span><span class='line'>[personalController setMemberId:memberId];
-</span><span class='line'>[self.navigationController pushViewController:personalController animated:YES];
-</span><span class='line'>[personalController release];
-</span><span class='line'>[self.navigationController popViewControllerAnimated:YES];</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>【情况二】</h3>
-
-<p>nested push animation can result in corrupted navigation bar <br/>
-嵌套的navigation动画会造成  navigation bar 错误<br/>
-具体表现为上一层的titleview 和这一层重叠， navigationbaritem维持上一层的左按钮,右按钮,系统警告提示nested push animation can result in corrupted navigation bar</p>
-
-<p>从头到尾分析了整个项目的代码， 最后确认问题根源——<strong>自定义UITabbarController</strong>引发的血案
-项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，</p>
-
-<ul>
-<li>整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，</li>
-<li>导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)viewWillAppear:(BOOL)animated
-</span><span class='line'>{
-</span><span class='line'>    [super viewWillAppear:animated];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

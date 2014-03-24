@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="引言 本系列适合0基础的人员，因为我就是从0开始的，此系列记录我步入Android开发的一些经验分享，望与君共勉！作为Android队伍中的一个新人的我，如果有什么不对的地方，还望不吝赐教。
-在开始Android开发之旅启动之前，首先要搭建环境，然后创建一个简单的HelloWorld。 &hellip;">
+  <meta name="description" content="这几天用lomboz3.3编辑JSP文件时，输入&lt;%@总是卡死，这是因为lomboz在我们输入&lt;%@时，lomboz在后台跟www.w3.org网站自动连接（IP：128.30.52.166：80），我是用WPE监听发现的。 解决办法： Windows: 打开C:\WINDOWS\ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,55 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/03/javawebkai-fa-eclipse-myeclipse-jspbian-ji-qia-si-wen-ti-jie-jue/">JavaWeb开发 Eclipse myEclipse JSP编辑卡死问题解决</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-03T15:16:00+08:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这几天用lomboz3.3编辑JSP文件时，输入&lt;%@总是卡死，这是因为lomboz在我们输入&lt;%@时，lomboz在后台跟www.w3.org网站自动连接（IP：128.30.52.166：80），我是用WPE监听发现的。</p>
+
+<p>解决办法：</p>
+
+<h6>Windows:</h6>
+
+<p>打开C:\WINDOWS\system32\drivers\etc\下的hosts文件，</p>
+
+<h5>Linux等:</h5>
+
+<p>/etc/hosts</p>
+
+<p>在其中加入 127.0.0.1   www.w3.org
+OK,解决了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -522,42 +570,6 @@ iSecret does not require any network.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/hello-jekyll/">Hello Jekyll</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-27T16:32:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>测试一下这玩意是不是能发布成功，哈哈</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -592,8 +604,8 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (60)</a></li>
-<li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (61)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (8)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
   </ul>
@@ -602,6 +614,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/">编译iOS上的libevent库、openssl库</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
@@ -617,10 +633,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/02/19/gcdde-keng/">GCD的坑</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
       </li>
     
   </ul>

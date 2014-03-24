@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-03-24T23:08:32+08:00</updated>
+  <updated>2014-03-25T00:08:58+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[编译iOS上的libevent库、openssl库]]></title>
+    <link href="http://saick.net/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/"/>
+    <updated>2014-03-25T00:05:00+08:00</updated>
+    <id>http://saick.net/blog/2014/03/25/bian-yi-iosshang-de-libeventku-,-opensslku</id>
+    <content type="html"><![CDATA[<p><a href="http://www.tuicool.com/articles/fmmQzq">http://www.tuicool.com/articles/fmmQzq</a></p>
+
+<p>附上自己使用的环境：</p>
+
+<p><a href="https://www.dropbox.com/s/809g8rhmk7c7pgo/libevent.zip">libevent</a>
+<a href="https://www.dropbox.com/s/t2xouoj5h4blwi2/openssl.zip">openssl</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别]]></title>
@@ -258,73 +272,6 @@ dispatch_async(_queue, ^{
 </span><span class='line'> @return  高度
 </span><span class='line'> &lt;/em>/
 </span><span class='line'>&ndash; (CGFloat)niDropDown:(NIDropDown &lt;/em>)niDropDown heightForHeaderInSection:(NSInteger)section;</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS中签名相关-MD5-sha1-10进制与16进制互转]]></title>
-    <link href="http://saick.net/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan/"/>
-    <updated>2014-01-21T21:32:00+08:00</updated>
-    <id>http://saick.net/blog/2014/01/21/ioszhong-qian-ming-xiang-guan-md5-sha1-10jin-zhi-yu-16jin-zhi-hu-zhuan</id>
-    <content type="html"><![CDATA[<p>费话少说，直接上代码</p>
-
-<h4>md5, sha1</h4>
-
-<p>```
-+ (NSString <em>)md5:(NSString </em>)str
-{
-  if ([str length] == 0)</p>
-
-<pre><code>return @"";
-</code></pre>
-
-<p>  unsigned char result[CC_MD5_DIGEST_LENGTH];
-  CC_MD5([str UTF8String], (CC_LONG)strlen([str UTF8String]) , result);
-  NSMutableString *digest = [NSMutableString string];
-  for (int i = 0; i &lt; CC_MD5_DIGEST_LENGTH; i++)</p>
-
-<pre><code>[digest appendFormat:@"%02X", result[i]];
-</code></pre>
-
-<p>  return [digest lowercaseString];
-}</p>
-
-<ul>
-<li><p>(NSString <em>)sha1:(NSString </em>)input
-{
-if ([input length] == 0)
-  return @&ldquo;&rdquo;;</p>
-
-<p>const char <em>cstr = [input cStringUsingEncoding:NSUTF8StringEncoding];
-NSData </em>data = [NSData dataWithBytes:cstr length:input.length];</p>
-
-<p>uint8_t digest[CC_SHA1_DIGEST_LENGTH];</p>
-
-<p>CC_SHA1(data.bytes, data.length, digest);</p>
-
-<p>NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];</p>
-
-<p>for(int i=0; i&lt;CC_SHA1_DIGEST_LENGTH; i++) {
-  [output appendFormat:@&ldquo;%02X&rdquo;, digest[i]];
-}</p>
-
-<p>return output;
-}
-```</p></li>
-</ul>
-
-
-<h4>10进制转16进制</h4>
-
-<p><code>
-NSString *num16Str = [NSString stringWithFormat:@"%x", numBase10];
-</code></p>
-
-<h4>16进制转10进制</h4>
-
-<p><code>
-NSString *num10Str = [NSString stringWithFormat:@"%d", strtoul([numBase16 UTF8String], 0, 16)];
-</code></p>
 ]]></content>
   </entry>
   

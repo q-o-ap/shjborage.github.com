@@ -9,7 +9,11 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本） 1）如果想启动的是一个Mac 的应用程序（即xxx.app）则可以通过图形化界面来设置： system prefernce--&gt;Accounts--&gt;LogItems--&gt;add 2）把想要启动的shell &hellip;">
+  <meta name="description" content="原文： http://www.tech126.com/git-fetch-pull/ Git中从远程的分支获取最新的版本到本地有这样2个命令： 1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge 1
+2
+3
+git fetch origin master
+git log &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +83,61 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Git Fetch和git Pull的区别</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T01:47:00+08:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
+
+<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
+
+<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git fetch origin master
+</span><span class='line'>git log -p master..origin/master
+</span><span class='line'>git merge origin/master</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -552,49 +611,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">给xcode工程做命令行build</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T14:59:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。</p>
-
-<p>XCode工程的命令行Build命令是 xcodebuild，用 &mdash;help 可以看到一些有用的参数。常用的是xcodebuild -configuration Release 指定用Release方式编译。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/gei-xcodegong-cheng-zuo-ming-ling-xing-build/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -629,8 +645,8 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (60)</a></li>
-<li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (61)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (8)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
   </ul>
@@ -639,6 +655,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/">编译iOS上的libevent库、openssl库</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
@@ -654,10 +674,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/02/19/gcdde-keng/">GCD的坑</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/">Objective-C&amp;XCode注释的正确写法</a>
       </li>
     
   </ul>

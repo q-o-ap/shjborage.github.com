@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Git no branch 解决方案 - Saick Blog</title>
+  <title>编译iOS上的libevent库、openssl库 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发 事件经过： 正常开发，branch:master
-在Eclipse中，使用插件checkout某版本出来 &hellip;">
+  <meta name="description" content="http://www.tuicool.com/articles/fmmQzq 附上自己使用的环境： libevent
+openssl
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2013/06/07/git-no-branch-jie-jue-fang-an/">
+  <link rel="canonical" href="http://saick.net/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">Git No Branch 解决方案</h1>
+      <h1 class="entry-title">编译iOS上的libevent库、openssl库</h1>
     
     
       <p class="meta">
@@ -99,69 +100,19 @@
   
 
 
-<time datetime="2013-06-07T18:03:00+08:00" pubdate data-updated="true">Jun 7<span>th</span>, 2013</time>
+<time datetime="2014-03-25T00:05:00+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
+<div class="entry-content"><p><a href="http://www.tuicool.com/articles/fmmQzq">http://www.tuicool.com/articles/fmmQzq</a></p>
 
-<h5>事件经过：</h5>
+<p>附上自己使用的环境：</p>
 
-<ol>
-<li>正常开发，branch:master</li>
-<li>在Eclipse中，使用插件checkout某版本出来</li>
-<li>再checkout到最近一次提交的版本</li>
-<li>不断Commit多次，一直不能push，以为工具出了问题</li>
-<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
-</ol>
-
-
-<p>每次都提交，数据肯定不会丢，也没有担心。
-就找个问题的解决方案，果然有。</p>
-
-<!-- more -->
-
-
-<p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># if you have already checked out to master, 
-</span><span class='line'># you won't know the commit-ish of your "no branch":
-</span><span class='line'>
-</span><span class='line'>git fsck --lost-found # (to find your &lt;commit-ish>)
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># if you are still on your "no branch" commit:
-</span><span class='line'>
-</span><span class='line'>git log # (the commit-ish will be on the first line)
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish>
-</span><span class='line'>
-</span><span class='line'># or
-</span><span class='line'>
-</span><span class='line'>git log | head -n 1 | cut -d ' ' -f 2 | pbcopy
-</span><span class='line'>git checkout master
-</span><span class='line'>git merge &lt;commit-ish></span></code></pre></td></tr></table></div></figure>
-
+<p><a href="https://www.dropbox.com/s/809g8rhmk7c7pgo/libevent.zip">libevent</a>
+<a href="https://www.dropbox.com/s/t2xouoj5h4blwi2/openssl.zip">openssl</a></p>
 </div>
 
 
@@ -184,12 +135,12 @@
   
 
 
-<time datetime="2013-06-07T18:03:00+08:00" pubdate data-updated="true">Jun 7<span>th</span>, 2013</time>
+<time datetime="2014-03-25T00:05:00+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/sourcecontrol/'>SourceControl</a>
+    <a class='category' href='/blog/categories/ios/'>iOS</a>, <a class='category' href='/blog/categories/other/'>other</a>
   
 </span>
 
@@ -202,7 +153,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/06/07/git-no-branch-jie-jue-fang-an/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/06/07/git-no-branch-jie-jue-fang-an/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/" >Tweet</a>
   
   
   
@@ -229,10 +180,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/06/07/mysql-for-macosx-an-zhuang-he-ji-ben-cao-zuo/" title="Previous Post: Mysql for MacOSX 安装和基本操作">&laquo; Mysql for MacOSX 安装和基本操作</a>
+        <a class="basic-alignment left" href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/" title="Previous Post: 性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别">&laquo; 性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/06/08/web-div-plus-csspai-ban/" title="Next Post: Web Div+CSS排版">Web Div+CSS排版 &raquo;</a>
       
     </p>
   </footer>
