@@ -5,11 +5,37 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS客户端的gzip处理-gzip-ungzip - Saick Blog</title>
+  <title>UIImage 圆角以及不同方向的圆角 - Saick Blog</title>
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的&#8221;Content-Encoding&#8221; 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了， &hellip;">
+  <meta name="description" content="自己对这个需求进行了重新封装，方便大家使用。 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+//
+// UIImage+RoundRect.h
+//
+// Created by Eric on 11/11/12.
+// &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +44,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/">
+  <link rel="canonical" href="http://saick.net/blog/2012/11/11/uiimage-yuan-jiao-yi-ji-bu-tong-fang-xiang-de-yuan-jiao/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +108,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS客户端的gzip处理-gzip-ungzip</h1>
+      <h1 class="entry-title">UIImage 圆角以及不同方向的圆角</h1>
     
     
       <p class="meta">
@@ -98,23 +124,14 @@
   
 
 
-<time datetime="2014-01-20T20:28:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+<time datetime="2012-11-11T12:43:00+08:00" pubdate data-updated="true">Nov 11<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的&#8221;Content-Encoding&#8221; 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了，这样gzip就没有起到作用。因此可以约定其他策略，防止网关解压，例如在别的头属性中标记gzip。</p>
-
-<!-- more -->
-
-
-<p>如此，就需要我们自己来解压gzip数据。方法如下：添加framework库中的libbz2.1.0.dylib；</p>
-
-<p>添加以下静态方法：</p>
-
-<h4>gzip解压：</h4>
+<div class="entry-content"><p>自己对这个需求进行了重新封装，方便大家使用。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -138,79 +155,31 @@
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSData *)ungzipData:(NSData *)compressedData
-</span><span class='line'>{
-</span><span class='line'>  if ([compressedData length] == 0)
-</span><span class='line'>    return compressedData;
-</span><span class='line'>  
-</span><span class='line'>  unsigned full_length = [compressedData length];
-</span><span class='line'>  unsigned half_length = [compressedData length] / 2;
-</span><span class='line'>  
-</span><span class='line'>  NSMutableData *decompressed = [NSMutableData dataWithLength: full_length + half_length];
-</span><span class='line'>  BOOL done = NO;
-</span><span class='line'>  int status;
-</span><span class='line'>  
-</span><span class='line'>  z_stream strm;
-</span><span class='line'>  strm.next_in = (Bytef *)[compressedData bytes];
-</span><span class='line'>  strm.avail_in = [compressedData length];
-</span><span class='line'>  strm.total_out = 0;
-</span><span class='line'>  strm.zalloc = Z_NULL;
-</span><span class='line'>  strm.zfree = Z_NULL;
-</span><span class='line'>  if (inflateInit2(&strm, (15+32)) != Z_OK)
-</span><span class='line'>    return nil;
-</span><span class='line'>  
-</span><span class='line'>  while (!done) {
-</span><span class='line'>    // Make sure we have enough room and reset the lengths.
-</span><span class='line'>    if (strm.total_out &gt;= [decompressed length]) {
-</span><span class='line'>      [decompressed increaseLengthBy: half_length];
-</span><span class='line'>    }
-</span><span class='line'>    strm.next_out = [decompressed mutableBytes] + strm.total_out;
-</span><span class='line'>    strm.avail_out = [decompressed length] - strm.total_out;
-</span><span class='line'>    // Inflate another chunk.
-</span><span class='line'>    status = inflate (&strm, Z_SYNC_FLUSH);
-</span><span class='line'>    if (status == Z_STREAM_END) {
-</span><span class='line'>      done = YES;
-</span><span class='line'>    } else if (status != Z_OK) {
-</span><span class='line'>      break;
-</span><span class='line'>    }
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  if (inflateEnd (&strm) != Z_OK)
-</span><span class='line'>    return nil;
-</span><span class='line'>  // Set real length.
-</span><span class='line'>  if (done) {
-</span><span class='line'>    [decompressed setLength: strm.total_out];
-</span><span class='line'>    return [NSData dataWithData: decompressed];
-</span><span class='line'>  }
-</span><span class='line'>  return nil;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UIImage+RoundRect.h
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 11/11/12.
+</span><span class='line'>//  Copyright (c) 2012 Saick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'> 
+</span><span class='line'>#import &lt;UIKit/UIKit.h&gt;
+</span><span class='line'> 
+</span><span class='line'>typedefenum {
+</span><span class='line'>    UIImageRoundedCornerTopLeft = 1,
+</span><span class='line'>    UIImageRoundedCornerTopRight = 1 &lt;&lt; 1,
+</span><span class='line'>    UIImageRoundedCornerBottomRight = 1 &lt;&lt; 2,
+</span><span class='line'>    UIImageRoundedCornerBottomLeft = 1 &lt;&lt; 3
+</span><span class='line'>} UIImageRoundedCorner;
+</span><span class='line'> 
+</span><span class='line'>@interface UIImage (RoundRect)
+</span><span class='line'> 
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius;
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius cornerMask:(UIImageRoundedCorner)cornerMask;
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
-<h4><em>顺便附上gzip压缩：</em></h4>
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -312,106 +281,137 @@
 <span class='line-number'>98</span>
 <span class='line-number'>99</span>
 <span class='line-number'>100</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSData*)gzipData:(NSData*)pUncompressedData
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UIImage+RoundRect.m
+</span><span class='line'>//  iSocial
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 11/11/12.
+</span><span class='line'>//  Copyright (c) 2012 Saick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'>
+</span><span class='line'>#import "UIImage+RoundRect.h"
+</span><span class='line'>
+</span><span class='line'>@implementation UIImage (RoundRect)
+</span><span class='line'>
+</span><span class='line'>//UIKit坐标系统原点在左上角，y方向向下的（坐标系A），但在Quartz中坐标系原点在左下角，y方向向上的(坐标系B)。图片绘制也是颠倒的。
+</span><span class='line'>static void addRoundedRectToPath(CGContextRef context, CGRect rect, float radius, UIImageRoundedCorner cornerMask)
 </span><span class='line'>{
-</span><span class='line'>  if (!pUncompressedData || [pUncompressedData length] == 0)
-</span><span class='line'>  {
-</span><span class='line'>    NSLog(@"%s: Error: Can't compress an empty or null NSData object.", __func__);
-</span><span class='line'>    return nil;
+</span><span class='line'>  //原点在左下方，y方向向上。移动到线条2的起点。
+</span><span class='line'>  CGContextMoveToPoint(context, rect.origin.x, rect.origin.y + radius);
+</span><span class='line'>  
+</span><span class='line'>  //画出线条2, 目前画线的起始点已经移动到线条2的结束地方了。
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height - radius);
+</span><span class='line'>  
+</span><span class='line'>  //如果左上角需要画圆角，画出一个弧线出来。
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerTopLeft) {
+</span><span class='line'>    //已左上的正方形的右下脚为圆心，半径为radius， 180度到90度画一个弧线，
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + rect.size.height - radius,
+</span><span class='line'>                    radius, M_PI, M_PI / 2, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    //如果不需要画左上角的弧度。从线2终点，画到线3的终点，
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height);
+</span><span class='line'>    
+</span><span class='line'>    //线3终点，画到线4的起点
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + radius, rect.origin.y + rect.size.height);
 </span><span class='line'>  }
 </span><span class='line'>  
-</span><span class='line'>  z_stream zlibStreamStruct;
-</span><span class='line'>  zlibStreamStruct.zalloc    = Z_NULL; // Set zalloc, zfree, and opaque to Z_NULL so
-</span><span class='line'>  zlibStreamStruct.zfree     = Z_NULL; // that when we call deflateInit2 they will be
-</span><span class='line'>  zlibStreamStruct.opaque    = Z_NULL; // updated to use default allocation functions.
-</span><span class='line'>  zlibStreamStruct.total_out = 0; // Total number of output bytes produced so far
-</span><span class='line'>  zlibStreamStruct.next_in   = (Bytef*)[pUncompressedData bytes]; // Pointer to input bytes
-</span><span class='line'>  zlibStreamStruct.avail_in  = [pUncompressedData length]; // Number of input bytes left to process
+</span><span class='line'>  //画线4的起始，到线4的终点
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x + rect.size.width - radius,
+</span><span class='line'>                          rect.origin.y + rect.size.height);
 </span><span class='line'>  
-</span><span class='line'>  int initError = deflateInit2(&zlibStreamStruct, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (15+16), 8, Z_DEFAULT_STRATEGY);
-</span><span class='line'>  if (initError != Z_OK)
-</span><span class='line'>  {
-</span><span class='line'>    NSString *errorMsg = nil;
-</span><span class='line'>    switch (initError)
-</span><span class='line'>    {
-</span><span class='line'>      case Z_STREAM_ERROR:
-</span><span class='line'>        errorMsg = @"Invalid parameter passed in to function.";
-</span><span class='line'>        break;
-</span><span class='line'>      case Z_MEM_ERROR:
-</span><span class='line'>        errorMsg = @"Insufficient memory.";
-</span><span class='line'>        break;
-</span><span class='line'>      case Z_VERSION_ERROR:
-</span><span class='line'>        errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
-</span><span class='line'>        break;
-</span><span class='line'>      default:
-</span><span class='line'>        errorMsg = @"Unknown error code.";
-</span><span class='line'>        break;
-</span><span class='line'>    }
-</span><span class='line'>    NSLog(@"%s: deflateInit2() Error: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
+</span><span class='line'>  //画右上角
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerTopRight) {
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + rect.size.width - radius,
+</span><span class='line'>                    rect.origin.y + rect.size.height - radius, radius, M_PI / 2, 0.0f, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height - radius);
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + radius);
+</span><span class='line'>  
+</span><span class='line'>  //画右下角弧线
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerBottomRight) {
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + rect.size.width - radius, rect.origin.y + radius,
+</span><span class='line'>                    radius, 0.0f, -M_PI / 2, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y);
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width - radius, rect.origin.y);
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x + radius, rect.origin.y);
+</span><span class='line'>  
+</span><span class='line'>  //画左下角弧线
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerBottomLeft) {
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + radius, radius,
+</span><span class='line'>                    -M_PI / 2, M_PI, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + radius);
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CGContextClosePath(context);
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'>    return nil;
-</span><span class='line'>  }
-</span><span class='line'>  
-</span><span class='line'>  // Create output memory buffer for compressed data. The zlib documentation states that
-</span><span class='line'>  // destination buffer size must be at least 0.1% larger than avail_in plus 12 bytes.
-</span><span class='line'>  NSMutableData *compressedData = [NSMutableData dataWithLength:[pUncompressedData length] * 1.01 + 12];
-</span><span class='line'>  
-</span><span class='line'>  int deflateStatus;
-</span><span class='line'>  do
-</span><span class='line'>  {
-</span><span class='line'>    // Store location where next byte should be put in next_out
-</span><span class='line'>    zlibStreamStruct.next_out = [compressedData mutableBytes] + zlibStreamStruct.total_out;
-</span><span class='line'>    
-</span><span class='line'>    // Calculate the amount of remaining free space in the output buffer
-</span><span class='line'>    // by subtracting the number of bytes that have been written so far
-</span><span class='line'>    // from the buffer's total capacity
-</span><span class='line'>    zlibStreamStruct.avail_out = [compressedData length] - zlibStreamStruct.total_out;
-</span><span class='line'>    deflateStatus = deflate(&zlibStreamStruct, Z_FINISH);
-</span><span class='line'>    
-</span><span class='line'>  } while ( deflateStatus == Z_OK );
-</span><span class='line'>  
-</span><span class='line'>  // Check for zlib error and convert code to usable error message if appropriate
-</span><span class='line'>  if (deflateStatus != Z_STREAM_END)
-</span><span class='line'>  {
-</span><span class='line'>    NSString *errorMsg = nil;
-</span><span class='line'>    switch (deflateStatus)
-</span><span class='line'>    {
-</span><span class='line'>      case Z_ERRNO:
-</span><span class='line'>        errorMsg = @"Error occured while reading file.";
-</span><span class='line'>        break;
-</span><span class='line'>      case Z_STREAM_ERROR:
-</span><span class='line'>        errorMsg = @"The stream state was inconsistent (e.g., next_in or next_out was NULL).";
-</span><span class='line'>        break;
-</span><span class='line'>      case Z_DATA_ERROR:
-</span><span class='line'>        errorMsg = @"The deflate data was invalid or incomplete.";
-</span><span class='line'>        break;
-</span><span class='line'>      case Z_MEM_ERROR:
-</span><span class='line'>        errorMsg = @"Memory could not be allocated for processing.";
-</span><span class='line'>        break;
-</span><span class='line'>      case Z_BUF_ERROR:
-</span><span class='line'>        errorMsg = @"Ran out of output buffer for writing compressed bytes.";
-</span><span class='line'>        break;
-</span><span class='line'>      case Z_VERSION_ERROR:
-</span><span class='line'>        errorMsg = @"The version of zlib.h and the version of the library linked do not match.";
-</span><span class='line'>        break;
-</span><span class='line'>      default:
-</span><span class='line'>        errorMsg = @"Unknown error code.";
-</span><span class='line'>        break;
-</span><span class='line'>    }
-</span><span class='line'>    DDLogError(@"%s: zlib error while attempting compression: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius
+</span><span class='line'>{
+</span><span class='line'>  return [self roundedRectWith:radius cornerMask:UIImageRoundedCornerBottomLeft | UIImageRoundedCornerBottomRight | UIImageRoundedCornerTopLeft | UIImageRoundedCornerTopRight];
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'>    // Free data structures that were dynamically created for the stream.
-</span><span class='line'>    deflateEnd(&zlibStreamStruct);
-</span><span class='line'>    
-</span><span class='line'>    return nil;
-</span><span class='line'>  }
-</span><span class='line'>  // Free data structures that were dynamically created for the stream.
-</span><span class='line'>  deflateEnd(&zlibStreamStruct);
-</span><span class='line'>  [compressedData setLength: zlibStreamStruct.total_out];
-</span><span class='line'>  DDLogInfo(@"%s: Compressed file from %d KB to %d KB", __func__, [pUncompressedData length]/1024, [compressedData length]/1024);
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius cornerMask:(UIImageRoundedCorner)cornerMask
+</span><span class='line'>{
+</span><span class='line'>  UIImageView *bkImageViewTmp = [[[UIImageView alloc] initWithImage:self] autorelease];
 </span><span class='line'>  
-</span><span class='line'>  return compressedData;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>  int w = self.size.width;
+</span><span class='line'>  int h = self.size.height;
+</span><span class='line'>  
+</span><span class='line'>  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+</span><span class='line'>  CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+</span><span class='line'>  
+</span><span class='line'>  CGContextBeginPath(context);
+</span><span class='line'>  addRoundedRectToPath(context,bkImageViewTmp.frame, radius, cornerMask);
+</span><span class='line'>  CGContextClosePath(context);
+</span><span class='line'>  CGContextClip(context);
+</span><span class='line'>  
+</span><span class='line'>  CGContextDrawImage(context, CGRectMake(0, 0, w, h), self.CGImage);
+</span><span class='line'>  
+</span><span class='line'>  CGImageRef imageMasked = CGBitmapContextCreateImage(context);
+</span><span class='line'>  CGContextRelease(context);
+</span><span class='line'>  CGColorSpaceRelease(colorSpace);
+</span><span class='line'>  
+</span><span class='line'>  UIImage *newImage = [UIImage imageWithCGImage:imageMasked];
+</span><span class='line'>  
+</span><span class='line'>  CGImageRelease(imageMasked);
+</span><span class='line'>  
+</span><span class='line'>  return newImage;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>转自<a href="http://www.cnblogs.com/likwo/archive/2011/06/16/2082781.html">http://www.cnblogs.com/likwo/archive/2011/06/16/2082781.html</a></p>
+
+<p>一般图片圆角显示都是四个角都显示圆角，如果只有这个功能需求，采用常用的方法就可以了，也不用费那么多事情。但是在有些情况下需要只显示图片的2个圆角，就不太好实现了。</p>
+
+<p>先看效果图 ，未做圆角转换的图片</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/13381665273/player/ef331c3000" height="487" width="328"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>做了4个角的圆角转换的图片</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/13381664873/player/0283605b27" height="460" width="322"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>只做了下面2个圆角转换的图片</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/13381874274/player/0060efcde0" height="460" width="324"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
 
 </div>
 
@@ -435,7 +435,7 @@
   
 
 
-<time datetime="2014-01-20T20:28:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+<time datetime="2012-11-11T12:43:00+08:00" pubdate data-updated="true">Nov 11<span>th</span>, 2012</time>
       
 
 <span class="categories">
@@ -453,7 +453,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/" data-via="eric_shj" data-counturl="http://saick.net/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2012/11/11/uiimage-yuan-jiao-yi-ji-bu-tong-fang-xiang-de-yuan-jiao/" data-via="eric_shj" data-counturl="http://saick.net/blog/2012/11/11/uiimage-yuan-jiao-yi-ji-bu-tong-fang-xiang-de-yuan-jiao/" >Tweet</a>
   
   
   
@@ -480,10 +480,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/18/auto-layout-by-example/" title="Previous Post: Auto Layout by Example">&laquo; Auto Layout by Example</a>
+        <a class="basic-alignment left" href="/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/" title="Previous Post: iOS 序列化与反序列化">&laquo; iOS 序列化与反序列化</a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/01/20/ios7-uijian-rong-dao-hang-lan-an-niu-bian-kuang-uinavigationitem-left-and-right-padding/" title="Next Post: iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding">iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padding &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2012/12/17/iosying-yong-nei-zhi-appstoreyi-ji-ios-safarinei-zhi-bannerjin-xing-tui-yan/" title="Next Post: iOS应用内置AppStore以及iOS Safari内置Banner进行推广">iOS应用内置AppStore以及iOS Safari内置Banner进行推广 &raquo;</a>
       
     </p>
   </footer>

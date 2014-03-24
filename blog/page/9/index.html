@@ -181,6 +181,323 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/11/11/uiimage-yuan-jiao-yi-ji-bu-tong-fang-xiang-de-yuan-jiao/">UIImage 圆角以及不同方向的圆角</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-11T12:43:00+08:00" pubdate data-updated="true">Nov 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>自己对这个需求进行了重新封装，方便大家使用。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UIImage+RoundRect.h
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 11/11/12.
+</span><span class='line'>//  Copyright (c) 2012 Saick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'> 
+</span><span class='line'>#import &lt;UIKit/UIKit.h&gt;
+</span><span class='line'> 
+</span><span class='line'>typedefenum {
+</span><span class='line'>    UIImageRoundedCornerTopLeft = 1,
+</span><span class='line'>    UIImageRoundedCornerTopRight = 1 &lt;&lt; 1,
+</span><span class='line'>    UIImageRoundedCornerBottomRight = 1 &lt;&lt; 2,
+</span><span class='line'>    UIImageRoundedCornerBottomLeft = 1 &lt;&lt; 3
+</span><span class='line'>} UIImageRoundedCorner;
+</span><span class='line'> 
+</span><span class='line'>@interface UIImage (RoundRect)
+</span><span class='line'> 
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius;
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius cornerMask:(UIImageRoundedCorner)cornerMask;
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  UIImage+RoundRect.m
+</span><span class='line'>//  iSocial
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 11/11/12.
+</span><span class='line'>//  Copyright (c) 2012 Saick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'>
+</span><span class='line'>#import "UIImage+RoundRect.h"
+</span><span class='line'>
+</span><span class='line'>@implementation UIImage (RoundRect)
+</span><span class='line'>
+</span><span class='line'>//UIKit坐标系统原点在左上角，y方向向下的（坐标系A），但在Quartz中坐标系原点在左下角，y方向向上的(坐标系B)。图片绘制也是颠倒的。
+</span><span class='line'>static void addRoundedRectToPath(CGContextRef context, CGRect rect, float radius, UIImageRoundedCorner cornerMask)
+</span><span class='line'>{
+</span><span class='line'>  //原点在左下方，y方向向上。移动到线条2的起点。
+</span><span class='line'>  CGContextMoveToPoint(context, rect.origin.x, rect.origin.y + radius);
+</span><span class='line'>  
+</span><span class='line'>  //画出线条2, 目前画线的起始点已经移动到线条2的结束地方了。
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height - radius);
+</span><span class='line'>  
+</span><span class='line'>  //如果左上角需要画圆角，画出一个弧线出来。
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerTopLeft) {
+</span><span class='line'>    //已左上的正方形的右下脚为圆心，半径为radius， 180度到90度画一个弧线，
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + rect.size.height - radius,
+</span><span class='line'>                    radius, M_PI, M_PI / 2, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    //如果不需要画左上角的弧度。从线2终点，画到线3的终点，
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height);
+</span><span class='line'>    
+</span><span class='line'>    //线3终点，画到线4的起点
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + radius, rect.origin.y + rect.size.height);
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  //画线4的起始，到线4的终点
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x + rect.size.width - radius,
+</span><span class='line'>                          rect.origin.y + rect.size.height);
+</span><span class='line'>  
+</span><span class='line'>  //画右上角
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerTopRight) {
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + rect.size.width - radius,
+</span><span class='line'>                    rect.origin.y + rect.size.height - radius, radius, M_PI / 2, 0.0f, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height - radius);
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + radius);
+</span><span class='line'>  
+</span><span class='line'>  //画右下角弧线
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerBottomRight) {
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + rect.size.width - radius, rect.origin.y + radius,
+</span><span class='line'>                    radius, 0.0f, -M_PI / 2, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y);
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width - radius, rect.origin.y);
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CGContextAddLineToPoint(context, rect.origin.x + radius, rect.origin.y);
+</span><span class='line'>  
+</span><span class='line'>  //画左下角弧线
+</span><span class='line'>  if (cornerMask & UIImageRoundedCornerBottomLeft) {
+</span><span class='line'>    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + radius, radius,
+</span><span class='line'>                    -M_PI / 2, M_PI, 1);
+</span><span class='line'>  } else {
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
+</span><span class='line'>    CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + radius);
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  CGContextClosePath(context);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius
+</span><span class='line'>{
+</span><span class='line'>  return [self roundedRectWith:radius cornerMask:UIImageRoundedCornerBottomLeft | UIImageRoundedCornerBottomRight | UIImageRoundedCornerTopLeft | UIImageRoundedCornerTopRight];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (UIImage *)roundedRectWith:(float)radius cornerMask:(UIImageRoundedCorner)cornerMask
+</span><span class='line'>{
+</span><span class='line'>  UIImageView *bkImageViewTmp = [[[UIImageView alloc] initWithImage:self] autorelease];
+</span><span class='line'>  
+</span><span class='line'>  int w = self.size.width;
+</span><span class='line'>  int h = self.size.height;
+</span><span class='line'>  
+</span><span class='line'>  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+</span><span class='line'>  CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+</span><span class='line'>  
+</span><span class='line'>  CGContextBeginPath(context);
+</span><span class='line'>  addRoundedRectToPath(context,bkImageViewTmp.frame, radius, cornerMask);
+</span><span class='line'>  CGContextClosePath(context);
+</span><span class='line'>  CGContextClip(context);
+</span><span class='line'>  
+</span><span class='line'>  CGContextDrawImage(context, CGRectMake(0, 0, w, h), self.CGImage);
+</span><span class='line'>  
+</span><span class='line'>  CGImageRef imageMasked = CGBitmapContextCreateImage(context);
+</span><span class='line'>  CGContextRelease(context);
+</span><span class='line'>  CGColorSpaceRelease(colorSpace);
+</span><span class='line'>  
+</span><span class='line'>  UIImage *newImage = [UIImage imageWithCGImage:imageMasked];
+</span><span class='line'>  
+</span><span class='line'>  CGImageRelease(imageMasked);
+</span><span class='line'>  
+</span><span class='line'>  return newImage;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>转自<a href="http://www.cnblogs.com/likwo/archive/2011/06/16/2082781.html">http://www.cnblogs.com/likwo/archive/2011/06/16/2082781.html</a></p>
+
+<p>一般图片圆角显示都是四个角都显示圆角，如果只有这个功能需求，采用常用的方法就可以了，也不用费那么多事情。但是在有些情况下需要只显示图片的2个圆角，就不太好实现了。</p>
+
+<p>先看效果图 ，未做圆角转换的图片</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/13381665273/player/ef331c3000" height="487" width="328"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>做了4个角的圆角转换的图片</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/13381664873/player/0283605b27" height="460" width="322"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>只做了下面2个圆角转换的图片</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/13381874274/player/0060efcde0" height="460" width="324"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/">iOS 序列化与反序列化</a></h1>
     
     
@@ -468,7 +785,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (59)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (60)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (7)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
