@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-03-25T00:08:58+08:00</updated>
+  <updated>2014-04-01T16:57:45+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,235 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Block实现原理研究与使用需要注意的问题]]></title>
+    <link href="http://saick.net/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/"/>
+    <updated>2014-04-01T16:42:00+08:00</updated>
+    <id>http://saick.net/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti</id>
+    <content type="html"><![CDATA[<p>关于Block的使用，现在很多人都说他知道。但是知道怎么用与懂为什么这么用，可能会出现哪些问题还是区别很大的。
+光说没用，先把<a href="http://blog.parse.com/2013/02/05/objective-c-blocks-quiz/">这个题</a>做一下试试看。如果说全做对，可能我接下来要说的大部分都可以直接跳过啦。</p>
+
+<!-- more -->
+
+
+<h2>Block 实现原理分析</h2>
+
+<p>引自：<a href="http://www.hrchen.com/2013/06/retain-cycle-in-block/">Block的引用循环问题 (ARC &amp; non-ARC)</a></p>
+
+<p>由于Objective-C是C语言的超集，既然OC中的NSObject对象其实是由C语言的struct+isa指针实现的，那么Block的内部实现估计也一样，以下三篇Blog对Block的实现机制做了详细研究：</p>
+
+<p><a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-1/">A look inside blocks: Episode 1</a>  <br/>
+<a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-2/">A look inside blocks: Episode 2</a>  <br/>
+<a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-3/">A look inside blocks: Episode 3</a></p>
+
+<p>虽然实现细节看着头痛，不过发现Block果然是和OC中的NSObject类似，也是用struct实现出来的东西。这个是LLVM项目compiler-rt分析的block头文Block_private.h头文件中关于Block的struct声明：</p>
+
+<p>```
+struct Block_descriptor {</p>
+
+<pre><code>unsigned long int reserved;
+unsigned long int size;
+void (*copy)(void *dst, void *src);
+void (*dispose)(void *);
+</code></pre>
+
+<p>};</p>
+
+<p>struct Block_layout {</p>
+
+<pre><code>void *isa;
+int flags;
+int reserved;
+void (*invoke)(void *, ...);
+struct Block_descriptor *descriptor;
+/* Imported variables. */
+</code></pre>
+
+<p>};
+```</p>
+
+<p>我们发现Block_layout中也有一个isa指针，像极了NSobject内部实现struct中的isa指针。这里的isa可能指向三种类型之一的Block：</p>
+
+<p><code>_NSConcreteGlobalBlock</code>：全局类型Block，在编译器就已经确定，直接放在代码段<strong>TEXT上。直接在NSLog中打印的类型为</strong>NSGlobalBlock<strong>。<br/>
+<code>_NSConcreteStackBlock</code>：位于栈上分配的Block，即</strong>NSStackBlock<strong>。<br/>
+<code>_NSConcreteMallocBlock</code>：位于堆上分配的Block，即</strong>NSMallocBlock__。</p>
+
+<p>为什么会有这么多种类呢？首先来看全局类型Block，看例子：</p>
+
+<p>```
+void addBlock(NSMutableArray *array) {
+  [array addObject:^{</p>
+
+<pre><code>printf("global block\n");
+</code></pre>
+
+<p>  }];
+}</p>
+
+<p>void example() {
+  NSMutableArray *array = [NSMutableArray array];
+  addBlock(array);
+  void (^block)() = [array objectAtIndex:0];
+  block();
+}
+```</p>
+
+<p>为什么addBlock中添加到array中的Block属于全局Block呢？因为它不需要运行时(Runtime)任何的状态来改变行为，不需要放在堆上或者栈上，直接编译后在代码段中即可，就像个c函数一样。这种类型的Block在ARC和non-ARC情况下没有差别。
+这个Block访问了作用域外的变量d，在实现上就是这个block会多一个成员变量对应这个d，在赋值block时会将方法exmpale中的d变量值复制到成员变量中，从而实现访问。</p>
+
+<p>```
+void example() {
+  int d = 5;
+  void (^block)() = ^() {</p>
+
+<pre><code>  printf("%d\n", d);
+</code></pre>
+
+<p>  };
+  block();
+}
+```</p>
+
+<p>如果要修改d呢？：</p>
+
+<p>```
+void example() {
+  int d = 5;
+  void (^block)() = ^() {</p>
+
+<pre><code>  d++;
+  printf("%d\n", d);
+</code></pre>
+
+<p>  };
+  block();
+  printf(&ldquo;%d\n&rdquo;, d);
+}
+```</p>
+
+<p>由于局部变量d和这个block的实现不在同一作用域，仅仅在调用过程中用到了值传递，所以不能直接修改，而需要加一个标识符__block int d = 5;，那么block就可以实现对这个局部变量的修改了。如果是这种block标识的变量，在Block实现中不再是简单的一个成员变量，而是对应一个新的结构体表示这个block变量。block的本质是引入了一个新的Block_byref{$var_name}{$index}结构体，被block关键字修饰的变量就被放到这个结构体中。另外，block结构体通过引入Block_byref{$var_name}{$index}指针类型的成员，得以间接访问到Block的外部变量。这样对Block外的变量访问从值传递转变为引用，从而有了修改内容的能力。
+正常我们使用Block是在栈上生成的，离开了栈作用域便释放了，如果copy一个Block，那么会将这个Block copy到堆上分配，这样就不再受栈的限制，可以随意使用啦。例如：</p>
+
+<p>```
+typedef void (^TestBlock)();</p>
+
+<p>TestBlock getBlock() {
+  char e = &lsquo;E&rsquo;;
+  void (^returnedBlock)() = ^{</p>
+
+<pre><code>printf("%c\n", e);
+</code></pre>
+
+<p>  };
+  return returnedBlock;
+}</p>
+
+<p>void example() {
+  TestBlock block = getBlock();
+  block();
+}
+```</p>
+
+<p>函数getBlock中声明并赋值的returnedBlock，一开始是在栈上分配的，属于NSStackBlock，如果是non-ARC情况下return这个NSStackBlock，那么其实已经被销毁了，在函数中example()使用时就会crash。如果是ARC情况下，getBlock返回的block会自动copy到堆上，那么block的类型就是NSMallocBlock，可以在example()中继续使用。要在Non-ARC情况下正常运行，那么就应该修改为：</p>
+
+<p>```
+TestBlock getBlock() {
+  char e = &lsquo;E&rsquo;;
+  void (^returnedBlock)() = ^{</p>
+
+<pre><code>printf("%c\n", e);
+</code></pre>
+
+<p>  };
+  return [[returnedBlock copy] autorelease];
+}
+```</p>
+
+<h2>Block中的循环引用问题</h2>
+
+<p>引自：<a href="http://www.hrchen.com/2013/06/retain-cycle-in-block/">Block的引用循环问题 (ARC &amp; non-ARC)</a></p>
+
+<p>扯了这么多，回到Block的循环引用问题，由于我们很多行为会导致Block的copy，而当Block被copy时，会对block中用到的对象产生强引用(ARC下)或者引用计数加一(non-ARC下)。
+如果遇到这种情况：</p>
+
+<p>```
+@property(nonatomic, readwrite, copy) completionBlock completionBlock;</p>
+
+<p>//========================================
+self.completionBlock = ^ {</p>
+
+<pre><code>    if (self.success) {
+        self.success(self.responseData);
+    }
+}
+</code></pre>
+
+<p>};
+```</p>
+
+<p>对象有一个Block属性，然而这个Block属性中又引用了对象的其他成员变量，那么就会对这个变量本身产生强应用，那么变量本身和他自己的Block属性就形成了循环引用。在ARC下需要修改成这样：</p>
+
+<p>```
+@property(nonatomic, readwrite, copy) completionBlock completionBlock;</p>
+
+<p>//========================================
+__weak typeof(self) weakSelf = self;
+self.completionBlock = ^ {</p>
+
+<pre><code>if (weakSelf.success) {
+    weakSelf.success(weakSelf.responseData);
+}
+</code></pre>
+
+<p>};
+```</p>
+
+<p>也就是生成一个对自身对象的弱引用，如果是倒霉催的项目还需要支持iOS4.3，就用<strong>unsafe_unretained替代</strong>weak。如果是non-ARC环境下就将<strong>weak替换为</strong>block即可。non-ARC情况下，<strong>block变量的含义是在Block中引入一个新的结构体成员变量指向这个</strong>block变量，那么__block typeof(self) weakSelf = self;就表示Block别再对self对象retain啦，这就打破了循环引用。</p>
+
+<h2>Block为什么不能捕获C语言数组的值</h2>
+
+<p>引自：<a href="http://billwang1990.github.io/blog/2014/02/06/block-cant-capture-c-array/">#iOS# Block为什么不能捕获C语言数组的值</a></p>
+
+<p>众所周知，在iOS的block中，我们可以截获自动变量，但是为什么如下截获C语言数组的代码却不行：</p>
+
+<p>```
+const char text[]  = “关注我得博客billwang1990.github.io”；</p>
+
+<p>void (^block)(void) = ^{</p>
+
+<pre><code> printf(“%c\n”, text[2]);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>要弄清楚这个问题，就必须明白block是怎样实现的。</p>
+
+<p>简单来说，所谓的“截获自动变量”意味着在执行Block语法时，Block语法表达式所使用的自动变量的值被被保存到Block结构体实例(即Block自身)中。</p>
+
+<p>之所以C数组不能截获，就类似下面的代码：</p>
+
+<p>```
+void func(char a[10])
+{
+   char b[10] = a ;
+   printf(“%d\n”, b[0]);
+}</p>
+
+<p>int main()
+{</p>
+
+<pre><code> char a[10] = {2};
+ func(a);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>这段代码是不能通过编译的，这也解释了为什么Block不能截获C数组。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[编译iOS上的libevent库、openssl库]]></title>
@@ -219,59 +448,6 @@ dispatch_async(_queue, ^{
 还有，如果关掉<code>TMCacheStartBackgroundTask</code>，并且不使用<code>dispatch_semaphore_t</code>做异步转同步的处理（直接使用<code>[[TMCache sharedCache] setObject:value forKey:key block:NULL];</code>），就没啥问题了。</p>
 
 <p>看详情，跑数据的在此<a href="https://www.dropbox.com/s/59kdkfc3sm2gx1q/test_GCD.zip">下载测试工程</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Objective-C&amp;XCode注释的正确写法]]></title>
-    <link href="http://saick.net/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa/"/>
-    <updated>2014-02-07T18:02:00+08:00</updated>
-    <id>http://saick.net/blog/2014/02/07/objective-c-and-xcodezhu-shi-de-zheng-que-xie-fa</id>
-    <content type="html"><![CDATA[<p>注释对于C体系的同学来说还是不太规范，对于XCode的文档系统来说，规范还是有帮助的，能在QuickHelp等提示中反应出来。所以还是多注意下会比较好。</p>
-
-<p>推荐以下两种写法(主是方法注释，其它的以后遇到再补充吧)</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/**
-</span><span class='line'> *  @brief update table
-</span><span class='line'> *
-</span><span class='line'> *  @param  model   you want to update the entity
-</span><span class='line'> *  @param  where   can use NSString or NSDictionary or nil&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;pre>&lt;code>                when "where" is nil : update the value based on rowid column or primary key column
-</span><span class='line'>&lt;/code>&lt;/pre>
-</span><span class='line'>
-</span><span class='line'>&lt;p> *
-</span><span class='line'> *  @return the updated was successful
-</span><span class='line'> &lt;em>/
-</span><span class='line'>&ndash;(BOOL)updateToDB:(NSObject &lt;/em>)model where:(id)where;</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/&lt;em>&lt;em>
-</span><span class='line'> @brief   每个Section的高度，默认为 0
-</span><span class='line'> @param   niDropDown: NIDropDown，用于区分不同的NI
-</span><span class='line'> @param   indexPath:  定位Section
-</span><span class='line'> @return  高度
-</span><span class='line'> &lt;/em>/
-</span><span class='line'>&ndash; (CGFloat)niDropDown:(NIDropDown &lt;/em>)niDropDown heightForHeaderInSection:(NSInteger)section;</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
