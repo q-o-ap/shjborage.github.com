@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-04-01T16:57:45+08:00</updated>
+  <updated>2014-04-01T16:59:24+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -239,6 +239,8 @@ void func(char a[10])
 ```</p>
 
 <p>这段代码是不能通过编译的，这也解释了为什么Block不能截获C数组。</p>
+
+<p>再分享一篇讲的比较好的文章：<a href="http://blog.csdn.net/jasonblog/article/details/7756763">iOS中block实现的探究</a></p>
 ]]></content>
   </entry>
   
