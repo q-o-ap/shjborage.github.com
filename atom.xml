@@ -4,7 +4,7 @@
   <title><![CDATA[Saick Blog]]></title>
   <link href="http://saick.net/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-04-08T17:03:18+08:00</updated>
+  <updated>2014-04-08T17:09:17+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -51,7 +51,7 @@
 <p>To uninstall, just remove the plugin from the above directory, and restart Xcode:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rm -rf ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins/KPRunEverywhereXcodePlugin.xcplugin</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rm -rf ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins/RevealPlugin.xcplugin</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Tested on Xcode 5.1 and Mac OS X 10.9.2.</p>
@@ -2274,7 +2274,7 @@ OCUnit 的有点是官方支持，于 XCode 集成的比较好。</p>
     <link href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#97;&#x40;&#x32;&#x78;&#46;&#112;&#x6e;&#103;">&#97;&#x40;&#50;&#x78;&#x2e;&#112;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#x61;&#x40;&#50;&#x78;&#46;&#112;&#110;&#x67;">&#97;&#64;&#50;&#x78;&#x2e;&#x70;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
