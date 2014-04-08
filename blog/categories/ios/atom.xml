@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Saick Blog]]></title>
   <link href="http://saick.net/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://saick.net/"/>
-  <updated>2014-04-01T16:59:24+08:00</updated>
+  <updated>2014-04-08T16:53:40+08:00</updated>
   <id>http://saick.net/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Reveal插件简介]]></title>
+    <link href="http://saick.net/blog/2014/04/08/revealcha-jian-jian-jie/"/>
+    <updated>2014-04-08T16:24:00+08:00</updated>
+    <id>http://saick.net/blog/2014/04/08/revealcha-jian-jian-jie</id>
+    <content type="html"><![CDATA[<p>Reveal 自己没有这种插件，可以修改工程使用，就自己做个吧。<br/>
+做的时候参考了Spark Inspector。</p>
+
+<p><a href="https://github.com/shjborage/Reveal-Plugin-for-XCode">https://github.com/shjborage/Reveal-Plugin-for-XCode</a></p>
+
+<!-- more -->
+
+
+<p>Plugin for Xcode to integrate the Reveal App to your project automatic(Without any modifications to your project).</p>
+
+<h2>Introduction</h2>
+
+<p><strong>The Reveal Plugin works just like Instruments.</strong></p>
+
+<p>The Spark Inspector integrates directly into Xcode, so you don&rsquo;t need to add frameworks or modify your project to inspect your app in the iOS Simulator.</p>
+
+<p>If you&rsquo;re in the middle of a debug session and something unexpected happens, you can attach the Spark Inspector to see what&rsquo;s going on. No restarting your app, no changing your project. All from inside Xcode.</p>
+
+<h2>Install</h2>
+
+<h3>Via Alcatraz</h3>
+
+<p>Reveal-Plugin-for-XCode is available through the <a href="http://alcatraz.io/">Alcatraz</a> Xcode plugin management system.</p>
+
+<p>From source</p>
+
+<p>Simply build the Xcode project and restart Xcode. The plugin will automatically install to <code>~/Library/Application Support/Developer/Shared/Xcode/Plug-ins</code>.</p>
+
+<h2>Uninstall</h2>
+
+<p>To uninstall, just remove the plugin from the above directory, and restart Xcode:</p>
+
+<p><code>
+rm -rf ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins/KPRunEverywhereXcodePlugin.xcplugin
+</code></p>
+
+<p>Tested on Xcode 5.1 and Mac OS X 10.9.2.</p>
+
+<h2>Contributors</h2>
+
+<p>Welcome to fork and PullRequest to do this better.
+We use issues to manage bugs and enhanced features.</p>
+
+<h2>Thanks</h2>
+
+<ul>
+<li><a href="http://blog.ittybittyapps.com/blog/2013/11/07/integrating-reveal-without-modifying-your-xcode-project/">Integrating Reveal without modifying your Xcode project</a></li>
+<li><a href="http://onevcat.com/2013/02/xcode-plugin">Xcode 4 插件制作入门</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Block实现原理研究与使用需要注意的问题]]></title>
@@ -312,144 +370,6 @@ UIImage *img = [UIImage imageWithContentsOfFile:@"myImage"]; // no caching
 
 
 <p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[GCD的坑]]></title>
-    <link href="http://saick.net/blog/2014/02/19/gcdde-keng/"/>
-    <updated>2014-02-19T22:22:00+08:00</updated>
-    <id>http://saick.net/blog/2014/02/19/gcdde-keng</id>
-    <content type="html"><![CDATA[<p>最近用不少GCD的东西，相信很多童鞋也会被GCD的简便给吸引过来。
-但是这玩意使用起来，还是有不少的坑，列举出来，希望能对遇到的有用。</p>
-
-<!-- more -->
-
-
-<p>大多数时间没啥事，但是有时这样使用，就会带来问题了。见测试代码：</p>
-
-<p>```
-//  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{</p>
-
-<pre><code>for (int i=0; i&lt;=100; i++) {
-</code></pre>
-
-<p>//    for (int i=0; i&lt;=62; i++) {</p>
-
-<pre><code>  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    NSString *key = [NSString stringWithFormat:@"key%d", i];
-    NSMutableDictionary *value = [NSMutableDictionary dictionary];
-    for (int j=0; j&lt;1/*10000*/; j++) {
-      NSString *subKey = [NSString stringWithFormat:@"subkey%d", j];
-      int random = arc4random();
-      [value setObject:[NSString stringWithFormat:@"%d", random] forKey:subKey];
-    }
-</code></pre>
-
-<p>//        int j=100;
-//        while (&mdash;j>0) {
-//          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//            NSLog(@&ldquo;sub&rdquo;);
-//          });
-//        }</p>
-
-<p>//        [[TMCache sharedCache] setObject:value forKey:key];</p>
-
-<pre><code>    [[TMCache sharedCache] setObject:value forKey:key block:NULL];
-</code></pre>
-
-<p>//        TMDiskCache *cache = [[TMDiskCache alloc] initWithName:@&ldquo;test.diskCache&rdquo;];
-//        [cache setObject:value forKey:key block:NULL];</p>
-
-<pre><code>    NSLog(@"%@", key);
-  });
-}
-</code></pre>
-
-<p>//  });
-```</p>
-
-<p><em>TMCache setObject:forKey:</em></p>
-
-<p>```
-&ndash; (void)setObject:(id <NSCoding>)object forKey:(NSString *)key
-{</p>
-
-<pre><code>if (!object || !key)
-    return;
-
-dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-
-[self setObject:object forKey:key block:^(TMCache *cache, NSString *key, id object) {
-    dispatch_semaphore_signal(semaphore);
-}];
-
-dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-
-#if !OS_OBJECT_USE_OBJC
-dispatch_release(semaphore);
-#endif
-</code></pre>
-
-<p>}
-```</p>
-
-<p><em>TMDiskCache 定义</em>
-```
-//#if <strong>IPHONE_OS_VERSION_MIN_REQUIRED >= </strong>IPHONE_4_0 //这个是默认值</p>
-
-<h1>if 0</h1>
-
-<pre><code>#define TMCacheStartBackgroundTask() UIBackgroundTaskIdentifier taskID = UIBackgroundTaskInvalid; \
-        taskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{ \
-        [[UIApplication sharedApplication] endBackgroundTask:taskID]; }];
-#define TMCacheEndBackgroundTask() [[UIApplication sharedApplication] endBackgroundTask:taskID];
-</code></pre>
-
-<h1>else</h1>
-
-<pre><code>#define TMCacheStartBackgroundTask()
-#define TMCacheEndBackgroundTask()
-</code></pre>
-
-<h1>endif</h1>
-
-<p>```</p>
-
-<p><em>TMDiskCache 使用</em>
-```
-&ndash; (void)setObject:(id <NSCoding>)object forKey:(NSString *)key block:(TMDiskCacheObjectBlock)block
-{</p>
-
-<pre><code>NSDate *now = [[NSDate alloc] init];
-
-if (!key || !object)
-    return;
-
-TMCacheStartBackgroundTask();
-
-__weak TMDiskCache *weakSelf = self;
-
-dispatch_async(_queue, ^{
-    TMDiskCache *strongSelf = weakSelf;
-    if (!strongSelf) {
-        TMCacheEndBackgroundTask();
-        return;
-    }
-
-    ...
-
-    TMCacheEndBackgroundTask();
-});
-</code></pre>
-
-<p>}
-```</p>
-
-<p>这样一个for循环，次数超过63就卡死了，啥也执行不了。
-还有，如果关掉<code>TMCacheStartBackgroundTask</code>，并且不使用<code>dispatch_semaphore_t</code>做异步转同步的处理（直接使用<code>[[TMCache sharedCache] setObject:value forKey:key block:NULL];</code>），就没啥问题了。</p>
-
-<p>看详情，跑数据的在此<a href="https://www.dropbox.com/s/59kdkfc3sm2gx1q/test_GCD.zip">下载测试工程</a></p>
 ]]></content>
   </entry>
   

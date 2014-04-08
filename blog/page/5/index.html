@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Shi">
 
   
-  <meta name="description" content="From:宋红日（转自：http://blog.sina.com.cn/s/blog_9792a85b01018v83.html%EF%BC%89 我们经常在引用第三方控件或者阅读一个开源的代码的时候，与自己的xcode 的开发环境不一样，导致编译不过的问题，还得改代码，带来了一定的工作量。 &hellip;">
+  <meta name="description" content="转自：http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/ (Posted by 唐巧 Aug 5th, 2012 iOS) 苹果在今年的WWDC2012大会上介绍了大量Objective-C的新特性， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">Objective-C的新特性(Object Literals等)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-20T22:28:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>转自：<a href="http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/">http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/</a> (Posted by 唐巧 Aug 5th, 2012  iOS)</p>
+
+<p>苹果在今年的WWDC2012大会上介绍了大量Objective-C的新特性，能够帮助iOS程序员更加高效地编写代码。在不久前更新的XCode4.4版本中，这些新特性已经可以使用了。让我们看看这些新特性有哪些：</p>
+
+<h3>Object Literals</h3>
+
+<p>这个是我认为最赞的一个改进。Object Literals允许你方便地定义数字、数组和字典对象。这个功能类似于java5提供的auto boxing功能。这虽然是一个语法糖，但我认为对提高写代码效率帮助很大。让我们先来看看以前定义数字、数组和字典对象的方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>123NSNumber * number = [NSNumber numberWithInt:1];
+</span><span class='line'>NSArray * array = [NSArray arrayWithObjects:@"one", @"two", nil];
+</span><span class='line'>NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:@"value1", @"key1", @"value2", @"key2", nil];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>是不是很恶心？现在以上代码可以简化成以下形式，注意到没有，不用再在参数的最后加恶心的nil了，字典的key和value也不再是倒着先写value,再写key了：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/20/objective-cde-xin-te-xing-object-literals/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -524,83 +581,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">iOS7 初步适配，与iOS6共存</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T15:43:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h4>状态栏隐藏问题</h4>
-
-<p><strong>使用代码</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)prefersStatusBarHidden
-</span><span class='line'>{
-</span><span class='line'>  return _isStatusHidden;//隐藏为YES，显示为NO
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>- (void)hideStatusBar:(BOOL)isHidden
-</span><span class='line'>{
-</span><span class='line'>  if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-</span><span class='line'>    // iOS 7
-</span><span class='line'>    _isStatusHidden = isHidden;
-</span><span class='line'>    [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
-</span><span class='line'>  } else {
-</span><span class='line'>    [[UIApplication sharedApplication] setStatusBarHidden:isHidden];
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/ios7-chu-bu-gua-pei-%2Cyu-ios6gong-cun/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -635,7 +615,7 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
 <li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
 <li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (62)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (63)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (8)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
 
@@ -645,6 +625,10 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal插件简介</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/">Block实现原理研究与使用需要注意的问题</a>
@@ -660,10 +644,6 @@ var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColo
     
       <li class="post">
         <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/06/er-fen-cha-zhao-zui-da-de-keng/">二分查找最大的坑</a>
       </li>
     
   </ul>
