@@ -6,6 +6,10 @@ comments: true
 categories: iOS
 ---
 
+## OpenSource
+
+此项目已开源 <https://bitbucket.org/Saick/flashlight>
+
 The best flashlight app to save you power and then protect you battery. 
 
 Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked. 

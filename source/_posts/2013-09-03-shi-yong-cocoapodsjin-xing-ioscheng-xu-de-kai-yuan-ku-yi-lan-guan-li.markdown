@@ -49,7 +49,8 @@ $ pod setup
 使用时需要新建一个名为Podfile的文件，以如下格式，将依赖的库名字依次列在文件中即可
 
 ```
-eachability',  '~> 3.0.0'
+platform :ios,'5.0'
+pod 'JSONKit',       '~> 1.4'
 pod 'ASIHTTPRequest'
 pod 'RegexKitLite'
 ```

@@ -3,7 +3,7 @@ layout: post
 title: "Hello jekyll"
 date: 2013-05-27 16:32
 comments: true
-categories: test
+categories: other
 ---
 
 

@@ -3,7 +3,7 @@ layout: post
 title: "Test sharing code snippets"
 date: 2013-05-27 16:54
 comments: true
-categories: test
+categories: other
 ---
 
 
