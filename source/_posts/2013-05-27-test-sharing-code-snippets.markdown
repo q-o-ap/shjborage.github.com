@@ -64,5 +64,11 @@ NSObject *obj = [NSObject new];
 NSObject *obj = [[]NSObject alloc] init];
 {% endcodeblock %}
 
+#### Gist
+
+2462760为ID，如果是多个文件的话，可在后面跟上文件名。
+
+{% gist 2462760 %} 
+
 
 
