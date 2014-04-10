@@ -6,6 +6,8 @@ comments: true
 categories: other
 ---
 
+Update the `Gist plugin` usage 		*2014-04-10*
+
 
 Sharing Code Snippets
 
@@ -66,9 +68,11 @@ NSObject *obj = [[]NSObject alloc] init];
 
 #### Gist
 
-2462760为ID，如果是多个文件的话，可在后面跟上文件名。
+2462760为ID，如果是多个文件的话，可在后面跟上文件名。(但现在好像不太能用啊)
 
-{% gist 2462760 %} 
+``` 
+{% gist 9828745 %} 
+```
 
 
 
