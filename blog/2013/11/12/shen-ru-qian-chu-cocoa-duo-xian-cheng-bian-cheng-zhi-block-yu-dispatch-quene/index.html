@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>深入浅出 Cocoa 多线程编程之 block 与 dispatch quene - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+
+  
+  <meta name="description" content="深入浅出 Cocoa 多线程编程之 block 与 dispatch quene
+罗朝辉(http://blog.csdn.net/kesalin)
+CC 许可，转载请注明出处 block 是 Apple 在 GCC 4.2 中扩充的新语法特性，其目的是支持多核并行编程。我们可以将 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://saick.net/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Saick Blog</a></h1>
+  
+    <h2>Safe&Quick iOS Dev Blog.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:saick.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/game.html">Game Channel</a></li>
+  <li><a href="/friendlylink.html">Links</a></li>
+  <li><a href="/about.html">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">深入浅出 Cocoa 多线程编程之 Block 与 Dispatch Quene</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T22:20:00+08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>深入浅出 Cocoa 多线程编程之 block 与 dispatch quene
+罗朝辉(<a href="http://blog.csdn.net/kesalin">http://blog.csdn.net/kesalin</a>)
+CC 许可，转载请注明出处</p>
+
+<p>block 是 Apple 在 GCC 4.2 中扩充的新语法特性，其目的是支持多核并行编程。我们可以将
+dispatch_queue 与 block 结合起来使用，方便进行多线程编程。</p>
+
+<!-- more -->
+
+
+<p>本文源代码下载：<a href="http://www.cppblog.com/Files/kesalin/StudyBlocks.zip">点击下载</a></p>
+
+<h3>1，实验工程准备</h3>
+
+<p>在 XCode 4.0 中，我们建立一个 Mac OS X Application 类型的 Command Line Tool，在 Type 里面我们选择 Foundation 就好，工程名字暂且为 StudyBlocks.默认生成的工程代码 main.m 内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>int main (int argc, const char * argv[])  
+</span><span class='line'>{  
+</span><span class='line'>    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>    // insert code here...  
+</span><span class='line'>    NSLog(@"Hello, World!");  
+</span><span class='line'>  
+</span><span class='line'>    [pool drain];  
+</span><span class='line'>    return 0;  
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2，如何编写 block</h3>
+
+<p>在自动生成的工程代码中，默认打印一条语句&#8221;Hello, World!&ldquo;，这个任务可以不可以用 block 语法来实现呢？答案是肯定的，请看：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^aBlock)(void) = ^(void){ NSLog(@"Hello, World!"); };  
+</span><span class='line'>aBlock();  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>用上面的这两行语句替换 main.m 中的 NSLog(@&ldquo;Hello, World!&rdquo;); 语句，编译运行，结果是一样的。</p>
+
+<p>这两行语句是什么意思呢？首先，等号左边的 void (^aBlock)(void) 表示声明了一个 block，这个 block 不带参数(void)且也无返回参数(void)；等号右边的 ^(void){ } 结构表示一个 block 的实现体，至于这个 block 具体要做的事情就都在 {} 之间了。在这里我们仅仅是打印一条语句。整个语句就是声明一个 block，并对其赋值。第二个语句就是调用这个 block 做实际的事情，就像我们调用函数一样。block 很有点像 C++0X 中的 Lambda 表达式。</p>
+
+<p>我们也可以这么写：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^aBlock)(void) = 0;  
+</span><span class='line'>aBlock = ^(void){  
+</span><span class='line'>    NSLog(@" &gt;&gt; Hello, World!");  
+</span><span class='line'>};  
+</span><span class='line'>aBlock();  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在我们知道了一个 block 该如何编写了，那么 block 数组呢？也很简单，请看：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void (^blocks[2])(void) = {  
+</span><span class='line'>    ^(void){ NSLog(@" &gt;&gt; This is block 1!"); },  
+</span><span class='line'>    ^(void){ NSLog(@" &gt;&gt; This is block 2!"); }  
+</span><span class='line'>};
+</span><span class='line'>blocks[0]();  
+</span><span class='line'>blocks[1]();  </span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>谨记！</strong></p>
+
+<p>block 是分配在 <em>stack</em> 上的，这意味着我们必须小心里处理 block 的生命周期。
+比如如下的做法是不对的，因为 stack 分配的 block 在 if 或 else 内是有效的，但是到大括号 } 退出时就可能无效了：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_block_t block;  
+</span><span class='line'>  
+</span><span class='line'>if (x) {  
+</span><span class='line'>    block = ^{ printf("true\n"); };  
+</span><span class='line'>} else {  
+</span><span class='line'>    block = ^{ printf("false\n"); };  
+</span><span class='line'>}  
+</span><span class='line'>block();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码就相当于下面这样的 unsafe 代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (x) {  
+</span><span class='line'>    struct Block __tmp_1 = ...; // setup details  
+</span><span class='line'>    block = &__tmp_1;  
+</span><span class='line'>} else {  
+</span><span class='line'>    struct Block __tmp_2 = ...; // setup details  
+</span><span class='line'>    block = &__tmp_2;  
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3，如何在 block 中修改外部变量</h3>
+
+<p>考虑到 block 的目的是为了支持并行编程，对于普通的 local 变量，我们就不能在 block 里面随意修改（原因很简单，block 可以被多个线程并行运行，会有问题的），而且如果你在 block 中修改普通的 local 变量，编译器也会报错。那么该如何修改外部变量呢？有两种办法，第一种是可以修改 static 全局变量；第二种是可以修改用新关键字 __block 修饰的变量。请看：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>__block int blockLocal  = 100;  
+</span><span class='line'>static int staticLocal  = 100;  
+</span><span class='line'>  
+</span><span class='line'>void (^aBlock)(void) = ^(void){   
+</span><span class='line'>    NSLog(@" >> Sum: %d\n", global + staticLocal);  
+</span><span class='line'>      
+</span><span class='line'>    global++;  
+</span><span class='line'>    blockLocal++;  
+</span><span class='line'>    staticLocal++;  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>aBlock();  
+</span><span class='line'>  
+</span><span class='line'>NSLog(@"After modified, global: %d, block local: %d, static local: %d\n", global, blockLocal, staticLocal);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>相似的情况，我们也可以引用 static block 或 __block block。比如我们可以用他们来实现 block 递归：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 1  
+</span><span class='line'>void (^aBlock)(int) = 0;  
+</span><span class='line'>static void (^ const staticBlock)(int) = ^(int i) {  
+</span><span class='line'>    if (i > 0) {  
+</span><span class='line'>        NSLog(@" >> static %d", i);  
+</span><span class='line'>        staticBlock(i - 1);  
+</span><span class='line'>    }  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>aBlock = staticBlock;  
+</span><span class='line'>aBlock(5);  
+</span><span class='line'>  
+</span><span class='line'>// 2  
+</span><span class='line'>__block void (^blockBlock)(int);  
+</span><span class='line'>blockBlock = ^(int i) {  
+</span><span class='line'>    if (i > 0) {  
+</span><span class='line'>        NSLog(@" >> block %d", i);  
+</span><span class='line'>        blockBlock(i - 1);  
+</span><span class='line'>    }  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>blockBlock(5);</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4，上面我们介绍了 block 及其基本用法，但还没有涉及并行编程。 block 与 Dispatch Queue 分发队列结合起来使用，是 iOS 中并行编程的利器。请看代码：</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch queue  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_async(queue, ^(void) {  
+</span><span class='line'>    int sum = 0;  
+</span><span class='line'>    for(int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        sum += data[i];  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> Sum: %d", sum);  
+</span><span class='line'>      
+</span><span class='line'>    flag = YES;  
+</span><span class='line'>});  
+</span><span class='line'>  
+</span><span class='line'>// wait util work is done.  
+</span><span class='line'>//  
+</span><span class='line'>while (!flag);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的 block 仅仅是将数组求和。</p>
+
+<p>首先，我们创建一个串行分发队列，然后将一个 block 任务加入到其中并行运行，这样 block 就会在新的线程中运行，直到结束返回主线程。在这里要注意 flag 的使用。flag 是 static 的，所以我们可以 block 中修改它。 语句 while (!flag); 的目的是保证主线程不会 blcok 所在线程之前结束。</p>
+
+<p>dispatch_queue_t 的定义如下：
+typedef void (^dispatch_block_t)( void);
+这意味着加入 dispatch_queue 中的 block 必须是无参数也无返回值的。</p>
+
+<p>dispatch_queue_create 的定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t dispatch_queue_create(const char *label, dispatch_queue_attr_t attr);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个函数带有两个参数：一个用于标识 dispatch_queue 的字符串；一个是保留的 dispatch_queue 属性，将其设置为 NULL 即可。</p>
+
+<p>我们也可以使用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_queue_t dispatch_get_global_queue(long priority, unsigned long flags);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>来获得全局的 dispatch_queue，参数 priority 表示优先级，值得注意的是：我们不能修改该函数返回的 dispatch_queue。</p>
+
+<p>dispatch_async 函数的定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void dispatch_async(dispatch_queue_t queue, dispatch_block_t block);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>它是将一个 block 加入一个 dispatch_queue，这个 block 会再其后得到调度时，并行运行。
+相应的 dispatch_sync 函数就是同步执行了，一般很少用到。比如上面的代码如果我们修改为 dispatch_sync，那么就无需编写 flag 同步代码了。</p>
+
+<h3>5，dispatch_queue 的运作机制及线程间同步</h3>
+
+<p>我们可以将许多 blocks 用 dispatch_async 函数提交到到 dispatch_queue 串行运行。这些 blocks 是按照 FIFO(先入先出)规则调度的，也就是说，先加入的先执行，后加入的一定后执行，但在某一个时刻，可能有多个 block 同时在执行。</p>
+
+<p>在上面的例子中，我们的主线程一直在轮询 flag 以便知晓 block 线程是否执行完毕，这样做的效率是很低的，严重浪费 CPU 资源。我们可以使用一些通信机制来解决这个问题，如：semaphore（信号量）。 semaphore 的原理很简单，就是生产-消费模式，必须生产一些资源才能消费，没有资源的时候，那我就啥也不干，直到资源就绪。下面来看代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>// Create a semaphore with 0 resource  
+</span><span class='line'>//  
+</span><span class='line'>__block dispatch_semaphore_t sem = dispatch_semaphore_create(0);  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch semaphore  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_async(queue, ^(void) {  
+</span><span class='line'>    int sum = 0;  
+</span><span class='line'>    for(int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        sum += data[i];  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> Sum: %d", sum);  
+</span><span class='line'>      
+</span><span class='line'>    // signal the semaphore: add 1 resource  
+</span><span class='line'>    //  
+</span><span class='line'>    dispatch_semaphore_signal(sem);  
+</span><span class='line'>});  
+</span><span class='line'>  
+</span><span class='line'>// wait for the semaphore: wait until resource is ready.  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(sem);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>首先我们创建一个 <code>__block semaphore</code>，并将其资源初始值设置为 0 (不能少于 0)，在这里表示任务还没有完成，没有资源可用主线程不要做事情。然后在 block 任务完成之后，使用 dispatch_semaphore_signal 增加 semaphore 计数（可理解为资源数），表明任务完成，有资源可用主线程可以做事情了。而主线程中的 dispatch_semaphore_wait 就是减少 semaphore 的计数，如果资源数少于 0，则表明资源还可不得，我得按照FIFO（先等先得）的规则等待资源就绪，一旦资源就绪并且得到调度了，我再执行。</p>
+
+<h3>6 示例：</h3>
+
+<p>下面我们来看一个按照 FIFO 顺序执行并用 semaphore 同步的例子：先将数组求和再依次减去数组。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>__block int sum = 0;  
+</span><span class='line'>  
+</span><span class='line'>// Create a semaphore with 0 resource  
+</span><span class='line'>//  
+</span><span class='line'>__block dispatch_semaphore_t sem = dispatch_semaphore_create(0);  
+</span><span class='line'>__block dispatch_semaphore_t taskSem = dispatch_semaphore_create(0);  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch semaphore  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task1 = ^(void) {  
+</span><span class='line'>    int s = 0;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s += data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> after add: %d", sum);  
+</span><span class='line'>  
+</span><span class='line'>    dispatch_semaphore_signal(taskSem);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task2 = ^(void) {  
+</span><span class='line'>    dispatch_semaphore_wait(taskSem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>      
+</span><span class='line'>    int s = sum;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s -= data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>  
+</span><span class='line'>    NSLog(@" >> after subtract: %d", sum);  
+</span><span class='line'>    dispatch_semaphore_signal(sem);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>dispatch_async(queue, task1);  
+</span><span class='line'>dispatch_async(queue, task2);  
+</span><span class='line'>  
+</span><span class='line'>// wait for the semaphore: wait until resource is ready.  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(taskSem);  
+</span><span class='line'>dispatch_release(sem);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的代码中，我们利用了 dispatch_queue 的 FIFO 特性，确保 task1 先于 task2 执行，而 task2 必须等待直到 task1 执行完毕才开始干正事，主线程又必须等待 task2 才能干正事。 这样我们就可以保证先求和，再相减，然后再让主线程运行结束这个顺序。</p>
+
+<h3>7，使用 dispatch_apply 进行并发迭代：</h3>
+
+<p>对于上面的求和操作，我们也可以使用 dispatch_apply 来简化代码的编写：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);  
+</span><span class='line'>  
+</span><span class='line'>__block int sum = 0;  
+</span><span class='line'>__block int *pArray = data;  
+</span><span class='line'>  
+</span><span class='line'>// iterations  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_apply(Length, queue, ^(size_t i) {  
+</span><span class='line'>    sum += pArray[i];  
+</span><span class='line'>});  
+</span><span class='line'>  
+</span><span class='line'>NSLog(@" >> sum: %d", sum);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意这里使用了全局 dispatch_queue。</p>
+
+<p>dispatch_apply 的定义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_apply(size_t iterations, dispatch_queue_t queue, void (^block)(size_t));</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参数 iterations 表示迭代的次数，void (^block)(size_t) 是 block 循环体。这么做与 for 循环相比有什么好处呢？答案是：并行，这里的求和是并行的，并不是按照顺序依次执行求和的。</p>
+
+<h3>8, dispatch group</h3>
+
+<p>我们可以将完成一组相关任务的 block 添加到一个 dispatch group 中去，这样可以在 group 中所有 block 任务都完成之后，再做其他事情。比如 6 中的示例也可以使用 dispatch group 实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];  
+</span><span class='line'>  
+</span><span class='line'>initData();  
+</span><span class='line'>  
+</span><span class='line'>__block int sum = 0;  
+</span><span class='line'>  
+</span><span class='line'>// Create a semaphore with 0 resource  
+</span><span class='line'>//  
+</span><span class='line'>__block dispatch_semaphore_t taskSem = dispatch_semaphore_create(0);  
+</span><span class='line'>  
+</span><span class='line'>// create dispatch semaphore  
+</span><span class='line'>//  
+</span><span class='line'>dispatch_queue_t queue = dispatch_queue_create("StudyBlocks", NULL);  
+</span><span class='line'>dispatch_group_t group = dispatch_group_create();  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task1 = ^(void) {  
+</span><span class='line'>    int s = 0;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s += data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> after add: %d", sum);  
+</span><span class='line'>      
+</span><span class='line'>    dispatch_semaphore_signal(taskSem);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>dispatch_block_t task2 = ^(void) {  
+</span><span class='line'>    dispatch_semaphore_wait(taskSem, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>      
+</span><span class='line'>    int s = sum;  
+</span><span class='line'>    for (int i = 0; i &lt; Length; i++)  
+</span><span class='line'>        s -= data[i];  
+</span><span class='line'>    sum = s;  
+</span><span class='line'>      
+</span><span class='line'>    NSLog(@" >> after subtract: %d", sum);  
+</span><span class='line'>};  
+</span><span class='line'>  
+</span><span class='line'>// Fork  
+</span><span class='line'>dispatch_group_async(group, queue, task1);  
+</span><span class='line'>dispatch_group_async(group, queue, task2);  
+</span><span class='line'>  
+</span><span class='line'>// Join  
+</span><span class='line'>dispatch_group_wait(group, DISPATCH_TIME_FOREVER);  
+</span><span class='line'>  
+</span><span class='line'>dispatch_release(taskSem);  
+</span><span class='line'>dispatch_release(queue);  
+</span><span class='line'>dispatch_release(group);  
+</span><span class='line'>  
+</span><span class='line'>[pool drain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的代码中，我们使用 dispatch_group_create 创建一个 dispatch_group_t，然后使用语句：dispatch_group_async(group, queue, task1); 将 block 任务加入队列中，并与组关联，这样我们就可以使用 dispatch_group_wait(group, DISPATCH_TIME_FOREVER); 来等待组中所有的 block 任务完成再继续执行。</p>
+
+<p>至此我们了解了 dispatch queue 以及 block 并行编程相关基本知识，开始在项目中运用它们吧，</p>
+
+<p><em>参考资料：</em>
+Concurrency Programming Guide：
+<a href="http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html">http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T22:20:00+08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+  
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
+    
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/06/iosduo-xian-cheng-bian-cheng-zhi-grand-central-dispatch-gcd-jie-shao-he-shi-yong/" title="Previous Post: iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用">&laquo; iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/11/12/mac-os-x-gai-hostswen-jian/" title="Next Post: Mac OS X 改 hosts文件">Mac OS X 改 hosts文件 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
+
+
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<!--QQ邮件列表订阅嵌入代码-->
+<!--
+<script >
+var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColor="light",sText="填写您的邮件地址，订阅精彩内容：" ;;
+</script>
+<script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>
+-->
+
+<!--QQ邮件列表订阅嵌入代码--><a target="_blank" href="http://list.qq.com/cgi-bin/qf_invite?id=cd51c6966346e0f99d051042a4e333ff2c27e747e9bbec00"><img alt="填写您的邮件地址，订阅我们的精彩内容：" border="0" src="http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_light_l.png"/></a>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (63)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (8)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal插件简介</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/">Block实现原理研究与使用需要注意的问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/">编译iOS上的libevent库、openssl库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Saick Apps</h1>
+  <ul id="apps">
+    <li><a href="/blog/2013/05/28/isecret-jian-jie/">iSecret</a></li>
+  	<li><a href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Flashlight</a></li>
+  	<li><a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal-Plugin-for-Xcode</a></li>
+  </ul>
+</section>
+
+
+
+
+
+
+<section>
+  <h1>(AD)广告位空缺中,招租</h1>
+  <div>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="69" src="http://www.taobao.com/go/app/tbk_app/tb_search.php?pid=mm_47294083_4254782_14422509&g_taobao=1&g_style=1&g_lg=1&g_w=260&g_h=69&g_btn=1&g_txt=&g_hot=1&g_hc=0065FF&g_cid=0&g_c=0" ></iframe>
+  </li>
+  <li><a href="http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQYmLpZqSXrGCK59hoQ7W1YJOECnbym1tV9CA%2B3%2FJg8VqWPzGzEl%2BXDq&pid=mm_47294083_0_0">天猫活动中心</a>    <a href="http://ai.taobao.com/?pid=mm_47294083_4254782_14424382&eventid=101329">爱淘宝</a></li>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="200" src="http://www.taobao.com/go/app/tbk_app/chongzhi_210_200.php?pid=mm_47294083_4254782_14422485&page=chongzhi_210_200.php&size_w=260&size_h=200&stru_phone=1&stru_game=1&stru_travel=1&size_cat=cst" ></iframe>
+  </li>
+  <li>
+  <script type="text/javascript">
+     document.write('<a style="display:none!important" id="tanx-a-mm_47294083_4254782_14422961"></a>');
+     tanx_s = document.createElement("script");
+     tanx_s.type = "text/javascript";
+     tanx_s.charset = "gbk";
+     tanx_s.id = "tanx-s-mm_47294083_4254782_14422961";
+     tanx_s.async = true;
+     tanx_s.src = "http://p.tanx.com/ex?i=mm_47294083_4254782_14422961";
+     tanx_h = document.getElementsByTagName("head")[0];
+     if(tanx_h)tanx_h.insertBefore(tanx_s,tanx_h.firstChild);
+  </script>
+  </li>
+  </div>
+</section>
+
+
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Eric Shi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <span class="credit">Theme by <a href="http://www.gehaxelt.in/">Gehaxelt</a> and <a href="http://www.it-solutions-neef.de/">IT Solutions Neef</a>
+  
+
+<script type="text/javascript">
+    (function(win,doc){
+        var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
+        if (!win.alimamatk_show) {
+            s.charset = "gbk";
+            s.async = true;
+            s.src = "http://a.alimama.cn/tkapi.js";
+            h.insertBefore(s, h.firstChild);
+        };
+        var o = {
+            pid: "mm_47294083_4254782_14430108",/*推广单元ID，用于区分不同的推广渠道*/
+            appkey: "",/*通过TOP平台申请的appkey，设置后引导成交会关联appkey*/
+            unid: ""/*自定义统计字段*/
+        };
+        win.alimamatk_onload = win.alimamatk_onload || [];
+        win.alimamatk_onload.push(o);
+    })(window,document);
+</script>
+
+
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

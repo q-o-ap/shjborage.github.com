@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>在iOS中使用icon font及自定义字体 - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+
+  
+  <meta name="description" content="在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和&#97;&#64;&#50;&#x78;&#x2e;&#112;&#110;&#103;)， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Saick Blog</a></h1>
+  
+    <h2>Safe&Quick iOS Dev Blog.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:saick.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/game.html">Game Channel</a></li>
+  <li><a href="/friendlylink.html">Links</a></li>
+  <li><a href="/about.html">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">在iOS中使用icon Font及自定义字体</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-11T21:42:00+08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x61;&#x40;&#x32;&#120;&#46;&#112;&#x6e;&#103;">&#97;&#64;&#50;&#x78;&#x2e;&#112;&#110;&#103;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+
+<p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
+
+<p>那么它能不能应用到ios开发上来呢？带着这个疑问，我在github上找到了FontasticIcons和ios-fontawesome，但是这两个OC包对icon资源封装都有限，而且扩展也不是很方便。</p>
+
+<p>既然能在ios上使用icon font，那么怎么用呢？经过一番摸索，发现使用原理和自定义字体差不多，只有个别操作不太一样，接下来我给大家详细介绍一下。</p>
+
+<!-- more -->
+
+
+<h3>如何使用自定义字体</h3>
+
+<p>在讲icon font之前，首先先来看看普通自定义字体是如何在ios中使用的，两个原理是一样的。这里以KaushanScript-Regular为例：</p>
+
+<h4>Step 1: 导入字体文件</h4>
+
+<p>将字体文件拖入项目（ios支持的字体格式有：.ttf、.otf，其他格式不确定）：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323775276/" title="2013-12-11-01 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2846/11323775276_b14a547aa1.jpg" width="500" height="354" alt="2013-12-11-01"></a></p>
+
+<p>然后再在项目的资源池中确认字体文件是否加入项目，打开xcode项目的Build Phases中查看：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323859283/" title="2013-12-11-02 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3816/11323859283_dff602ee81.jpg" width="500" height="249" alt="2013-12-11-02"></a></p>
+
+<h4>Step 2: 配置.plist文件</h4>
+
+<p>在.plist文件中注册新加入的字体，.plist文件往往以“[appname]-Info.plist”的形式存在于“Supporting Files”文件夹内。 在.plist文件中添加新属性“Fonts provided by application”，该属性的值是一个数组，这意味着可以在这里注册多个字体。</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323790974/" title="2013-12-11-03 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3692/11323790974_9beda31ccb.jpg" width="500" height="209" alt="2013-12-11-03"></a></p>
+
+<h4>Step 3: 找到字体集名称</h4>
+
+<p>注册完，我们需要检测是否注册成功且取得新字体名称，检测方法就是把所有安装了的字体都打印出来，看看新注册的字体是否在里面：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>for (NSString* family in [UIFont familyNames]) 
+</span><span class='line'>{ 
+</span><span class='line'>  NSLog(@"%@", family); 
+</span><span class='line'>  for (NSString* name in [UIFont fontNamesForFamilyName: family]) 
+</span><span class='line'>  { 
+</span><span class='line'>         NSLog(@"  %@", name); 
+</span><span class='line'>    } 
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行完，查看控制台里打印出的所有字体集中是否有新注册的字体，如果有，说明注册成功，并将字体名（在这里是“Kaushan Script”）记住留到后面用。</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323787836/" title="2013-12-11-04 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5481/11323787836_e8fc5ed22a.jpg" width="500" height="392" alt="2013-12-11-04"></a></p>
+
+<h3>Step 4: 使用新字体</h3>
+
+<p>最后，就是使用你最新加入的字体啦：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)]; 
+</span><span class='line'>label.font = [UIFont fontWithName:@"Kaushan Script" size:35]; 
+</span><span class='line'>label.text = @"icon font"; 
+</span><span class='line'>label.textColor = UIColorFromRGB(0xFF7300); 
+</span><span class='line'>[self.view addSubview:label]; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果：</p>
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323858493/" title="2013-12-11-05 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5471/11323858493_39eaf9269b.jpg" width="276" height="113" alt="2013-12-11-05"></a></p>
+
+<h3>开始使用icon font</h3>
+
+<p>图标字体也是字体，使用方式和上面所说的差不多，只是在套用上有些差别；这里拿fontello的图标字体库为例。</p>
+
+<ul>
+<li>1.选择需要的图标
+在fontello的图标字体库选择自己需要的图标，并下载生成的字体文件。</li>
+<li>2.按照上面的步骤将图标字体注册到项目中</li>
+<li>3.找到图标对应的unicode码
+使用FontLab Studio 5工具打开字体文件（比如fontello.ttf），就可以看到图标与unicode码之间的对应关系啦。</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323774246/" title="2013-12-11-06 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2824/11323774246_65813b1aab.jpg" width="500" height="126" alt="2013-12-11-06"></a></p>
+
+<ul>
+<li>4.使用图标</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 300, 50)]; 
+</span><span class='line'>label.font = [UIFont fontWithName:@"fontello" size:35]; 
+</span><span class='line'>label.text = @"\U0000E802 \U0000E801 \U0000E803 \U0000E804 \U0000E805 \U0000E81A"; 
+</span><span class='line'>label.textColor = UIColorFromRGB(0xFF7300); 
+</span><span class='line'>[self.view addSubview:label]; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>在Objective-C中，自定义的unicode码需要以“\U0000E802”这样的格式存在。</p>
+
+<ul>
+<li>5.使用emoji表情库
+这里还可以使用苹果emoji表情库的图标，这里不需要新加字体库，只要找到emoji图标和unicode之间的对应关系就好，但是这些图标都不是矢量图，缩放请自重。</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UILabel *label5 = [[UILabel alloc] initWithFrame:CGRectMake(10, 480, 300, 50)]; 
+</span><span class='line'>label5.text = @"\U0000e42a\U0000e525\U0000e41c"; 
+</span><span class='line'>[self.view addSubview:label5]; </span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>6.效果</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/shjborage/11323858703/" title="2013-12-11-07 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5526/11323858703_820c5b3eef.jpg" width="366" height="500" alt="2013-12-11-07"></a></p>
+
+<ul>
+<li>7.使用自制图标字体</li>
+<li><p>如果上面介绍的图标库还满足不了你的需求，或者需要的图标分布在多个图标库而不能集中到一个字体文件中；那么你可能需要自己去制作图标字体文件了。</p></li>
+</ul>
+
+
+<h3>总结</h3>
+
+<p>这样，在iOS开发上，不仅可以直接去开源图标库找现成的图标用到项目中，而且还可以轻松地改变图标的颜色、大小，相信可以解放不少设计师和工程师的工作量。</p>
+
+<p>图标字体库
+<a href="http://fontello.com/">fontello</a>
+etao图标字体库（这里有个问题要注意，etao的图标字体名为“Untitled1”，是不是生成字体的同学疏忽啦？）
+IcoMoon
+<a href="http://www.easyapns.com/iphone-emoji-alerts">emoji表情库</a></p>
+
+<p>参考资料</p>
+
+<p><a href="http://codewithchris.com/common-mistakes-with-adding-custom-fonts-to-your-ios-app/">Common Mistakes With Adding Custom Fonts to Your iOS App</a></p>
+
+<p><a href="http://ux.etao.com/posts/401">Icon font 实践</a></p>
+
+<p>FontasticIcons</p>
+
+<p>ios-fontawesome</p>
+
+<p><a href="https://coderwall.com/p/wrb3pw">Custom Unicode Characters in Objective-C</a></p>
+
+<p><a href="http://www.qianduan.net/css3-icon-font-guide.html">CSS3 icon font完全指南</a></p>
+
+<p>《转》</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-11T21:42:00+08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+  
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
+    
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/08/ding-zhi-ios-7zhong-de-dao-hang-lan-he-zhuang-tai-lan/" title="Previous Post: 定制iOS 7中的导航栏和状态栏">&laquo; 定制iOS 7中的导航栏和状态栏</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/12/12/xcodexia-de-iosdan-yuan-ce-shi/" title="Next Post: XCode下的iOS单元测试">XCode下的iOS单元测试 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
+
+
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<!--QQ邮件列表订阅嵌入代码-->
+<!--
+<script >
+var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColor="light",sText="填写您的邮件地址，订阅精彩内容：" ;;
+</script>
+<script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>
+-->
+
+<!--QQ邮件列表订阅嵌入代码--><a target="_blank" href="http://list.qq.com/cgi-bin/qf_invite?id=cd51c6966346e0f99d051042a4e333ff2c27e747e9bbec00"><img alt="填写您的邮件地址，订阅我们的精彩内容：" border="0" src="http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_light_l.png"/></a>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (63)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (8)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal插件简介</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/">Block实现原理研究与使用需要注意的问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/">编译iOS上的libevent库、openssl库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Saick Apps</h1>
+  <ul id="apps">
+    <li><a href="/blog/2013/05/28/isecret-jian-jie/">iSecret</a></li>
+  	<li><a href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Flashlight</a></li>
+  	<li><a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal-Plugin-for-Xcode</a></li>
+  </ul>
+</section>
+
+
+
+
+
+
+<section>
+  <h1>(AD)广告位空缺中,招租</h1>
+  <div>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="69" src="http://www.taobao.com/go/app/tbk_app/tb_search.php?pid=mm_47294083_4254782_14422509&g_taobao=1&g_style=1&g_lg=1&g_w=260&g_h=69&g_btn=1&g_txt=&g_hot=1&g_hc=0065FF&g_cid=0&g_c=0" ></iframe>
+  </li>
+  <li><a href="http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQYmLpZqSXrGCK59hoQ7W1YJOECnbym1tV9CA%2B3%2FJg8VqWPzGzEl%2BXDq&pid=mm_47294083_0_0">天猫活动中心</a>    <a href="http://ai.taobao.com/?pid=mm_47294083_4254782_14424382&eventid=101329">爱淘宝</a></li>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="200" src="http://www.taobao.com/go/app/tbk_app/chongzhi_210_200.php?pid=mm_47294083_4254782_14422485&page=chongzhi_210_200.php&size_w=260&size_h=200&stru_phone=1&stru_game=1&stru_travel=1&size_cat=cst" ></iframe>
+  </li>
+  <li>
+  <script type="text/javascript">
+     document.write('<a style="display:none!important" id="tanx-a-mm_47294083_4254782_14422961"></a>');
+     tanx_s = document.createElement("script");
+     tanx_s.type = "text/javascript";
+     tanx_s.charset = "gbk";
+     tanx_s.id = "tanx-s-mm_47294083_4254782_14422961";
+     tanx_s.async = true;
+     tanx_s.src = "http://p.tanx.com/ex?i=mm_47294083_4254782_14422961";
+     tanx_h = document.getElementsByTagName("head")[0];
+     if(tanx_h)tanx_h.insertBefore(tanx_s,tanx_h.firstChild);
+  </script>
+  </li>
+  </div>
+</section>
+
+
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Eric Shi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <span class="credit">Theme by <a href="http://www.gehaxelt.in/">Gehaxelt</a> and <a href="http://www.it-solutions-neef.de/">IT Solutions Neef</a>
+  
+
+<script type="text/javascript">
+    (function(win,doc){
+        var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
+        if (!win.alimamatk_show) {
+            s.charset = "gbk";
+            s.async = true;
+            s.src = "http://a.alimama.cn/tkapi.js";
+            h.insertBefore(s, h.firstChild);
+        };
+        var o = {
+            pid: "mm_47294083_4254782_14430108",/*推广单元ID，用于区分不同的推广渠道*/
+            appkey: "",/*通过TOP平台申请的appkey，设置后引导成交会关联appkey*/
+            unid: ""/*自定义统计字段*/
+        };
+        win.alimamatk_onload = win.alimamatk_onload || [];
+        win.alimamatk_onload.push(o);
+    })(window,document);
+</script>
+
+
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

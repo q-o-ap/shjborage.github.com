@@ -1,0 +1,1069 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>iOS 序列化与反序列化 - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+
+  
+  <meta name="description" content="序列化的问题，在以前做VC的时候就听说过，但实际用的不多。大概意思呢，就是把一个对象（一些数据或者自定义的对象）序列化成文件（一般是XML文件），永久的保存起来。 需要用的时候再通过反序列化恢复原有的数据。 在iOS（OC）中，像标准的集合以及字典(NSArray, NSDictionary)， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://saick.net/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Saick Blog</a></h1>
+  
+    <h2>Safe&Quick iOS Dev Blog.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:saick.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/game.html">Game Channel</a></li>
+  <li><a href="/friendlylink.html">Links</a></li>
+  <li><a href="/about.html">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">iOS 序列化与反序列化</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-25T10:36:00+08:00" pubdate data-updated="true">Sep 25<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>   序列化的问题，在以前做VC的时候就听说过，但实际用的不多。大概意思呢，就是把一个对象（一些数据或者自定义的对象）序列化成文件（一般是XML文件），永久的保存起来。 需要用的时候再通过反序列化恢复原有的数据。<br/>
+   在iOS（OC）中，像标准的集合以及字典(NSArray, NSDictionary)，都有直接序列化的方法，wirteToFile&hellip;，但这些只适合用于集合中只有标准数据类型，如果有自定义的类，那么就会报错，写入失败了。</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<h3>标准反序列化</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>   // NSMutableArray *_arDataSource;
+</span><span class='line'>   NSString *strCaches = [NSString stringWithFormat:@"%@/tmp/%@",
+</span><span class='line'>                        NSHomeDirectory(), kCachedFileName];
+</span><span class='line'>   BOOL bWriteSuccess = [_arDataSource writeToFile:strCaches atomically:YES];
+</span><span class='line'>   if (bWriteSuccess == NO) {
+</span><span class='line'>//            NSLog(@"Wirte file error, unkown error occurred");
+</span><span class='line'>   } // end of if (bWriteSuccess == NO) {</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>标准反序列化</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>   _arDataSource = [[NSMutableArray arrayWithContentsOfFile:strCaches] retain];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果有自定义的类，应该在类中实现NSCoding协议，NSCopying是可选的吧，放在这儿写copy时可以参考下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  item_info.h
+</span><span class='line'>//  BitCar_Shopping
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 9/24/12.
+</span><span class='line'>//  Copyright (c) 2012 Safe&Quick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'> 
+</span><span class='line'>#import &lt;Foundation/Foundation.h&gt;
+</span><span class='line'> 
+</span><span class='line'>#define kClass      @"BC_Class"
+</span><span class='line'>#define kSubClass   @"BC_SubClass"
+</span><span class='line'>#define kName       @"BC_Name"
+</span><span class='line'>#define kPrice      @"BC_Price"
+</span><span class='line'>#define kSelected   @"BC_Selected"
+</span><span class='line'> 
+</span><span class='line'>@interface item_info : NSObject
+</span><span class='line'>&lt;
+</span><span class='line'>NSCoding,
+</span><span class='line'>NSCopying
+</span><span class='line'>&gt;
+</span><span class='line'>{
+</span><span class='line'>    NSString *_strClass;
+</span><span class='line'>    NSString *_strSubClass;
+</span><span class='line'>    
+</span><span class='line'>    NSString *_strName;
+</span><span class='line'>    NSString *_strPrice;
+</span><span class='line'>    
+</span><span class='line'>    BOOL _bSelected;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>@property (nonatomic, copy) NSString *strClass;
+</span><span class='line'>@property (nonatomic, copy) NSString *strSubClass;
+</span><span class='line'> 
+</span><span class='line'>@property (nonatomic, copy) NSString *strName;
+</span><span class='line'>@property (nonatomic, copy) NSString *strPrice;
+</span><span class='line'> 
+</span><span class='line'>@property (nonatomic, assign) BOOL bSelected;
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  item_info.m
+</span><span class='line'>//  BitCar_Shopping
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 9/24/12.
+</span><span class='line'>//  Copyright (c) 2012 Safe&Quick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'> 
+</span><span class='line'>#import "item_info.h"
+</span><span class='line'> 
+</span><span class='line'>@implementation item_info
+</span><span class='line'> 
+</span><span class='line'>@synthesize strClass = _strClass;
+</span><span class='line'>@synthesize strSubClass = _strSubClass;
+</span><span class='line'> 
+</span><span class='line'>@synthesize strName = _strName;
+</span><span class='line'>@synthesize strPrice = _strPrice;
+</span><span class='line'> 
+</span><span class='line'>@synthesize bSelected = _bSelected;
+</span><span class='line'> 
+</span><span class='line'>- (void)dealloc
+</span><span class='line'>{
+</span><span class='line'>    [_strClassrelease];
+</span><span class='line'>    [_strSubClassrelease];
+</span><span class='line'>    
+</span><span class='line'>    [_strPricerelease];
+</span><span class='line'>    [_strName release];
+</span><span class='line'>    
+</span><span class='line'>    [super dealloc];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (void)encodeWithCoder:(NSCoder *)aCoder
+</span><span class='line'>{
+</span><span class='line'>    [aCoder encodeObject:_strClassforKey:kClass];
+</span><span class='line'>    [aCoder encodeObject:_strSubClassforKey:kSubClass];
+</span><span class='line'>    [aCoder encodeObject:_strNameforKey:kName];
+</span><span class='line'>    [aCoder encodeObject:_strPriceforKey:kPrice];
+</span><span class='line'>    [aCoder encodeBool:_bSelected forKey:kSelected];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (id)initWithCoder:(NSCoder *)aDecoder
+</span><span class='line'>{
+</span><span class='line'>    if (self = [super init]) {
+</span><span class='line'>        _strClass   = [[aDecoder decodeObjectForKey:kClass] copy];
+</span><span class='line'>        _strSubClass= [[aDecoder decodeObjectForKey:kSubClass] copy];
+</span><span class='line'>        _strName    = [[aDecoder decodeObjectForKey:kName] copy];
+</span><span class='line'>        _strPrice   = [[aDecoder decodeObjectForKey:kPrice] copy];
+</span><span class='line'>        _bSelected  = [aDecoder decodeBoolForKey:kSelected];
+</span><span class='line'>    }
+</span><span class='line'>    returnself;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (id)copyWithZone:(NSZone *)zone
+</span><span class='line'>{
+</span><span class='line'>    item_info *item = [[[self class] allocWithZone:zone] init];
+</span><span class='line'>    item.strClass   = [[self.strClass copyWithZone:zone] autorelease];
+</span><span class='line'>    item.strSubClass= [[self.strSubClass copyWithZone:zone] autorelease];
+</span><span class='line'>    item.strName    = [[self.strName copyWithZone:zone] autorelease];
+</span><span class='line'>    item.strPrice   = [[self.strPrice copyWithZone:zone] autorelease];
+</span><span class='line'> 
+</span><span class='line'>    return item;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>使用实例：</h3>
+
+<p><em>序列化：</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// KeyedArchiver
+</span><span class='line'>NSMutableData *data = [[NSMutableData alloc] init];
+</span><span class='line'>NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+</span><span class='line'>[archiver encodeObject:_arDataSource forKey:kDataKey];
+</span><span class='line'>[archiver finishEncoding];
+</span><span class='line'>bWriteSuccess = [data writeToFile:strCaches atomically:YES];
+</span><span class='line'>[data release];
+</span><span class='line'>[archiver release];</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>反序列化：</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSData *data = [[NSMutableData alloc] initWithContentsOfFile:strCaches];
+</span><span class='line'>NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+</span><span class='line'>        
+</span><span class='line'>_arDataSource = [[unarchiver decodeObjectForKey:kDataKey] retain];
+</span><span class='line'>[unarchiver finishDecoding];
+</span><span class='line'>        
+</span><span class='line'>[unarchiver release];
+</span><span class='line'>[data release];</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>另附数据源构造核心代码，虽然结果可能设计不太合理，希望大家提出宝贵意见：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)initDataSource
+</span><span class='line'>{
+</span><span class='line'>    NSString *strCaches = [NSString stringWithFormat:@"%@/tmp/%@",
+</span><span class='line'>                           NSHomeDirectory(), kCachedFileName];
+</span><span class='line'>    if ([[NSFileManagerdefaultManager] fileExistsAtPath:strCaches]) {
+</span><span class='line'>//        _arDataSource = [[NSMutableArray arrayWithContentsOfFile:strCaches] retain];
+</span><span class='line'>        NSData *data = [[NSMutableData alloc] initWithContentsOfFile:strCaches];
+</span><span class='line'>        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+</span><span class='line'>        
+</span><span class='line'>        _arDataSource = [[unarchiver decodeObjectForKey:kDataKey] retain];
+</span><span class='line'>        [unarchiver finishDecoding];
+</span><span class='line'>        
+</span><span class='line'>        [unarchiver release];
+</span><span class='line'>        [data release];
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    if (_arDataSource == nil)
+</span><span class='line'>        self.arDataSource = [NSMutableArray array];
+</span><span class='line'>    else
+</span><span class='line'>        [_arDataSourceremoveAllObjects];
+</span><span class='line'>    
+</span><span class='line'>    NSString *strFilePath = [[NSBundlemainBundle] pathForResource:kShoppingListFileNameofType:@"xml"];
+</span><span class='line'>    if ([[NSFileManager defaultManager] fileExistsAtPath:strFilePath]) {
+</span><span class='line'>        NSString *strXml = [NSStringstringWithContentsOfFile:strFilePath encoding:NSUTF8StringEncodingerror:nil];
+</span><span class='line'>        if ([strXml length] == 0)
+</span><span class='line'>            return;
+</span><span class='line'>        
+</span><span class='line'>        GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithXMLString:strXml options:0 error:nil];
+</span><span class='line'>        if (doc == nil)
+</span><span class='line'>            return;
+</span><span class='line'>        
+</span><span class='line'>        NSArray *arRootChilds = [doc.rootElement children];
+</span><span class='line'>        for (GDataXMLElement *element in arRootChilds) {
+</span><span class='line'>            NSMutableArray *arTmp = [[NSMutableArray alloc] init];
+</span><span class='line'>            
+</span><span class='line'>            NSString *strClass = [[element attributeForName:@"name"] stringValue];
+</span><span class='line'>            NSArray *arClassChilds = [element children];
+</span><span class='line'>            for (GDataXMLElement *element_sub in arClassChilds) {
+</span><span class='line'>                NSMutableArray *arTmpSub = [[NSMutableArray alloc] init];
+</span><span class='line'>                
+</span><span class='line'>                NSString *strSubClass = [[element_sub attributeForName:@"name"] stringValue];
+</span><span class='line'>                
+</span><span class='line'>                NSArray *arSubClassChilds = [element_sub children];
+</span><span class='line'>                for (GDataXMLElement *element_item in arSubClassChilds) {
+</span><span class='line'>                    NSString *strName = [[element_item attributeForName:@"name"] stringValue];
+</span><span class='line'>                    NSString *strPrice = [[element_item attributeForName:@"price"] stringValue];
+</span><span class='line'>                    
+</span><span class='line'>                    item_info *item = [[item_info alloc] init];
+</span><span class='line'>                    item.strClass = strClass;
+</span><span class='line'>                    item.strSubClass = strSubClass;
+</span><span class='line'>                    item.strName = strName;
+</span><span class='line'>                    item.strPrice = strPrice;
+</span><span class='line'>                    item.bSelected = NO;
+</span><span class='line'>                    
+</span><span class='line'>                    [arTmpSub addObject:item];
+</span><span class='line'>                    [item release];
+</span><span class='line'>                }
+</span><span class='line'>                
+</span><span class='line'>                [arTmp addObject:arTmpSub];
+</span><span class='line'>                [arTmpSub release];
+</span><span class='line'>            }
+</span><span class='line'>            
+</span><span class='line'>            [_arDataSource addObject:arTmp];
+</span><span class='line'>            [arTmp release];
+</span><span class='line'>        }
+</span><span class='line'>        
+</span><span class='line'>        [doc release];
+</span><span class='line'>    } // end of fileExists
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>kShoppingListFileName：</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+</span><span class='line'>&lt;shoping&gt;
+</span><span class='line'>&lt;class name="图书" &gt;
+</span><span class='line'>&lt;subclass name="计算机"&gt;
+</span><span class='line'>&lt;item name="《C＃入门》"price=" 60.00"/&gt;
+</span><span class='line'>&lt;item name="《ios入门》"price="24.00"/&gt;
+</span><span class='line'>&lt;item name="《架构设计》"price="33.00"/&gt;
+</span><span class='line'>&lt;item name="《敏捷实战》"price="55.00"/&gt;
+</span><span class='line'>&lt;item name="《ASP.net从入门到精通》"price="56.00"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="外语"&gt;
+</span><span class='line'>&lt;item name="《商务口语》"price="9.00"/&gt;
+</span><span class='line'>&lt;item name="《朗讯辞典》"price="99.00"/&gt;
+</span><span class='line'>&lt;item name="《1天1句》"price="8.0"/&gt;
+</span><span class='line'>&lt;item name="《我爱背单词》"price="7.6"/&gt;
+</span><span class='line'>&lt;item name="《看图说话》"price="7.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="教材"&gt;
+</span><span class='line'>&lt;item name="《大学语文》"price="32.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="小说"&gt;
+</span><span class='line'>&lt;item name="《美人》"price="37.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="励志"&gt;
+</span><span class='line'>&lt;item name="《学会说NO》"price="98.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="动漫"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="《??》"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;/class&gt;
+</span><span class='line'>&lt;class name="家具"&gt;
+</span><span class='line'>&lt;subclass name="床"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="国王大床"price="39898.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="桌"&gt;
+</span><span class='line'>&lt;item name="小圆桌"price="98.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="椅"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="太师椅"price="32.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="灯具"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="熊猫台灯"price="983.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="门窗"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="玻璃门"price="983.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="地板"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="楠木地板"price="9333333.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;/class&gt;
+</span><span class='line'>&lt;class name="电子设备"&gt;
+</span><span class='line'>&lt;subclass name="电脑"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="DELL"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="手机"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="iphone"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="摄影摄像"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="DELL"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="打印扫描"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HP"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;/class&gt;
+</span><span class='line'>&lt;/shoping&gt;</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-25T10:36:00+08:00" pubdate data-updated="true">Sep 25<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+  
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
+    
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/" data-via="eric_shj" data-counturl="http://saick.net/blog/2012/09/25/ios-xu-lie-hua-yu-fan-xu-lie-hua/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/21/iosjin-yong-duo-an-niu-tong-shi-dian-ji/" title="Previous Post: iOS禁用多按钮同时点击">&laquo; iOS禁用多按钮同时点击</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/11/11/uiimage-yuan-jiao-yi-ji-bu-tong-fang-xiang-de-yuan-jiao/" title="Next Post: UIImage 圆角以及不同方向的圆角">UIImage 圆角以及不同方向的圆角 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
+
+
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<!--QQ邮件列表订阅嵌入代码-->
+<!--
+<script >
+var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColor="light",sText="填写您的邮件地址，订阅精彩内容：" ;;
+</script>
+<script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>
+-->
+
+<!--QQ邮件列表订阅嵌入代码--><a target="_blank" href="http://list.qq.com/cgi-bin/qf_invite?id=cd51c6966346e0f99d051042a4e333ff2c27e747e9bbec00"><img alt="填写您的邮件地址，订阅我们的精彩内容：" border="0" src="http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_light_l.png"/></a>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (63)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (8)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal插件简介</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/">Block实现原理研究与使用需要注意的问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/">编译iOS上的libevent库、openssl库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Saick Apps</h1>
+  <ul id="apps">
+    <li><a href="/blog/2013/05/28/isecret-jian-jie/">iSecret</a></li>
+  	<li><a href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Flashlight</a></li>
+  	<li><a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal-Plugin-for-Xcode</a></li>
+  </ul>
+</section>
+
+
+
+
+
+
+<section>
+  <h1>(AD)广告位空缺中,招租</h1>
+  <div>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="69" src="http://www.taobao.com/go/app/tbk_app/tb_search.php?pid=mm_47294083_4254782_14422509&g_taobao=1&g_style=1&g_lg=1&g_w=260&g_h=69&g_btn=1&g_txt=&g_hot=1&g_hc=0065FF&g_cid=0&g_c=0" ></iframe>
+  </li>
+  <li><a href="http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQYmLpZqSXrGCK59hoQ7W1YJOECnbym1tV9CA%2B3%2FJg8VqWPzGzEl%2BXDq&pid=mm_47294083_0_0">天猫活动中心</a>    <a href="http://ai.taobao.com/?pid=mm_47294083_4254782_14424382&eventid=101329">爱淘宝</a></li>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="200" src="http://www.taobao.com/go/app/tbk_app/chongzhi_210_200.php?pid=mm_47294083_4254782_14422485&page=chongzhi_210_200.php&size_w=260&size_h=200&stru_phone=1&stru_game=1&stru_travel=1&size_cat=cst" ></iframe>
+  </li>
+  <li>
+  <script type="text/javascript">
+     document.write('<a style="display:none!important" id="tanx-a-mm_47294083_4254782_14422961"></a>');
+     tanx_s = document.createElement("script");
+     tanx_s.type = "text/javascript";
+     tanx_s.charset = "gbk";
+     tanx_s.id = "tanx-s-mm_47294083_4254782_14422961";
+     tanx_s.async = true;
+     tanx_s.src = "http://p.tanx.com/ex?i=mm_47294083_4254782_14422961";
+     tanx_h = document.getElementsByTagName("head")[0];
+     if(tanx_h)tanx_h.insertBefore(tanx_s,tanx_h.firstChild);
+  </script>
+  </li>
+  </div>
+</section>
+
+
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Eric Shi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <span class="credit">Theme by <a href="http://www.gehaxelt.in/">Gehaxelt</a> and <a href="http://www.it-solutions-neef.de/">IT Solutions Neef</a>
+  
+
+<script type="text/javascript">
+    (function(win,doc){
+        var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
+        if (!win.alimamatk_show) {
+            s.charset = "gbk";
+            s.async = true;
+            s.src = "http://a.alimama.cn/tkapi.js";
+            h.insertBefore(s, h.firstChild);
+        };
+        var o = {
+            pid: "mm_47294083_4254782_14430108",/*推广单元ID，用于区分不同的推广渠道*/
+            appkey: "",/*通过TOP平台申请的appkey，设置后引导成交会关联appkey*/
+            unid: ""/*自定义统计字段*/
+        };
+        win.alimamatk_onload = win.alimamatk_onload || [];
+        win.alimamatk_onload.push(o);
+    })(window,document);
+</script>
+
+
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

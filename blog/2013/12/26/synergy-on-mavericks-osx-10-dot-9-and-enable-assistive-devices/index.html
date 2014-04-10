@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Synergy on Mavericks (OSX 10.9) and enable assistive devices - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+
+  
+  <meta name="description" content="Origin Question Mavericks handles accessibility on a per-application basis, so instead of enabling assistive devices (option does not even exist) &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://saick.net/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Saick Blog</a></h1>
+  
+    <h2>Safe&Quick iOS Dev Blog.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:saick.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/game.html">Game Channel</a></li>
+  <li><a href="/friendlylink.html">Links</a></li>
+  <li><a href="/about.html">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Synergy on Mavericks (OSX 10.9) and Enable Assistive Devices</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-26T10:42:00+08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://superuser.com/questions/656912/synergy-on-mavericks-osx-10-9-and-enable-assistive-devices">Origin</a></p>
+
+<h3>Question</h3>
+
+<p>Mavericks handles accessibility on a per-application basis, so instead of enabling assistive devices (option does not even exist) carte-blanche, the app which makes the request shows up in a list in System Preferences > Security &amp; Privacy > Privacy where you can enable the access it&rsquo;s looking for.</p>
+
+<p>Synergy, however, makes a check for the old style of assistive devices setting and fails to start.</p>
+
+<!-- more -->
+
+
+<h3>Answer</h3>
+
+<p>From a terminal:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo open /Applications/Synergy.app/Contents/MacOS/Synergy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then open OSX <em>System Preferences</em> and click <strong>Security and Privacy</strong>, then <strong>Accessibility</strong></p>
+
+<p>Check the checkbox on for <strong>Terminal</strong> and <strong>Synergy</strong>.</p>
+
+<p>You can then close Synergy and start it again in the background through the terminal:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/Applications/Synergy.app/Contents/MacOS/Synergy &</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I expect this will be fixed in the next release (1.4.16 Beta)</p>
+
+<p><a href="http://synergy-foss.org/osqa/questions/1999/error-1410-on-mac-1081">Source</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-26T10:42:00+08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mac/'>Mac</a>
+  
+</span>
+
+  
+    </p>
+    <p class="meta">
+	  版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" id="">Creative Commons BY-NC-ND 3.0</a>
+    </p>
+    
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://saick.net/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/" data-via="eric_shj" data-counturl="http://saick.net/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/" title="Previous Post: OSX Server - Message Server 研究与故障解决方案">&laquo; OSX Server - Message Server 研究与故障解决方案</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/12/31/android-sdk-managergeng-xin-jian-ce-shi-bai-jie-jue/" title="Next Post: Android SDK Manager更新检测失败解决">Android SDK Manager更新检测失败解决 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section id="comment">
+    <h1>Comments</h1>
+    
+<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"saick"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+<!-- Duoshuo Comment END -->
+
+  </section>
+
+
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<!--QQ邮件列表订阅嵌入代码-->
+<!--
+<script >
+var nId = "77c1d236c091500550d7595c2ff6fdaed4fe6edd88335254",nWidth="auto",sColor="light",sText="填写您的邮件地址，订阅精彩内容：" ;;
+</script>
+<script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>
+-->
+
+<!--QQ邮件列表订阅嵌入代码--><a target="_blank" href="http://list.qq.com/cgi-bin/qf_invite?id=cd51c6966346e0f99d051042a4e333ff2c27e747e9bbec00"><img alt="填写您的邮件地址，订阅我们的精彩内容：" border="0" src="http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_light_l.png"/></a>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (5)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javaweb/'>JavaWeb (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (7)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (3)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (63)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (8)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (6)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal插件简介</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/">Block实现原理研究与使用需要注意的问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/">编译iOS上的libevent库、openssl库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/">性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/">UITableView的常见优化方式总结</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Saick Apps</h1>
+  <ul id="apps">
+    <li><a href="/blog/2013/05/28/isecret-jian-jie/">iSecret</a></li>
+  	<li><a href="/blog/2013/05/28/flashlight-powersaving-jian-jie/">Flashlight</a></li>
+  	<li><a href="/blog/2014/04/08/revealcha-jian-jian-jie/">Reveal-Plugin-for-Xcode</a></li>
+  </ul>
+</section>
+
+
+
+
+
+
+<section>
+  <h1>(AD)广告位空缺中,招租</h1>
+  <div>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="69" src="http://www.taobao.com/go/app/tbk_app/tb_search.php?pid=mm_47294083_4254782_14422509&g_taobao=1&g_style=1&g_lg=1&g_w=260&g_h=69&g_btn=1&g_txt=&g_hot=1&g_hc=0065FF&g_cid=0&g_c=0" ></iframe>
+  </li>
+  <li><a href="http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQYmLpZqSXrGCK59hoQ7W1YJOECnbym1tV9CA%2B3%2FJg8VqWPzGzEl%2BXDq&pid=mm_47294083_0_0">天猫活动中心</a>    <a href="http://ai.taobao.com/?pid=mm_47294083_4254782_14424382&eventid=101329">爱淘宝</a></li>
+  <li>
+  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="200" src="http://www.taobao.com/go/app/tbk_app/chongzhi_210_200.php?pid=mm_47294083_4254782_14422485&page=chongzhi_210_200.php&size_w=260&size_h=200&stru_phone=1&stru_game=1&stru_travel=1&size_cat=cst" ></iframe>
+  </li>
+  <li>
+  <script type="text/javascript">
+     document.write('<a style="display:none!important" id="tanx-a-mm_47294083_4254782_14422961"></a>');
+     tanx_s = document.createElement("script");
+     tanx_s.type = "text/javascript";
+     tanx_s.charset = "gbk";
+     tanx_s.id = "tanx-s-mm_47294083_4254782_14422961";
+     tanx_s.async = true;
+     tanx_s.src = "http://p.tanx.com/ex?i=mm_47294083_4254782_14422961";
+     tanx_h = document.getElementsByTagName("head")[0];
+     if(tanx_h)tanx_h.insertBefore(tanx_s,tanx_h.firstChild);
+  </script>
+  </li>
+  </div>
+</section>
+
+
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Eric Shi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <span class="credit">Theme by <a href="http://www.gehaxelt.in/">Gehaxelt</a> and <a href="http://www.it-solutions-neef.de/">IT Solutions Neef</a>
+  
+
+<script type="text/javascript">
+    (function(win,doc){
+        var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
+        if (!win.alimamatk_show) {
+            s.charset = "gbk";
+            s.async = true;
+            s.src = "http://a.alimama.cn/tkapi.js";
+            h.insertBefore(s, h.firstChild);
+        };
+        var o = {
+            pid: "mm_47294083_4254782_14430108",/*推广单元ID，用于区分不同的推广渠道*/
+            appkey: "",/*通过TOP平台申请的appkey，设置后引导成交会关联appkey*/
+            unid: ""/*自定义统计字段*/
+        };
+        win.alimamatk_onload = win.alimamatk_onload || [];
+        win.alimamatk_onload.push(o);
+    })(window,document);
+</script>
+
+
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>
