@@ -4,6 +4,7 @@ title: "objc@interface的设计哲学与设计技巧"
 date: 2014-04-15 16:25
 comments: true
 categories: iOS
+tags: iOS 架构设计
 ---
 
 学习objc时，尤其是先学过其他编程语言再来看objc时，总会对objc的类声明的关键字`interface`感到有点奇怪，在其它面向对象的语言中通常由`class`关键字来表示，而`interface`在java中表示的却大约相当于objc的`protocol`，这个关键字的区别究竟代表了objc语言的设计者怎样的思想呢，在objc类设计中需要注意哪些问题呢？接下来对这个问题进行一些思考和探究.

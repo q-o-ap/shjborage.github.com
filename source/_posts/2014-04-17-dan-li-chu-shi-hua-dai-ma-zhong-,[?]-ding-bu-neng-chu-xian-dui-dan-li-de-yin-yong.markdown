@@ -4,6 +4,7 @@ title: "单例初始化代码中,一定不能出现对单例的引用"
 date: 2014-04-17 23:03
 comments: true
 categories: iOS
+tags: iOS 设计模式
 ---
 
 写了个测试的例子：
