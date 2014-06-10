@@ -4,6 +4,7 @@ title: "二分查找最大的坑"
 date: 2014-03-06 00:35
 comments: true
 categories: Interview
+tags: Interview
 ---
 
 二分法大家都不陌生，每当找工作面试都得看看，被问几遍。但最近从大神那儿了解到这里面最大的坑，写出来让更多的人能受益。

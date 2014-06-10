@@ -4,6 +4,7 @@ title: "GCD的坑"
 date: 2014-02-19 22:22
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 最近用不少GCD的东西，相信很多童鞋也会被GCD的简便给吸引过来。

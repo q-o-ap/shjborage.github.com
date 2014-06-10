@@ -4,6 +4,7 @@ title: "Mac OS X: 停止响应的处理（包含强制重启机器）"
 date: 2013-10-23 22:47
 comments: true
 categories: Mac
+tags: Mac
 ---
 
 *Mac OS X: 如果您的计算机停止响应、“悬挂”或“冻结”*

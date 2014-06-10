@@ -4,6 +4,7 @@ title: "iCloud 学习笔记"
 date: 2012-09-20 17:47
 comments: true
 categories: iOS
+tags: iOS Obj-C iCloud
 ---
 
 1.准备新的mobileprovision,不能用通配符，并打开iCloud功能，然后在工程里Summary中选中iCloud，并编辑entitlements文件。    

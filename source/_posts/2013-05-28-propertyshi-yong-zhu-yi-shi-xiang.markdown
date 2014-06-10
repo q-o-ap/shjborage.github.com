@@ -4,6 +4,7 @@ title: "Property 使用注意事项"
 date: 2013-05-28 11:04
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 *	NSString property的属性必须是copy

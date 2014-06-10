@@ -4,6 +4,7 @@ title: "UITableView的常见优化方式总结"
 date: 2014-03-15 00:07
 comments: true
 categories: iOS
+tags: iOS 优化
 ---
 
 众所周知，我们在iOS开发过程中与面试中，常见的问题就包括UITableView的滚动性能，足以见得这个功能的重要性。

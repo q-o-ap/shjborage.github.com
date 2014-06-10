@@ -4,6 +4,7 @@ title: "Auto Layout by Example"
 date: 2014-01-18 16:21
 comments: true
 categories: iOS
+tags: iOS UI AutoLayout
 ---
 
 Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。 

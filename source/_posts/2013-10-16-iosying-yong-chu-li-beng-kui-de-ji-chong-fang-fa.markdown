@@ -4,6 +4,7 @@ title: "iOS应用处理崩溃的几种方法"
 date: 2013-10-16 23:31
 comments: true
 categories: iOS
+tags: iOS Crash
 ---
 
 在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。

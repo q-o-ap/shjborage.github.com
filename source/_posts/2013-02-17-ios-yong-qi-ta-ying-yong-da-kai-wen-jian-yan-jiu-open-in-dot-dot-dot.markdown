@@ -4,6 +4,7 @@ title: "iOS 用其它应用打开文件研究 Open In..."
 date: 2013-2-17 17:34
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 今天上班的状态还没有完全恢复，就拿Reminders里面的提醒来看看，研究一些以前没时间弄的东西，就发现了这个。

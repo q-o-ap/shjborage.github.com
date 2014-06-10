@@ -4,6 +4,7 @@ title: "对比iOS网络组件：AFNetworking VS ASIHTTPRequest"
 date: 2013-10-20 22:55
 comments: true
 categories: iOS
+tags: iOS Obj-C Network
 ---
 
 

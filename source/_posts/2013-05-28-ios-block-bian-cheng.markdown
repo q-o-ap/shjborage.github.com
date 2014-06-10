@@ -4,6 +4,7 @@ title: "iOS block 编程"
 date: 2013-05-28 09:57
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 ##block

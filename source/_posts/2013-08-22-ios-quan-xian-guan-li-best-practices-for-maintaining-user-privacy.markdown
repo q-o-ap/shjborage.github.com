@@ -4,6 +4,7 @@ title: " iOS 权限管理-Best Practices for Maintaining User Privacy 本地与P
 date: 2013-08-22 14:58
 comments: true
 categories: iOS
+tags: iOS Obj-C Push
 ---
 
 从Notification的开关入手，发现了统一给出的入口。

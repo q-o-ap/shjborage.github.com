@@ -4,6 +4,7 @@ title: "Django学习资源以及相关备注"
 date: 2013-10-24 23:01
 comments: true
 categories: python
+tags: python Django
 ---
 
 

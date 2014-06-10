@@ -4,6 +4,7 @@ title: "Git no branch 解决方案"
 date: 2013-06-07 18:03
 comments: true
 categories: SourceControl
+tags: SourceControl Git
 ---
 
 Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发

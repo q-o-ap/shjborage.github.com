@@ -4,6 +4,7 @@ title: "iOS 7教程：浅析Text Kit"
 date: 2013-11-23 22:06
 comments: true
 categories: iOS
+tags: iOS UI iOS7
 ---
 
 转自[破船](http://beyondvincent.com/blog/2013/11/12/121-brief-analysis-text-kit/)的博客

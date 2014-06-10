@@ -4,6 +4,7 @@ title: "iOS应用内置AppStore以及iOS Safari内置Banner进行推广"
 date: 2012-12-17 18:10
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 今天才发现在iOS6中，可以不跳转到AppStore那个应用，可以在当前应用中进行推广。

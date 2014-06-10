@@ -4,6 +4,7 @@ title: "Xcode工程目录的 folder 和 group的区别(蓝色和黄色文件夹�
 date: 2013-09-23 23:58
 comments: true
 categories: iOS
+tags: iOS Tools
 ---
 
 XCode工程目录里面，有时你会发现2个不同颜色的文件夹，一种是蓝色的，一种是黄色的，最常见的是黄色的，我也是最近学习html5的时候，发现还有蓝色的文件夹呢，

@@ -4,6 +4,7 @@ title: "iOS多线程编程之Grand Central Dispatch(GCD)介绍和使用"
 date: 2013-11-06 23:14
 comments: true
 categories: iOS
+tags: iOS Obj-C 底层 多线程
 ---
 ###介绍：
 Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。

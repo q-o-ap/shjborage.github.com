@@ -4,6 +4,7 @@ title: "Objective-C的新特性(Object Literals等)"
 date: 2013-10-20 22:28
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 转自：http://blog.devtang.com/blog/2012/08/05/use-modern-objective-c/ (Posted by 唐巧 Aug 5th, 2012  iOS)

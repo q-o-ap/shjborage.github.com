@@ -4,6 +4,7 @@ title: "iOS库添加CocoaPods支持"
 date: 2013-10-17 15:30
 comments: true
 categories: iOS
+tags: iOS CocoaPods
 ---
 
 

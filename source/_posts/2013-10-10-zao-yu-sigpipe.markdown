@@ -4,6 +4,7 @@ title: "遭遇SIGPIPE"
 date: 2013-10-10 23:35
 comments: true
 categories: iOS
+tags: iOS Crash
 ---
 《转》
 

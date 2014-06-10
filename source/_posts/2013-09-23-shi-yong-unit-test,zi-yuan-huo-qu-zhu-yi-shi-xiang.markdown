@@ -4,6 +4,7 @@ title: "使用unit test，资源获取注意事项"
 date: 2013-09-23 23:42
 comments: true
 categories: iOS
+tags: iOS Obj-C 单元测试
 ---
 
 ### 引言

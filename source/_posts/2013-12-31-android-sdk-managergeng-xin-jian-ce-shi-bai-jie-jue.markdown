@@ -4,6 +4,7 @@ title: "Android SDK Manager更新检测失败解决"
 date: 2013-12-31 13:39
 comments: true
 categories: Android
+tags: Android Tools
 ---
 
 好久没弄Eclipse开发Android了，最近弄了个天猫的盒子，就拿出来玩玩，没想到新的SDK下不下来，悲剧。

@@ -4,6 +4,7 @@ title: "MAC 系统的启动过程和系统启动时运行shell 脚本"
 date: 2013-10-19 01:34
 comments: true
 categories: Mac
+tags: Mac
 ---
 
 ####1 Mac 开机启动脚本或应用（系统启动时运行shell 脚本）

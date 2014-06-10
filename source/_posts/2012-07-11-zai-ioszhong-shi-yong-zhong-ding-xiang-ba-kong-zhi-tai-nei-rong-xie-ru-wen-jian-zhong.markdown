@@ -4,6 +4,7 @@ title: "在iOS中使用重定向，把控制台内容写入文件中"
 date: 2012-07-11 17:39
 comments: true
 categories: iOS
+tags: iOS Obj-C Debug
 ---
 
 转自：http://mmz06.blog.163.com/blog/static/121416962011111210462288/

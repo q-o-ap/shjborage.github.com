@@ -4,6 +4,7 @@ title: "Hybird App研究"
 date: 2013-09-02 09:02
 comments: true
 categories: iOS
+tags: iOS HybirdApp
 ---
 
 

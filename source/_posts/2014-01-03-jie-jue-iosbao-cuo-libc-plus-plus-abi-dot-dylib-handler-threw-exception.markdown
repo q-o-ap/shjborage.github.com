@@ -4,6 +4,7 @@ title: "解决iOS报错libc++abi.dylib handler threw exception"
 date: 2014-01-03 23:57
 comments: true
 categories: iOS
+tags: iOS Obj-C 底层
 ---
 
 这个错有时很奇怪，有时比较正常的情况也会报这个，可能与XCode版本有关。

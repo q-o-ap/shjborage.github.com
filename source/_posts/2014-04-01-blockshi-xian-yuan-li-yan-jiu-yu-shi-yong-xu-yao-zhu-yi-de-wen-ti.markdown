@@ -4,6 +4,7 @@ title: "Block实现原理研究与使用需要注意的问题"
 date: 2014-04-01 16:42
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 关于Block的使用，现在很多人都说他知道。但是知道怎么用与懂为什么这么用，可能会出现哪些问题还是区别很大的。

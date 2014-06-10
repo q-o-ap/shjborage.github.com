@@ -4,6 +4,7 @@ title: "UIImage 圆角以及不同方向的圆角"
 date: 2012-11-11 12:43
 comments: true
 categories: iOS
+tags: iOS UI
 ---
 
 自己对这个需求进行了重新封装，方便大家使用。

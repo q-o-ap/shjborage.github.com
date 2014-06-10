@@ -4,6 +4,7 @@ title: "iOS Quick Tip: 7 Tips to Speed Up Your Development"
 date: 2013-11-23 16:18
 comments: true
 categories: iOS
+tags: iOS iOS7
 ---
 
 [origin](http://mobile.tutsplus.com/tutorials/iphone/ios-quick-tip-7-tips-to-speed-up-your-development/)

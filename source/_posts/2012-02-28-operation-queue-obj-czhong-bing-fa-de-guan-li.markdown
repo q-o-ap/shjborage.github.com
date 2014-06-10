@@ -4,6 +4,7 @@ title: "Operation Queue Obj-C中并发的管理"
 date: 2012-02-28 22:29
 comments: true
 categories: iOS
+tags: iOS Obj-C 多线程
 ---
 
 ***Operation***是一种用面向对象封装的异步操作技术。operation即可以单独使用，也可与operation queue联合使用。因为是用Objective-C实现的，operation主要用于基于Cocoa的iOS/Mac OS X程序中。

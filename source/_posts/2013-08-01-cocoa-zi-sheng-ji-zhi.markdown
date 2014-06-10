@@ -4,6 +4,7 @@ title: "Cocoa 自省机制"
 date: 2013-08-01 16:30
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 ###内省

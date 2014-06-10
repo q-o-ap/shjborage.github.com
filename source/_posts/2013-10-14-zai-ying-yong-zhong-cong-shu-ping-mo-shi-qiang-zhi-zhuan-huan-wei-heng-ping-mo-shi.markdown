@@ -4,6 +4,7 @@ title: "在应用中从竖屏模式强制转换为横屏模式 & 状态栏白边
 date: 2013-10-14 16:28
 comments: true
 categories: iOS
+tags: iOS UI
 ---
 
 ####序：状态栏白边问题解决

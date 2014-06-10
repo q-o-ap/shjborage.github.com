@@ -4,6 +4,7 @@ title: "Mysql for MacOSX 安装和基本操作"
 date: 2013-06-07 10:55
 comments: true
 categories: Database
+tags: Mac Tools Database
 ---
 
 

@@ -4,6 +4,7 @@ title: "Synergy on Mavericks (OSX 10.9) and enable assistive devices"
 date: 2013-12-26 10:42
 comments: true
 categories: Mac
+tags: Mac Tools
 ---
 
 [Origin](http://superuser.com/questions/656912/synergy-on-mavericks-osx-10-9-and-enable-assistive-devices)

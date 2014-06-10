@@ -4,6 +4,7 @@ title: "给xcode工程做命令行build"
 date: 2013-10-14 14:59
 comments: true
 categories: iOS
+tags: iOS Obj-C 底层
 ---
 
 XCode工程其实是可以用命令行来build的，这样就可以用命令行编译出.app的文件，然后就可以打成ipa包。整个流程做到自动化后，就可以方便的做每日的daily build，便于产品和测试同事跟进进度，随时获得最新版本的ipa文件。

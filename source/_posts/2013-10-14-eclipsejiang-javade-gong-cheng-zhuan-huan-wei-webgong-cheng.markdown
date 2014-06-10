@@ -4,6 +4,7 @@ title: "Eclipse将java的工程转换为web工程"
 date: 2013-10-14 15:30
 comments: true
 categories: JavaWeb
+tags: Java Web
 ---
 
 很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下：

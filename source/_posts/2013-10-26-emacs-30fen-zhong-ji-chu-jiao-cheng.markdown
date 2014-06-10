@@ -4,6 +4,7 @@ title: "Emacs 30分钟基础教程"
 date: 2013-10-26 23:36
 comments: true
 categories: python other
+tags: Tools
 ---
 
 ###简介

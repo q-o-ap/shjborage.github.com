@@ -4,6 +4,7 @@ title: "CocoaPods本身版本的更新"
 date: 2013-09-02 11:00
 comments: true
 categories: iOS
+tags: iOS CocoaPods
 ---
 
 CocoaPods本身也不断在更新，在项目进行中不建议进行更新。但是不得已时也得为之。

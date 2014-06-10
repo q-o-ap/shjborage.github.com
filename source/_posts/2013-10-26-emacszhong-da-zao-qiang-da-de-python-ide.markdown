@@ -4,6 +4,7 @@ title: "Emacs中打造强大的Python IDE"
 date: 2013-10-26 22:26
 comments: true
 categories: python
+tags: python Tools
 ---
 
 本文将介绍，在Emacs中，通过各种扩展，打造强大的Python IDE环境，包括Snippet工具，智能提示，自动补全，重构工具，调试以及GAE的调试，等等。以下各工具的安装前提是你对Emacs的配置文件有一定的了解，所有相关的el文件都必须放在load_path能够加载的地方。

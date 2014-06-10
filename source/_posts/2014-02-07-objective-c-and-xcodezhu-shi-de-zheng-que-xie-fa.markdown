@@ -4,6 +4,7 @@ title: "Objective-C&amp;XCode注释的正确写法"
 date: 2014-02-07 18:02
 comments: true
 categories: iOS
+tags: iOS Obj-C Tools
 ---
 
 注释对于C体系的同学来说还是不太规范，对于XCode的文档系统来说，规范还是有帮助的，能在QuickHelp等提示中反应出来。所以还是多注意下会比较好。

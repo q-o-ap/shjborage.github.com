@@ -4,6 +4,7 @@ title: "怎么查看在mac上连接过的wifi密码"
 date: 2013-10-14 16:16
 comments: true
 categories: Mac
+tags: Mac
 ---
 
 Mac上连接过的wifi密码忘记了怎么办？通过本文的几步可以查看在mac上连接过的wifi密码

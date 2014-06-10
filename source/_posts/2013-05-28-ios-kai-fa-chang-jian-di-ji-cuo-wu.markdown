@@ -4,6 +4,7 @@ title: "iOS 开发常见低级错误"
 date: 2013-05-28 10:19
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 ***不断更新中。。。***

@@ -4,6 +4,7 @@ title: "NSObject继承中load与initialize的用法"
 date: 2014-04-15 17:07
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 很多时候我用会在我们的类中使用`load`或`initialize`方法，详细看了一下文档以及[初始化阶段 —— load 和 initialize](http://www.cnblogs.com/biosli/p/NSObject_inherit.html)，分享一下。

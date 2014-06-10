@@ -4,6 +4,7 @@ title: "多参数selector"
 date: 2013-10-14 16:09
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 Selector是Objective-C一个非常强大的特性，合理使用Selector可以大大简化实现并避免重复代码。但NSObject提供 的performSelector最多只支持两个参数，对于两个以上的参数就无能为力了。一番调查后针对NSObject增加了如下扩展，使得 performSelector可以支持传入参数数组。多个参数就不再是问题了。

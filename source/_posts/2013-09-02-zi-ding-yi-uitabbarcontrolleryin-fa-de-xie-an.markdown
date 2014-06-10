@@ -4,6 +4,7 @@ title: "自定义UITabbarController引发的血案"
 date: 2013-09-02 09:05
 comments: true
 categories: iOS
+tags: iOS UI Crash
 ---
 
 转自：http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html

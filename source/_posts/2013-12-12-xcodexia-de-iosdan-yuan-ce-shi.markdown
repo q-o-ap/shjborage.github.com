@@ -4,6 +4,7 @@ title: "XCode下的iOS单元测试"
 date: 2013-12-12 09:34
 comments: true
 categories: iOS
+tags: iOS Obj-C 单元测试
 ---
 
 XCode 内置了 OCUnit 单元测试框架，但目前最好用的测试框架应该是 GHUnit。通过 GHUnit + OCMock 组合，我们可以在 iOS 下进行较强大的单元测试功能。本文将演示如何在 XCode 4.2 下使用 OCUnit， GHUnit 和 OCMock 进行单元测试。

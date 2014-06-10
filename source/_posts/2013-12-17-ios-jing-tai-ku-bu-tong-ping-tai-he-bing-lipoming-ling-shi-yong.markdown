@@ -4,6 +4,7 @@ title: "iOS 静态库不同平台合并 lipo命令使用"
 date: 2013-12-17 23:54
 comments: true
 categories: iOS
+tags: iOS Obj-C 底层 第三方库
 ---
 
 ###Introduction

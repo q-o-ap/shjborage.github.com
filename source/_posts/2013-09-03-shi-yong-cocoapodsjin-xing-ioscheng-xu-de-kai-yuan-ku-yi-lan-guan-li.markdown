@@ -4,6 +4,7 @@ title: "使用CocoaPods进行iOS程序的开源库依懒管理"
 date: 2013-09-03 11:49
 comments: true
 categories: iOS
+tags: iOS CocoaPods
 ---
 
 

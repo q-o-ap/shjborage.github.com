@@ -4,6 +4,7 @@ title: "浅谈五大Python Web框架"
 date: 2013-10-23 00:14
 comments: true
 categories: python
+tags: python
 ---
 
 摘要：作者飞龙写了一篇《浅谈Python Web框架》，文中他介绍了几个Python Web框架和自己对选择框架的分析。在他看来，用Django来快速开发一些Web运用是很不错的选择。

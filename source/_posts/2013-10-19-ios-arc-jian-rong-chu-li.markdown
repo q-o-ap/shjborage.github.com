@@ -4,6 +4,7 @@ title: "iOS ARC 兼容处理"
 date: 2013-10-19 01:56
 comments: true
 categories: iOS
+tags: iOS Obj-C 底层
 ---
 
 From:宋红日（转自：http://blog.sina.com.cn/s/blog_9792a85b01018v83.html）

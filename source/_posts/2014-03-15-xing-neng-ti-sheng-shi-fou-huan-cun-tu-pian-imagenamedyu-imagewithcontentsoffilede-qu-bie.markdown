@@ -4,6 +4,7 @@ title: "性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的�
 date: 2014-03-15 01:01
 comments: true
 categories: iOS
+tags: iOS Obj-C 优化
 ---
 
 常见的从bundle中加载图片的方式有两种，一个是用`imageNamed`，二是用`imageWithContentsOfFile`，第一种比较常见一点。

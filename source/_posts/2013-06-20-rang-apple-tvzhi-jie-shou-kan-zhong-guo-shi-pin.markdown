@@ -4,6 +4,7 @@ title: "让Apple TV直接收看中国视频"
 date: 2013-06-20 14:09
 comments: true
 categories: other
+tags: AppleTV
 ---
 
 更新（转自威锋论坛）：  

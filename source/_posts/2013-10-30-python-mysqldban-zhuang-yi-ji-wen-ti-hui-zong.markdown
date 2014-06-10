@@ -4,6 +4,7 @@ title: "Python MySQLdb安装以及问题汇总"
 date: 2013-10-30 23:17
 comments: true
 categories: python Database
+tags: python DataBase
 ---
 
 自已备注一些, 斜体

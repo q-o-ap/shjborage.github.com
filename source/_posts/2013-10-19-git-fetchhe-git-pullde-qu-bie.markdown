@@ -4,6 +4,7 @@ title: "Git fetch和git pull的区别"
 date: 2013-10-19 01:47
 comments: true
 categories: SourceControl
+tags: SourceControl Git
 ---
 
 原文： http://www.tech126.com/git-fetch-pull/ 

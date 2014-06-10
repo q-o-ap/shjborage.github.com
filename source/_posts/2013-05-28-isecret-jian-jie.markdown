@@ -4,6 +4,7 @@ title: "iSecret 简介 Updated at Oct 14, 2013"
 date: 2013-05-28 16:44
 comments: true
 categories: iOS
+tags: iOS Obj-C Product
 ---
 
 美国区：<a href="https://itunes.apple.com/us/app/isecret-ai-mi-mi/id502265634?mt=8&uo=4" target="itunes_store"><img src="http://r.mzstatic.com/images/web/linkmaker/badge_appstore-lrg.gif" alt="iSecret（爱秘密） - Safe&Quick" style="border: 0;"/></a>  

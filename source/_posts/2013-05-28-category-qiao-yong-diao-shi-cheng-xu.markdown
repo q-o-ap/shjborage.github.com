@@ -4,6 +4,7 @@ title: "Category 巧用-调试程序"
 date: 2013-05-28 10:52
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
 ###Category可以用来调试

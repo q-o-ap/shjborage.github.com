@@ -4,6 +4,7 @@ title: "在github上使用octopress"
 date: 2013-08-22 10:55
 comments: true
 categories: other
+tags: Github octopress
 ---
 
 Octopress是使用ruby语言编写的一套建立在jekyll之上的博客系统，它有一些很独特的特点：

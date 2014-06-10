@@ -4,6 +4,7 @@ title: "深入浅出 Cocoa 多线程编程之 block 与 dispatch quene"
 date: 2013-11-12 22:20
 comments: true
 categories: iOS
+tags: iOS Obj-C 底层 多线程
 ---
 
 深入浅出 Cocoa 多线程编程之 block 与 dispatch quene

@@ -4,6 +4,7 @@ title: "SQLite使用 iOS平台"
 date: 2013-09-03 13:35
 comments: true
 categories: Database iOS
+tags: iOS Database
 ---
 
 ###不太常用，但很关键命令

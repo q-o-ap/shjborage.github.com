@@ -4,6 +4,7 @@ title: "Reveal插件简介"
 date: 2014-04-08 16:24
 comments: true
 categories: iOS
+tags: iOS OpenSource Tools
 ---
 
 Reveal 自己没有这种插件，可以修改工程使用，就自己做个吧。  

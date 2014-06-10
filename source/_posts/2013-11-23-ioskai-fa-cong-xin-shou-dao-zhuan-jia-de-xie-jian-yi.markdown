@@ -4,6 +4,7 @@ title: "iOS开发：从新手到专家的一些建议"
 date: 2013-11-23 17:32
 comments: true
 categories: iOS
+tags: iOS
 ---
 
 [Origin](http://www.cocoachina.com/applenews/devnews/2013/1118/7371.html)

@@ -4,6 +4,7 @@ title: "OSX Server - Message Server 研究与故障解决方案"
 date: 2013-12-21 00:50
 comments: true
 categories: Mac
+tags: Mac Tools
 ---
 
 OSX Server是个出色的小团队服务端解决方案，前两个月发邮件说这个可以让我使用兑换券免费下一个，一定不能错过的机会，平时可是会卖很贵的啊

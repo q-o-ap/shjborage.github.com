@@ -5,6 +5,7 @@ date: 2014-05-15 21:35
 comments: true
 categories: iOS
 tags : iOS AppStore
+tags: iOS AppStore Product
 ---
 
 1、程序有重大bug，程序不能启动，或者中途退出。   

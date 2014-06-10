@@ -4,6 +4,7 @@ title: "Autolayout及VFL经验分享"
 date: 2013-11-23 17:53
 comments: true
 categories: iOS
+tags: iOS UI AutoLayout
 ---
 
 [Origin](http://www.cocoachina.com/applenews/devnews/2013/1108/7322.html)  

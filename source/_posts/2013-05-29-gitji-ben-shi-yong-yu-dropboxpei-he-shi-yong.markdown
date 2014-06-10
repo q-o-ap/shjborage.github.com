@@ -4,6 +4,7 @@ title: "Git基本使用与Dropbox配合使用"
 date: 2013-05-29 11:43
 comments: true
 categories: SourceControl
+tags: SourceControl Git Dropbox
 ---
 
 ###Git基本使用

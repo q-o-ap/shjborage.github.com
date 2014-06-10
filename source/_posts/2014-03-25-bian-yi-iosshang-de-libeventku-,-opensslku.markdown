@@ -4,6 +4,7 @@ title: "编译iOS上的libevent库、openssl库"
 date: 2014-03-25 00:05
 comments: true
 categories: iOS other
+tags: iOS Obj-C 第三方库
 ---
 
 http://www.tuicool.com/articles/fmmQzq

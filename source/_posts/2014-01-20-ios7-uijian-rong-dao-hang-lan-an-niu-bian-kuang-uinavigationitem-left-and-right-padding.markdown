@@ -4,6 +4,7 @@ title: "iOS7 UI兼容 导航栏按钮边框 UINavigationItem left and right padd
 date: 2014-01-20 23:16
 comments: true
 categories: iOS
+tags: iOS UI iOS7
 ---
 
 iOS7之前的UI为：

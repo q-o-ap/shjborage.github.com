@@ -4,6 +4,7 @@ title: "UITableView reloadData的正确方法"
 date: 2012-02-08 12:04
 comments: true
 categories: iOS
+tags: iOS UI
 ---
 
 相信很多人会遇到这种情况，当tableView正在滚动的时候，如果reloadData，偶尔发生App crash的情况。 这种情况有时候有，有时候没有，已经难倒了很多人。直至今天，我在stackoverflow上面，仍没有发现真正有说到其本质的帖子。我的处女贴，选择这个问题来阐述一下我的观点。  

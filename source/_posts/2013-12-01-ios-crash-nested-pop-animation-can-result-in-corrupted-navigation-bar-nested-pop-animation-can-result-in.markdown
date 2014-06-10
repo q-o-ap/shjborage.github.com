@@ -4,6 +4,7 @@ title: "iOS Crash:nested pop animation can result in corrupted navigation bar ne
 date: 2013-12-01 01:37
 comments: true
 categories: iOS
+tags: iOS UI Crash
 ---
 
 [Origin](http://yul100887.blog.163.com/blog/static/20033613520137205121620/)

@@ -4,6 +4,7 @@ title: "iOS客户端的gzip处理-gzip-ungzip"
 date: 2014-01-20 20:28
 comments: true
 categories: iOS
+tags: iOS Obj-C 底层 Network
 ---
 
 服务端使用gzip压缩，可以大幅度减小传输包的体积，加快客户端网络请求速度，为用户节省流量。当服务器返回的httpHeader的"Content-Encoding" 属性的值是gzip时，数据会自动被解压缩，但有时候在客户端还没拿到数据的时候，就已经被某些网关解压了，这样gzip就没有起到作用。因此可以约定其他策略，防止网关解压，例如在别的头属性中标记gzip。

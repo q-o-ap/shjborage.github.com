@@ -4,6 +4,7 @@ title: "Mac OS X添加PATH环境变量"
 date: 2013-10-24 23:53
 comments: true
 categories: Mac
+tags: Mac
 ---
 
 解决办法:

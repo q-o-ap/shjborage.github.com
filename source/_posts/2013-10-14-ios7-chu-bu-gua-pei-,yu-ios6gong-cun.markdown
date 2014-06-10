@@ -4,6 +4,7 @@ title: "iOS7 初步适配，与iOS6共存"
 date: 2013-10-14 15:43
 comments: true
 categories: iOS
+tags: iOS UI iOS7
 ---
 
 #### 状态栏隐藏问题

@@ -4,6 +4,7 @@ title: "SQLite(FMDB) 线程安全 - 多线程处理"
 date: 2013-12-12 11:25
 comments: true
 categories: iOS Database
+tags: iOS Obj-C DataBase
 ---
 
 在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。

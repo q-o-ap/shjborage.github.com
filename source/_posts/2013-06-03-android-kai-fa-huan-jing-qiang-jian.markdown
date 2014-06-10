@@ -4,6 +4,7 @@ title: "Android 开发环境搭建"
 date: 2013-06-03 10:19
 comments: true
 categories: Android
+tags: Android Tools
 ---
 
 ####引言

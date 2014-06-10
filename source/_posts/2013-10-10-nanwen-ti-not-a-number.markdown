@@ -4,6 +4,7 @@ title: "NaN问题 Not a Number"
 date: 2013-10-10 23:26
 comments: true
 categories: iOS
+tags: iOS Crash
 ---
 
 这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。  

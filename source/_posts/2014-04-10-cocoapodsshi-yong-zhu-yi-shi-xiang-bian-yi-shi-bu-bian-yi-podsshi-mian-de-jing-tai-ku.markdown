@@ -4,6 +4,7 @@ title: "CocoaPods使用注意事项-编译时不编译Pods时面的静态库"
 date: 2014-04-10 21:59
 comments: true
 categories: iOS 
+tags: iOS CocoaPods
 ---
 
 自从决定开始用CocoaPods以后，肯定就是根本停不下来的节奏。但是由于CocoaPods本身也是处于不断的开发与改进中的，自然也免不了各种问题。当然了，如果懂Ruby可以为社区贡献一份力量，如果不懂的话呢，就只能先总结总结，给自己减少一些犯错的“机会”吧。

@@ -4,6 +4,7 @@ title: "Web Div+CSS排版"
 date: 2013-06-08 16:08
 comments: true
 categories: other
+tags: CSS Web
 ---
 
 ######显示效果见源网页：http://www.java3z.com/cwbwebhome/article/article9/ht26.html

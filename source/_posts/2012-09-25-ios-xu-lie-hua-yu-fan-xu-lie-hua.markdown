@@ -4,6 +4,7 @@ title: "iOS 序列化与反序列化"
 date: 2012-09-25 10:36
 comments: true
 categories: iOS
+tags: iOS Obj-C
 ---
 
     
