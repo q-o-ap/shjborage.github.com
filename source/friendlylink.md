@@ -9,9 +9,6 @@ footer: true
 
 ####iOS Dev
 *	[国内iOS开源代码库](http://code4app.com)
-*	[iOS7 官方迁移指导](https://developer.apple.com/library/ios/documentation/userexperience/conceptual/TransitionGuide/index.html)
-*	[iOS7 day-by-day](http://www.shinobicontrols.com/blog/posts/2013/09/19/introducing-ios7-day-by-day/)
-*	[iOS7 day-by-day Code](https://github.com/ShinobiControls/iOS7-day-by-day)
 *	[《程序员编程艺术》](https://github.com/julycoding/The-Art-Of-Programming-By-July)
 
 
@@ -21,6 +18,7 @@ footer: true
 *	[唐巧的技术博客](http://blog.devtang.com)
 *	[OneV's Den-上善若水，人淡如菊](http://onevcat.com/)
 *	[结构之法 算法之道](http://blog.csdn.net/v_july_v)
+*	[猫·仁波切-Swift](http://andelf.github.io/)
 
 ####Friends
 *	[hongri-iOS开发者](http://blog.csdn.net/songhongri)
