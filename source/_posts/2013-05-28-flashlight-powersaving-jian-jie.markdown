@@ -4,7 +4,7 @@ title: "Flashlight(PowerSaving) 简介"
 date: 2013-05-28 16:46
 comments: true
 categories: iOS
-tags: iOS Obj-C Product
+tags: iOS Obj-C Product OpenSource
 ---
 
 ## OpenSource
