@@ -14,7 +14,7 @@ tags: octopress
 
 +   首先，我安装并使用过很长`octopress`，并且比较熟悉，也很好的管理着`master`与`source`分支
 +   先用`Github.app`把工程`clone`下来，切换到`source`分支
-+   根据`原文`的提示，另外需要把`master``clone`到`_deploy`目录中
++   根据`原文`的提示，另外需要把`master` `clone`到`_deploy`目录中
 ```
 cd your_blog_dir(maybe shjborage.github.com)
 # 会自动创建目录，默认即master分支，如果有异常，可考虑 git clone -b master xxx
