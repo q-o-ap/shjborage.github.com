@@ -39,7 +39,7 @@ tags: iOS AutoLayout
 最后一篇的话是小伙伴翻译的，来自[objc.io](http://objc.io)，我还没看，不过整个网站质量很高，也希望大家关注中文版[objccn.io](http://objccn.io)，我也贡献过一点点力，嘿嘿。
 
 [AutoLayout 相关概念介绍和动画demo](http://studentdeng.github.io/blog/2014/06/13/auto-layout/)  
-[一篇厚道的Autolayout及VFL经验分享](http://blog.csdn.net/mozixiong/article/details/14165391)这个我也转了<http://www.saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/>   
+[一篇厚道的Autolayout及VFL经验分享](http://blog.csdn.net/mozixiong/article/details/14165391)这个我也转了<http://blog.saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/>   
 [先进的自动布局工具箱 from objc.io](http://objccn.io/issue-3-5/)  
 
 ###总结
