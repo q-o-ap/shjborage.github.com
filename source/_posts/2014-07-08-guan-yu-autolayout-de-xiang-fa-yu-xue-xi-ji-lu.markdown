@@ -47,4 +47,4 @@ tags: iOS AutoLayout
 
 ###后记
 看了一眼，以前也写、转过`AutoLayout`的东西，不过自己都没想起来 - -。  
-[Auto Layout by Example](http://www.saick.net/blog/2014/01/18/auto-layout-by-example/)
+[Auto Layout by Example](http://blog.saick.net/blog/2014/01/18/auto-layout-by-example/)

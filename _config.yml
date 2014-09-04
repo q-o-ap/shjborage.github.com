@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://www.saick.net
+url: http://blog.saick.net
 title: Saick Blog
 subtitle: Safe&Quick iOS Dev Blog.
 author: Eric Shi
@@ -20,7 +20,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: shjborage@gmail.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -120,7 +120,7 @@ weibo_sina: show
 jiathis: show
 
 # ad
-ad: show
+# ad: show
 
 # ad: taobao
 ad_TB: show
