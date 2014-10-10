@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Git fetch和git pull的区别"
+title: "Git fetch和Git pull的区别"
 date: 2013-10-19 01:47
 comments: true
 categories: SourceControl
