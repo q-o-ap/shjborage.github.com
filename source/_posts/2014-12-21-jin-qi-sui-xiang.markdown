@@ -3,7 +3,7 @@ layout: post
 title: "近期随想"
 date: 2014-12-21 17:42
 comments: true
-categories: 随便写写
+categories: other
 tags: 随便 推荐工具
 ---
 

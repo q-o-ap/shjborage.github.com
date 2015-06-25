@@ -20,8 +20,7 @@ tags: iOS Obj-C
 
 ####	1.注册类型，按需要添加 
 
-附上本地的文档链接（搜索关键字：Uniform Type Identifier Concepts）
-（file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/understanding_utis/understand_utis_conc/understand_utis_conc.html#//apple_ref/doc/uid/TP40001319-CH202-CHDHIJDE）
+文档中搜索关键字：`Uniform Type Identifier Concepts`
 
 All Files这个文件类型，是从Dropbox里面抄来的，你懂的（http://www.cocoanetics.com/2013/01/open-in-all-files/）。
 
@@ -29,7 +28,7 @@ All Files这个文件类型，是从Dropbox里面抄来的，你懂的（http://
 
 
 ###	2.打开文件ViewController 
-附本地文件链接：（搜索关键字：Previewing and Opening Files）file:///Users/shjborage/Library/Developer/Shared/Documentation/DocSets/com.apple.adc.documentation.AppleiOS5_0.iOSLibrary.docset/Contents/Resources/Documents/index.html#documentation/FileManagement/Conceptual/DocumentInteraction_TopicsForIOS/Articles/PreviewingandOpeningItems.html#//apple_ref/doc/uid/TP40010410-SW1
+文档中搜索关键字：`Previewing and Opening Files`
 
 ####UIDocumentInteractionController
 
