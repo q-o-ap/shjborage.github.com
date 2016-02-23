@@ -7,6 +7,15 @@ sharing: false
 footer: true
 ---
 
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#nav-menu .index-nav").removeClass("current");
+	$("#nav-menu .archives-nav").removeClass("current");
+	$("#nav-menu .friendlink-nav").addClass("current");
+	$("#nav-menu .about-nav").removeClass("current");
+});
+</script>
+
 ####iOS Dev
 *	[国内iOS开源代码库](http://code4app.com)
 *	[《程序员编程艺术》](https://github.com/julycoding/The-Art-Of-Programming-By-July)
