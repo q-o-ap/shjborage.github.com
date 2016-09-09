@@ -28,7 +28,8 @@ new_page_ext    = "markdown"  # default new page file extension when using the n
 server_port     = "4000"      # port for preview server eg. localhost:4000
 
 ## -- My Configs -- ##
-editor                        = "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"        # default editor for new_post/new_page
+#editor                        = "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"        # default editor for new_post/new_page
+editor                        = "/Applications/MWeb.app/Contents/MacOS/MWeb"
 
 
 desc "Initial setup for Octopress: copies the default theme into the path of Jekyll's generator. Rake install defaults to rake install[classic] to install a different theme run rake install[some_theme_name]"
@@ -117,9 +118,9 @@ task :new_post, :title do |t, args|
     post.puts "tags: "
     post.puts "---"
   end
-  if open(filename, "r")
-     `'#{editor}' #{filename}`
-  end
+#  if open(filename, "r")
+#     `'#{editor}' #{filename}`
+#  end
 
 end
 
