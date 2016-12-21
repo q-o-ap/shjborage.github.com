@@ -3,7 +3,7 @@ layout: post
 title: "Eclipse将java的工程转换为web工程"
 date: 2013-10-14 15:30
 comments: true
-categories: JavaWeb
+categories: Web
 tags: Java Web
 ---
 

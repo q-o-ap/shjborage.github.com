@@ -3,7 +3,7 @@ layout: post
 title: "JavaWeb开发 eclipse myEclipse JSP编辑卡死问题解决"
 date: 2013-06-03 15:16
 comments: true
-categories: JavaWeb
+categories: Web
 tags: Java Web
 ---
 
@@ -20,3 +20,4 @@ tags: Java Web
 
 在其中加入 127.0.0.1   www.w3.org
 OK,解决了。
+

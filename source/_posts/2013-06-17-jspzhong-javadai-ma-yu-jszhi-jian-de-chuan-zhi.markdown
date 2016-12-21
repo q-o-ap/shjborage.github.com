@@ -3,7 +3,7 @@ layout: post
 title: "JSP中java代码与js之间的传值"
 date: 2013-06-17 15:04
 comments: true
-categories: JavaWeb
+categories: Web
 tags: Java Web
 ---
 
@@ -37,3 +37,4 @@ JSP代码
 
 数组的传递：不能像List那样直接赋值.可以参考这里
 http://wuaner.iteye.com/blog/455481
+
