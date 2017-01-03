@@ -325,11 +325,13 @@ long long incr  // 操作数， incr命令时为 `1`
 
 ## Refs
 
-[源码分析：静态分析 C 程序函数调用关系图](http://www.tinylab.org/callgraph-draw-the-calltree-of-c-functions/?utm_source=tuicool&utm_medium=referral)
+[源码分析：静态分析 C 程序函数调用关系图](http://www.tinylab.org/callgraph-draw-the-calltree-of-c-functions/?utm_source=tuicool&utm_medium=referral)  
 [DOT语言](https://zh.wikipedia.org/wiki/DOT%E8%AF%AD%E8%A8%80)
 
 ## Evernote
-<https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM>
+
+[redis-结构-源码研究备忘](https://www.evernote.com/l/AC5QDjLdH0ZN1K1zh9XY343jZaP1AWeYbS8)  
+<https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM>  
 
 
 
