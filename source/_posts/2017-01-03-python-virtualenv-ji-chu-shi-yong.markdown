@@ -3,8 +3,8 @@ layout: post
 title: "Python - virtualenv 基础使用"
 date: 2017-01-03 16:28
 comments: true
-categories: env python
-tags: python
+categories: python
+tags: python env
 ---
 
 
