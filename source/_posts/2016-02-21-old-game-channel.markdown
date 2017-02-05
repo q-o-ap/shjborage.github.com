@@ -3,7 +3,7 @@ layout: post
 title: "Old Game Channel"
 date: 2016-02-21 12:10
 comments: true
-categories: Game
+categories: other
 tags: Game
 ---
 
@@ -28,3 +28,5 @@ tags: Game
 
     <embed src="http://player.youku.com/player.php/sid/XODYwMDU1NzY=/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
     
+
+
