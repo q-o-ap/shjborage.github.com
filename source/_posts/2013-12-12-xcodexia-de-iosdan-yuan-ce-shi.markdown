@@ -1,19 +1,19 @@
 ---
 layout: post
-title: "XCode下的iOS单元测试"
+title: "Xcode 下的 iOS 单元测试"
 date: 2013-12-12 09:34
 comments: true
 categories: iOS
 tags: iOS Obj-C 单元测试
 ---
 
-XCode 内置了 OCUnit 单元测试框架，但目前最好用的测试框架应该是 GHUnit。通过 GHUnit + OCMock 组合，我们可以在 iOS 下进行较强大的单元测试功能。本文将演示如何在 XCode 4.2 下使用 OCUnit， GHUnit 和 OCMock 进行单元测试。
+Xcode 内置了 OCUnit 单元测试框架，但目前最好用的测试框架应该是 GHUnit。通过 GHUnit + OCMock 组合，我们可以在 iOS 下进行较强大的单元测试功能。本文将演示如何在 XCode 4.2 下使用 OCUnit， GHUnit 和 OCMock 进行单元测试。
 
 <!-- more -->
 
 ###OCUnit
 
-在 XCode 下新建一个 OCUnitProject 工程，选中 Include Unit Tests 选择框，
+在 Xcode 下新建一个 OCUnitProject 工程，选中 Include Unit Tests 选择框，
 
 <a href="http://www.flickr.com/photos/shjborage/11332017455/" title="2013-12-12-1 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2805/11332017455_a9679dfeb5.jpg" width="500" height="337" alt="2013-12-12-1"></a>
 
@@ -21,7 +21,7 @@ OCUnit 框架则会为我们自动添加 Unit Test 框架代码：
 
 <a href="http://www.flickr.com/photos/shjborage/11332111874/" title="2013-12-12-2 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5538/11332111874_82dae3bc52.jpg" width="430" height="381" alt="2013-12-12-2"></a>
 
-XCode 在 OCUnitProjectTests.m 中为我们自动生成了一个 Fail 的测试：
+Xcode 在 OCUnitProjectTests.m 中为我们自动生成了一个 Fail 的测试：
 
 ```
 - (void)testExample
@@ -194,4 +194,5 @@ Unit Testing in Xcode 4- use OCUnit and SenTest instead of GHUnit
 
 GHUnit Reference: http://gabriel.github.com/gh-unit/
 
-转自：http://www.uml.org.cn/mobiledev/201201093.asp
+转自：<http://www.uml.org.cn/mobiledev/201201093.asp>
+
