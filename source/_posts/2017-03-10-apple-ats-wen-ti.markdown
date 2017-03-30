@@ -33,6 +33,10 @@ nscurl --ats-diagnostics https://www.example.com
 需要切换为 `NSURLSession` 来解决这个问题。
 后续的网络请求应该都不再使用 `NSURLConnection`，应该是苹果 SDK 的 bug，但因为这部分已经是不再维护的了，也别为难苹果了，使用最新的 API 吧。
 
+## Refs
+
+-   [关于 iOS 10 中 ATS 的问题](https://onevcat.com/2016/06/ios-10-ats/)
+
 
 
 
