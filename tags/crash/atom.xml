@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: Crash | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/crash/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS Crash:nested pop animation can result in corrupted navigation bar nested pop animation can result in ..]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in/"/>
+    <updated>2013-12-01T01:37:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/01/ios-crash-nested-pop-animation-can-result-in-corrupted-navigation-bar-nested-pop-animation-can-result-in</id>
+    <content type="html"><![CDATA[<p><a href="http://yul100887.blog.163.com/blog/static/20033613520137205121620/">Origin</a></p>
+
+<p>Nested pop animation can result in corrupted navigation bar</p>
+
+<p>Finishing up a navigation transition in an unexpected state. Navigation Bar subview tree might get corrupted.</p>
+
+<h3>【情况一】</h3>
+
+<p>出现此问题的原因是在A界面弹出B界面完成后，又掉A界面POP出栈，这必然导致以上问题。如下，在弹出personalController后面，又在后面调用了[self.navigationController popViewControllerAnimated:YES];将自己弹出！解决方法，还用说吗？｛删除最后一行代码，要弹出此界面，自然有自己的返回按钮来处理｝，至少在B界面未POP以前，A界面是无论如何也不能将自己POP去消毁！</p>
+
+<!-- more -->
+
+
+<p><code>
+NSString *memberId = [dictionary objectForKey:@"PlayerNo"];
+PersonalInfoViewController* personalController = [[PersonalInfoViewController alloc] init];
+[personalController.navigationItems etHidesBackButton:YES];
+[personalController setMemberId:memberId];
+[self.navigationController pushViewController:personalController animated:YES];
+[personalController release];
+[self.navigationController popViewControllerAnimated:YES];
+</code></p>
+
+<h3>【情况二】</h3>
+
+<p>nested push animation can result in corrupted navigation bar <br/>
+嵌套的navigation动画会造成  navigation bar 错误<br/>
+具体表现为上一层的titleview 和这一层重叠， navigationbaritem维持上一层的左按钮,右按钮,系统警告提示nested push animation can result in corrupted navigation bar</p>
+
+<p>从头到尾分析了整个项目的代码， 最后确认问题根源——<strong>自定义UITabbarController</strong>引发的血案
+项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，</p>
+
+<ul>
+<li>整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，</li>
+<li>导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</li>
+</ul>
+
+
+<p>```
+&ndash; (void)viewWillAppear:(BOOL)animated
+{</p>
+
+<pre><code>[super viewWillAppear:animated];
+</code></pre>
+
+<p>}
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS应用处理崩溃的几种方法]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa/"/>
+    <updated>2013-10-16T23:31:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/16/iosying-yong-chu-li-beng-kui-de-ji-chong-fang-fa</id>
+    <content type="html"><![CDATA[<p>在开发IOS app的过程中,XCode在遇到程序崩溃时打印的信息一般时比较少的。
+在iOS7时，这个情况好像有些一些变化，但不太明确，也不太稳定。</p>
+
+<h3>1.在XCode中使用一个通用断点</h3>
+
+<p>在XCode中打开工程，在左边的工程导航栏中选中断点,点击下放的＋号,选择“Add Exception BreakPoint”。点done即可。</p>
+
+<h3>2.开启NSZombieEnabled等调试选项</h3>
+
+<p>XCode->Product->Scheme->Edit Scheme->Run XXX.app->Arguments
+在Environment Variables中增加下面属性并都配置为YES。</p>
+
+<!-- more -->
+
+
+<p><code>
+MallocStackLogging
+MallocStackLoggingNoCompact
+NSAutoreleaseFreedObjectCheckEnabled
+NSDebugEnabled
+NSZombieEnabled
+</code></p>
+
+<p>在实际使用中发现，使用了上述配置之后，如果能在模拟器上运行效果更佳。比如,真机调试时遇到过如下错误：</p>
+
+<p><code>
+-[CALayer retain]: message sent to deallocated instance 0x1d418a30
+</code></p>
+
+<p>使用网上很多地方都提到的方法：</p>
+
+<p><code>
+info malloc-history 0x1d418a30
+XCode提示:Undefined info command: "malloc-history".  Try "help info".
+</code>
+针对这种情况可以参考:<a href="http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82">http://stackoverflow.com/questions/3851565/using-gdb-info-malloc-command-within-xcode-iphone-dev,%E9%87%8C%E9%9D%A2%E5%B0%B1%E8%AF%B4%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E4%BC%BCmalloc-history%E7%9A%84gdb%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E3%80%82</a></p>
+
+<p><strong>其中最主要的还是</strong> <em>NSZombieEnabled</em>, 这个解决EXC_BAD_ACCESS还是很有用的。
+具体参考这个：<a href="http://www.cocoachina.com/macdev/objc/2011/0219/2661.html">http://www.cocoachina.com/macdev/objc/2011/0219/2661.html</a></p>
+
+<h3>3.增加异常处理[理论上和"在XCode中使用一个通用断点"效果类似]</h3>
+
+<p>写iOS代码的时候,经常会遇到程序崩溃在main函数的入口处并出现类似"First throw call stack"这样的错误。为了更好的知道崩溃的原因,我们可以在AppDelegate中定义一个方法, 用于处理异常:</p>
+
+<p>```
+void caughtException(NSException *exception)
+{</p>
+
+<pre><code>NSLog(@"CRASH: %@", exception);  
+NSLog(@"Stack Trace: %@", [exception callStackSymbols]);  
+// Internal error reporting 
+</code></pre>
+
+<p>}
+```
+另外，在打印时，也可以使用GTM，GTMStackTraceFromException(exception)，跟系统的类似。</p>
+
+<p>然后在应用启动时，设置这个方法作为自己的自定义异常回调：</p>
+
+<p>```
+&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
+{</p>
+
+<pre><code>NSSetUncaughtExceptionHandler(&amp; caughtException); 
+</code></pre>
+
+<p>}
+```
+在定义了这个回调之后，崩溃是的控制台信息一般都会一目了然，我们甚至可以看出是那个类的哪一行出问题了。</p>
+
+<h3>4.signal处理，并提示。</h3>
+
+<p>启动信号处理</p>
+
+<p>```</p>
+
+<pre><code>signal(SIGABRT, signalHandler);
+signal(SIGILL, signalHandler);
+signal(SIGSEGV, signalHandler);
+signal(SIGFPE, signalHandler);
+signal(SIGBUS, signalHandler);
+signal(SIGPIPE, signalHandler);
+</code></pre>
+
+<p>```</p>
+
+<p>其它相关代码
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>include &lt;libkern/OSAtomic.h>&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>include &lt;execinfo.h>&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>NSString * const UncaughtExceptionHandlerSignalExceptionName = @&ldquo;UncaughtExceptionHandlerSignalExceptionName&rdquo;;
+</span><span class='line'>NSString * const UncaughtExceptionHandlerSignalKey = @&ldquo;UncaughtExceptionHandlerSignalKey&rdquo;;
+</span><span class='line'>NSString * const UncaughtExceptionHandlerAddressesKey = @&ldquo;UncaughtExceptionHandlerAddressesKey&rdquo;;&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>volatile int32_t UncaughtExceptionCount = 0;
+</span><span class='line'>const int32_t UncaughtExceptionMaximum = 10;
+</span><span class='line'>const NSInteger UncaughtExceptionHandlerSkipAddressCount = 0;
+</span><span class='line'>const NSInteger UncaughtExceptionHandlerReportAddressCount = 100;&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;ul>
+</span><span class='line'>&lt;li>&lt;p>(NSArray &lt;em>)backTrace
+</span><span class='line'>{
+</span><span class='line'>void&lt;/em> callstack[1024];
+</span><span class='line'>int frames = backtrace(callstack, 1024);
+</span><span class='line'>char **strs = backtrace_symbols(callstack, frames);&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>int i;
+</span><span class='line'>NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
+</span><span class='line'>for (i = UncaughtExceptionHandlerSkipAddressCount;
+</span><span class='line'>     i &lt; UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount;
+</span><span class='line'>     i++)
+</span><span class='line'>{
+</span><span class='line'>  if (frames &lt;= i)
+</span><span class='line'>    break;
+</span><span class='line'>  [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
+</span><span class='line'>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>free(strs);&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>return backtrace;
+</span><span class='line'>}&lt;/p>&lt;/li>
+</span><span class='line'>&lt;li>&lt;p>(void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex
+</span><span class='line'>{
+</span><span class='line'>if (anIndex == 0) {
+</span><span class='line'>  _dismissed = YES;
+</span><span class='line'>}
+</span><span class='line'>}&lt;/p>&lt;/li>
+</span><span class='line'>&lt;li>&lt;p>(void)handleException:(NSException &lt;em>)exception
+</span><span class='line'>{
+</span><span class='line'>UIAlertView &lt;/em>alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@&ldquo;Unhandled exception&rdquo;, nil)
+</span><span class='line'>                                                message:[NSString stringWithFormat:NSLocalizedString(@&ldquo;You can try to continue but the application may be unstable.\n&rdquo; @&ldquo;%@\n%@&rdquo;, nil), [exception reason], [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]
+</span><span class='line'>                                               delegate:self
+</span><span class='line'>                                      cancelButtonTitle:NSLocalizedString(@&ldquo;Quit&rdquo;, nil)
+</span><span class='line'>                                      otherButtonTitles:NSLocalizedString(@&ldquo;Continue&rdquo;, nil), nil];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>[alert show];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+</span><span class='line'>CFArrayRef allModes = CFRunLoopCopyAllModes(runLoop);&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>while (!_dismissed) {
+</span><span class='line'>  for (NSString &lt;em>mode in (NSArray &lt;/em>)CFBridgingRelease(allModes)) {
+</span><span class='line'>    CFRunLoopRunInMode((CFStringRef)CFBridgingRetain(mode), 0.001, false);
+</span><span class='line'>  }
+</span><span class='line'>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>CFRelease(allModes);&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>NSString *log = [NSString stringWithFormat:@&ldquo;%@\n\n info:\n%@&rdquo;, exception, exception.userInfo];
+</span><span class='line'>[[DebugUtil sharedDebug] LogException:log];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>NSSetUncaughtExceptionHandler(NULL);
+</span><span class='line'>signal(SIGABRT, SIG_DFL);
+</span><span class='line'>signal(SIGILL, SIG_DFL);
+</span><span class='line'>signal(SIGSEGV, SIG_DFL);
+</span><span class='line'>signal(SIGFPE, SIG_DFL);
+</span><span class='line'>signal(SIGBUS, SIG_DFL);
+</span><span class='line'>signal(SIGPIPE, SIG_DFL);&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>if ([[exception name] isEqual:UncaughtExceptionHandlerSignalExceptionName]) {
+</span><span class='line'>  kill(getpid(), [[[exception userInfo] objectForKey:UncaughtExceptionHandlerSignalKey] intValue]);
+</span><span class='line'>} else {
+</span><span class='line'>  [exception raise];
+</span><span class='line'>}
+</span><span class='line'>}&lt;/p>&lt;/li>
+</span><span class='line'>&lt;/ul>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p>NSString * getAppInfo()
+</span><span class='line'>{
+</span><span class='line'>  NSString *appInfo = [NSString stringWithFormat:@&ldquo;App : %@ %@(%@)\nDevice : %@\nOS Version : %@ %@\nUDID : %@\n&rdquo;,&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>                   [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
+</span><span class='line'>                   [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
+</span><span class='line'>                   [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
+</span><span class='line'>                   [UIDevice currentDevice].model,
+</span><span class='line'>                   [UIDevice currentDevice].systemName,
+</span><span class='line'>                   [UIDevice currentDevice].systemVersion,
+</span><span class='line'>                   /*[UIDevice currentDevice].uniqueIdentifier*/@""];
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  return appInfo;
+</span><span class='line'>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>void signalHandler(int signal)
+</span><span class='line'>{
+</span><span class='line'>  int32_t exceptionCount = OSAtomicIncrement32(&amp;UncaughtExceptionCount);&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  if (exceptionCount > UncaughtExceptionMaximum) {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>return;
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  }&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:signal] forKey:UncaughtExceptionHandlerSignalKey];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  NSArray *callStack = [DebugUtil backTrace];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  [userInfo setObject:callStack forKey:UncaughtExceptionHandlerAddressesKey];&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  [[[DebugUtil alloc] init] performSelectorOnMainThread:@selector(handleException:) withObject: [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName reason:[NSString stringWithFormat: NSLocalizedString(@&ldquo;Signal %d was raised.\n&rdquo; @&ldquo;%@&rdquo;, nil), signal, getAppInfo()] userInfo:userInfo] waitUntilDone:YES];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>第4部分 原文：<a href="http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html">http://www.cocoachina.com/newbie/tutorial/2012/0829/4672.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[遭遇SIGPIPE]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/10/zao-yu-sigpipe/"/>
+    <updated>2013-10-10T23:35:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/10/zao-yu-sigpipe</id>
+    <content type="html"><![CDATA[<p>《转》</p>
+
+<p>我写了一个服务器程序, 在Windows下在cygwin环境编译后执行,
+然后用C#写了多线程客户端进行压力测试. 程序一直运行正常.
+但当在Linux下测试时, 总是莫名退出. 最后跟踪到是write调用导致退出.</p>
+
+<p>用gdb执行程序, 退出时提示"Broken pipe".
+最后问题确定为, 对一个对端已经关闭的socket调用两次write,
+第二次将会生成SIGPIPE信号, 该信号默认结束进程.</p>
+
+<!-- more -->
+
+
+<p>具体的分析可以结合TCP的"四次握手"关闭. TCP是全双工的信道,
+可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时,
+虽然本意是关闭整个两条信道, 但本端只是收到FIN包. 按照TCP协议的语义,
+表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据.</p>
+
+<p>也就是说, 因为TCP协议的限制,
+一个端点无法获知对端的socket是调用了close还是shutdown.
+对一个已经收到FIN包的socket调用read方法, 如果接收缓冲已空, 则返回0,
+这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题,
+会返回正确写入(发送). 但发送的报文会导致对端发送RST报文,
+因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
+第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
+
+<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它,
+给它设置SIG_IGN信号处理函数:
+<code>signal(SIGPIPE, SIG_IGN);</code>
+这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE.
+程序便能知道对端已经关闭.</p>
+
+<p>PS: Linux下的SIGALRM似乎会每1秒钟往后偏移1毫秒, 但Windows下经过测试完全准时, 不差1毫秒.</p>
+
+<h5>忽略SIGPIPE信号的方法</h5>
+
+<p><a href="http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html">http://hi.baidu.com/greathongjian/blog/item/2f695643091885139213c65a.html</a></p>
+
+<p><code>
+struct sigaction sa;
+sa.sa_handler = SIG_IGN;//设定接受到指定信号后的动作为忽略
+sa.sa_flags = 0;
+if (sigemptyset(&amp;sa.sa_mask) == -1 || //初始化信号集为空
+sigaction(SIGPIPE, &amp;sa, 0) == -1) { //屏蔽SIGPIPE信号
+perror("failed to ignore SIGPIPE; sigaction");
+exit(EXIT_FAILURE);
+}
+</code></p>
+
+<h5>pthread线程里如何屏蔽SIGPIPE异常</h5>
+
+<p>hi.baidu.com/ailacy/blog/item/a7eb65f8b8b55707d8f9fdd5.html
+<a href="http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1">http://bbs2.chinaunix.net/viewthread.php?tid=985166&amp;extra=&amp;page=1</a></p>
+
+<p>在pthread中，可能会遇到Program received signal SIGPIPE, Broken
+pipe的问题，解决方法是每一个线程启动之前时，先执行下面代码：</p>
+
+<p>```</p>
+
+<h1>ifndef WIN32</h1>
+
+<p>sigset_t signal_mask;
+sigemptyset (&amp;signal_mask);
+sigaddset (&amp;signal_mask, SIGPIPE);
+int rc = pthread_sigmask (SIG_BLOCK, &amp;signal_mask, NULL);
+if (rc != 0) {
+printf(&ldquo;block sigpipe error\n&rdquo;);
+}
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[NaN问题 Not a Number]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/10/nanwen-ti-not-a-number/"/>
+    <updated>2013-10-10T23:26:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/10/nanwen-ti-not-a-number</id>
+    <content type="html"><![CDATA[<p>这种错误是在float经过函数运行出了不是数字的值，nan的意思就是not a number。</p>
+
+<p>主要常见原因：</p>
+
+<ul>
+<li>除以0</li>
+<li>sizeWithFont的字符串为nil</li>
+<li>数学函数不正确运算</li>
+</ul>
+
+
+<p>解决方法除了排除根源所在之外，用函数isnan()也是不错的选择（至少在没有彻底解决以前）
+如下</p>
+
+<p><code>
+float _x = NAN;
+if (!isnan(_x)) {
+cell.imgView.frame = CGRectMake(_x, 8, 10, 12);
+}
+</code></p>
+
+<p>引自：<a href="http://www.minroad.com/?p=403">http://www.minroad.com/?p=403</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[自定义UITabbarController引发的血案]]></title>
+    <link href="http://shjborage.github.io/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an/"/>
+    <updated>2013-09-02T09:05:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/09/02/zi-ding-yi-uitabbarcontrolleryin-fa-de-xie-an</id>
+    <content type="html"><![CDATA[<p>转自：<a href="http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html">http://www.cnblogs.com/chen1987lei/archive/2012/05/19/2509057.html</a></p>
+
+<p>nested push animation can result in corrupted navigation bar 嵌套的navigation动画会造成 navigation bar 错误， 具体表现为上一层的titleview 和这一层重叠， navigationbaritem 维持上一层的左按钮， 右按钮 、、、系统警告提示nested push animation can result in corrupted navigation bar ， 大家遇到过这种情况吗？？
+嵌套的动画， 是什么意思呢， 为什么会这样， 要怎么解决</p>
+
+<!-- more -->
+
+
+<p>结贴~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+
+<p>有一天，从头到尾分析了整个项目的代码， 最后确认问题根源——自定义UITabbarController引发的血案
+项目中使用了自定义的UITabbarController ，修改里面的tabbar视图， 在这个UITabbarController 中实现了viewWillAppear方法， 里面没有加super viewWillAppear ， 结果导致了这一连串的问题，
+整个软件里面，都会出现弹一次模态窗口，导航视图就会动画乱序，
+导航视图前进后退过快， 导致导航栏嵌套， 一个上面覆盖另一个。</p>
+
+<p>扩展阅读：
+<a href="http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga">http://stackoverflow.com/questions/5525519/iphone-uinavigation-issue-nested-push-animation-can-result-in-corrupted-naviga</a></p>
+
+<p>其实主要还是在用户看不到的时候，多次使用Animate=YES</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: Linux | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/linux/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Linux 开发备忘]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang/"/>
+    <updated>2017-03-12T11:00:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang</id>
+    <content type="html"><![CDATA[<h2>Terminal 使用相关（Mac 下测试通过）</h2>
+
+<h3><a href="http://blog.csdn.net/kai27ks/article/details/7449610">.bash_profile生效方法</a></h3>
+
+<p><code>
+source .bash_profile
+exec bash --login
+</code></p>
+
+<h3>获取当前时间的unix时间戳</h3>
+
+<p>from: <a href="http://www.jb51.net/LINUXjishu/227114.html">http://www.jb51.net/LINUXjishu/227114.html</a></p>
+
+<p><code>
+date +%s
+</code></p>
+
+<h3>awk 命令</h3>
+
+<p><a href="http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html">http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html</a></p>
+
+<h3>grep 查询日志</h3>
+
+<p><a href="http://www.cnblogs.com/end/archive/2012/02/21/2360965.html">linux grep命令</a></p>
+
+<p><code>
+grep -n "xxx" log/xxx.2016xxxxx*
+</code></p>
+
+<h3>压缩解压</h3>
+
+<p>```
+// unzip
+tar -zxvf xxx.gz</p>
+
+<p>// zip a dir
+tar -zcvf xxx.gz dirName
+```</p>
+
+<h3>Terminal 光标移动</h3>
+
+<p><a href="http://blog.csdn.net/teng_ontheway/article/details/50159891">http://blog.csdn.net/teng_ontheway/article/details/50159891</a></p>
+
+<p><code>
+Ctrl + a    // 回行首
+Ctrl + e    // 回行尾
+</code></p>
+
+<!-- more -->
+
+
+<h3>端口占用查询</h3>
+
+<p>命令 <code>lsof -i tcp:port</code>（port替换成端口号，比如 6379）可以查看该端口被什么程序占用，并显示PID，方便KILL</p>
+
+<h2>Vim 相关</h2>
+
+<p>控制鼠标模式，目前还是比较适应纯键盘输入。</p>
+
+<p><code>
+set mouse=v
+</code></p>
+
+<h3>Vim插件体系管理系统</h3>
+
+<p><a href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a>
+<a href="https://github.com/szw/vim-tags">https://github.com/szw/vim-tags</a>
+快捷键 <code>Ctrl+]</code></p>
+
+<p>这个插件体系也可以完全不用的~~</p>
+
+<h4>ctags</h4>
+
+<p>其实是个索引文件，需要创建，并且在当前目录打开才可以使用的。</p>
+
+<p>```
+// 创建tags文件
+cd /your work path
+ctags -R *</p>
+
+<p>// vim 中跳转与返回
+Ctrl + ]
+Ctrl + T
+```</p>
+
+<h5>ctags 更好的支持 php</h5>
+
+<p>在 <code>~/.ctags</code> 中添加这段，更好的创建 php 文件的 tags 文件。</p>
+
+<p><code>
+--regex-php=/^[ \t]*[(private|protected|public|static)( \t)]*function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/f, function, functions/
+--regex-php=/^[ \t]*[(private|protected|public|static)]+[ \t]+\$([A-Za-z0-9_]+)[ \t]*/\1/p, property, properties/
+--regex-php=/^[ \t]*(const)[ \t]+([A-Za-z0-9_]+)[ \t]*/\2/d, const, constants/
+</code></p>
+
+<h4>taglist</h4>
+
+<h4>WinManager</h4>
+
+<h4>phpcomplete</h4>
+
+<h4>supertab</h4>
+
+<p>```
+&ldquo;phpcomplete
+filetype plugin on
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP</p>
+
+<p>&ldquo; taglist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1</p>
+
+<p>&ldquo; wm
+let g:winManagerWindowLayout=&lsquo;FileExplorer|TagList&rsquo;
+"nmap wm :WMToggle<cr></p>
+
+<p>&ldquo; 设置winmanager
+&rdquo; 设置界面分割
+&ldquo;let g:winManagerWindowLayout = "TagList|FileExplorer&rdquo;
+&ldquo;设置winmanager的宽度，默认为25
+let g:winManagerWidth = 30
+"定义打开关闭winmanager快捷键为F8 => 改为普通模式的 wm
+nmap wm :WMToggle<cr>
+"在进入vim时自动打开winmanager
+let g:AutoOpenWinManager = 1</p>
+
+<p>&ldquo; supertab
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType=&rdquo;&lt;C-X>&lt;C-O>&ldquo;
+```</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2017-03-12-14776418022718.jpg" alt="" /></p>
+
+<h5>代码自动补全升级</h5>
+
+<p><a href="http://blog.csdn.net/arcsinsin/article/details/39436043">VIM代码补全提示功能</a></p>
+
+<p>插件是这个：<a href="http://www.vim.org/scripts/script.PHP?script_id=1879">autocomplpop</a>
+安装后，在 <code>.vimrc</code> 中添加配置，支持 php 的 <code>::</code>, <code>-&gt;</code>, <code>$</code>：</p>
+
+<p><code>
+if !exists('g:AutoComplPop_Behavior')
+let g:AutoComplPop_Behavior = {}
+let g:AutoComplPop_Behavior['php'] = []
+call add(g:AutoComplPop_Behavior['php'], {
+\ 'command' : "",
+\ 'pattern' : printf('−&gt;|::|$\k\{『百分号』d,}$', 0),
+\ 'repeat' : 0,
+\})
+endif
+</code></p>
+
+<h4>NERDTree</h4>
+
+<p><code>
+ 114 "NERDTree
+ 115 let g:NERDTree_title="[NERDTree]"
+ 116 let g:winManagerWindowLayout="NERDTree|TagList"
+ 117
+ 118 function! NERDTree_Start()
+ 119     exec 'NERDTree'
+ 120 endfunction
+ 121
+ 122 function! NERDTree_IsValid()
+ 123     return 1
+ 124 endfunction
+</code></p>
+
+<p><a href="http://blog.csdn.net/bokee/article/details/6633193">http://blog.csdn.net/bokee/article/details/6633193</a></p>
+
+<p>这个版本的Winmanager好像有个小bug，你在打开Winmanager界面时，会同时打开一个空的文件。这会影响后续使用，所以我们要在打开Winmanager时关掉这个空文件。在~/.vim/plugin目录下的winmanager.vim文件中找到以下函数定义并在第5行下添加第6行的内容：</p>
+
+<p>```
+function! <SID>ToggleWindowsManager()<br/>
+   if IsWinManagerVisible()</p>
+
+<pre><code>  call s:CloseWindowsManager()  
+</code></pre>
+
+<p>   else</p>
+
+<pre><code>  call s:StartWindowsManager()  
+  exe 'q'
+</code></pre>
+
+<p>   end<br/>
+endfunction
+```</p>
+
+<h3>Vim 打开多窗口、多文件之间的切换</h3>
+
+<p>打开多个文件：
+一、Vim 还没有启动的时候：``
+1.在终端里输入
+<code>
+vim file1 file2 ... filen便可以打开所有想要打开的文件
+</code>
+2.Vim已经启动
+输入
+<code>
+:e file
+</code></p>
+
+<p>可以再打开一个文件，并且此时vim里会显示出file文件的内容。</p>
+
+<p>3.同时显示多个文件：</p>
+
+<p><code>
+:sp         //水平切分窗口
+:vsplit     //垂直切分窗口(:vsp)
+</code></p>
+
+<p>二、在文件之间切换：
+1.文件间切换
+<code>
+Ctrl+6  //两文件间的切换
+:bn      //下一个文件
+:bp      //上一个文件
+:ls       //列出打开的文件，带编号
+:b1~n  //切换至第n个文件
+</code></p>
+
+<p>对于用 <code>(v)split</code> 在多个窗格中打开的文件，这种方法只会在当前窗格中切换不同的文件。</p>
+
+<p>2.在窗格间切换的方法</p>
+
+<p><code>
+Ctrl+w+方向键——切换到前／下／上／后一个窗格
+Ctrl+w+h/j/k/l ——同上
+Ctrl+ww——依次向后切换到下一个窗格中
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Linux、Mac上面ln命令使用说明]]></title>
+    <link href="http://shjborage.github.io/blog/2014/10/22/linux-macshang-mian-lnming-ling-shi-yong-shuo-ming/"/>
+    <updated>2014-10-22T22:25:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/10/22/linux-macshang-mian-lnming-ling-shi-yong-shuo-ming</id>
+    <content type="html"><![CDATA[<h3>引子</h3>
+
+<p>作为一个Mac使用者，曾经也是玩Linux的。遇到一些命令也一般能搞定，但就是有一些命令让你哭笑不得，还真得写下点什么才行。 So, Let&rsquo;s go.</p>
+
+<h3>正文</h3>
+
+<p>ln是linux中又一个非常重要命令，它的功能是为某一个文件在另外一个位置建立一个同不的链接，这个命令最常用的参数是 <code>-s</code>，具体用法是：<code>ln –s 源文件 目标文件</code>。<br><br>
+当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用<code>ln</code>命令链接（link）它就可以，不必重复的占用磁盘空间。例如：<code>ln –s /bin/less /usr/local/bin/less</code> <br>
+<em>-s 是代号（symbolic）的意思</em></p>
+
+<!-- more -->
+
+
+<p><strong>注意：</strong><br>
+第一，<code>ln</code>命令会保持每一处链接文件的同步性，也就是说，不论你改动了哪一处，其它的文件都会发生相同的变化；<br>
+第二，ln的链接又分软链接和硬链接两种，软链接就是<code>ln –s ** **</code>，它只会在你选定的位置上生成一个文件的镜像，不会占用磁盘空间，硬链接<code>ln ** **</code>，没有参数<code>-s</code>， 它会在你选定的位置上生成一个和源文件大小相同的文件，无论是软链接还是硬链接，文件都保持同步变化。
+　　</p>
+
+<p>如果你用<code>ls</code>查看一个目录时，发现有的文件后面有一个<em>@</em>的符号，那就是一个用<code>ln</code>命令生成的文件，用<code>ls –l</code>命令去察看，就可以看到显示的link的路径了。</p>
+
+<h4>指令详细说明(可自行<code>man ln</code>查看)</h4>
+
+<p><code>
+　　指令名称 : ln
+　　使用权限 : 所有使用者
+　　使用方式 : ln [options] source dist，其中 option 的格式为 :
+　　[-bdfinsvF] [-S backup-suffix] [-V {numbered,existing,simple}]
+　　[--help] [--version] [--]
+　　说明 : Linux/Unix 档案系统中，有所谓的连结(link)，我们可以将其视为档案的别名，而连结又可分为两种 : 硬连结(hard link)与软连结(symbolic link)，硬连结的意思是一个档案可以有多个名称，而软连结的方式则是产生一个特殊的档案，该档案的内容是指向另一个档案的位置。硬连结是存在同一个档 案系统中，而软连结却可以跨越不同的档案系统。
+　　ln source dist 是产生一个连结(dist)到 source，至于使用硬连结或软链结则由参数决定。
+　　不论是硬连结或软链结都不会将原本的档案复制一份，只会占用非常少量的磁碟空间。
+　　-f : 链结时先将与 dist 同档名的档案删除
+　　-d : 允许系统管理者硬链结自己的目录
+　　-i : 在删除与 dist 同档名的档案时先进行询问
+　　-n : 在进行软连结时，将 dist 视为一般的档案
+　　-s : 进行软链结(symbolic link)
+　　-v : 在连结之前显示其档名
+　　-b : 将在链结时会被覆写或删除的档案进行备份
+　　-S SUFFIX : 将备份的档案都加上 SUFFIX 的字尾
+　　-V METHOD : 指定备份的方式
+　　--help : 显示辅助说明
+　　--version : 显示版本
+　　范例 :
+　　将档案 yy 产生一个 symbolic link : zz
+　　ln -s yy zz
+　　将档案 yy 产生一个 hard link : zz
+　　ln yy xx﻿
+</code></p>
+
+<p>原文: <a href="http://www.cnblogs.com/joeblackzqq/archive/2011/03/20/1989625.html">http://www.cnblogs.com/joeblackzqq/archive/2011/03/20/1989625.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

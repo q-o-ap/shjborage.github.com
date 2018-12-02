@@ -1,0 +1,457 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Mac OS X 改 hosts文件 - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+  <!--[if lt IE 9]>
+    <script src="http://x.papaapp.com/farm1/a571d2/8dda131d/html5shiv.js"></script>
+    <![endif]-->
+  
+  <meta name="description" content="Mac OS X 改 Hosts文件 Nov 12th, 2013 | Comments 一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者， &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header id="header" class="clearfix">    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                <a id="logo" href="/">
+                   Saick Blog
+                </a>
+                <p class="description">技术博客，致力于全栈以及各方面修养。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="index-nav current" href="/">Blog</a>
+<a class="archives-nav" href="/blog/archives">Archives</a>
+<!-- <a class="friendlink-nav" href="/friendlylink.html">Links</a> -->
+<a class="about-nav" href="/about.html">About Me</a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+  <div id="body">
+    <div class="container">
+    	<div class="col-group">
+			<div class="col-8" id="main">
+  <div class="res-cons">
+  <article class="post clearfix">
+  
+  <header>
+    
+      <h1 class="post-title">Mac OS X 改 Hosts文件</h1>
+    
+    
+      <p class="post-meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T22:34:00+08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="post-content"><p>一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者，因此没有权限写到该文件”的提示，要解决这个权限问题又比较麻烦，对于刚刚使用 Mac 的用户来说并不容易整明白。因此，就有了这篇小贴士，下面我分享四种方法来修改 Mac OS X Lion 系统中的 Hosts 文件，这四种方法都不会出现权限提示，而且 Mac OS X Snow Leopard(10.6) 用户也完全可以使用这些方法。</p>
+
+<h3>1、通过 VI 编辑器修改</h3>
+
+<p>打开终端（应用程序——实用工具），运行：(<em>vim也行</em>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo vi /etc/hosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>屏幕上会提示你输入密码（输入密码的时候不会有任何字符显示，甚至*都不会显示，输完之后按回车就是了），打开 hosts 文件之后按 i 键进入插入模式（可理解为编辑模式），然后按照你的需要对该文件进行编辑，编辑完成之后按 ESC 键退出插入模式，之后按 :wq+回车保存退出，记得英文的冒号也是要输入的哦。</p>
+
+<p>这是笔者一直都在使用的方法，VI 编辑器对于经常使用 Linux 的用户应该不会陌生，而且该编辑器是默认内置在 Mac 系统中的。但是，对于没有使用过 VI 的用户，还真得花一会儿功夫来学习其基本使用方法。另外VI编辑器是一个很好很强大的工具，想要玩好 Mac 的话，最好掌握这个工具的使用。</p>
+
+<!-- more -->
+
+
+<h3>2、使用 nano 编辑器修改</h3>
+
+<p>和上面的方法类似，这个编辑器相比 vi 更加简单易用，但是功能不强大，似乎也没有 vi 流行。方法同样是在终端中运行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo nano /etc/hosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同样是输入密码，打开 hosts 文件，按照你的需要对该文件进行编辑，编辑完毕之后按 ctrl+o 保存，出现 File Name to Write: /etc/hosts 的时候按回车确认，再按 ctrl+x 退出即可。</p>
+
+<h3>3、使用 cat 命令合并文件</h3>
+
+<p>这个方法比较适合当你想往 Hosts 文件中添加一些内容的情况，首先你需要把需要添加到 Hosts 文件中的内容保存为一个TXT文本文件（建议直接保存在你的用户目录），我这里拿保存在用户目录中的123.txt为例说明。</p>
+
+<p>同样是启动终端，然后运行下面两条命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo -s
+</span><span class='line'>cat ~/123.txt&gt;&gt;/etc/hosts</span></code></pre></td></tr></table></div></figure>
+
+
+<p>顺便说一下，~ 符号在 Mac 甚至所有基于 Unix 和 Linux 的系统中都是代表当前用户的用户目录，.代表当前目录，这回你就应该明白上面的命令中为什么是 ~/123.txt 了吧。</p>
+
+<h3>4、直接在图形界面中修改</h3>
+
+<p>打开 Finder，然后点击菜单栏中的 前往——前往文件夹（或者快捷键 Shift+Command+G），在路径中输入 /private，进入之后在 etc 文件夹上点击右键——显示简介，在文件夹简介窗口的最下面找到“共享与权限”，将 everyone 的权限修改为“读与写”，如果你发现不能修改的话，将右下角的那把小锁解开就可以修改了。</p>
+
+<p>修改 etc 文件夹的权限之后，再进入 etc 文件夹下面，修改名为 hosts 文件的权限（同样是everyone读与写），修改完成之后，你就可以直接在 hosts 文件上点右键，通过“文本编辑”打开并编辑该文件了，不会出现没有权限的提示。修改并保存完成之后，记得将该文件和 etc 文件夹的权限还原。</p>
+
+<h3>最后的话</h3>
+
+<p>本文分享的这几种 Lion 系统下修改 Hosts 的方法都不会出现没有文件修改权限的提示，这个提示其实也是 Lion 安全性更高的表现，以上几种方法在 10.6 系统中都可以使用，至少算得上 Lion 系统下几个最简单修改 Hosts 文件的方法了。另外大家可以看到以上三种方法都需要在终端中操作，而对于刚刚使用 Mac，且没有玩过 Linux 的用户来说可能会觉得很麻烦，实际上终端很简单，莫非就是几个命令，并且功能非常强大，能够实现很多意想不到的功能。所以，对于刚刚用 Mac 的同学来说一定不要被终端这种命令行操作所吓倒，基本上你只需要复制命令，然后粘贴进去按回车就可以了，这有什么难的呢？</p>
+</div>
+
+
+  <footer class="post-footer">
+    <div class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+ and 
+      File under 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mac/'>Mac</a>
+  
+</span>
+
+ with 
+
+<span class="tags">
+  
+    <a class='tag' href='/tags/mac/'>Mac</a>
+  
+</span>
+
+ Tag
+    </div>
+    
+      <div class="sharing">
+  <div>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian/" data-via="eric_shj" data-counturl="http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  </div>
+
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <h5> <br> </h5>
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/12/shen-ru-qian-chu-cocoa-duo-xian-cheng-bian-cheng-zhi-block-yu-dispatch-quene/" title="Previous Post: 深入浅出 Cocoa 多线程编程之 block 与 dispatch quene">&laquo; 深入浅出 Cocoa 多线程编程之 block 与 dispatch quene</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/11/23/ios-quick-tip-7-tips-to-speed-up-your-development/" title="Next Post: iOS Quick Tip: 7 Tips to Speed Up Your Development">iOS Quick Tip: 7 Tips to Speed Up Your Development &raquo;</a>
+      
+    </div>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h3>Comments</h3>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+  </div>
+</div>
+
+  <aside id="secondary">
+  
+    <section class="widget">
+    <form id="search" action="http://google.com/search" method="get">
+    	<input type="hidden" name="q" value="site:shjborage.github.io"/>
+    	<input type="text" name="q" results="0" class="text" placeholder="Google搜索"/>
+    </form>
+</section>
+
+<section class="widget">
+	<h2 class="widget-title">最新文章</h2>
+	<ul class="widget-list">
+		
+     	<li>
+      	  <a href="/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/">为 PHP 做单元测试（UnitTest）</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/12/linux-kai-fa-bei-wang/">Linux 开发备忘</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/10/apple-ats-wen-ti/">Apple ATS 问题</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/">npm install 本地安装与全局安装</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/">Python - virtualenv 基础使用</a>
+      	</li>
+    	
+	</ul>
+</section>
+<section class="widget">
+  <h2 class="widget-title">Categories</h2>
+  <ul class="widget-list">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/c/'>C (4)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (6)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javascript/'>JavaScript (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (9)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (4)</a></li>
+<li class='category'><a href='/blog/categories/translate/'>Translate (1)</a></li>
+<li class='category'><a href='/blog/categories/web/'>Web (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (82)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (15)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (10)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h2 class="widget">Tags</h2>
+  <div>
+    <a style="font-size: 90%" href="/tags/ats/">ATS</a>
+<a style="font-size: 108%" href="/tags/android/">Android</a>
+<a style="font-size: 108%" href="/tags/appstore/">AppStore</a>
+<a style="font-size: 90%" href="/tags/appletv/">AppleTV</a>
+<a style="font-size: 90%" href="/tags/applewatch/">AppleWatch</a>
+<a style="font-size: 118%" href="/tags/autolayout/">AutoLayout</a>
+<a style="font-size: 108%" href="/tags/backend/">BackEnd</a>
+<a style="font-size: 118%" href="/tags/c/">C</a>
+<a style="font-size: 90%" href="/tags/css/">CSS</a>
+<a style="font-size: 125%" href="/tags/cocoapods/">CocoaPods</a>
+<a style="font-size: 131%" href="/tags/crash/">Crash</a>
+<a style="font-size: 108%" href="/tags/database/">DataBase</a>
+<a style="font-size: 118%" href="/tags/database/">Database</a>
+<a style="font-size: 90%" href="/tags/debug/">Debug</a>
+<a style="font-size: 90%" href="/tags/django/">Django</a>
+<a style="font-size: 90%" href="/tags/fe/">FE</a>
+<a style="font-size: 90%" href="/tags/game/">Game</a>
+<a style="font-size: 125%" href="/tags/git/">Git</a>
+<a style="font-size: 90%" href="/tags/github/">Github</a>
+<a style="font-size: 90%" href="/tags/https/">HTTPS</a>
+<a style="font-size: 90%" href="/tags/hybirdapp/">HybirdApp</a>
+<a style="font-size: 90%" href="/tags/interview/">Interview</a>
+<a style="font-size: 90%" href="/tags/js/">JS</a>
+<a style="font-size: 118%" href="/tags/java/">Java</a>
+<a style="font-size: 118%" href="/tags/javascript/">JavaScript</a>
+<a style="font-size: 108%" href="/tags/linux/">Linux</a>
+<a style="font-size: 148%" href="/tags/mac/">Mac</a>
+<a style="font-size: 90%" href="/tags/markdown/">Markdown</a>
+<a style="font-size: 125%" href="/tags/network/">Network</a>
+<a style="font-size: 180%" href="/tags/obj-c/">Obj-C</a>
+<a style="font-size: 108%" href="/tags/opensource/">OpenSource</a>
+<a style="font-size: 90%" href="/tags/php/">PHP</a>
+<a style="font-size: 118%" href="/tags/product/">Product</a>
+<a style="font-size: 90%" href="/tags/push/">Push</a>
+<a style="font-size: 90%" href="/tags/svn/">SVN</a>
+<a style="font-size: 90%" href="/tags/script/">Script</a>
+<a style="font-size: 90%" href="/tags/sharesdk/">ShareSDK</a>
+<a style="font-size: 118%" href="/tags/sourcecontrol/">SourceControl</a>
+<a style="font-size: 151%" href="/tags/tools/">Tools</a>
+<a style="font-size: 90%" href="/tags/translate/">Translate</a>
+<a style="font-size: 157%" href="/tags/ui/">UI</a>
+<a style="font-size: 90%" href="/tags/watch/">Watch</a>
+<a style="font-size: 125%" href="/tags/web/">Web</a>
+<a style="font-size: 90%" href="/tags/xcode/">XCode</a>
+<a style="font-size: 90%" href="/tags/basic/">basic</a>
+<a style="font-size: 90%" href="/tags/env/">env</a>
+<a style="font-size: 90%" href="/tags/icloud/">iCloud</a>
+<a style="font-size: 200%" href="/tags/ios/">iOS</a>
+<a style="font-size: 90%" href="/tags/ios10/">iOS10</a>
+<a style="font-size: 90%" href="/tags/ios5/">iOS5</a>
+<a style="font-size: 131%" href="/tags/ios7/">iOS7</a>
+<a style="font-size: 90%" href="/tags/ios9/">iOS9</a>
+<a style="font-size: 90%" href="/tags/ipa/">ipa</a>
+<a style="font-size: 90%" href="/tags/js/">js</a>
+<a style="font-size: 90%" href="/tags/keynote/">keynote</a>
+<a style="font-size: 90%" href="/tags/npm/">npm</a>
+<a style="font-size: 125%" href="/tags/octopress/">octopress</a>
+<a style="font-size: 143%" href="/tags/python/">python</a>
+<a style="font-size: 90%" href="/tags/redis/">redis</a>
+<a style="font-size: 90%" href="/tags/sae/">sae,</a>
+<a style="font-size: 90%" href="/tags/tools/">tools</a>
+<a style="font-size: 108%" href="/tags/you-hua/">优化</a>
+<a style="font-size: 90%" href="/tags/fen-xiang/">分享</a>
+<a style="font-size: 108%" href="/tags/dan-yuan-ce-shi/">单元测试</a>
+<a style="font-size: 90%" href="/tags/hou-duan/">后端</a>
+<a style="font-size: 90%" href="/tags/keng/">坑</a>
+<a style="font-size: 90%" href="/tags/bei-wang/">备忘</a>
+<a style="font-size: 118%" href="/tags/duo-xian-cheng/">多线程</a>
+<a style="font-size: 90%" href="/tags/an-quan/">安全</a>
+<a style="font-size: 155%" href="/tags/di-ceng/">底层</a>
+<a style="font-size: 90%" href="/tags/wei-xin/">微信</a>
+<a style="font-size: 90%" href="/tags/tui-jian-gong-ju/">推荐工具</a>
+<a style="font-size: 90%" href="/tags/jia-gou-she-ji/">架构设计</a>
+<a style="font-size: 90%" href="/tags/ce-shi/">测试</a>
+<a style="font-size: 90%" href="/tags/yi-dong-duan/">移动端</a>
+<a style="font-size: 108%" href="/tags/di-san-fang-ku/">第三方库</a>
+<a style="font-size: 90%" href="/tags/chun-ji-zhu/">纯技术</a>
+<a style="font-size: 90%" href="/tags/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/tags/diao-shi/">调试</a>
+<a style="font-size: 108%" href="/tags/sui-bian/">随便</a>
+
+  </div>
+</section>
+<section>
+  <h2 class="widget">(AD)广告位空缺中,招租</h2>
+</section>
+
+
+<section>
+  <h2 class="widget">新浪微博</h2>
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+</section>
+
+  
+</aside>
+
+
+      	</div>
+    </div>
+  </div>
+  <footer id="footer">
+  	<div class="container">
+	Copyright &copy; 2018 - Eric Shi -
+  <span class="credit">Powered by <a rel="nofollow" href="http://octopress.org">Octopress</a> on <a rel="nofollow" href="http://pages.github.com/">GitHubPages</a>
+  </span>
+  - <span class="credit">Theme by <a rel="nofollow" href="http://pagecho.com">Cho</a></span>
+
+
+</div>
+
+  </footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian/';
+        var disqus_url = 'http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

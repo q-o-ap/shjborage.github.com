@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: Markdown | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/markdown/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Markdown中表格与它常见效果实现]]></title>
+    <link href="http://shjborage.github.io/blog/2014/07/09/markchang-jian-xiao-guo-shi-xian/"/>
+    <updated>2014-07-09T23:26:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/07/09/markchang-jian-xiao-guo-shi-xian</id>
+    <content type="html"><![CDATA[<p><a href="http://zh.wikipedia.org/wiki/Markdown">Markdown</a> 的使用越来越广，大多数时候我们也能简单的使用，各种教程也比较多。<br/>
+这里 <a href="http://wowubuntu.com/markdown/">http://wowubuntu.com/markdown/</a> 也有简单中文的语法说明。</p>
+
+<p>但是有些效果还是无从查证，比如表格，<code>&lt;del&gt;&lt;/del&gt;</code>这种。
+这两者可以使用 <code>html</code> 直接来实现，哈哈，尤其是后者。
+对于表格来说，还有一种简便方法，但仅限于部分环境（PHP Markdown Extra, Mou，Github）。</p>
+
+<p><code>
+你好|Markdown|表格
+---|---|---
+我|不是|人
+</code></p>
+
+<p>可惜的是Octopress不支持，不过博客里用的也少，简单记录一下吧。</p>
+]]></content>
+  </entry>
+  
+</feed>

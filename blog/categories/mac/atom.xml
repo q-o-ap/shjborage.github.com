@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mac | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/blog/categories/mac/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Linux 开发备忘]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang/"/>
+    <updated>2017-03-12T11:00:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang</id>
+    <content type="html"><![CDATA[<h2>Terminal 使用相关（Mac 下测试通过）</h2>
+
+<h3><a href="http://blog.csdn.net/kai27ks/article/details/7449610">.bash_profile生效方法</a></h3>
+
+<p><code>
+source .bash_profile
+exec bash --login
+</code></p>
+
+<h3>获取当前时间的unix时间戳</h3>
+
+<p>from: <a href="http://www.jb51.net/LINUXjishu/227114.html">http://www.jb51.net/LINUXjishu/227114.html</a></p>
+
+<p><code>
+date +%s
+</code></p>
+
+<h3>awk 命令</h3>
+
+<p><a href="http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html">http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html</a></p>
+
+<h3>grep 查询日志</h3>
+
+<p><a href="http://www.cnblogs.com/end/archive/2012/02/21/2360965.html">linux grep命令</a></p>
+
+<p><code>
+grep -n "xxx" log/xxx.2016xxxxx*
+</code></p>
+
+<h3>压缩解压</h3>
+
+<p>```
+// unzip
+tar -zxvf xxx.gz</p>
+
+<p>// zip a dir
+tar -zcvf xxx.gz dirName
+```</p>
+
+<h3>Terminal 光标移动</h3>
+
+<p><a href="http://blog.csdn.net/teng_ontheway/article/details/50159891">http://blog.csdn.net/teng_ontheway/article/details/50159891</a></p>
+
+<p><code>
+Ctrl + a    // 回行首
+Ctrl + e    // 回行尾
+</code></p>
+
+<!-- more -->
+
+
+<h3>端口占用查询</h3>
+
+<p>命令 <code>lsof -i tcp:port</code>（port替换成端口号，比如 6379）可以查看该端口被什么程序占用，并显示PID，方便KILL</p>
+
+<h2>Vim 相关</h2>
+
+<p>控制鼠标模式，目前还是比较适应纯键盘输入。</p>
+
+<p><code>
+set mouse=v
+</code></p>
+
+<h3>Vim插件体系管理系统</h3>
+
+<p><a href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a>
+<a href="https://github.com/szw/vim-tags">https://github.com/szw/vim-tags</a>
+快捷键 <code>Ctrl+]</code></p>
+
+<p>这个插件体系也可以完全不用的~~</p>
+
+<h4>ctags</h4>
+
+<p>其实是个索引文件，需要创建，并且在当前目录打开才可以使用的。</p>
+
+<p>```
+// 创建tags文件
+cd /your work path
+ctags -R *</p>
+
+<p>// vim 中跳转与返回
+Ctrl + ]
+Ctrl + T
+```</p>
+
+<h5>ctags 更好的支持 php</h5>
+
+<p>在 <code>~/.ctags</code> 中添加这段，更好的创建 php 文件的 tags 文件。</p>
+
+<p><code>
+--regex-php=/^[ \t]*[(private|protected|public|static)( \t)]*function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/f, function, functions/
+--regex-php=/^[ \t]*[(private|protected|public|static)]+[ \t]+\$([A-Za-z0-9_]+)[ \t]*/\1/p, property, properties/
+--regex-php=/^[ \t]*(const)[ \t]+([A-Za-z0-9_]+)[ \t]*/\2/d, const, constants/
+</code></p>
+
+<h4>taglist</h4>
+
+<h4>WinManager</h4>
+
+<h4>phpcomplete</h4>
+
+<h4>supertab</h4>
+
+<p>```
+&ldquo;phpcomplete
+filetype plugin on
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP</p>
+
+<p>&ldquo; taglist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1</p>
+
+<p>&ldquo; wm
+let g:winManagerWindowLayout=&lsquo;FileExplorer|TagList&rsquo;
+"nmap wm :WMToggle<cr></p>
+
+<p>&ldquo; 设置winmanager
+&rdquo; 设置界面分割
+&ldquo;let g:winManagerWindowLayout = "TagList|FileExplorer&rdquo;
+&ldquo;设置winmanager的宽度，默认为25
+let g:winManagerWidth = 30
+"定义打开关闭winmanager快捷键为F8 => 改为普通模式的 wm
+nmap wm :WMToggle<cr>
+"在进入vim时自动打开winmanager
+let g:AutoOpenWinManager = 1</p>
+
+<p>&ldquo; supertab
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType=&rdquo;&lt;C-X>&lt;C-O>&ldquo;
+```</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2017-03-12-14776418022718.jpg" alt="" /></p>
+
+<h5>代码自动补全升级</h5>
+
+<p><a href="http://blog.csdn.net/arcsinsin/article/details/39436043">VIM代码补全提示功能</a></p>
+
+<p>插件是这个：<a href="http://www.vim.org/scripts/script.PHP?script_id=1879">autocomplpop</a>
+安装后，在 <code>.vimrc</code> 中添加配置，支持 php 的 <code>::</code>, <code>-&gt;</code>, <code>$</code>：</p>
+
+<p><code>
+if !exists('g:AutoComplPop_Behavior')
+let g:AutoComplPop_Behavior = {}
+let g:AutoComplPop_Behavior['php'] = []
+call add(g:AutoComplPop_Behavior['php'], {
+\ 'command' : "",
+\ 'pattern' : printf('−&gt;|::|$\k\{『百分号』d,}$', 0),
+\ 'repeat' : 0,
+\})
+endif
+</code></p>
+
+<h4>NERDTree</h4>
+
+<p><code>
+ 114 "NERDTree
+ 115 let g:NERDTree_title="[NERDTree]"
+ 116 let g:winManagerWindowLayout="NERDTree|TagList"
+ 117
+ 118 function! NERDTree_Start()
+ 119     exec 'NERDTree'
+ 120 endfunction
+ 121
+ 122 function! NERDTree_IsValid()
+ 123     return 1
+ 124 endfunction
+</code></p>
+
+<p><a href="http://blog.csdn.net/bokee/article/details/6633193">http://blog.csdn.net/bokee/article/details/6633193</a></p>
+
+<p>这个版本的Winmanager好像有个小bug，你在打开Winmanager界面时，会同时打开一个空的文件。这会影响后续使用，所以我们要在打开Winmanager时关掉这个空文件。在~/.vim/plugin目录下的winmanager.vim文件中找到以下函数定义并在第5行下添加第6行的内容：</p>
+
+<p>```
+function! <SID>ToggleWindowsManager()<br/>
+   if IsWinManagerVisible()</p>
+
+<pre><code>  call s:CloseWindowsManager()  
+</code></pre>
+
+<p>   else</p>
+
+<pre><code>  call s:StartWindowsManager()  
+  exe 'q'
+</code></pre>
+
+<p>   end<br/>
+endfunction
+```</p>
+
+<h3>Vim 打开多窗口、多文件之间的切换</h3>
+
+<p>打开多个文件：
+一、Vim 还没有启动的时候：``
+1.在终端里输入
+<code>
+vim file1 file2 ... filen便可以打开所有想要打开的文件
+</code>
+2.Vim已经启动
+输入
+<code>
+:e file
+</code></p>
+
+<p>可以再打开一个文件，并且此时vim里会显示出file文件的内容。</p>
+
+<p>3.同时显示多个文件：</p>
+
+<p><code>
+:sp         //水平切分窗口
+:vsplit     //垂直切分窗口(:vsp)
+</code></p>
+
+<p>二、在文件之间切换：
+1.文件间切换
+<code>
+Ctrl+6  //两文件间的切换
+:bn      //下一个文件
+:bp      //上一个文件
+:ls       //列出打开的文件，带编号
+:b1~n  //切换至第n个文件
+</code></p>
+
+<p>对于用 <code>(v)split</code> 在多个窗格中打开的文件，这种方法只会在当前窗格中切换不同的文件。</p>
+
+<p>2.在窗格间切换的方法</p>
+
+<p><code>
+Ctrl+w+方向键——切换到前／下／上／后一个窗格
+Ctrl+w+h/j/k/l ——同上
+Ctrl+ww——依次向后切换到下一个窗格中
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Linux、Mac上面ln命令使用说明]]></title>
+    <link href="http://shjborage.github.io/blog/2014/10/22/linux-macshang-mian-lnming-ling-shi-yong-shuo-ming/"/>
+    <updated>2014-10-22T22:25:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/10/22/linux-macshang-mian-lnming-ling-shi-yong-shuo-ming</id>
+    <content type="html"><![CDATA[<h3>引子</h3>
+
+<p>作为一个Mac使用者，曾经也是玩Linux的。遇到一些命令也一般能搞定，但就是有一些命令让你哭笑不得，还真得写下点什么才行。 So, Let&rsquo;s go.</p>
+
+<h3>正文</h3>
+
+<p>ln是linux中又一个非常重要命令，它的功能是为某一个文件在另外一个位置建立一个同不的链接，这个命令最常用的参数是 <code>-s</code>，具体用法是：<code>ln –s 源文件 目标文件</code>。<br><br>
+当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用<code>ln</code>命令链接（link）它就可以，不必重复的占用磁盘空间。例如：<code>ln –s /bin/less /usr/local/bin/less</code> <br>
+<em>-s 是代号（symbolic）的意思</em></p>
+
+<!-- more -->
+
+
+<p><strong>注意：</strong><br>
+第一，<code>ln</code>命令会保持每一处链接文件的同步性，也就是说，不论你改动了哪一处，其它的文件都会发生相同的变化；<br>
+第二，ln的链接又分软链接和硬链接两种，软链接就是<code>ln –s ** **</code>，它只会在你选定的位置上生成一个文件的镜像，不会占用磁盘空间，硬链接<code>ln ** **</code>，没有参数<code>-s</code>， 它会在你选定的位置上生成一个和源文件大小相同的文件，无论是软链接还是硬链接，文件都保持同步变化。
+　　</p>
+
+<p>如果你用<code>ls</code>查看一个目录时，发现有的文件后面有一个<em>@</em>的符号，那就是一个用<code>ln</code>命令生成的文件，用<code>ls –l</code>命令去察看，就可以看到显示的link的路径了。</p>
+
+<h4>指令详细说明(可自行<code>man ln</code>查看)</h4>
+
+<p><code>
+　　指令名称 : ln
+　　使用权限 : 所有使用者
+　　使用方式 : ln [options] source dist，其中 option 的格式为 :
+　　[-bdfinsvF] [-S backup-suffix] [-V {numbered,existing,simple}]
+　　[--help] [--version] [--]
+　　说明 : Linux/Unix 档案系统中，有所谓的连结(link)，我们可以将其视为档案的别名，而连结又可分为两种 : 硬连结(hard link)与软连结(symbolic link)，硬连结的意思是一个档案可以有多个名称，而软连结的方式则是产生一个特殊的档案，该档案的内容是指向另一个档案的位置。硬连结是存在同一个档 案系统中，而软连结却可以跨越不同的档案系统。
+　　ln source dist 是产生一个连结(dist)到 source，至于使用硬连结或软链结则由参数决定。
+　　不论是硬连结或软链结都不会将原本的档案复制一份，只会占用非常少量的磁碟空间。
+　　-f : 链结时先将与 dist 同档名的档案删除
+　　-d : 允许系统管理者硬链结自己的目录
+　　-i : 在删除与 dist 同档名的档案时先进行询问
+　　-n : 在进行软连结时，将 dist 视为一般的档案
+　　-s : 进行软链结(symbolic link)
+　　-v : 在连结之前显示其档名
+　　-b : 将在链结时会被覆写或删除的档案进行备份
+　　-S SUFFIX : 将备份的档案都加上 SUFFIX 的字尾
+　　-V METHOD : 指定备份的方式
+　　--help : 显示辅助说明
+　　--version : 显示版本
+　　范例 :
+　　将档案 yy 产生一个 symbolic link : zz
+　　ln -s yy zz
+　　将档案 yy 产生一个 hard link : zz
+　　ln yy xx﻿
+</code></p>
+
+<p>原文: <a href="http://www.cnblogs.com/joeblackzqq/archive/2011/03/20/1989625.html">http://www.cnblogs.com/joeblackzqq/archive/2011/03/20/1989625.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Synergy on Mavericks (OSX 10.9) and enable assistive devices]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/"/>
+    <updated>2013-12-26T10:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices</id>
+    <content type="html"><![CDATA[<p><a href="http://superuser.com/questions/656912/synergy-on-mavericks-osx-10-9-and-enable-assistive-devices">Origin</a></p>
+
+<h3>Question</h3>
+
+<p>Mavericks handles accessibility on a per-application basis, so instead of enabling assistive devices (option does not even exist) carte-blanche, the app which makes the request shows up in a list in System Preferences > Security &amp; Privacy > Privacy where you can enable the access it&rsquo;s looking for.</p>
+
+<p>Synergy, however, makes a check for the old style of assistive devices setting and fails to start.</p>
+
+<!-- more -->
+
+
+<h3>Answer</h3>
+
+<p>From a terminal:</p>
+
+<p><code>
+sudo open /Applications/Synergy.app/Contents/MacOS/Synergy
+</code></p>
+
+<p>Then open OSX <em>System Preferences</em> and click <strong>Security and Privacy</strong>, then <strong>Accessibility</strong></p>
+
+<p>Check the checkbox on for <strong>Terminal</strong> and <strong>Synergy</strong>.</p>
+
+<p>You can then close Synergy and start it again in the background through the terminal:</p>
+
+<p><code>
+/Applications/Synergy.app/Contents/MacOS/Synergy &amp;
+</code></p>
+
+<p>I expect this will be fixed in the next release (1.4.16 Beta)</p>
+
+<p><a href="http://synergy-foss.org/osqa/questions/1999/error-1410-on-mac-1081">Source</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OSX Server - Message Server 研究与故障解决方案]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/"/>
+    <updated>2013-12-21T00:50:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<p>OSX Server是个出色的小团队服务端解决方案，前两个月发邮件说这个可以让我使用兑换券免费下一个，一定不能错过的机会，平时可是会卖很贵的啊</p>
+
+<p>特分享一下使用的相关事项吧</p>
+
+<!-- more -->
+
+
+<h3>简介</h3>
+
+<p>详见<a href="http://www.apple.com/cn/osx/server/">官方介绍</a></p>
+
+<h3>使用过的服务</h3>
+
+<ul>
+<li>Message Server</li>
+<li>DNS</li>
+<li>FileShare</li>
+<li>WebServer</li>
+<li>Wiki</li>
+<li>。。。</li>
+</ul>
+
+
+<p>可以说每个都能解决我们的某些需求，但是这些东西呢，没有OSX Server我们一样能找到替代方案。 但是苹果就是能在易用性上能帮我们做一些事。比如这个Wiki就比较简单实用</p>
+
+<p>但是呢,有些也做的不是太好，比如Message Server</p>
+
+<h3>Message Server</h3>
+
+<h4>用户</h4>
+
+<p>最开始在10.8上面直接搞上了，但是不知道怎么建用户（第一次玩Jabber，XMPP）
+帮助文档不太好找，上链接，有写用户的使用。</p>
+
+<p><a href="https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7">https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7</a>
+见这段<em>Understand Messages screen names</em></p>
+
+<h4>登录</h4>
+
+<p>无论如何都登录不了，这个更是愁人。。。
+也在上面的帮助文档里有说明，见这段<em>Server-to-server federation</em></p>
+
+<p>需要在设置中把自己的域名也加进去（最好配置DNS，否则需要自己改hosts文件）</p>
+
+<h4>还是登录不了。。</h4>
+
+<p>自己的Mavericks（10.9）还是登录不了，可能是域名设来设去的吧，无论如何也搞不定，查Google也不太好找，找了一些检索词，最后还是放弃，自己搞。
+看文档，日志会写入<strong>system.log</strong>, 打开Console，看到报错如下:</p>
+
+<p><em>SASL callback for non-existing host"</em></p>
+
+<p>Google之，解决方案如下</p>
+
+<p><a href="https://discussions.apple.com/message/23948580#23948580">https://discussions.apple.com/message/23948580#23948580</a></p>
+
+<p>这里面说的两个文件的路径还不太对，在这个目录下找那俩文件修改相关域名即可</p>
+
+<p><code>
+/Library/Server/Messages/Config/jabberd
+</code></p>
+
+<h3>Message Server OK</h3>
+
+<p>可以使用Mac 上面的Message直接登录，团队其它直接使用Server的DNS，这样就不用绑hosts了，然后使用rooms聊天室，这样系统内置了Message，而且还会比较及时的通知到，非常方便。</p>
+
+<p><em>远离QQ吧。</em>  Good night!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mac OS X 改 hosts文件]]></title>
+    <link href="http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian/"/>
+    <updated>2013-11-12T22:34:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian</id>
+    <content type="html"><![CDATA[<p>一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者，因此没有权限写到该文件”的提示，要解决这个权限问题又比较麻烦，对于刚刚使用 Mac 的用户来说并不容易整明白。因此，就有了这篇小贴士，下面我分享四种方法来修改 Mac OS X Lion 系统中的 Hosts 文件，这四种方法都不会出现权限提示，而且 Mac OS X Snow Leopard(10.6) 用户也完全可以使用这些方法。</p>
+
+<h3>1、通过 VI 编辑器修改</h3>
+
+<p>打开终端（应用程序——实用工具），运行：(<em>vim也行</em>)</p>
+
+<p><code>
+sudo vi /etc/hosts
+</code></p>
+
+<p>屏幕上会提示你输入密码（输入密码的时候不会有任何字符显示，甚至*都不会显示，输完之后按回车就是了），打开 hosts 文件之后按 i 键进入插入模式（可理解为编辑模式），然后按照你的需要对该文件进行编辑，编辑完成之后按 ESC 键退出插入模式，之后按 :wq+回车保存退出，记得英文的冒号也是要输入的哦。</p>
+
+<p>这是笔者一直都在使用的方法，VI 编辑器对于经常使用 Linux 的用户应该不会陌生，而且该编辑器是默认内置在 Mac 系统中的。但是，对于没有使用过 VI 的用户，还真得花一会儿功夫来学习其基本使用方法。另外VI编辑器是一个很好很强大的工具，想要玩好 Mac 的话，最好掌握这个工具的使用。</p>
+
+<!-- more -->
+
+
+<h3>2、使用 nano 编辑器修改</h3>
+
+<p>和上面的方法类似，这个编辑器相比 vi 更加简单易用，但是功能不强大，似乎也没有 vi 流行。方法同样是在终端中运行：</p>
+
+<p><code>
+sudo nano /etc/hosts
+</code></p>
+
+<p>同样是输入密码，打开 hosts 文件，按照你的需要对该文件进行编辑，编辑完毕之后按 ctrl+o 保存，出现 File Name to Write: /etc/hosts 的时候按回车确认，再按 ctrl+x 退出即可。</p>
+
+<h3>3、使用 cat 命令合并文件</h3>
+
+<p>这个方法比较适合当你想往 Hosts 文件中添加一些内容的情况，首先你需要把需要添加到 Hosts 文件中的内容保存为一个TXT文本文件（建议直接保存在你的用户目录），我这里拿保存在用户目录中的123.txt为例说明。</p>
+
+<p>同样是启动终端，然后运行下面两条命令：</p>
+
+<p><code>
+sudo -s
+cat ~/123.txt&gt;&gt;/etc/hosts
+</code></p>
+
+<p>顺便说一下，~ 符号在 Mac 甚至所有基于 Unix 和 Linux 的系统中都是代表当前用户的用户目录，.代表当前目录，这回你就应该明白上面的命令中为什么是 ~/123.txt 了吧。</p>
+
+<h3>4、直接在图形界面中修改</h3>
+
+<p>打开 Finder，然后点击菜单栏中的 前往——前往文件夹（或者快捷键 Shift+Command+G），在路径中输入 /private，进入之后在 etc 文件夹上点击右键——显示简介，在文件夹简介窗口的最下面找到“共享与权限”，将 everyone 的权限修改为“读与写”，如果你发现不能修改的话，将右下角的那把小锁解开就可以修改了。</p>
+
+<p>修改 etc 文件夹的权限之后，再进入 etc 文件夹下面，修改名为 hosts 文件的权限（同样是everyone读与写），修改完成之后，你就可以直接在 hosts 文件上点右键，通过“文本编辑”打开并编辑该文件了，不会出现没有权限的提示。修改并保存完成之后，记得将该文件和 etc 文件夹的权限还原。</p>
+
+<h3>最后的话</h3>
+
+<p>本文分享的这几种 Lion 系统下修改 Hosts 的方法都不会出现没有文件修改权限的提示，这个提示其实也是 Lion 安全性更高的表现，以上几种方法在 10.6 系统中都可以使用，至少算得上 Lion 系统下几个最简单修改 Hosts 文件的方法了。另外大家可以看到以上三种方法都需要在终端中操作，而对于刚刚使用 Mac，且没有玩过 Linux 的用户来说可能会觉得很麻烦，实际上终端很简单，莫非就是几个命令，并且功能非常强大，能够实现很多意想不到的功能。所以，对于刚刚用 Mac 的同学来说一定不要被终端这种命令行操作所吓倒，基本上你只需要复制命令，然后粘贴进去按回车就可以了，这有什么难的呢？</p>
+]]></content>
+  </entry>
+  
+</feed>

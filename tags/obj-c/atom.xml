@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: Obj-C | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/obj-c/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[NSObject继承中load与initialize的用法]]></title>
+    <link href="http://shjborage.github.io/blog/2014/04/15/nsobjectji-cheng-zhong-loadyu-initializede-yong-fa/"/>
+    <updated>2014-04-15T17:07:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/04/15/nsobjectji-cheng-zhong-loadyu-initializede-yong-fa</id>
+    <content type="html"><![CDATA[<p>很多时候我用会在我们的类中使用<code>load</code>或<code>initialize</code>方法，详细看了一下文档以及<a href="http://www.cnblogs.com/biosli/p/NSObject_inherit.html">初始化阶段 —— load 和 initialize</a>，分享一下。</p>
+
+<!-- more -->
+
+
+<h2>load函数</h2>
+
+<p>原型：</p>
+
+<p><code>
++(void)load
+</code></p>
+
+<p>当类被引用进程序的时候会执行这个函数。</p>
+
+<p>在一个程序开始运行之前（在main函数开始执行之前）,在库开始被程序加载，load函数就会开始被执行。</p>
+
+<p>我们开发的程序都可以认为是一个库，但是库又不会独立存在（我们的程序还会引用其他库，也可能被其他函数引用），所以库的初始化顺序可以如下：</p>
+
+<ul>
+<li>初始化我们引用的库</li>
+<li>执行我们自己库的Objective-C的load函数</li>
+<li>执行C++和C的static初始化变量</li>
+<li>初始化引用我们库的其他库</li>
+</ul>
+
+
+<p>在我们的编写的库中，会有很多类重写load函数，他们之间的执行顺序是不确定的。</p>
+
+<p>当父类和子类都实现load函数时，父类的load函数会被先执行。load函数是系统自动加载的，因此不需要调用父类的load函数，否则父类的load函数会多次执行。</p>
+
+<p>在Category中写load函数是不会替换原始类中的load函数的，原始类和Category中的load函数都会被执行，原始类的load会先被执行，再执行Category中的load函数。当有多个Category都实现了load函数，这几个load函数执行顺序不确定。</p>
+
+<h2>Initialize函数</h2>
+
+<p>原型：</p>
+
+<p><code>
++ (void)initialize
+</code></p>
+
+<p>当类第一次被执行到的时候这个函数会被执行。</p>
+
+<p>如果类包含继承关系，父类的initialize函数会比子类先执行。由于是系统自动调用，也不需要显式的调用父类的initialize，否则父类的initialize会被多次执行。</p>
+
+<p>假如这个类放到代码中，而这段代码并没有被执行，这个函数是不会被执行的。</p>
+
+<h2>Load or Initialize</h2>
+
+<p>这两个函数没有交集，也没有执行的先后顺序，他们各自遵循着各自的调用原则。因此在写逻辑的时候，不能有逻辑依赖load函数比initialize函数先行调用。</p>
+
+<p>来看下面这种情况：</p>
+
+<p>```
+@interface NoneClass : NSObject</p>
+
+<p>@end</p>
+
+<p>@implementation NoneClass</p>
+
+<p>+(void)load
+{</p>
+
+<pre><code>NSLog(@"NoneClass _cmd: %@", NSStringFromSelector(_cmd));
+MyTestObject *test = [[MyTestObject alloc] init];
+</code></pre>
+
+<p>}</p>
+
+<p>@end</p>
+
+<p>@interface MyTestObject</p>
+
+<p>@end</p>
+
+<p>@implementation MyTestObject</p>
+
+<ul>
+<li><p>(void) load
+{
+  NSLog(@&ldquo;MyTestObject <em>cmd: %@&rdquo;, NSStringFromSelector(</em>cmd));
+}</p></li>
+<li><p>(void)initialize
+{
+  NSLog(@&ldquo;MyTestObject <em>cmd: %@&rdquo;, NSStringFromSelector(</em>cmd));
+}</p></li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>输出的结果：</p>
+
+<p><code>
+2014-04-11 12:45:44.297 ObjectTest[1617:60b] NoneClass _cmd: load
+2014-04-11 12:45:44.300 ObjectTest[1617:60b] MyTestObject _cmd: initialize
+2014-04-11 12:45:44.301 ObjectTest[1617:60b] MyTestObject _cmd: load
+</code></p>
+
+<p>结果分析：</p>
+
+<p>由于在执行NonoClass的load函数中调用了MyTestObject的构造函数，这样会触发MyTestObject的initialize函数调用。而此时MyTestObject的load函数还没有被调用。</p>
+
+<h2>使用场景</h2>
+
+<p>将针对于类修改放在intialize中，将针对Category的修改放在load中。</p>
+
+<p>但是假如我们是修改系统的类，一般会通过添加Category来添加功能，但是如果修改initialize会导致原生的intialize不会执行，所以放在load中会比较妥当。</p>
+
+<h2>参考：</h2>
+
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/Reference/Reference.html#//apple_ref/occ/clm/NSObject/">https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/Reference/Reference.html#//apple_ref/occ/clm/NSObject/</a></p>
+
+<p>转自：<a href="http://www.cnblogs.com/biosli/p/NSObject_inherit.html">http://www.cnblogs.com/biosli/p/NSObject_inherit.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Block实现原理研究与使用需要注意的问题]]></title>
+    <link href="http://shjborage.github.io/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/"/>
+    <updated>2014-04-01T16:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti</id>
+    <content type="html"><![CDATA[<p>关于Block的使用，现在很多人都说他知道。但是知道怎么用与懂为什么这么用，可能会出现哪些问题还是区别很大的。
+光说没用，先把<a href="http://blog.parse.com/2013/02/05/objective-c-blocks-quiz/">这个题</a>做一下试试看。如果说全做对，可能我接下来要说的大部分都可以直接跳过啦。</p>
+
+<!-- more -->
+
+
+<h2>Block 实现原理分析</h2>
+
+<p>引自：<a href="http://www.hrchen.com/2013/06/retain-cycle-in-block/">Block的引用循环问题 (ARC &amp; non-ARC)</a></p>
+
+<p>由于Objective-C是C语言的超集，既然OC中的NSObject对象其实是由C语言的struct+isa指针实现的，那么Block的内部实现估计也一样，以下三篇Blog对Block的实现机制做了详细研究：</p>
+
+<p><a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-1/">A look inside blocks: Episode 1</a>  <br/>
+<a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-2/">A look inside blocks: Episode 2</a>  <br/>
+<a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-3/">A look inside blocks: Episode 3</a></p>
+
+<p>虽然实现细节看着头痛，不过发现Block果然是和OC中的NSObject类似，也是用struct实现出来的东西。这个是LLVM项目compiler-rt分析的block头文Block_private.h头文件中关于Block的struct声明：</p>
+
+<p>```
+struct Block_descriptor {</p>
+
+<pre><code>unsigned long int reserved;
+unsigned long int size;
+void (*copy)(void *dst, void *src);
+void (*dispose)(void *);
+</code></pre>
+
+<p>};</p>
+
+<p>struct Block_layout {</p>
+
+<pre><code>void *isa;
+int flags;
+int reserved;
+void (*invoke)(void *, ...);
+struct Block_descriptor *descriptor;
+/* Imported variables. */
+</code></pre>
+
+<p>};
+```</p>
+
+<p>我们发现Block_layout中也有一个isa指针，像极了NSobject内部实现struct中的isa指针。这里的isa可能指向三种类型之一的Block：</p>
+
+<p><code>_NSConcreteGlobalBlock</code>：全局类型Block，在编译器就已经确定，直接放在代码段<strong>TEXT上。直接在NSLog中打印的类型为</strong>NSGlobalBlock<strong>。<br/>
+<code>_NSConcreteStackBlock</code>：位于栈上分配的Block，即</strong>NSStackBlock<strong>。<br/>
+<code>_NSConcreteMallocBlock</code>：位于堆上分配的Block，即</strong>NSMallocBlock__。</p>
+
+<p>为什么会有这么多种类呢？首先来看全局类型Block，看例子：</p>
+
+<p>```
+void addBlock(NSMutableArray *array) {
+  [array addObject:^{</p>
+
+<pre><code>printf("global block\n");
+</code></pre>
+
+<p>  }];
+}</p>
+
+<p>void example() {
+  NSMutableArray *array = [NSMutableArray array];
+  addBlock(array);
+  void (^block)() = [array objectAtIndex:0];
+  block();
+}
+```</p>
+
+<p>为什么addBlock中添加到array中的Block属于全局Block呢？因为它不需要运行时(Runtime)任何的状态来改变行为，不需要放在堆上或者栈上，直接编译后在代码段中即可，就像个c函数一样。这种类型的Block在ARC和non-ARC情况下没有差别。
+这个Block访问了作用域外的变量d，在实现上就是这个block会多一个成员变量对应这个d，在赋值block时会将方法exmpale中的d变量值复制到成员变量中，从而实现访问。</p>
+
+<p>```
+void example() {
+  int d = 5;
+  void (^block)() = ^() {</p>
+
+<pre><code>  printf("%d\n", d);
+</code></pre>
+
+<p>  };
+  block();
+}
+```</p>
+
+<p>如果要修改d呢？：</p>
+
+<p>```
+void example() {
+  int d = 5;
+  void (^block)() = ^() {</p>
+
+<pre><code>  d++;
+  printf("%d\n", d);
+</code></pre>
+
+<p>  };
+  block();
+  printf(&ldquo;%d\n&rdquo;, d);
+}
+```</p>
+
+<p>由于局部变量d和这个block的实现不在同一作用域，仅仅在调用过程中用到了值传递，所以不能直接修改，而需要加一个标识符__block int d = 5;，那么block就可以实现对这个局部变量的修改了。如果是这种block标识的变量，在Block实现中不再是简单的一个成员变量，而是对应一个新的结构体表示这个block变量。block的本质是引入了一个新的Block_byref{$var_name}{$index}结构体，被block关键字修饰的变量就被放到这个结构体中。另外，block结构体通过引入Block_byref{$var_name}{$index}指针类型的成员，得以间接访问到Block的外部变量。这样对Block外的变量访问从值传递转变为引用，从而有了修改内容的能力。
+正常我们使用Block是在栈上生成的，离开了栈作用域便释放了，如果copy一个Block，那么会将这个Block copy到堆上分配，这样就不再受栈的限制，可以随意使用啦。例如：</p>
+
+<p>```
+typedef void (^TestBlock)();</p>
+
+<p>TestBlock getBlock() {
+  char e = &lsquo;E&rsquo;;
+  void (^returnedBlock)() = ^{</p>
+
+<pre><code>printf("%c\n", e);
+</code></pre>
+
+<p>  };
+  return returnedBlock;
+}</p>
+
+<p>void example() {
+  TestBlock block = getBlock();
+  block();
+}
+```</p>
+
+<p>函数getBlock中声明并赋值的returnedBlock，一开始是在栈上分配的，属于NSStackBlock，如果是non-ARC情况下return这个NSStackBlock，那么其实已经被销毁了，在函数中example()使用时就会crash。如果是ARC情况下，getBlock返回的block会自动copy到堆上，那么block的类型就是NSMallocBlock，可以在example()中继续使用。要在Non-ARC情况下正常运行，那么就应该修改为：</p>
+
+<p>```
+TestBlock getBlock() {
+  char e = &lsquo;E&rsquo;;
+  void (^returnedBlock)() = ^{</p>
+
+<pre><code>printf("%c\n", e);
+</code></pre>
+
+<p>  };
+  return [[returnedBlock copy] autorelease];
+}
+```</p>
+
+<h2>Block中的循环引用问题</h2>
+
+<p>引自：<a href="http://www.hrchen.com/2013/06/retain-cycle-in-block/">Block的引用循环问题 (ARC &amp; non-ARC)</a></p>
+
+<p>扯了这么多，回到Block的循环引用问题，由于我们很多行为会导致Block的copy，而当Block被copy时，会对block中用到的对象产生强引用(ARC下)或者引用计数加一(non-ARC下)。
+如果遇到这种情况：</p>
+
+<p>```
+@property(nonatomic, readwrite, copy) completionBlock completionBlock;</p>
+
+<p>//========================================
+self.completionBlock = ^ {</p>
+
+<pre><code>    if (self.success) {
+        self.success(self.responseData);
+    }
+}
+</code></pre>
+
+<p>};
+```</p>
+
+<p>对象有一个Block属性，然而这个Block属性中又引用了对象的其他成员变量，那么就会对这个变量本身产生强应用，那么变量本身和他自己的Block属性就形成了循环引用。在ARC下需要修改成这样：</p>
+
+<p>```
+@property(nonatomic, readwrite, copy) completionBlock completionBlock;</p>
+
+<p>//========================================
+__weak typeof(self) weakSelf = self;
+self.completionBlock = ^ {</p>
+
+<pre><code>if (weakSelf.success) {
+    weakSelf.success(weakSelf.responseData);
+}
+</code></pre>
+
+<p>};
+```</p>
+
+<p>也就是生成一个对自身对象的弱引用，如果是倒霉催的项目还需要支持iOS4.3，就用<strong>unsafe_unretained替代</strong>weak。如果是non-ARC环境下就将<strong>weak替换为</strong>block即可。non-ARC情况下，<strong>block变量的含义是在Block中引入一个新的结构体成员变量指向这个</strong>block变量，那么__block typeof(self) weakSelf = self;就表示Block别再对self对象retain啦，这就打破了循环引用。</p>
+
+<h2>Block为什么不能捕获C语言数组的值</h2>
+
+<p>引自：<a href="http://billwang1990.github.io/blog/2014/02/06/block-cant-capture-c-array/">#iOS# Block为什么不能捕获C语言数组的值</a></p>
+
+<p>众所周知，在iOS的block中，我们可以截获自动变量，但是为什么如下截获C语言数组的代码却不行：</p>
+
+<p>```
+const char text[]  = “关注我得博客billwang1990.github.io”；</p>
+
+<p>void (^block)(void) = ^{</p>
+
+<pre><code> printf(“%c\n”, text[2]);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>要弄清楚这个问题，就必须明白block是怎样实现的。</p>
+
+<p>简单来说，所谓的“截获自动变量”意味着在执行Block语法时，Block语法表达式所使用的自动变量的值被被保存到Block结构体实例(即Block自身)中。</p>
+
+<p>之所以C数组不能截获，就类似下面的代码：</p>
+
+<p>```
+void func(char a[10])
+{
+   char b[10] = a ;
+   printf(“%d\n”, b[0]);
+}</p>
+
+<p>int main()
+{</p>
+
+<pre><code> char a[10] = {2};
+ func(a);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>这段代码是不能通过编译的，这也解释了为什么Block不能截获C数组。</p>
+
+<p>再分享一篇讲的比较好的文章：<a href="http://blog.csdn.net/jasonblog/article/details/7756763">iOS中block实现的探究</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[编译iOS上的libevent库、openssl库]]></title>
+    <link href="http://shjborage.github.io/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/"/>
+    <updated>2014-03-25T00:05:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/03/25/bian-yi-iosshang-de-libeventku-,-opensslku</id>
+    <content type="html"><![CDATA[<p><a href="http://www.tuicool.com/articles/fmmQzq">http://www.tuicool.com/articles/fmmQzq</a></p>
+
+<p>附上自己使用的环境：</p>
+
+<p><a href="https://www.dropbox.com/s/809g8rhmk7c7pgo/libevent.zip">libevent</a>
+<a href="https://www.dropbox.com/s/t2xouoj5h4blwi2/openssl.zip">openssl</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别]]></title>
+    <link href="http://shjborage.github.io/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/"/>
+    <updated>2014-03-15T01:01:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie</id>
+    <content type="html"><![CDATA[<p>常见的从bundle中加载图片的方式有两种，一个是用<code>imageNamed</code>，二是用<code>imageWithContentsOfFile</code>，第一种比较常见一点。</p>
+
+<p>既然有两种类似的方法来实现相同的目的，那么他们之间的差别是什么呢？</p>
+
+<p><code>imageNamed</code>的优点是当加载时会缓存图片。<code>imageNamed</code>的文档中这么说:
+这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象如果它存在的话。如果缓存中没有找到相应的图片，这个方法从指定的文档中加载然后缓存并返回这个对象。</p>
+
+<p>相反的，<code>imageWithContentsOfFile</code>仅加载图片。</p>
+
+<p>下面的代码说明了这两种方法的用法:</p>
+
+<p><code>
+UIImage *img = [UIImage imageNamed:@"myImage"];              // caching
+// or
+UIImage *img = [UIImage imageWithContentsOfFile:@"myImage"]; // no caching
+</code>
+那么我们应该如何选择呢？</p>
+
+<p>如果你要加载一个大图片而且是一次性使用，那么就没必要缓存这个图片，用<code>imageWithContentsOfFile</code>足矣，这样不会浪费内存来缓存它。</p>
+
+<p>然而，在图片反复重用的情况下<code>imageNamed</code>是一个好得多的选择。</p>
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[GCD的坑]]></title>
+    <link href="http://shjborage.github.io/blog/2014/02/19/gcdde-keng/"/>
+    <updated>2014-02-19T22:22:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/02/19/gcdde-keng</id>
+    <content type="html"><![CDATA[<p>最近用不少GCD的东西，相信很多童鞋也会被GCD的简便给吸引过来。
+但是这玩意使用起来，还是有不少的坑，列举出来，希望能对遇到的有用。</p>
+
+<!-- more -->
+
+
+<p>大多数时间没啥事，但是有时这样使用，就会带来问题了。见测试代码：</p>
+
+<p>```
+//  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{</p>
+
+<pre><code>for (int i=0; i&lt;=100; i++) {
+</code></pre>
+
+<p>//    for (int i=0; i&lt;=62; i++) {</p>
+
+<pre><code>  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    NSString *key = [NSString stringWithFormat:@"key%d", i];
+    NSMutableDictionary *value = [NSMutableDictionary dictionary];
+    for (int j=0; j&lt;1/*10000*/; j++) {
+      NSString *subKey = [NSString stringWithFormat:@"subkey%d", j];
+      int random = arc4random();
+      [value setObject:[NSString stringWithFormat:@"%d", random] forKey:subKey];
+    }
+</code></pre>
+
+<p>//        int j=100;
+//        while (&mdash;j>0) {
+//          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//            NSLog(@&ldquo;sub&rdquo;);
+//          });
+//        }</p>
+
+<p>//        [[TMCache sharedCache] setObject:value forKey:key];</p>
+
+<pre><code>    [[TMCache sharedCache] setObject:value forKey:key block:NULL];
+</code></pre>
+
+<p>//        TMDiskCache *cache = [[TMDiskCache alloc] initWithName:@&ldquo;test.diskCache&rdquo;];
+//        [cache setObject:value forKey:key block:NULL];</p>
+
+<pre><code>    NSLog(@"%@", key);
+  });
+}
+</code></pre>
+
+<p>//  });
+```</p>
+
+<p><em>TMCache setObject:forKey:</em></p>
+
+<p>```
+&ndash; (void)setObject:(id <NSCoding>)object forKey:(NSString *)key
+{</p>
+
+<pre><code>if (!object || !key)
+    return;
+
+dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+[self setObject:object forKey:key block:^(TMCache *cache, NSString *key, id object) {
+    dispatch_semaphore_signal(semaphore);
+}];
+
+dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+#if !OS_OBJECT_USE_OBJC
+dispatch_release(semaphore);
+#endif
+</code></pre>
+
+<p>}
+```</p>
+
+<p><em>TMDiskCache 定义</em>
+```
+//#if <strong>IPHONE_OS_VERSION_MIN_REQUIRED >= </strong>IPHONE_4_0 //这个是默认值</p>
+
+<h1>if 0</h1>
+
+<pre><code>#define TMCacheStartBackgroundTask() UIBackgroundTaskIdentifier taskID = UIBackgroundTaskInvalid; \
+        taskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{ \
+        [[UIApplication sharedApplication] endBackgroundTask:taskID]; }];
+#define TMCacheEndBackgroundTask() [[UIApplication sharedApplication] endBackgroundTask:taskID];
+</code></pre>
+
+<h1>else</h1>
+
+<pre><code>#define TMCacheStartBackgroundTask()
+#define TMCacheEndBackgroundTask()
+</code></pre>
+
+<h1>endif</h1>
+
+<p>```</p>
+
+<p><em>TMDiskCache 使用</em>
+```
+&ndash; (void)setObject:(id <NSCoding>)object forKey:(NSString *)key block:(TMDiskCacheObjectBlock)block
+{</p>
+
+<pre><code>NSDate *now = [[NSDate alloc] init];
+
+if (!key || !object)
+    return;
+
+TMCacheStartBackgroundTask();
+
+__weak TMDiskCache *weakSelf = self;
+
+dispatch_async(_queue, ^{
+    TMDiskCache *strongSelf = weakSelf;
+    if (!strongSelf) {
+        TMCacheEndBackgroundTask();
+        return;
+    }
+
+    ...
+
+    TMCacheEndBackgroundTask();
+});
+</code></pre>
+
+<p>}
+```</p>
+
+<p>这样一个for循环，次数超过63就卡死了，啥也执行不了。
+还有，如果关掉<code>TMCacheStartBackgroundTask</code>，并且不使用<code>dispatch_semaphore_t</code>做异步转同步的处理（直接使用<code>[[TMCache sharedCache] setObject:value forKey:key block:NULL];</code>），就没啥问题了。</p>
+
+<p>看详情，跑数据的在此<a href="https://www.dropbox.com/s/59kdkfc3sm2gx1q/test_GCD.zip">下载测试工程</a></p>
+]]></content>
+  </entry>
+  
+</feed>

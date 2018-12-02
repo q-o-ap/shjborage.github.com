@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: FE | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/fe/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Study FE Skills with FreeCodeCamp]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/28/study-fe-skills-with-freecodecamp/"/>
+    <updated>2016-02-28T20:35:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/28/study-fe-skills-with-freecodecamp</id>
+    <content type="html"><![CDATA[<p>偶然的机会，让我结识了 <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp</a> 这个在 <code>JavaScript</code> 语言中 Star 数排名第一的项目。<br/>
+这是一个很好的学习前端技能的平台，<strong>Free</strong>。</p>
+
+<p>不管是否有基础，想学一些编程，都可以从前端开始学起，很好的网站。目前我已经用了有空的两天时间断断续续的学习了一些课程，大概总共用了3-4个小时左右，我更了解<code>Html</code>与<code>CSS</code>的一些东西。<br/>
+在这里可以学到以下东西：</p>
+
+<ul>
+<li>前端技能</li>
+<li>数据处理相关</li>
+<li>后端技能</li>
+<li>开源项目（公益）</li>
+</ul>
+
+
+<p>这是我的学习主页，大家有兴趣可以一起学～～<br/>
+<a href="http://www.freecodecamp.com/shjborage">http://www.freecodecamp.com/shjborage</a></p>
+]]></content>
+  </entry>
+  
+</feed>

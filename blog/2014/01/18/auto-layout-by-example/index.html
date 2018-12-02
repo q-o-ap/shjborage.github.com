@@ -1,0 +1,611 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Auto Layout by Example - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+  <!--[if lt IE 9]>
+    <script src="http://x.papaapp.com/farm1/a571d2/8dda131d/html5shiv.js"></script>
+    <![endif]-->
+  
+  <meta name="description" content="Auto Layout by Example Jan 18th, 2014 | Comments Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子， &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shjborage.github.io/blog/2014/01/18/auto-layout-by-example/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header id="header" class="clearfix">    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                <a id="logo" href="/">
+                   Saick Blog
+                </a>
+                <p class="description">技术博客，致力于全栈以及各方面修养。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="index-nav current" href="/">Blog</a>
+<a class="archives-nav" href="/blog/archives">Archives</a>
+<!-- <a class="friendlink-nav" href="/friendlylink.html">Links</a> -->
+<a class="about-nav" href="/about.html">About Me</a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+  <div id="body">
+    <div class="container">
+    	<div class="col-group">
+			<div class="col-8" id="main">
+  <div class="res-cons">
+  <article class="post clearfix">
+  
+  <header>
+    
+      <h1 class="post-title">Auto Layout by Example</h1>
+    
+    
+      <p class="post-meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-18T16:21:00+08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="post-content"><p>Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。</p>
+
+<p>如果某个地方看不明白可以留言给我，我翻译并给大家讲。</p>
+
+<p>ScrollView这块我暂时没有用，没细看，下面Size适配那个我试了，并且写了Demo，大家感兴趣下文下载研究。</p>
+
+<p>Auto Layout makes it easy to solve many complex layout problems automatically, without the need for manual view manipulation. By creating the right combination of constraints, you can create layouts that are traditionally difficult to manage in code, such as equally spaced views that adjust to changes in orientation or size, elements inside scroll views that affect the size of the scrolling content, or elements inside scroll views that don’t scroll with the rest of the contents.</p>
+
+<!-- more -->
+
+
+<h3>Using Scroll Views with Auto Layout</h3>
+
+<p>When you are creating an app using Auto Layout, scroll views can present a unique challenge. The size of the scrolling content must be set correctly so that the user can scroll through all of the available content, for example, and if you need to lock a contextual view in place on top of a scroll view, such as the scale and legend for a map, it’s difficult to ensure that the element doesn’t scroll with the rest of the content.</p>
+
+<h4>Controlling Scroll View Content Size</h4>
+
+<p>The size of the content inside of a scroll view is determined by the constraints of its descendants.</p>
+
+<p><em>To set the size of a scroll view</em></p>
+
+<ul>
+<li>Create the scroll view.</li>
+<li>Place the UI element inside it.</li>
+<li>Create constraints that fully define the width and height of the scroll view content.</li>
+</ul>
+
+
+<p>You must make sure you create constraints for all the subviews inside a scroll view. For example, when defining the constraints for a view that doesn’t have an intrinsic content size, you’ll need more than just a leading edge constraint—you must also create trailing edge, width, and height constraints. There cannot be any missing constraints, starting from one edge of the scroll view to the other.</p>
+
+<h4>Creating Anchored Views Inside a Scroll View</h4>
+
+<p>You may find you want to create an area inside a scroll view that doesn’t move when a user scrolls the contents of the scroll view. You accomplish this by using a separate <strong>container view</strong>.</p>
+
+<p><em>To lock a view inside a scroll view</em>
+*   Create a container view to hold the scroll view.
+*   Create the scroll view and place it in the container view with all edges equal to zero points.
+*   Create and place a subview inside of the scroll view.
+*   Create constraints from the subview to the container view.</p>
+
+<p>The following example uses the steps in the above task to show how to position a text view inside of a scroll view. In this example, the text view stays at the bottom of the scroll view and doesn’t move when the scroll view contents are moved.</p>
+
+<p>First, create the container view that will contain the scroll view. Set the size of the container view equal to the desired size of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008276023/player/b1ddbeff09" height="500" width="291"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After the container view is created, create a scroll view and place it inside of the container view. Resize the scroll view so that all of the edges are flush with the container view’s edges, by setting the distance to 0.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810786/player/1202126aa8" height="500" width="290"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create another view and place it inside of the scroll view. In this example, a text view is placed inside of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999315/player/ddc38c3ea6" height="500" width="288"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After placing the text view, create constraints from the text view to the container view. Creating constraints that anchor the text view to the container view (skipping the scroll view) anchors the text view relative to the container view, which ensures that the scroll view won’t scroll the text view.</p>
+
+<p>To create a constraint that crosses multiple views in the view hierarchy, it is generally easier to Control-drag from the view to the container view in the Interface Builder outline view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810736/player/e32e620ff4" height="298" width="270"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In the constraint overlay that appears, set the required constraints for the view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275923/player/194c48615c" height="273" width="158"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In this example, constraints are created from the leading, trailing, and bottom edges of the text view to the container view. The height of the text view is also constrained.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810686/player/bdc0cae834" height="500" width="287"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>The following two figures show the app in iOS Simulator, both in normal and landscape positions. The text view is constrained at the bottom of the scroll view and doesn’t move as the scroll view is moved.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999185/player/a051895080" height="296" width="495"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999135/player/4f87b36fa7" height="495" width="296"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<h3>Spacing and Wrapping</h3>
+
+<p>Auto Layout provides several techniques for automatically spacing views and resizing items based on their content. The following sections describe how to create constraints that keep visible views proportionally spaced based on the orientation of the device.</p>
+
+<h4>Creating Equal Spacing Between Views</h4>
+
+<p>To lay out several views that are proportionally spaced based on the orientation of a device, create spacer views between the visible views. Set the constraints of these spacer views correctly to ensure that the visible views are able to stay spaced apart based on the orientation of the device.</p>
+
+<p><em>To space views proportionally</em>
+*   Create the visible views.
+*   Create the spacer views equal to the number of visible views plus one.
+*   Alternate placing your views, starting with a spacer view.</p>
+
+<pre><code>To space two visible views, place all of the views in the following pattern, starting from the left side of the screen and moving right:
+</code></pre>
+
+<p><code>spacer1 | view1 | spacer2 | view2 | spacer3.</code></p>
+
+<ul>
+<li>Constrain the spacer views so that their lengths are equal to each other.</li>
+</ul>
+
+
+<p><code>
+Note: The height of the spacer views can be any value, including 0. However, you must create constraints for the height of the views—don’t leave the height ambiguous.
+Create a leading constraint from the first spacer view to the container view.
+</code></p>
+
+<ul>
+<li>Create a trailing constraint from the last spacer view to the container view.</li>
+<li>Create constraints between the spacer views and the visible views.</li>
+</ul>
+
+
+<p><code>
+Note: When spacing views vertically, start from the top of the screen and place each view below the previous view. Set the heights of the spacer views equal to each other.
+The following example uses the steps in the above task to show how to position two views proportionally spaced. The spacer views are annotated for the example, but are normally left empty with no background. First, create the two views and place them in the storyboard.
+</code></p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351964/player/6cff17637e" height="310" width="236"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Add the three spacer views—one to the left of the leftmost view, one between the two views, and one to the right of the rightmost view. The spacer views don’t have to be the same size at this time because their size will be set through constraints.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275823/player/bdda53d7d0" height="310" width="235"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create the following constraints for the spacer views:</p>
+
+<ul>
+<li>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1.</li>
+<li>Constrain the width of spacer view 1 to be greater than or equal to the minimum desired width.</li>
+<li>Create a Leading Space to Container constraint from spacer view 1 to the container.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 1 to view 1. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create Horizontal Spacing constraints from spacer view 2 to view 1 and view 2. Set these constraints to be a less-than-or-equal-to constraint with a priority of 999.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 3 to view 2. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create a Trailing Space to Container constraint from spacer view 3 to the container.</li>
+</ul>
+
+
+<p>These constraints create two visible views and three invisible views (spacer views). These spacer views automatically resize as the orientation of the device changes, keeping the visible views proportionally spaced, as shown in the following two figures:</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275833/player/7290ca4711" height="337" width="261"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351904/player/a2b7a82a10" height="261" width="337"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p><a href="https://www.dropbox.com/s/23vrbep9khfyvb6/AutoLayoutDemo.zip">Demo</a></p>
+
+<h3>Animating Changes Made by Auto Layout</h3>
+
+<p>If you need full control over animating changes made by Auto Layout, you must make your constraint changes programmatically. The basic concept is the same for both iOS and OS X, but there are a few minor differences.</p>
+
+<p>In an iOS app, your code would look something like the following:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[containerView layoutSubtreeIfNeeded]; // Ensures that all pending layout operations have been completed
+</span><span class='line'>[UIView animateWithDuration:1.0 animations:^{
+</span><span class='line'>     // Make all constraint changes here
+</span><span class='line'>     [containerView layoutSubtreeIfNeeded]; // Forces the layout of the subtree animation block and then captures all of the frame changes
+</span><span class='line'>}];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In OS X, use the following code when using layer-backed animations:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[containterView layoutIfNeeded];
+</span><span class='line'>NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+</span><span class='line'>     [context setAllowsImplicitAnimation: YES];
+</span><span class='line'>     // Make all constraint changes here
+</span><span class='line'>     [containerView layoutIfNeeded];
+</span><span class='line'>}];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you aren’t using layer-backed animations, you must animate the constant using the constraint’s animator:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[constraint animator] setConstant:42];</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>个人总结</h3>
+
+<ol>
+<li>所有相关Contraints都加好后再自动让XCode补全，或者干脆在没问题的时候忽略警告</li>
+<li><code>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1</code>. 这意思是让三个视频的width相等，并不是给他们三个都加上width的Contraints。</li>
+<li>最后是在3.5寸屏幕下开发，再适应4寸，这样直接拉开。（在开发时，点那个大小切换那个可能会带来Contraints警告，要小心。不行就Commond+Z）</li>
+</ol>
+
+</div>
+
+
+  <footer class="post-footer">
+    <div class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+ and 
+      File under 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+ with 
+
+<span class="tags">
+  
+    <a class='tag' href='/tags/autolayout/'>AutoLayout</a>, <a class='tag' href='/tags/ui/'>UI</a>, <a class='tag' href='/tags/ios/'>iOS</a>
+  
+</span>
+
+ Tag
+    </div>
+    
+      <div class="sharing">
+  <div>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shjborage.github.io/blog/2014/01/18/auto-layout-by-example/" data-via="eric_shj" data-counturl="http://shjborage.github.io/blog/2014/01/18/auto-layout-by-example/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  </div>
+
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <h5> <br> </h5>
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/01/03/jie-jue-iosbao-cuo-libc-plus-plus-abi-dot-dylib-handler-threw-exception/" title="Previous Post: 解决iOS报错libc++abi.dylib handler threw exception">&laquo; 解决iOS报错libc++abi.dylib handler threw exception</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/01/20/ioske-hu-duan-de-gzipchu-li-gzip-ungzip/" title="Next Post: iOS客户端的gzip处理-gzip-ungzip">iOS客户端的gzip处理-gzip-ungzip &raquo;</a>
+      
+    </div>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h3>Comments</h3>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+  </div>
+</div>
+
+  <aside id="secondary">
+  
+    <section class="widget">
+    <form id="search" action="http://google.com/search" method="get">
+    	<input type="hidden" name="q" value="site:shjborage.github.io"/>
+    	<input type="text" name="q" results="0" class="text" placeholder="Google搜索"/>
+    </form>
+</section>
+
+<section class="widget">
+	<h2 class="widget-title">最新文章</h2>
+	<ul class="widget-list">
+		
+     	<li>
+      	  <a href="/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/">为 PHP 做单元测试（UnitTest）</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/12/linux-kai-fa-bei-wang/">Linux 开发备忘</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/10/apple-ats-wen-ti/">Apple ATS 问题</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/">npm install 本地安装与全局安装</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/">Python - virtualenv 基础使用</a>
+      	</li>
+    	
+	</ul>
+</section>
+<section class="widget">
+  <h2 class="widget-title">Categories</h2>
+  <ul class="widget-list">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/c/'>C (4)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (6)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javascript/'>JavaScript (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (9)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (4)</a></li>
+<li class='category'><a href='/blog/categories/translate/'>Translate (1)</a></li>
+<li class='category'><a href='/blog/categories/web/'>Web (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (82)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (15)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (10)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h2 class="widget">Tags</h2>
+  <div>
+    <a style="font-size: 90%" href="/tags/ats/">ATS</a>
+<a style="font-size: 108%" href="/tags/android/">Android</a>
+<a style="font-size: 108%" href="/tags/appstore/">AppStore</a>
+<a style="font-size: 90%" href="/tags/appletv/">AppleTV</a>
+<a style="font-size: 90%" href="/tags/applewatch/">AppleWatch</a>
+<a style="font-size: 118%" href="/tags/autolayout/">AutoLayout</a>
+<a style="font-size: 108%" href="/tags/backend/">BackEnd</a>
+<a style="font-size: 118%" href="/tags/c/">C</a>
+<a style="font-size: 90%" href="/tags/css/">CSS</a>
+<a style="font-size: 125%" href="/tags/cocoapods/">CocoaPods</a>
+<a style="font-size: 131%" href="/tags/crash/">Crash</a>
+<a style="font-size: 108%" href="/tags/database/">DataBase</a>
+<a style="font-size: 118%" href="/tags/database/">Database</a>
+<a style="font-size: 90%" href="/tags/debug/">Debug</a>
+<a style="font-size: 90%" href="/tags/django/">Django</a>
+<a style="font-size: 90%" href="/tags/fe/">FE</a>
+<a style="font-size: 90%" href="/tags/game/">Game</a>
+<a style="font-size: 125%" href="/tags/git/">Git</a>
+<a style="font-size: 90%" href="/tags/github/">Github</a>
+<a style="font-size: 90%" href="/tags/https/">HTTPS</a>
+<a style="font-size: 90%" href="/tags/hybirdapp/">HybirdApp</a>
+<a style="font-size: 90%" href="/tags/interview/">Interview</a>
+<a style="font-size: 90%" href="/tags/js/">JS</a>
+<a style="font-size: 118%" href="/tags/java/">Java</a>
+<a style="font-size: 118%" href="/tags/javascript/">JavaScript</a>
+<a style="font-size: 108%" href="/tags/linux/">Linux</a>
+<a style="font-size: 148%" href="/tags/mac/">Mac</a>
+<a style="font-size: 90%" href="/tags/markdown/">Markdown</a>
+<a style="font-size: 125%" href="/tags/network/">Network</a>
+<a style="font-size: 180%" href="/tags/obj-c/">Obj-C</a>
+<a style="font-size: 108%" href="/tags/opensource/">OpenSource</a>
+<a style="font-size: 90%" href="/tags/php/">PHP</a>
+<a style="font-size: 118%" href="/tags/product/">Product</a>
+<a style="font-size: 90%" href="/tags/push/">Push</a>
+<a style="font-size: 90%" href="/tags/svn/">SVN</a>
+<a style="font-size: 90%" href="/tags/script/">Script</a>
+<a style="font-size: 90%" href="/tags/sharesdk/">ShareSDK</a>
+<a style="font-size: 118%" href="/tags/sourcecontrol/">SourceControl</a>
+<a style="font-size: 151%" href="/tags/tools/">Tools</a>
+<a style="font-size: 90%" href="/tags/translate/">Translate</a>
+<a style="font-size: 157%" href="/tags/ui/">UI</a>
+<a style="font-size: 90%" href="/tags/watch/">Watch</a>
+<a style="font-size: 125%" href="/tags/web/">Web</a>
+<a style="font-size: 90%" href="/tags/xcode/">XCode</a>
+<a style="font-size: 90%" href="/tags/basic/">basic</a>
+<a style="font-size: 90%" href="/tags/env/">env</a>
+<a style="font-size: 90%" href="/tags/icloud/">iCloud</a>
+<a style="font-size: 200%" href="/tags/ios/">iOS</a>
+<a style="font-size: 90%" href="/tags/ios10/">iOS10</a>
+<a style="font-size: 90%" href="/tags/ios5/">iOS5</a>
+<a style="font-size: 131%" href="/tags/ios7/">iOS7</a>
+<a style="font-size: 90%" href="/tags/ios9/">iOS9</a>
+<a style="font-size: 90%" href="/tags/ipa/">ipa</a>
+<a style="font-size: 90%" href="/tags/js/">js</a>
+<a style="font-size: 90%" href="/tags/keynote/">keynote</a>
+<a style="font-size: 90%" href="/tags/npm/">npm</a>
+<a style="font-size: 125%" href="/tags/octopress/">octopress</a>
+<a style="font-size: 143%" href="/tags/python/">python</a>
+<a style="font-size: 90%" href="/tags/redis/">redis</a>
+<a style="font-size: 90%" href="/tags/sae/">sae,</a>
+<a style="font-size: 90%" href="/tags/tools/">tools</a>
+<a style="font-size: 108%" href="/tags/you-hua/">优化</a>
+<a style="font-size: 90%" href="/tags/fen-xiang/">分享</a>
+<a style="font-size: 108%" href="/tags/dan-yuan-ce-shi/">单元测试</a>
+<a style="font-size: 90%" href="/tags/hou-duan/">后端</a>
+<a style="font-size: 90%" href="/tags/keng/">坑</a>
+<a style="font-size: 90%" href="/tags/bei-wang/">备忘</a>
+<a style="font-size: 118%" href="/tags/duo-xian-cheng/">多线程</a>
+<a style="font-size: 90%" href="/tags/an-quan/">安全</a>
+<a style="font-size: 155%" href="/tags/di-ceng/">底层</a>
+<a style="font-size: 90%" href="/tags/wei-xin/">微信</a>
+<a style="font-size: 90%" href="/tags/tui-jian-gong-ju/">推荐工具</a>
+<a style="font-size: 90%" href="/tags/jia-gou-she-ji/">架构设计</a>
+<a style="font-size: 90%" href="/tags/ce-shi/">测试</a>
+<a style="font-size: 90%" href="/tags/yi-dong-duan/">移动端</a>
+<a style="font-size: 108%" href="/tags/di-san-fang-ku/">第三方库</a>
+<a style="font-size: 90%" href="/tags/chun-ji-zhu/">纯技术</a>
+<a style="font-size: 90%" href="/tags/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/tags/diao-shi/">调试</a>
+<a style="font-size: 108%" href="/tags/sui-bian/">随便</a>
+
+  </div>
+</section>
+<section>
+  <h2 class="widget">(AD)广告位空缺中,招租</h2>
+</section>
+
+
+<section>
+  <h2 class="widget">新浪微博</h2>
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+</section>
+
+  
+</aside>
+
+
+      	</div>
+    </div>
+  </div>
+  <footer id="footer">
+  	<div class="container">
+	Copyright &copy; 2018 - Eric Shi -
+  <span class="credit">Powered by <a rel="nofollow" href="http://octopress.org">Octopress</a> on <a rel="nofollow" href="http://pages.github.com/">GitHubPages</a>
+  </span>
+  - <span class="credit">Theme by <a rel="nofollow" href="http://pagecho.com">Cho</a></span>
+
+
+</div>
+
+  </footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shjborage.github.io/blog/2014/01/18/auto-layout-by-example/';
+        var disqus_url = 'http://shjborage.github.io/blog/2014/01/18/auto-layout-by-example/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

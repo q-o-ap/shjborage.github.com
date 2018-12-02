@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: Watch | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/watch/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[AppleWatch相关介绍 keynote]]></title>
+    <link href="http://shjborage.github.io/blog/2015/07/27/applewatchxiang-guan-jie-shao-keynote/"/>
+    <updated>2015-07-27T14:28:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/07/27/applewatchxiang-guan-jie-shao-keynote</id>
+    <content type="html"><![CDATA[<p>最近做了一次AppleWatch的分享，大家给指点一下<br/>
+有任何问题大家直接板聊～</p>
+
+<iframe width=600 height=400 frameborder=0 scrolling=auto src="http://blog.saick.net/HostedResources/AppleWatch-Preview/index.html"></iframe>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

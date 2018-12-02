@@ -1,0 +1,680 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>在github上使用octopress - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+  <!--[if lt IE 9]>
+    <script src="http://x.papaapp.com/farm1/a571d2/8dda131d/html5shiv.js"></script>
+    <![endif]-->
+  
+  <meta name="description" content="在github上使用octopress Aug 22nd, 2013 | Comments Octopress是使用ruby语言编写的一套建立在jekyll之上的博客系统，它有一些很独特的特点： 使用静态页面；
+不使用数据库；
+使用markdown标记语言编写文章；
+可以与git紧密集成， &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shjborage.github.io/blog/2013/08/22/zai-githubshang-shi-yong-octopress/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header id="header" class="clearfix">    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                <a id="logo" href="/">
+                   Saick Blog
+                </a>
+                <p class="description">技术博客，致力于全栈以及各方面修养。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="index-nav current" href="/">Blog</a>
+<a class="archives-nav" href="/blog/archives">Archives</a>
+<!-- <a class="friendlink-nav" href="/friendlylink.html">Links</a> -->
+<a class="about-nav" href="/about.html">About Me</a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+  <div id="body">
+    <div class="container">
+    	<div class="col-group">
+			<div class="col-8" id="main">
+  <div class="res-cons">
+  <article class="post clearfix">
+  
+  <header>
+    
+      <h1 class="post-title">在github上使用octopress</h1>
+    
+    
+      <p class="post-meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-22T10:55:00+08:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="post-content"><p>Octopress是使用ruby语言编写的一套建立在jekyll之上的博客系统，它有一些很独特的特点：</p>
+
+<ol>
+<li>使用静态页面；</li>
+<li>不使用数据库；</li>
+<li>使用markdown标记语言编写文章；</li>
+<li>可以与git紧密集成，方便地进行博客的版本管理；</li>
+<li>可以于Github Pages集成，不需要单独的web hosting，只要你有github帐号即可。</li>
+</ol>
+
+
+<!-- more -->
+
+
+<p>这些特点中的第三点到第五点尤其吸引我（第一点和第二点也很酷），于是我花了些时间研究。以下是相关的步骤和心得。</p>
+
+<h4>在你本地安装octopress</h4>
+
+<p>说“安装”可能不太恰当，准确的说是你需要从github上取得octopress的代码并进行些许配置。步骤请参考这里。</p>
+
+<ol>
+<li><p>安装RVM(Ruby Version Manager)并使用”Ruby 1.9.2″作为你本地的ruby实现，这事我之前按照这篇文章做过，这里就不详细说了，你也可以按照octopress官方的介绍来安装RVM。</p></li>
+<li><p>从github得到octopress代码，运行以下命令：</p></li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git octopress
+</span><span class='line'>cd octopress    # If you use RVM, You'll be asked if you trust the .rvmrc file (say yes).
+</span><span class='line'>ruby --version  # Should report Ruby 1.9.2
+</span><span class='line'>
+</span><span class='line'>gem install bundler # Install dependencies
+</span><span class='line'>bundle install
+</span><span class='line'>
+</span><span class='line'>rake install # Install the default Octopress theme</span></code></pre></td></tr></table></div></figure>
+
+
+<p>配置你本地的octopress，使之可以发布到你的github pages</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake setup_github_pages
+</span><span class='line'>Enter the read/write url for your repository
+</span><span class='line'>(For example, 'git@github.com:your_username/your_username.github.com)
+</span><span class='line'>Repository url:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>请输入：git@github.com:yourname/yourname.github.com.git (将yourname替换成你的github登录名)</p>
+
+<p>这个步骤rake会做很多事情：</p>
+
+<p>在.git/config中替换origin为你输入的repository，并把原来的origin写到octopress中。
+创建新的branch source并切换到这个branch。
+在生成的_deploy目录下，初始化git repository为你的repository。
+以下是两个git config的内容，just for your information。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tchen@tchen-mbp:~/projects/octopress$ cat .git/config 
+</span><span class='line'>[core]
+</span><span class='line'>    repositoryformatversion = 0
+</span><span class='line'>    filemode = true
+</span><span class='line'>    bare = false
+</span><span class='line'>    logallrefupdates = true
+</span><span class='line'>    ignorecase = true
+</span><span class='line'>[remote "octopress"]
+</span><span class='line'>    url = git://github.com/imathis/octopress.git
+</span><span class='line'>    fetch = +refs/heads/*:refs/remotes/octopress/*
+</span><span class='line'>[branch "source"]
+</span><span class='line'>    remote = origin
+</span><span class='line'>    merge = refs/heads/master
+</span><span class='line'>    rebase = true
+</span><span class='line'>[remote "origin"]
+</span><span class='line'>    url = git@github.com:tyrchen/tyrchen.github.com.git
+</span><span class='line'>    fetch = +refs/heads/*:refs/remotes/origin/*
+</span><span class='line'>tchen@tchen-mbp:~/projects/octopress$ cat _deploy/.git/config 
+</span><span class='line'>[core]
+</span><span class='line'>    repositoryformatversion = 0
+</span><span class='line'>    filemode = true
+</span><span class='line'>    bare = false
+</span><span class='line'>    logallrefupdates = true
+</span><span class='line'>    ignorecase = true
+</span><span class='line'>[remote "origin"]
+</span><span class='line'>    url = git@github.com:tyrchen/tyrchen.github.com.git
+</span><span class='line'>    fetch = +refs/heads/*:refs/remotes/origin/*</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就可以做到：你在本地创建博客文章(当然是用markdown写成的)，然后直接deploy到你的github pages repo，github会自动进行发布。也就是说：所有发博客的动作只需要在你本地用命令完成，酷吧！</p>
+
+<p>参考了这里<a href="http://octopress.org/docs/blogging/">http://octopress.org/docs/blogging/</a>。</p>
+
+<ul>
+<li>1.创建你的github pages repo</li>
+</ul>
+
+
+<p>如果你的github用户名是username，那个就创建一个名称为”username.github.com”的repo，这个repo就是你的github pages repo，更多信息可以参考这里。</p>
+
+<ul>
+<li>2.在你本地运行以下命令，octopress会自动帮你进行配置：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd your_local_octopress_directory
+</span><span class='line'>rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意：当命令提示你输入github URL时，请使用这个格式的URL: “git@github.com:username/username.github.com.git”</p>
+
+<p>当这个命令运行完成之后，你的github pages repo会有两个branches: master branch用于静态页面的发布(“octopress/<em>deploy”的内容)，source branch用于保存你的blog内容（”octopress”目录中除了”</em>deploy”的其它内容）</p>
+
+<p>到这里基本的配置就完成了，你还可以参考这里配置你博客的名称等信息。</p>
+
+<h4>编写并发布文章</h4>
+
+<ul>
+<li>1.写文章</li>
+</ul>
+
+
+<p>cd your_local_octopress_directory
+rake new_post[&ldquo;Your Title of Your Article&rdquo;]
+该命令会在你的”octopress/source/_posts”目录下生成对应的”.markdown”文件，用任意文本编辑器编辑，使用markdown语法编写你的文章。</p>
+
+<ul>
+<li>2.生成，预览并发布：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd your_local_octopress_directory
+</span><span class='line'>rake generate # generate your blog static pages content according to your input. 
+</span><span class='line'>rake preview # start a web server on "http://localhost:4000", you can preview your blog content.
+</span><span class='line'>rake deploy # push your static pages content to your github pages repo ("master" branch)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>还有很重要的一步是把你的修改(文本修改，不包含”_deploy”目录，”deploy”目录保存”rake generate”生成的静态页面内容，会被”rake deploy”命令提交到”master branch”)放到你的github pages(“source” branch)上:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd your_local_octopress_directory
+</span><span class='line'>git add .
+</span><span class='line'>git commit -m 'your message'
+</span><span class='line'>git push origin source</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>个性化</h4>
+
+<p>添加个人域名
+在octopress目录下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ echo 'blog.yourdomain.com' &gt;&gt; source/CNAME</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在你的DNS服务商，如 dnspod.cn，添加相应的CNAME指向 yourname.github.com。如果你要使用顶级域名，如 <a href="http://yourdomain.com">http://yourdomain.com</a> 访问你的博客，则需要使用A记录指向 207.97.227.245。详细内容请参考：<a href="http://octopress.org/docs/deploying/github/%E3%80%82">http://octopress.org/docs/deploying/github/%E3%80%82</a></p>
+
+<h4>设置博客</h4>
+
+<p>打开_config.yml，按照 <a href="http://octopress.org/docs/configuring/">http://octopress.org/docs/configuring/</a> 的说明进行设置即可。注意把不需要的asides都删除，免得加载不必要的js，拖累访问速度。如果想把你自己的微博个人秀加在侧栏，请参考：<a href="http://clark1231.iteye.com/blog/1553939%E3%80%82">http://clark1231.iteye.com/blog/1553939%E3%80%82</a></p>
+
+<h4>使用主题</h4>
+
+<p>可使用 <a href="https://github.com/amelandri/darkstripes">https://github.com/amelandri/darkstripes</a> 的主题。使用方法很简单：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd octopress
+</span><span class='line'>$ git clone git://github.com/amelandri/darkstripes.git .themes/darkstripes
+</span><span class='line'>$ rake install['darkstripes']
+</span><span class='line'>$ rake generate</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意你对已有主题的汉化会被覆盖，请确保提交所有更改前你merge了你的改动。</p>
+
+<h4>添加多说</h4>
+
+<p>由于github pages只支持静态文件，所以类似评论这样的功能就只能使用第三方工具。octopress自带disqus的评论系统，但其对国内用户不够友好，另外加载速度也不快。国内disqus的copycat是duoshuo，于是照猫画虎，添加多说的支持进来：</p>
+
+<p>首先在 source/post/ 下创建duoshuo.html:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"></pre></td><td class='code'><pre><code class=''></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在 source/_layouts/post.html，将对应的disqus代码改为：
+注：去掉{与%中间的\</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"></pre></td><td class='code'><pre><code class=''></code></pre></td></tr></table></div></figure>
+
+
+<p>在 source/_config.yml 里，添加：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Duoshuo comments
+</span><span class='line'>duoshuo_name: your_duoshuo_name</span></code></pre></td></tr></table></div></figure>
+
+
+<p>应该就可以了。可以使用如下命令测试：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake generate
+</span><span class='line'>$ rake preview</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>添加百度统计</h4>
+
+<p>百度统计可以将生成的script直接添加到 source/post/after_footer.html 就可以。很简单，这里就不详述。</p>
+
+<p>参考：<a href="http://www.cnblogs.com/stevelin/p/3281811.html">http://www.cnblogs.com/stevelin/p/3281811.html</a></p>
+
+<h4>修改READON</h4>
+
+<p>在xxx_post.markdown里添加如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!-- more --&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在_config.yml的excerpt_link:修改为你希望的描述就可以。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>excerpt_link: "阅读全文 &rarr;"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From:<a href="http://ibluegrid.info/blog/2013/01/02/octopress-customization-2/">http://ibluegrid.info/blog/2013/01/02/octopress-customization-2/</a></p>
+</div>
+
+
+  <footer class="post-footer">
+    <div class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+ and 
+      File under 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/other/'>other</a>
+  
+</span>
+
+ with 
+
+<span class="tags">
+  
+    <a class='tag' href='/tags/github/'>Github</a>, <a class='tag' href='/tags/octopress/'>octopress</a>
+  
+</span>
+
+ Tag
+    </div>
+    
+      <div class="sharing">
+  <div>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shjborage.github.io/blog/2013/08/22/zai-githubshang-shi-yong-octopress/" data-via="eric_shj" data-counturl="http://shjborage.github.io/blog/2013/08/22/zai-githubshang-shi-yong-octopress/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  </div>
+
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <h5> <br> </h5>
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/08/01/cocoa-zi-sheng-ji-zhi/" title="Previous Post: Cocoa 自省机制">&laquo; Cocoa 自省机制</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/08/22/ios-quan-xian-guan-li-best-practices-for-maintaining-user-privacy/" title="Next Post:  iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究"> iOS 权限管理-Best Practices for Maintaining User Privacy 本地与Push通知检测研究 &raquo;</a>
+      
+    </div>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h3>Comments</h3>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+  </div>
+</div>
+
+  <aside id="secondary">
+  
+    <section class="widget">
+    <form id="search" action="http://google.com/search" method="get">
+    	<input type="hidden" name="q" value="site:shjborage.github.io"/>
+    	<input type="text" name="q" results="0" class="text" placeholder="Google搜索"/>
+    </form>
+</section>
+
+<section class="widget">
+	<h2 class="widget-title">最新文章</h2>
+	<ul class="widget-list">
+		
+     	<li>
+      	  <a href="/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/">为 PHP 做单元测试（UnitTest）</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/12/linux-kai-fa-bei-wang/">Linux 开发备忘</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/10/apple-ats-wen-ti/">Apple ATS 问题</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/">npm install 本地安装与全局安装</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/">Python - virtualenv 基础使用</a>
+      	</li>
+    	
+	</ul>
+</section>
+<section class="widget">
+  <h2 class="widget-title">Categories</h2>
+  <ul class="widget-list">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/c/'>C (4)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (6)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javascript/'>JavaScript (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (9)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (4)</a></li>
+<li class='category'><a href='/blog/categories/translate/'>Translate (1)</a></li>
+<li class='category'><a href='/blog/categories/web/'>Web (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (82)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (15)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (10)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h2 class="widget">Tags</h2>
+  <div>
+    <a style="font-size: 90%" href="/tags/ats/">ATS</a>
+<a style="font-size: 108%" href="/tags/android/">Android</a>
+<a style="font-size: 108%" href="/tags/appstore/">AppStore</a>
+<a style="font-size: 90%" href="/tags/appletv/">AppleTV</a>
+<a style="font-size: 90%" href="/tags/applewatch/">AppleWatch</a>
+<a style="font-size: 118%" href="/tags/autolayout/">AutoLayout</a>
+<a style="font-size: 108%" href="/tags/backend/">BackEnd</a>
+<a style="font-size: 118%" href="/tags/c/">C</a>
+<a style="font-size: 90%" href="/tags/css/">CSS</a>
+<a style="font-size: 125%" href="/tags/cocoapods/">CocoaPods</a>
+<a style="font-size: 131%" href="/tags/crash/">Crash</a>
+<a style="font-size: 108%" href="/tags/database/">DataBase</a>
+<a style="font-size: 118%" href="/tags/database/">Database</a>
+<a style="font-size: 90%" href="/tags/debug/">Debug</a>
+<a style="font-size: 90%" href="/tags/django/">Django</a>
+<a style="font-size: 90%" href="/tags/fe/">FE</a>
+<a style="font-size: 90%" href="/tags/game/">Game</a>
+<a style="font-size: 125%" href="/tags/git/">Git</a>
+<a style="font-size: 90%" href="/tags/github/">Github</a>
+<a style="font-size: 90%" href="/tags/https/">HTTPS</a>
+<a style="font-size: 90%" href="/tags/hybirdapp/">HybirdApp</a>
+<a style="font-size: 90%" href="/tags/interview/">Interview</a>
+<a style="font-size: 90%" href="/tags/js/">JS</a>
+<a style="font-size: 118%" href="/tags/java/">Java</a>
+<a style="font-size: 118%" href="/tags/javascript/">JavaScript</a>
+<a style="font-size: 108%" href="/tags/linux/">Linux</a>
+<a style="font-size: 148%" href="/tags/mac/">Mac</a>
+<a style="font-size: 90%" href="/tags/markdown/">Markdown</a>
+<a style="font-size: 125%" href="/tags/network/">Network</a>
+<a style="font-size: 180%" href="/tags/obj-c/">Obj-C</a>
+<a style="font-size: 108%" href="/tags/opensource/">OpenSource</a>
+<a style="font-size: 90%" href="/tags/php/">PHP</a>
+<a style="font-size: 118%" href="/tags/product/">Product</a>
+<a style="font-size: 90%" href="/tags/push/">Push</a>
+<a style="font-size: 90%" href="/tags/svn/">SVN</a>
+<a style="font-size: 90%" href="/tags/script/">Script</a>
+<a style="font-size: 90%" href="/tags/sharesdk/">ShareSDK</a>
+<a style="font-size: 118%" href="/tags/sourcecontrol/">SourceControl</a>
+<a style="font-size: 151%" href="/tags/tools/">Tools</a>
+<a style="font-size: 90%" href="/tags/translate/">Translate</a>
+<a style="font-size: 157%" href="/tags/ui/">UI</a>
+<a style="font-size: 90%" href="/tags/watch/">Watch</a>
+<a style="font-size: 125%" href="/tags/web/">Web</a>
+<a style="font-size: 90%" href="/tags/xcode/">XCode</a>
+<a style="font-size: 90%" href="/tags/basic/">basic</a>
+<a style="font-size: 90%" href="/tags/env/">env</a>
+<a style="font-size: 90%" href="/tags/icloud/">iCloud</a>
+<a style="font-size: 200%" href="/tags/ios/">iOS</a>
+<a style="font-size: 90%" href="/tags/ios10/">iOS10</a>
+<a style="font-size: 90%" href="/tags/ios5/">iOS5</a>
+<a style="font-size: 131%" href="/tags/ios7/">iOS7</a>
+<a style="font-size: 90%" href="/tags/ios9/">iOS9</a>
+<a style="font-size: 90%" href="/tags/ipa/">ipa</a>
+<a style="font-size: 90%" href="/tags/js/">js</a>
+<a style="font-size: 90%" href="/tags/keynote/">keynote</a>
+<a style="font-size: 90%" href="/tags/npm/">npm</a>
+<a style="font-size: 125%" href="/tags/octopress/">octopress</a>
+<a style="font-size: 143%" href="/tags/python/">python</a>
+<a style="font-size: 90%" href="/tags/redis/">redis</a>
+<a style="font-size: 90%" href="/tags/sae/">sae,</a>
+<a style="font-size: 90%" href="/tags/tools/">tools</a>
+<a style="font-size: 108%" href="/tags/you-hua/">优化</a>
+<a style="font-size: 90%" href="/tags/fen-xiang/">分享</a>
+<a style="font-size: 108%" href="/tags/dan-yuan-ce-shi/">单元测试</a>
+<a style="font-size: 90%" href="/tags/hou-duan/">后端</a>
+<a style="font-size: 90%" href="/tags/keng/">坑</a>
+<a style="font-size: 90%" href="/tags/bei-wang/">备忘</a>
+<a style="font-size: 118%" href="/tags/duo-xian-cheng/">多线程</a>
+<a style="font-size: 90%" href="/tags/an-quan/">安全</a>
+<a style="font-size: 155%" href="/tags/di-ceng/">底层</a>
+<a style="font-size: 90%" href="/tags/wei-xin/">微信</a>
+<a style="font-size: 90%" href="/tags/tui-jian-gong-ju/">推荐工具</a>
+<a style="font-size: 90%" href="/tags/jia-gou-she-ji/">架构设计</a>
+<a style="font-size: 90%" href="/tags/ce-shi/">测试</a>
+<a style="font-size: 90%" href="/tags/yi-dong-duan/">移动端</a>
+<a style="font-size: 108%" href="/tags/di-san-fang-ku/">第三方库</a>
+<a style="font-size: 90%" href="/tags/chun-ji-zhu/">纯技术</a>
+<a style="font-size: 90%" href="/tags/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/tags/diao-shi/">调试</a>
+<a style="font-size: 108%" href="/tags/sui-bian/">随便</a>
+
+  </div>
+</section>
+<section>
+  <h2 class="widget">(AD)广告位空缺中,招租</h2>
+</section>
+
+
+<section>
+  <h2 class="widget">新浪微博</h2>
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+</section>
+
+  
+</aside>
+
+
+      	</div>
+    </div>
+  </div>
+  <footer id="footer">
+  	<div class="container">
+	Copyright &copy; 2018 - Eric Shi -
+  <span class="credit">Powered by <a rel="nofollow" href="http://octopress.org">Octopress</a> on <a rel="nofollow" href="http://pages.github.com/">GitHubPages</a>
+  </span>
+  - <span class="credit">Theme by <a rel="nofollow" href="http://pagecho.com">Cho</a></span>
+
+
+</div>
+
+  </footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shjborage.github.io/blog/2013/08/22/zai-githubshang-shi-yong-octopress/';
+        var disqus_url = 'http://shjborage.github.io/blog/2013/08/22/zai-githubshang-shi-yong-octopress/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

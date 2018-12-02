@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: C++ | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/c-plus-plus/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[C Objective-C 底层研究 常用方法]]></title>
+    <link href="http://shjborage.github.io/blog/2014/05/08/c-objective-c-di-ceng-yan-jiu-chang-yong-fang-fa/"/>
+    <updated>2014-05-08T10:15:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/05/08/c-objective-c-di-ceng-yan-jiu-chang-yong-fang-fa</id>
+    <content type="html"><![CDATA[<p>经常会遇到一些高级宏不知道什么意思，再或者搞iOS的时候，ARC、Block不知道实现的原理，怎么办？
+简单，看下文。</p>
+
+<!-- more -->
+
+
+<h2>预编译</h2>
+
+<p><em>查看宏替换后的结果，看编译前的样子</em></p>
+
+<p><strong><code>gcc -E xxx.c</code></strong></p>
+
+<p>源码:</p>
+
+<p>```</p>
+
+<h1>include &lt;stdio.h></h1>
+
+<h1>define MAX(x, y) (x) > (y) ? (x) : (y)</h1>
+
+<p>int main() {
+  int a = 5, b = 7;
+  int max = MAX(a, b);</p>
+
+<p>  printf(&ldquo;max of a,b is %d\n&rdquo;, max);
+  return 0;
+}
+```</p>
+
+<p>==></p>
+
+<p>```
+// 省略若干行，这里是stdio.h的头文件被包含进来了。。
+extern int __vsnprintf_chk (char * restrict, size_t, int, size_t,</p>
+
+<pre><code>   const char * restrict, va_list);
+</code></pre>
+
+<h1>491 &ldquo;/usr/include/stdio.h&rdquo; 2 3 4</h1>
+
+<h1>2 &ldquo;main.c&rdquo; 2</h1>
+
+<p>int main() {
+  int a = 5, b = 7;
+  int max = (a) > (b) ? (a) : (b);</p>
+
+<p>  printf(&ldquo;max of a,b is %d\n&rdquo;, max);
+  return 0;
+}
+```</p>
+
+<p>从上面转换完的代码可以发现，替换结果如此清晰。</p>
+
+<p>与这个类似的，还有<code>Objective-C</code>中的处理 <strong><code>clang -E xxx.m</code></strong>. 当然还有<code>clang -S xx.m</code> 转换成汇编。。</p>
+
+<h2>Objective-C代码转换为C代码</h2>
+
+<p><strong><code>clang -rewrite-objc xxx.m</code></strong> 这个在研究Block等时很实用，直接上代码</p>
+
+<p>```</p>
+
+<h1>include &lt;stdio.h></h1>
+
+<p>int main() {</p>
+
+<pre><code>const char *fmt = "val = %d\n";
+int val = 9;
+int tmp = 1024;
+
+void (^blk)() = ^{printf(fmt, val);};
+
+blk();
+
+return 0;
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>==></p>
+
+<p>```
+// 此处省略453行</p>
+
+<p>struct <strong>main_block_impl_0 {
+  struct </strong>block_impl impl;
+  struct <strong>main_block_desc_0<em> Desc;
+  const char </em>fmt;
+  int val;
+  </strong>main_block_impl_0(void <em>fp, struct __main_block_desc_0 </em>desc, const char *<em>fmt, int </em>val, int flags=0) : fmt(<em>fmt), val(</em>val) {</p>
+
+<pre><code>impl.isa = &amp;_NSConcreteStackBlock;
+impl.Flags = flags;
+impl.FuncPtr = fp;
+Desc = desc;
+</code></pre>
+
+<p>  }
+};
+static void <strong>main_block_func_0(struct </strong>main_block_impl_0 <em>__cself) {
+  const char </em>fmt = <strong>cself->fmt; // bound by copy
+  int val = </strong>cself->val; // bound by copy
+printf(fmt, val);}</p>
+
+<p>static struct <strong>main_block_desc_0 {
+  size_t reserved;
+  size_t Block_size;
+} </strong>main_block_desc_0_DATA = { 0, sizeof(struct __main_block_impl_0)};
+int main() {
+ const char *fmt = &ldquo;val = %d\n&rdquo;;
+ int val = 9;
+ int tmp = 1024;</p>
+
+<p> void (<em>blk)() = (void (</em>)())&amp;<strong>main_block_impl_0((void *)</strong>main_block_func_0, &amp;__main_block_desc_0_DATA, fmt, val);</p>
+
+<p> ((void (<em>)(__block_impl </em>))((<strong>block_impl *)blk)&ndash;>FuncPtr)((</strong>block_impl *)blk);</p>
+
+<p> return 0;
+}
+static struct IMAGE_INFO { unsigned version; unsigned flag; } _OBJC_IMAGE_INFO = { 0, 2 };
+```</p>
+
+<p>参考文献：Objective-C高级编程 iOS与OSX多线程和内存管理</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: SVN | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/svn/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[SVN的大环境下使用Git管理]]></title>
+    <link href="http://shjborage.github.io/blog/2014/09/09/svnde-da-huan-jing-xia-shi-yong-gitguan-li-zi-ji/"/>
+    <updated>2014-09-09T22:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/09/09/svnde-da-huan-jing-xia-shi-yong-gitguan-li-zi-ji</id>
+    <content type="html"><![CDATA[<h2>写在前面</h2>
+
+<p>很多同学可能都了解<code>SVN</code>与<code>Git</code>的差异与优缺点，这部分我只是简单提一下我的观点，不是很全也不一定对，仅代表我的个人观点。如果大家对这个问题比较感兴趣的话呢，欢迎来<code>Google</code>百度一下。</p>
+
+<h3>Git与SVN简单对比</h3>
+
+<h4>SVN</h4>
+
+<ul>
+<li>优点
+
+<ul>
+<li>以SVN Server为中心</li>
+<li>便利的权限管理</li>
+</ul>
+</li>
+<li>缺点
+
+<ul>
+<li>完全依赖中心，连接到Server才可以正常提交代码</li>
+<li>分支管理较“重”，一般就学习<code>trunk</code>, <code>branches</code>, <code>tags</code>就够了。</li>
+</ul>
+</li>
+</ul>
+
+
+<h4>Git</h4>
+
+<ul>
+<li>优点
+
+<ul>
+<li>每个版本库都是中心</li>
+<li>非常方便的分支管理，甚至<a href="https://github.com/nvie/gitflow">git-flow</a></li>
+<li>离线管理</li>
+</ul>
+</li>
+<li>缺点
+
+<ul>
+<li>权限管理（非要说的话，这个我确实没用<code>Git</code>管理过。不过pull-request可以控制一些写权限吧，也不知道这个理解对不对）</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Let&rsquo;s do it!</h2>
+
+<p>很多团队，因为权限（扯淡的控制欲）还是使用SVN，各种申请权限。少吐槽，来干货。</p>
+
+<!-- more -->
+
+
+<h3><code>git-svn</code>环境</h3>
+
+<p><code>git-svn</code>是<code>git</code>的一部分，安装<code>git</code>1.5.3 版本以后的都支持。Mac安装Xcode后，安装<code>CommandLineTool</code>，即可。如果是beta的版本的Mac，相信你也有能力解决好安装的问题。<br>
+附上安装<code>CommandLineTool</code>的方法，在终端里执行以下命令
+<code>
+xcode-select --install
+</code>
+不确定自己行不行？在终端里执行以下命令：
+<code>
+git svn
+</code>
+如果得到以下结果，说明你OK的～<br></p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/15210513791/in/set-72157639886815375/player/" width="500" height="90" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<h3><code>git</code>基本使用</h3>
+
+<p>分享一些使用经验，再基础的命令就不介绍了。<code>git</code>一下或者<code>git --help</code>再或者<code>man git</code>来解决吧～</p>
+
+<h4>干货-<code>git</code>分支管理策略<br></h4>
+
+<ul>
+<li><a href="https://github.com/nvie/gitflow">git-flow</a></li>
+<li><a href="http://nvie.com/posts/a-successful-git-branching-model/">http://nvie.com/posts/a-successful-git-branching-model/</a>(<code>git-flow</code>变种？)</li>
+</ul>
+
+
+<h4>干货-实用的log，来自<a href="http://coolshell.cn/articles/7755.html">这里</a></h4>
+
+<p><code>
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit --"
+</code></p>
+
+<h3>初始化代码库</h3>
+
+<p>首先用git-svn来初始化本地的代码库(repository)
+<code>
+git svn clone -s svn-repository-url
+</code>
+<code>svn-repository-url</code>部分使用svn代码库的url。如果要从trunk目录或者某个branch目录里check out，要把-s换成-T、-b等选项。具体参看<code>man git-svn</code>。这个命令时间比较长，因为需要同步所有的提交历史，还好只此一次，以后不会这么慢了。做完这一步，在本地就有了一个完整的代码库，包括所有commit的历史和log，已经可以开始用它来进行开发工作了。<br>
+不过，在开始开发之前，最好先做一次垃圾搜集：
+<code>
+git gc
+</code>
+它对代码库的信息进行垃圾搜集和压缩，最明显的作用就是减小磁盘占用空间。第一次做效果尤其明显。你可以检查一下代码库的状态：
+<code>
+git status
+</code>
+现在应该在一个叫”master”的分支(branch)上。用这个命令来显示出所有的分支(branch):
+<code>
+git branch -a
+</code>
+master前有一个*号，代表你现在所处的分支，另外还有一个分支叫trunk，它是一个远程分支(remote branch)，对应的是远程svn代码库。master实际上是trunk的一个本地分支。
+接下来，需要配置忽略文件，让git忽略一些目录中不希望加入代码库的文件，这部分直接参数<a href="https://github.com/github/gitignore">这个repo</a></p>
+
+<h3>开发流程（建议考虑<a href="https://github.com/nvie/gitflow">git-flow</a>）</h3>
+
+<p>这部分每个人的做法可能都有不同，全部<code>git</code>操作，上文也介绍一些，这部分如果有问题请使用Google百度一下。</p>
+
+<h4>提交到<code>svn</code></h4>
+
+<p><code>
+git svn dcommit
+</code>
+如果在git svn rebase时发生代码冲突，需要先手动解决冲突，然后用git add将修改加入索引，然后继续rebase
+<code>
+git svn rebase --continue
+</code></p>
+
+<h4>拉取<code>svn</code>更新</h4>
+
+<p><code>
+git svn fetch
+git svn rebase
+</code></p>
+
+<h3>使用经验</h3>
+
+<p>使用<code>git-svn</code>当然给我们<code>git</code>的用户带来了很多方便，顺手！</p>
+
+<ul>
+<li><code>git</code>提交到<code>svn</code>还是有点水土不服：比如分支合并等都不看不出来，甚至开始的时候，我还以为本地随便提交，提到到<code>svn</code>的时候才是只有一版；</li>
+<li><code>git svn fetch</code> 下来后，不 rebase 的话，走 merge 的话，感觉流程有点奇怪（有一次直接提交 merge 到<code>svn</code>，有几次<code>git</code>上的commit都没有体现在<code>svn</code>上）。所以还是直接使用 rebase，至少 rebase 与 merge 区别，可以参考<a href="http://www.cnblogs.com/iammatthew/archive/2011/12/06/2277383.html">这里</a>和<a href="http://my.oschina.net/AlexZhuang/blog/67681">这里</a>；</li>
+</ul>
+
+
+<h2>总结</h2>
+
+<p>这个<code>topic</code>我也是才开始用，可谓新手，对于<code>git</code>、<code>git-svn</code>。也在这方面摸索，如果大家有更好的方案或或者我这里提到的内容有问题，都可以跟我联系，谢谢。</p>
+
+<h2>参考</h2>
+
+<p><a href="http://www.robinlu.com/blog/archives/194">http://www.robinlu.com/blog/archives/194</a>
+<a href="http://www.cnblogs.com/ini_always/archive/2012/08/31/2666086.html">http://www.cnblogs.com/ini_always/archive/2012/08/31/2666086.html</a>
+<a href="http://www.jianshu.com/p/Gy1rTq">http://www.jianshu.com/p/Gy1rTq</a></p>
+]]></content>
+  </entry>
+  
+</feed>

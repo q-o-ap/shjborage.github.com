@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 随便 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/sui-bian/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[近期随想]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/16/jin-qi-sui-xiang/"/>
+    <updated>2016-02-16T16:41:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/16/jin-qi-sui-xiang</id>
+    <content type="html"><![CDATA[<p>一年又一年, 不知不觉中自己老了&hellip;
+每一步的选择真的都意味着放弃,自己也都真切的能感受得到. 关键在于,不断的会有各种选择与放弃.一个人的时间 精力真的很有限,越是岁数大越是能清楚的明白这个事实.</p>
+
+<p>今年有好些事儿要做,当然去年也没闲着(只是blog一直没有更新,由于微信公众号流行,感觉blog也要过时了. 但又实在没时间搞开源甚至自己写点东西,想想也是醉了&hellip;). 去年我结婚了,搞定了几年大事&hellip;想说: <strong>今年继续</strong></p>
+
+<ul>
+<li>研究 <code>ReactNative</code> 并有所应用</li>
+<li>扩展除技术外的"技能"</li>
+<li>带baby出去继续玩</li>
+<li>看场演唱会, 暂定杰伦的</li>
+<li>其它&hellip;</li>
+</ul>
+
+
+<p>没了&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[近期随想]]></title>
+    <link href="http://shjborage.github.io/blog/2014/12/21/jin-qi-sui-xiang/"/>
+    <updated>2014-12-21T17:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/12/21/jin-qi-sui-xiang</id>
+    <content type="html"><![CDATA[<p>好久没更新了，好些东西要写。但又不知道写哪个～
+主要问题在于：<strong>好些东西不想再直接写个结论上去，不想直接拿别人的结果。</strong>
+这方面也总结过了，今天写点别的吧。</p>
+
+<br>
+
+
+<p>推荐个工具 <em>Omni Focus</em>。GTD王者，适合各种人群，科学管理自己的时间，高效面对人生。<br>
+详细的大家自动用Google百度一下，教程介绍多的是。这家伙使用简单，但有些地方需要些技巧，比如同步可以试试 <em>坚果云</em> 的 WebDAV，另外Android平台没有手机app。</p>
+
+<br>
+
+
+<p>后续在技术上的分享可能会少一些，可能会从自己的感悟上面多写写，希望大家多多支持。</p>
+
+<br><br>
+
+
+<p>有时在想，技术、人、沟通、公司、项目、产品、用户、上线、事故。。。等等这些事，到底是如何影响着我们。想这些写一些，又不知道从哪写起。语言不及格啊～～～</p>
+
+<br>
+
+
+<p>先放些关键字，再有体会时一个一个写吧，加油！</p>
+]]></content>
+  </entry>
+  
+</feed>

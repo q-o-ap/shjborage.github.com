@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 备忘 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/bei-wang/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Xcode用archive只生成generic xcode archive的解决方案]]></title>
+    <link href="http://shjborage.github.io/blog/2014/11/18/xcodeyong-archivezhi-sheng-cheng-generic-xcode-archivede-jie-jue-fang-an/"/>
+    <updated>2014-11-18T21:26:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/11/18/xcodeyong-archivezhi-sheng-cheng-generic-xcode-archivede-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<h3>引子</h3>
+
+<p>有这么一个工程，Archive的时候，只生成<code>generic xcode archive</code>，很奇怪为什么。想导入 ipa 或者 提交 Appstore都无从下一步。想直接使用 ApplicationLoader(在Xcode菜单中选择 Open Develop Tool 来打开) 直接打包 xxx.app 成 zip 上传，但想想又太原始。</p>
+
+<h3>解决方案</h3>
+
+<p>无奈之下找到解决方案，备忘如下：<br>
+1、点击主要工程，然后在右边分别点击PROJECT和TARGETS，在Building Settings中，搜索skip，设置为NO;<br>
+2、项目中包含的其他辅助工程，点击工程文件，然后在右边分别点击PROJECT和TARGETS，在Building Settings中，搜索skip，设置为YES；对每个子工程做类似操作；<br>
+3、再次archive，就正常了。<br></p>
+
+<h3>原因分析</h3>
+
+<p>工程文件中内嵌子工程时，才会有这个问题。
+<code>
+Skip install is NO for the main project target
+Skip install is YES for framework (sub-projects) targets
+</code></p>
+
+<h4>参考</h4>
+
+<p><a href="http://blog.csdn.net/ysysbaobei/article/details/16332677">http://blog.csdn.net/ysysbaobei/article/details/16332677</a>
+<a href="http://stackoverflow.com/questions/10715211/cannot-generate-ios-app-archive-in-xcode-4-3">http://stackoverflow.com/questions/10715211/cannot-generate-ios-app-archive-in-xcode-4-3</a></p>
+]]></content>
+  </entry>
+  
+</feed>

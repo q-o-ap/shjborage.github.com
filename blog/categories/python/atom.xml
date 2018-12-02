@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: python | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Python - virtualenv 基础使用]]></title>
+    <link href="http://shjborage.github.io/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/"/>
+    <updated>2017-01-03T16:28:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong</id>
+    <content type="html"><![CDATA[<p><code>python</code> 的环境折腾起来还是比较复杂，不说 macOS 下面有个默认 python，自己还需要装一个自己需要的版本（2.7或3.x）。然后不同的开发需求，可能就会使用 <code>pip</code> 安装不同的包，甚至不同的项目需要安装不同版本的包，这就麻烦了，需要 <code>virtualenv</code> 来协助了。</p>
+
+<h2>安装 <code>virtualenv</code></h2>
+
+<p><code>virtualenv</code> 不是 <code>python</code> 自带的，需要独立安装</p>
+
+<p><code>
+pip install virtualenv
+</code></p>
+
+<h2>创建一个指定 <code>python</code> 版本的环境</h2>
+
+<p><code>
+virtualenv -p /usr/bin/python2.7 ENV2.7
+</code></p>
+
+<h2>激活</h2>
+
+<p><code>
+source ./bin/active
+</code></p>
+
+<h2>关闭</h2>
+
+<p><code>
+deactive
+</code></p>
+
+<h2>Refs</h2>
+
+<p><a href="http://www.jianshu.com/p/08c657bd34f1">Python&mdash;Virtualenv简明教程</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SAE python 输出log 的方法]]></title>
+    <link href="http://shjborage.github.io/blog/2014/08/14/sae-python-shu-chu-log-de-fang-fa/"/>
+    <updated>2014-08-14T22:02:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/08/14/sae-python-shu-chu-log-de-fang-fa</id>
+    <content type="html"><![CDATA[<h3>背景</h3>
+
+<p><a href="http://sae.sina.com.cn">SAE</a>真是很方便，可以免费做一些简单的<code>Server</code>自己来研究用。<br>
+但是学了一点<code>python</code>后，想在<code>SAE</code>里面玩一玩，发现在里面调试有点难。因为习惯了别的平台的<code>Debug</code>，一下子还是想研究，可是试了各种方案（包含<code>SAE</code>自己的<code>ShellMiddleware</code>），都没办法在<code>SAE</code>的环境中进行调试。在本地倒是研究好了<code>pdb</code>的相关使用，虽然使用起来还很初级。<br>
+最后只能使用Log的方式了。</p>
+
+<h3>解决方案</h3>
+
+<p>```
+print (&ldquo;xxxx %s %d&rdquo; % (&ldquo;asdf&rdquo;, 5))</p>
+
+<h1>或</h1>
+
+<p>logging.debug(&ldquo;debug log xxxxx&rdquo;)
+<code>``
+这个Log大家应该都很熟悉啦（我还不熟悉~)，但是在</code>SAE`后台中如何查看呢？<br></p>
+
+<p>日志内容在 <strong><code>应用»日志中心»HTTP</code></strong> 中查看，类别为<em><code>debug</code></em></p>
+
+<p>可能老版本的SAE可能不支持吧，至少现在是有的。<br>
+希望能对大家有所帮助。</p>
+
+<p>另外，关于<code>logging</code>的使用，我也写了一个<code>module</code>，封装了一些东西。等对<code>python</code>的模块的规范熟悉一些后，会把这部分开源如来（虽然大家可能都有自己的）。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python时间,日期,时间戳处理]]></title>
+    <link href="http://shjborage.github.io/blog/2014/08/14/pythonshi-jian-ri-qi-shi-jian-chuo-chu-li/"/>
+    <updated>2014-08-14T21:28:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/08/14/pythonshi-jian-ri-qi-shi-jian-chuo-chu-li</id>
+    <content type="html"><![CDATA[<p>最近在练习<code>python</code>，看书看到好多东西，不过需要用的时候还会想不起来，还是万能的<code>Google</code>牛啊，从<code>Google</code>学习咯~</p>
+
+<h4>1.将字符串的时间转换为时间戳</h4>
+
+<p>方法:
+```</p>
+
+<pre><code>a = "2013-10-10 23:40:00"
+# 将其转换为时间数组
+import time
+timeArray = time.strptime(a, "%Y-%m-%d %H:%M:%S")
+# 转换为时间戳:
+timeStamp = int(time.mktime(timeArray))
+timeStamp == 1381419600
+</code></pre>
+
+<p>```</p>
+
+<h4>2.字符串格式更改</h4>
+
+<p>如a = &ldquo;2013-10-10 23:40:00&rdquo;,想改为 a = &ldquo;2013/10/10 23:40:00&rdquo;<br>方法:先转换为时间数组,然后转换为其他格式
+```</p>
+
+<pre><code>timeArray = time.strptime(a, "%Y-%m-%d %H:%M:%S")
+otherStyleTime = time.strftime("%Y/%m/%d %H:%M:%S", timeArray)
+</code></pre>
+
+<p>```</p>
+
+<h4>3.时间戳转换为指定格式日期:</h4>
+
+<p>方法一:<br>
+利用localtime()转换为时间数组,然后格式化为需要的格式,如
+```</p>
+
+<pre><code>timeStamp = 1381419600
+timeArray = time.localtime(timeStamp)
+otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+otherStyletime == "2013-10-10 23:40:00"
+</code></pre>
+
+<p>```</p>
+
+<!-- more -->
+
+
+<p>方法二:
+```</p>
+
+<pre><code>import datetime
+timeStamp = 1381419600
+dateArray = datetime.datetime.utcfromtimestamp(timeStamp)
+otherStyleTime = dateArray.strftime("%Y-%m-%d %H:%M:%S")
+otherStyletime == "2013-10-10 23:40:00"
+</code></pre>
+
+<p>```</p>
+
+<h4>4.获取当前时间并转换为指定日期格式</h4>
+
+<p>方法一:
+```</p>
+
+<pre><code>import time
+# 获得当前时间时间戳
+now = int(time.time())  -&gt;这是时间戳
+# 转换为其他日期格式,如:"%Y-%m-%d %H:%M:%S"
+timeArray = time.localtime(timeStamp)
+otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+</code></pre>
+
+<p>```</p>
+
+<p>方法二:
+```</p>
+
+<pre><code>import datetime
+# 获得当前时间
+now = datetime.datetime.now()  # 这是时间数组格式
+# 转换为指定的格式:
+otherStyleTime = now.strftime("%Y-%m-%d %H:%M:%S")
+</code></pre>
+
+<p>```</p>
+
+<h4>5.获得三天前的时间</h4>
+
+<p>方法:
+```</p>
+
+<pre><code>import time
+import datetime
+# 先获得时间数组格式的日期
+threeDayAgo = (datetime.datetime.now() - datetime.timedelta(days = 3))
+# 转换为时间戳:
+timeStamp = int(time.mktime(threeDayAgo.timetuple()))
+# 转换为其他字符串格式:
+otherStyleTime = threeDayAgo.strftime("%Y-%m-%d %H:%M:%S")
+</code></pre>
+
+<p>```
+<em>注:timedelta()的参数有:days,hours,seconds,microseconds</em></p>
+
+<h4>6.给定时间戳,计算该时间的几天前时间:</h4>
+
+<p>```</p>
+
+<pre><code>timeStamp = 1381419600
+# 先转换为datetime
+import datetime
+import time
+dateArray = datetime.datetime.utcfromtimestamp(timeStamp)
+threeDayAgo = dateArray - datetime.timedelta(days = 3)
+# 参考5,可以转换为其他的任意格式了
+</code></pre>
+
+<p>```</p>
+
+<p>原文：清风乐逍遥<a href="http://blog.csdn.net/xiaobing_blog/article/details/12591917">http://blog.csdn.net/xiaobing_blog/article/details/12591917</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python中有中文注释或输出时报错问题解决]]></title>
+    <link href="http://shjborage.github.io/blog/2014/08/13/pythonzhong-you-zhong-wen-zhu-shi-huo-shu-chu-shi-bao-cuo-wen-ti-jie-jue/"/>
+    <updated>2014-08-13T23:27:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/08/13/pythonzhong-you-zhong-wen-zhu-shi-huo-shu-chu-shi-bao-cuo-wen-ti-jie-jue</id>
+    <content type="html"><![CDATA[<p>执行Python代码时，如果有中文注释，提示：
+<code>
+SyntaxError: Non-ASCII character '\xe7' in file D:\python\Test\hello\getjpg.py on line 13, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+</code>
+与编译器还无关，不管是Sublime写完在命令行跑还是Eclipse。</p>
+
+<p><strong>解决办法:</strong>
+在文件第一行或第二行加入以下代码：
+```</p>
+
+<h1>&ndash;<em>&ndash; coding: utf-8 &ndash;</em>&ndash;</h1>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python MySQLdb安装以及问题汇总]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/"/>
+    <updated>2013-10-30T23:17:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong</id>
+    <content type="html"><![CDATA[<p>自已备注一些, 斜体</p>
+
+<p>转自：<a href="http://blog.chinaunix.net/uid-8487640-id-3183185.html">http://blog.chinaunix.net/uid-8487640-id-3183185.html</a></p>
+
+<p>MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb：</p>
+
+<p>首先要下载下载：请到官方网站<a href="http://sourceforge.net/projects/mysql-python/">http://sourceforge.net/projects/mysql-python/</a> 或者 <a href="http://downloads.sourceforge.net/project/mysql-python/mysql-python-test/1.2.3c1/MySQL-python-1.2.3c1.tar.gz?use_mirror=nchc">点击链接下载</a></p>
+
+<!-- more -->
+
+
+<p>解压：tar zxvf MySQL-python*</p>
+
+<p>进入文件目录，运行以下命令：
+<code>
+python setup.py install
+</code></p>
+
+<p>安装完成，到你的python安装目录下的site-packages目录里检查以下文件是否存在，如果存在即代表安装成功了</p>
+
+<p>Linux：MySQL_python-1.2.3c1-py2.6-linux-i686.egg
+Mac OS X：MySQL_python-1.2.3c1-py2.6-macosx-10.4-x86_64.egg</p>
+
+<h4>注：如果碰到mysql_config not found的问题，有两种方法解决：<em>可能两个方法要合一起</em></h4>
+
+<p>1）ln -s /usr/local/mysql/bin/mysql_config /usr/local/bin/mysql_config
+将mysql_confi从你的安装目录链接到/usr/local/bin目录下，这样就可以在任意目录下访问了（也可以放到/usr/bin）</p>
+
+<p>2）编辑源码文件夹的site.cfg文件，去掉#mysql_config = /usr/local/bin/mysql_config前的注释＃，修改后面的路径为你的mysql_config真正的目录就可以了。（如果不知道mysql_config在哪里，运行命令：whereis mysql_config）</p>
+
+<h4>注:如果碰到import error: libmysqlclient.so.18: cannot open shared object file: No such file or directory</h4>
+
+<p>解决方法:</p>
+
+<p>locate or find libmysqlclient.so.18
+link path/libmysqlclient.so.18 /usr/lib/libmysqlclient.so.18
+vi /etc/ld.so.conf    //加入libmysqlclient.so.18 所在的目录
+插入: /usr/lib/</p>
+
+<p>保存退出后执行/sbin/ldconfig生效</p>
+
+<h4><em>后部安装：需要进行一个软连接链接不然会提示报错。</em></h4>
+
+<p>问题如下：</p>
+
+<p>```</p>
+
+<blockquote><blockquote><blockquote><p>from django.db import connection
+cursor = connection.cursor()
+Traceback (most recent call last):
+  File &ldquo;<console>&rdquo;, line 1, in <module>
+  File &ldquo;/Library/Python/2.7/site-packages/django/db/<strong>init</strong>.py&rdquo;, line 39, in <strong>getattr</strong></p>
+
+<pre><code>return getattr(connections[DEFAULT_DB_ALIAS], item)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 193, in <strong>getitem</strong></p>
+
+<pre><code>backend = load_backend(db['ENGINE'])
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 108, in load_backend</p>
+
+<pre><code>return import_module('%s.base' % backend_name)
+</code></pre>
+
+<p>  File &ldquo;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/<strong>init</strong>.py&rdquo;, line 37, in import_module</p>
+
+<pre><code>__import__(name)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/backends/mysql/base.py&rdquo;, line 17, in <module></p>
+
+<pre><code>raise ImproperlyConfigured("Error loading MySQLdb module: %s" % e)
+</code></pre>
+
+<p>ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/<em>mysql.so, 2): Library not loaded: libmysqlclient.18.dylib
+  Referenced from: /Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/</em>mysql.so
+  Reason: image not found</p>
+
+<p>```</p></blockquote></blockquote></blockquote>
+
+<p>解决方案：</p>
+
+<p><code>
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Database | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/blog/categories/database/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[redis-源码研究之-INCR]]></title>
+    <link href="http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr/"/>
+    <updated>2016-12-28T16:47:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr</id>
+    <content type="html"><![CDATA[<p>调用类似微博的关注 Feed 流的实现时，发现早在2009年，<a href="https://redis.io">redis</a> 官方就写过这样<a href="https://redis.io/topics/twitter-clone">一篇文章</a>：通过 <code>redis</code> 的各种 API 来做数据存储，方便的实现 Push 的关注流。</p>
+
+<p>简单研究了一下，最终改了一点点代码，详情见 <a href="https://github.com/shjborage/retwis">Github</a>。</p>
+
+<p>今天主要研究一下这个命令 <a href="https://redis.io/commands/incr">INCR</a> ，看 <code>redis</code> 是如何实现这个命令在多线程访问的。</p>
+
+<!-- more -->
+
+
+<h2>准备工作</h2>
+
+<ol>
+<li><code>redis</code> 源码 <a href="https://github.com/antirez/redis">https://github.com/antirez/redis</a></li>
+<li>当然还离不开官方的源码说明：<a href="https://github.com/antirez/redis#redis-internals">https://github.com/antirez/redis#redis-internals</a></li>
+<li><code>vim</code> + <code>ctags</code> 自行脑补看代码的流程吧~</li>
+</ol>
+
+
+<h2>main 入口</h2>
+
+<p>找到 <code>main</code> 函数，Server、Client 应该至少有两个：</p>
+
+<p>```
+find ./* | xargs grep -n &lsquo;main(&rsquo;</p>
+
+<p>// 重要结果
+./redis-cli.c:2552:int main(int argc, char <strong>argv) {
+./server.c:3566:int main(int argc, char </strong>argv) {
+```</p>
+
+<p>发现 <code>server.c</code>，在 <code>server.h</code> 中找到各种结构体的说明（官网也有讲）</p>
+
+<h3>server.h</h3>
+
+<p>```
+struct redisServer {</p>
+
+<pre><code>/* General */
+pid_t pid;                  /* Main process pid. */
+char *configfile;           /* Absolute config file path, or NULL */
+char *executable;           /* Absolute executable file path. */
+char **exec_argv;           /* Executable argv vector (copy). */
+int hz;                     /* serverCron() calls frequency in hertz */
+redisDb *db;
+dict *commands;             /* Command table */
+...
+list *clients;              /* List of active clients */
+...
+client *master;     /* Client that is master for this slave */
+...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>```
+typedef struct client {</p>
+
+<pre><code>int fd;
+sds querybuf;
+int argc;
+robj **argv;
+redisDb *db;
+int flags;
+list *reply;
+char buf[PROTO_REPLY_CHUNK_BYTES];
+... many other fields ...
+</code></pre>
+
+<p>} client;
+```</p>
+
+<p>```
+typedef struct redisObject {</p>
+
+<pre><code>unsigned type:4;
+unsigned encoding:4;
+unsigned lru:LRU_BITS; /* LRU time (relative to server.lruclock) or
+                        * LFU data (least significant 8 bits frequency
+                        * and most significant 16 bits decreas time). */
+int refcount;
+void *ptr;
+</code></pre>
+
+<p>} robj;
+```</p>
+
+<h3>server.c</h3>
+
+<p>重要初始化流程：</p>
+
+<p><code>
+initServerConfig() //setups the default values of the server structure.
+initServer() //allocates the data structures needed to operate, setup the listening socket, and so forth.
+aeMain() // starts the event loop which listens for new connections.
+</code></p>
+
+<p><code>call()</code> is used in order to call a given command in the context of a given client.</p>
+
+<p>这个就是我们要找的处理命令入口方法了。</p>
+
+<p>附上一个完整的 <code>Command</code> 说明:</p>
+
+<blockquote><p>The global variable <code>redisCommandTable</code> defines all the Redis commands, specifying the name of the command, the function implementing the command, the number of arguments required, and other properties of each command.</p></blockquote>
+
+<p>```
+struct redisCommand redisCommandTable[] = {</p>
+
+<pre><code>{"module",moduleCommand,-2,"as",0,NULL,1,1,1,0,0},
+{"get",getCommand,2,"rF",0,NULL,1,1,1,0,0},
+{"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0},
+...
+{"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+{"decr",decrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+...
+</code></pre>
+
+<p>```</p>
+
+<p>但我们发现， <code>call()</code> 是由 <code>processCommand()</code> 调用的，<code>processCommand()</code> 的调用在 <code>server.c</code> 中并没有。 还需努力。。。</p>
+
+<p>继续看官方文档（其实也在本地搜索了一下）</p>
+
+<p>```
+find ./* | xargs grep -n &lsquo;processCommand&rsquo;</p>
+
+<p>// 结果
+./cluster.c:5128:                 * not trapped earlier in processCommand(). Report the same
+grep: ./modules: Is a directory
+./networking.c:1299:            if (processCommand&copy; == C_OK)
+Binary file ./networking.o matches
+Binary file ./redis-check-rdb matches
+Binary file ./redis-sentinel matches
+Binary file ./redis-server matches
+./server.c:2226: * processCommand() execute the command or prepare the
+./server.c:2232:int processCommand(client <em>c) {
+./server.h:1547:int processCommand(client </em>c);
+Binary file ./server.o matches
+./tags:3304:processCommand  server.c    /^int processCommand(client *c) {$/;&ldquo;   f
+```</p>
+
+<p><code>server.h</code> 中已经暴露出了 API，提供给了 <code>networking.c</code>。所以继续下文。</p>
+
+<h2>networking.c</h2>
+
+<blockquote><p><code>createClient()</code> // allocates and initializes a new client.
+the <code>addReply*()</code> family of functions are used by commands implementations in order to append data to the client structure, that will be transmitted to the client as a reply for a given command executed.
+<code>writeToClient()</code> transmits the data pending in the output buffers to the client and is called by the writable event handler sendReplyToClient().
+<code>readQueryFromClient()</code> is the readable event handler and accumulates data from read from the client into the query buffer.
+<code>processInputBuffer()</code> is the entry point in order to parse the client query buffer according to the Redis protocol. Once commands are ready to be processed, it calls <code>processCommand()</code> which is defined inside server.c in order to actually execute the command.
+<code>freeClient()</code> deallocates, disconnects and removes a client.</p></blockquote>
+
+<p>基本上理完了整体的调用流程：</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824009373678.jpg" alt="" /></p>
+
+<p>其它细节待研究，我们重点看 <code>call()</code>。</p>
+
+<h2>call()</h2>
+
+<p>研究了一下 <code>callgraph</code>，把 C 代码的调用关系梳理了一下（比干巴巴的代码好些，当然还要结合代码去分析）：</p>
+
+<p><code>
+callgraph -b chrome -f call
+</code></p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824095565432.jpg" alt="" /></p>
+
+<p>找到 <strong><code>proc</code></strong> 这个重点函数</p>
+
+<p><code>
+ 2127     /* Call the command. */
+ 2128     dirty = server.dirty;
+ 2129     start = ustime();
+ 2130     c-&gt;cmd-&gt;proc(c);
+ 2131     duration = ustime()-start;
+ 2132     dirty = server.dirty-dirty;
+ 2133     if (dirty &lt; 0) dirty = 0;
+</code></p>
+
+<p>到 <code>client</code> 中了，需要看下这个 <code>cmd</code>（<code>redisCommand</code>） 下的 <code>proc</code> (<code>redisCommandProc</code>)</p>
+
+<p><code>
+typedef void redisCommandProc(client *c);
+</code></p>
+
+<p>需要找出这个 <code>callback</code> 在哪设置的，如何执行。</p>
+
+<p>我们的 <code>client</code> 里面主要是从客户端那拿解析到的命令，是通过 <code>argc</code> 和 <code>argv</code> 来表现的。
+在 <code>processCommand</code> 中通过 <code>lookupCommand</code> 来给 <code>cmd</code> 赋值，在 <code>server</code> 中有 <code>commands</code> 保存的命令列表。</p>
+
+<p><code>
+2243     /* Now lookup the command and check ASAP about trivial error conditions
+2244      * such as wrong arity, bad command name and so forth. */
+2245     c-&gt;cmd = c-&gt;lastcmd = lookupCommand(c-&gt;argv[0]-&gt;ptr);
+</code></p>
+
+<p><code>commands</code> 是在 <code>initServerConfig</code> 中初始化的，也是根据 <code>redisCommandTable</code> 进行的。</p>
+
+<p><code>
+{"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+</code></p>
+
+<p>如下代码进行了初始化：</p>
+
+<p>```
+int numcommands = sizeof(redisCommandTable)/sizeof(struct redisCommand);</p>
+
+<p>for (j = 0; j &lt; numcommands; j++) {</p>
+
+<pre><code>struct redisCommand *c = redisCommandTable+j;
+char *f = c-&gt;sflags;
+...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>redisCommand 定义：
+<code>
+ 1161 struct redisCommand {
+ 1162     char *name;
+ 1163     redisCommandProc *proc;
+ 1164     int arity;
+ 1165     char *sflags; /* Flags as string representation, one char per flag. */
+ 1166     int flags;    /* The actual flags, obtained from the 'sflags' field. */
+ 1167     /* Use a function to determine keys arguments in a command line.
+ 1168      * Used for Redis Cluster redirect. */
+ 1169     redisGetKeysProc *getkeys_proc;
+ 1170     /* What keys should be loaded in background when calling this command? */
+ 1171     int firstkey; /* The first argument that's a key (0 = no keys) */
+ 1172     int lastkey;  /* The last argument that's a key */
+ 1173     int keystep;  /* The step between first and last key */
+ 1174     long long microseconds, calls;
+ 1175 };
+</code></p>
+
+<p>所以每个命令都对应的 <code>proc</code>，就在 <code>redisCommandTable</code> 中。
+<code>incr</code> 对应的就是 <code>incrCommand</code>，在 <code>t_string.c</code> 中又中转到 <code>incrDecrCommand</code>。</p>
+
+<h2>incrDecrCommand(client *c, long long incr)</h2>
+
+<p>调用关系：</p>
+
+<p>```
+void incrCommand(client *c) {</p>
+
+<pre><code>incrDecrCommand(c,1);
+</code></pre>
+
+<p>}
+```</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14828945195167.jpg" alt="" /></p>
+
+<p>先来分析两个参数：</p>
+
+<p><code>
+client *c       // 客户端实例
+long long incr  // 操作数， incr命令时为 `1`
+</code></p>
+
+<p>看来半天，这里的结构也是基本的操作，除了 <code>server.dirty</code> 的操作外，貌似没有多线程相关的处理。</p>
+
+<p><code>
+ 341 void incrDecrCommand(client *c, long long incr) {
+ 342     long long value, oldvalue;
+ 343     robj *o, *new;
+ 344
+ 345     o = lookupKeyWrite(c-&gt;db,c-&gt;argv[1]);
+ 346     if (o != NULL &amp;&amp; checkType(c,o,OBJ_STRING)) return;
+ 347     if (getLongLongFromObjectOrReply(c,o,&amp;value,NULL) != C_OK) return;
+ 348
+ 349     oldvalue = value;
+ 350     if ((incr &lt; 0 &amp;&amp; oldvalue &lt; 0 &amp;&amp; incr &lt; (LLONG_MIN-oldvalue)) ||
+ 351         (incr &gt; 0 &amp;&amp; oldvalue &gt; 0 &amp;&amp; incr &gt; (LLONG_MAX-oldvalue))) {
+ 352         addReplyError(c,"increment or decrement would overflow");
+ 353         return;
+ 354     }
+ 355     value += incr;
+ 356
+ 357     if (o &amp;&amp; o-&gt;refcount == 1 &amp;&amp; o-&gt;encoding == OBJ_ENCODING_INT &amp;&amp;
+ 358         (value &lt; 0 || value &gt;= OBJ_SHARED_INTEGERS) &amp;&amp;
+ 359         value &gt;= LONG_MIN &amp;&amp; value &lt;= LONG_MAX)
+ 360     {
+ 361         new = o;
+ 362         o-&gt;ptr = (void*)((long)value);
+ 363     } else {
+ 364         new = createStringObjectFromLongLong(value);
+ 365         if (o) {
+ 366             dbOverwrite(c-&gt;db,c-&gt;argv[1],new);
+ 367         } else {
+ 368             dbAdd(c-&gt;db,c-&gt;argv[1],new);
+ 369         }
+ 370     }
+ 371     signalModifiedKey(c-&gt;db,c-&gt;argv[1]);
+ 372     notifyKeyspaceEvent(NOTIFY_STRING,"incrby",c-&gt;argv[1],c-&gt;db-&gt;id);
+ 373     server.dirty++;
+ 374     addReply(c,shared.colon);
+ 375     addReply(c,new);
+ 376     addReply(c,shared.crlf);
+ 377 }
+</code></p>
+
+<p>还是得回头看 <code>call()</code> 里面到底还有哪些多线程相关操作。</p>
+
+<p>```
+ 2127     /<em> Call the command. </em>/
+ 2128     dirty = server.dirty;
+ 2129     start = ustime();
+ 2130     c->cmd->proc&copy;;
+ 2131     duration = ustime()-start;
+ 2132     dirty = server.dirty-dirty;
+ 2133     if (dirty &lt; 0) dirty = 0;</p>
+
+<p> &hellip;</p>
+
+<p> 2169         /<em> Check if the command operated changes in the data set. If so
+ 2170          * set for replication / AOF propagation. </em>/
+ 2171         if (dirty) propagate_flags |= (PROPAGATE_AOF|PROPAGATE_REPL);
+```</p>
+
+<p>再来看看这个 <code>PROPAGATE_AOF</code> 是搞啥的</p>
+
+<h2>aof.c</h2>
+
+<p>官方说明： <a href="https://github.com/antirez/redis#aofc-and-rdbc">https://github.com/antirez/redis#aofc-and-rdbc</a></p>
+
+<blockquote><p>As you can guess from the names these files implement the RDB and AOF persistence for Redis. Redis uses a persistence model based on the fork() system call in order to create a thread with the same (shared) memory content of the main Redis thread. This secondary thread dumps the content of the memory on disk. This is used by rdb.c to create the snapshots on disk and by aof.c in order to perform the AOF rewrite when the append only file gets too big.</p>
+
+<p>The implementation inside aof.c has additional functions in order to implement an API that allows commands to append new commands into the AOF file as clients execute them.</p>
+
+<p>The call() function defined inside server.c is responsible to call the functions that in turn will write the commands into the AOF.</p></blockquote>
+
+<p>这个应该是主要原因了，一个通用的方案，因为时间关系，有时间再把这部分详细研究吧。</p>
+
+<h2>Refs</h2>
+
+<p><a href="http://www.tinylab.org/callgraph-draw-the-calltree-of-c-functions/?utm_source=tuicool&amp;utm_medium=referral">源码分析：静态分析 C 程序函数调用关系图</a><br/>
+<a href="https://zh.wikipedia.org/wiki/DOT%E8%AF%AD%E8%A8%80">DOT语言</a></p>
+
+<h2>Evernote</h2>
+
+<p><a href="https://www.evernote.com/l/AC5QDjLdH0ZN1K1zh9XY343jZaP1AWeYbS8">redis-结构-源码研究备忘</a><br/>
+<a href="https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM">https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SQLite(FMDB) 线程安全 - 多线程处理]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/"/>
+    <updated>2013-12-12T11:25:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li</id>
+    <content type="html"><![CDATA[<p>在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。</p>
+
+<p>但是，我们在数据库操作的时候，经常遇到多线程访问数据库的状况，常见的有几种处理方法：</p>
+
+<ul>
+<li>1, NSLock或类似方法加锁</li>
+<li>2, FMDatabaseQueue</li>
+<li>3, SQLITE_CONFIG_SERIALIZED</li>
+</ul>
+
+
+<p>下面我们来仔细看一下出现的问题以及相关的解决方案</p>
+
+<!-- more -->
+
+
+<h3>常见问题</h3>
+
+<p>以使用FMDB为例：</p>
+
+<p>The debugger says that the error occurs at [FMResultSet next] at the line, has <code>EXC_BAD_ACCESS</code></p>
+
+<p><code>
+rc = sqlite3_step(statement.statement);
+</code></p>
+
+<p>多线程访问的时候，会在这里报错。</p>
+
+<p>如何解决呢？</p>
+
+<h4>1. NSLock加锁（NSMutex）</h4>
+
+<p>详见苹果官方文档：
+<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Multithreading/ThreadSafety/ThreadSafety.html">Threading Programming Guide</a></p>
+
+<h4>2. FMDatabaseQueue</h4>
+
+<p>这个是我在某项目中用到的，所有查询都走这里。
+可能因为项目较复杂，用了这个还是会时候有问题，但稳定很多。可以有一些别的地方调用，没查清楚。</p>
+
+<p>```
+// 相关引用
+_fmQueue = [FMDatabaseQueue databaseQueueWithPath:sqlitePath];</p>
+
+<p>// 查询数据
+&ndash; (FMResultSet <em>)executeQueryWithSQL:(NSString </em>)sql
+{
+  BFLogVerbose(@&ldquo;executeQuery: %@&rdquo;, sql);</p>
+
+<p>  <strong>block FMResultSet *rs = nil;
+  </strong>block dispatch_semaphore_t sem = dispatch_semaphore_create(0);</p>
+
+<p>  [_fmQueue inDatabase:^(FMDatabase *fmdb){</p>
+
+<pre><code>FMResultSet *tmpRs = [fmdb executeQuery:sql];
+rs = [FMResultSet resultSetWithStatement:tmpRs.statement usingParentDatabase:fmdb];
+[tmpRs close];
+dispatch_semaphore_signal(sem);
+</code></pre>
+
+<p>  }];</p>
+
+<p>  dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+  dispatch_release(sem);</p>
+
+<p>  return rs;
+}
+```</p>
+
+<h3>3. SQLITE_CONFIG_SERIALIZED</h3>
+
+<p>SQLite provides a much simpler serialization. By just setting the sqlite_config() option SQLITE_CONFIG_SERIALIZED you will probably avoid most of these kinds of headaches. I discovered this the hard way after fighting with threading issues for a long while.</p>
+
+<p>```
+if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_ERROR) {</p>
+
+<pre><code>    NSLog(@"couldn't set serialized mode");
+</code></pre>
+
+<p>}
+```</p>
+
+<p>参考：
+<a href="http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0">http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python MySQLdb安装以及问题汇总]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/"/>
+    <updated>2013-10-30T23:17:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong</id>
+    <content type="html"><![CDATA[<p>自已备注一些, 斜体</p>
+
+<p>转自：<a href="http://blog.chinaunix.net/uid-8487640-id-3183185.html">http://blog.chinaunix.net/uid-8487640-id-3183185.html</a></p>
+
+<p>MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb：</p>
+
+<p>首先要下载下载：请到官方网站<a href="http://sourceforge.net/projects/mysql-python/">http://sourceforge.net/projects/mysql-python/</a> 或者 <a href="http://downloads.sourceforge.net/project/mysql-python/mysql-python-test/1.2.3c1/MySQL-python-1.2.3c1.tar.gz?use_mirror=nchc">点击链接下载</a></p>
+
+<!-- more -->
+
+
+<p>解压：tar zxvf MySQL-python*</p>
+
+<p>进入文件目录，运行以下命令：
+<code>
+python setup.py install
+</code></p>
+
+<p>安装完成，到你的python安装目录下的site-packages目录里检查以下文件是否存在，如果存在即代表安装成功了</p>
+
+<p>Linux：MySQL_python-1.2.3c1-py2.6-linux-i686.egg
+Mac OS X：MySQL_python-1.2.3c1-py2.6-macosx-10.4-x86_64.egg</p>
+
+<h4>注：如果碰到mysql_config not found的问题，有两种方法解决：<em>可能两个方法要合一起</em></h4>
+
+<p>1）ln -s /usr/local/mysql/bin/mysql_config /usr/local/bin/mysql_config
+将mysql_confi从你的安装目录链接到/usr/local/bin目录下，这样就可以在任意目录下访问了（也可以放到/usr/bin）</p>
+
+<p>2）编辑源码文件夹的site.cfg文件，去掉#mysql_config = /usr/local/bin/mysql_config前的注释＃，修改后面的路径为你的mysql_config真正的目录就可以了。（如果不知道mysql_config在哪里，运行命令：whereis mysql_config）</p>
+
+<h4>注:如果碰到import error: libmysqlclient.so.18: cannot open shared object file: No such file or directory</h4>
+
+<p>解决方法:</p>
+
+<p>locate or find libmysqlclient.so.18
+link path/libmysqlclient.so.18 /usr/lib/libmysqlclient.so.18
+vi /etc/ld.so.conf    //加入libmysqlclient.so.18 所在的目录
+插入: /usr/lib/</p>
+
+<p>保存退出后执行/sbin/ldconfig生效</p>
+
+<h4><em>后部安装：需要进行一个软连接链接不然会提示报错。</em></h4>
+
+<p>问题如下：</p>
+
+<p>```</p>
+
+<blockquote><blockquote><blockquote><p>from django.db import connection
+cursor = connection.cursor()
+Traceback (most recent call last):
+  File &ldquo;<console>&rdquo;, line 1, in <module>
+  File &ldquo;/Library/Python/2.7/site-packages/django/db/<strong>init</strong>.py&rdquo;, line 39, in <strong>getattr</strong></p>
+
+<pre><code>return getattr(connections[DEFAULT_DB_ALIAS], item)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 193, in <strong>getitem</strong></p>
+
+<pre><code>backend = load_backend(db['ENGINE'])
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 108, in load_backend</p>
+
+<pre><code>return import_module('%s.base' % backend_name)
+</code></pre>
+
+<p>  File &ldquo;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/<strong>init</strong>.py&rdquo;, line 37, in import_module</p>
+
+<pre><code>__import__(name)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/backends/mysql/base.py&rdquo;, line 17, in <module></p>
+
+<pre><code>raise ImproperlyConfigured("Error loading MySQLdb module: %s" % e)
+</code></pre>
+
+<p>ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/<em>mysql.so, 2): Library not loaded: libmysqlclient.18.dylib
+  Referenced from: /Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/</em>mysql.so
+  Reason: image not found</p>
+
+<p>```</p></blockquote></blockquote></blockquote>
+
+<p>解决方案：</p>
+
+<p><code>
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[group_concat函数详解]]></title>
+    <link href="http://shjborage.github.io/blog/2013/09/24/group-concathan-shu-xiang-jie/"/>
+    <updated>2013-09-24T00:06:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/09/24/group-concathan-shu-xiang-jie</id>
+    <content type="html"><![CDATA[<p>问了好多人，都不知道group_concat这个函数。
+这个函数好啊，能将相同的行组合起来，省老事了。
+MySQL中group_concat函数(SQLite或其它数据亦可)</p>
+
+<p>完整的语法如下：</p>
+
+<p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator &lsquo;分隔符&rsquo;])</p>
+
+<p> <!-- more --></p>
+
+<h4>基本查询</h4>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select * from aa;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>| id| name |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10|</p>
+
+<p>|1 | 20|</p>
+
+<p>|1 | 20|</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 200 |</p>
+
+<p>|3 | 500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;+</p>
+
+<p>6 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，逗号分隔(默认)</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>| id| group_concat(name) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10,20,20|</p>
+
+<p>|2 | 20 |</p>
+
+<p>|3 | 200,500|</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，分号分隔</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name separator &lsquo;;&rsquo;) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>| id| group_concat(name separator &lsquo;;&rsquo;) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>|1 | 10;20;20 |</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 200;500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把去冗余的name字段的值打印在一行，</p>
+
+<h3>逗号分隔</h3>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(distinct name) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>| id| group_concat(distinct name) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>|1 | 10,20|</p>
+
+<p>|2 | 20 |</p>
+
+<p>|3 | 200,500 |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+
+<p>以id分组，把name字段的值打印在一行，逗号分隔，以name排倒序</p>
+
+<p>Sql代码</p>
+
+<ol>
+<li> select id,group_concat(name order by name desc) from aa group by id;</li>
+</ol>
+
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>| id| group_concat(name order by name desc) |</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>|1 | 20,20,10 |</p>
+
+<p>|2 | 20|</p>
+
+<p>|3 | 500,200|</p>
+
+<p>+&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+</p>
+
+<p>3 rows in set (0.00 sec)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SQLite使用 iOS平台]]></title>
+    <link href="http://shjborage.github.io/blog/2013/09/03/sqliteshi-yong-iosping-tai/"/>
+    <updated>2013-09-03T13:35:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/09/03/sqliteshi-yong-iosping-tai</id>
+    <content type="html"><![CDATA[<h3>不太常用，但很关键命令</h3>
+
+<h4>1.整理数据库：vacuum</h4>
+
+<p>VACUUM命令是SQLite的一个扩展功能，模仿PostgreSQL中的相同命令而来。若调用VACUUM带一个表名或索引名， 则将整理该表或索引。在SQLite 1.0中，VACUUM命令调用gdbm_reorganize()整理后端数据库文件。</p>
+
+<p>SQLITE 2.0.0中去掉了GDBM后端，VACUUM无效。在2.8.1版中，VACUUM被重新实现。现在索引名或表名被忽略。</p>
+
+<!-- more -->
+
+
+<p>当数据库中的一个对象(表，索引或触发器)被撤销，会留下空白的空间。它使数据库比需要的大小更大，但能加快插入速度。实时的插入和删除会使得数据库文件结构混乱，减慢对数据库内容访问的速度。 VACUUM命令复制主数据库文件到临时数据库并从临时数据库重新载入主数据库，以整理数据库文件。这将除去空白页，使表数据彼此相邻排列，并整理数据库文件结构。不能对附加数据库文件进行以上操作。</p>
+
+<p>若当前有活动事务，该命令无法起作用。对于in-memory数据库，该命令无效。</p>
+
+<p>SQLite3.1中，可以通过使用auto-vacuum模式取代VACUUM命令，使用auto_vacuum pragma开启该模式。
+扩展阅读：<a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+
+<h4>2.导出数据库：.dump</h4>
+
+<p>.output file.sql</p>
+
+<p>.dump</p>
+
+<p>.output stdout</p>
+
+<h4>3.导入数据库：.read 和.import</h4>
+
+<p>.read file.sql</p>
+
+<p>.import [file][table]</p>
+
+<h3>SQLite不支持的常用操作</h3>
+
+<ul>
+<li>1 高级联结：SQlite支持“左外部联结（LEFT OUTER JOIN）”，不支持“右外部联结（RIGHT OUTER JOIN）”和“全外部联结（FULL OUTER JOIN）”。</li>
+<li>2 修改表操作：SQlite支持“重命名表（RENAME TABLE）”，使用“ALTER TABLE给表添加新列”。不支持使用“ALTER TABLE”进行“删除列（DROP COLUMN）”，“修改列（ALTER COLUMN）”，“添加约束（ADD CONSTRAINT）”等。</li>
+<li>3 触发器支持不完整：SQlite支持“行级触发器（FOR EACH ROW）”，不支持“语句级触发器（FOR EACH STATEMENT）”。</li>
+<li>4 视图只能读不能写：SQlite不能在一个视图上使用“删除（DELETE）”，“插入（INSERT）”和“更新（UPDATE）”语句。但是可以创建一个触发器，当对表进行“DELETE”，“INSERT”或者“UPDATE”操作时激活该触发器，在该触发器的body部分做所需的操作。</li>
+<li>5 不支持GRANT和REVOKE语句：因为SQlite只是去读写普通的磁盘文件，所以唯一可以应用到SQlite数据库的访问权限（控制），只有底层操作系统的普通的文件访问权限。所以那些client/server模式的数据库上通常具有的GRANT和REVOKE命令，SQlite并不支持，因为它们对于“嵌入式的数据库引擎（embedded database engine）”毫无意义。</li>
+</ul>
+
+
+<h4>官方SQL语法</h4>
+
+<p><a href="http://www.sqlite.org/lang_vacuum.html">http://www.sqlite.org/lang_vacuum.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,686 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Block实现原理研究与使用需要注意的问题 - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+  <!--[if lt IE 9]>
+    <script src="http://x.papaapp.com/farm1/a571d2/8dda131d/html5shiv.js"></script>
+    <![endif]-->
+  
+  <meta name="description" content="Block实现原理研究与使用需要注意的问题 Apr 1st, 2014 | Comments 关于Block的使用，现在很多人都说他知道。但是知道怎么用与懂为什么这么用，可能会出现哪些问题还是区别很大的。
+光说没用，先把这个题做一下试试看。如果说全做对，可能我接下来要说的大部分都可以直接跳过啦 &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shjborage.github.io/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header id="header" class="clearfix">    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                <a id="logo" href="/">
+                   Saick Blog
+                </a>
+                <p class="description">技术博客，致力于全栈以及各方面修养。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="index-nav current" href="/">Blog</a>
+<a class="archives-nav" href="/blog/archives">Archives</a>
+<!-- <a class="friendlink-nav" href="/friendlylink.html">Links</a> -->
+<a class="about-nav" href="/about.html">About Me</a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+  <div id="body">
+    <div class="container">
+    	<div class="col-group">
+			<div class="col-8" id="main">
+  <div class="res-cons">
+  <article class="post clearfix">
+  
+  <header>
+    
+      <h1 class="post-title">Block实现原理研究与使用需要注意的问题</h1>
+    
+    
+      <p class="post-meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-01T16:42:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="post-content"><p>关于Block的使用，现在很多人都说他知道。但是知道怎么用与懂为什么这么用，可能会出现哪些问题还是区别很大的。
+光说没用，先把<a href="http://blog.parse.com/2013/02/05/objective-c-blocks-quiz/">这个题</a>做一下试试看。如果说全做对，可能我接下来要说的大部分都可以直接跳过啦。</p>
+
+<!-- more -->
+
+
+<h2>Block 实现原理分析</h2>
+
+<p>引自：<a href="http://www.hrchen.com/2013/06/retain-cycle-in-block/">Block的引用循环问题 (ARC &amp; non-ARC)</a></p>
+
+<p>由于Objective-C是C语言的超集，既然OC中的NSObject对象其实是由C语言的struct+isa指针实现的，那么Block的内部实现估计也一样，以下三篇Blog对Block的实现机制做了详细研究：</p>
+
+<p><a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-1/">A look inside blocks: Episode 1</a>  <br/>
+<a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-2/">A look inside blocks: Episode 2</a>  <br/>
+<a href="http://www.galloway.me.uk/2012/10/a-look-inside-blocks-episode-3/">A look inside blocks: Episode 3</a></p>
+
+<p>虽然实现细节看着头痛，不过发现Block果然是和OC中的NSObject类似，也是用struct实现出来的东西。这个是LLVM项目compiler-rt分析的block头文Block_private.h头文件中关于Block的struct声明：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct Block_descriptor {
+</span><span class='line'>    unsigned long int reserved;
+</span><span class='line'>    unsigned long int size;
+</span><span class='line'>    void (*copy)(void *dst, void *src);
+</span><span class='line'>    void (*dispose)(void *);
+</span><span class='line'>};
+</span><span class='line'>
+</span><span class='line'>struct Block_layout {
+</span><span class='line'>    void *isa;
+</span><span class='line'>    int flags;
+</span><span class='line'>    int reserved;
+</span><span class='line'>    void (*invoke)(void *, ...);
+</span><span class='line'>    struct Block_descriptor *descriptor;
+</span><span class='line'>    /* Imported variables. */
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们发现Block_layout中也有一个isa指针，像极了NSobject内部实现struct中的isa指针。这里的isa可能指向三种类型之一的Block：</p>
+
+<p><code>_NSConcreteGlobalBlock</code>：全局类型Block，在编译器就已经确定，直接放在代码段<strong>TEXT上。直接在NSLog中打印的类型为</strong>NSGlobalBlock<strong>。<br/>
+<code>_NSConcreteStackBlock</code>：位于栈上分配的Block，即</strong>NSStackBlock<strong>。<br/>
+<code>_NSConcreteMallocBlock</code>：位于堆上分配的Block，即</strong>NSMallocBlock__。</p>
+
+<p>为什么会有这么多种类呢？首先来看全局类型Block，看例子：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void addBlock(NSMutableArray *array) {
+</span><span class='line'>  [array addObject:^{
+</span><span class='line'>    printf("global block\n");
+</span><span class='line'>  }];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>void example() {
+</span><span class='line'>  NSMutableArray *array = [NSMutableArray array];
+</span><span class='line'>  addBlock(array);
+</span><span class='line'>  void (^block)() = [array objectAtIndex:0];
+</span><span class='line'>  block();
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为什么addBlock中添加到array中的Block属于全局Block呢？因为它不需要运行时(Runtime)任何的状态来改变行为，不需要放在堆上或者栈上，直接编译后在代码段中即可，就像个c函数一样。这种类型的Block在ARC和non-ARC情况下没有差别。
+这个Block访问了作用域外的变量d，在实现上就是这个block会多一个成员变量对应这个d，在赋值block时会将方法exmpale中的d变量值复制到成员变量中，从而实现访问。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void example() {
+</span><span class='line'>  int d = 5;
+</span><span class='line'>  void (^block)() = ^() {
+</span><span class='line'>      printf("%d\n", d);
+</span><span class='line'>  };
+</span><span class='line'>  block();
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果要修改d呢？：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void example() {
+</span><span class='line'>  int d = 5;
+</span><span class='line'>  void (^block)() = ^() {
+</span><span class='line'>      d++;
+</span><span class='line'>      printf("%d\n", d);
+</span><span class='line'>  };
+</span><span class='line'>  block();
+</span><span class='line'>  printf("%d\n", d);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由于局部变量d和这个block的实现不在同一作用域，仅仅在调用过程中用到了值传递，所以不能直接修改，而需要加一个标识符__block int d = 5;，那么block就可以实现对这个局部变量的修改了。如果是这种block标识的变量，在Block实现中不再是简单的一个成员变量，而是对应一个新的结构体表示这个block变量。block的本质是引入了一个新的Block_byref{$var_name}{$index}结构体，被block关键字修饰的变量就被放到这个结构体中。另外，block结构体通过引入Block_byref{$var_name}{$index}指针类型的成员，得以间接访问到Block的外部变量。这样对Block外的变量访问从值传递转变为引用，从而有了修改内容的能力。
+正常我们使用Block是在栈上生成的，离开了栈作用域便释放了，如果copy一个Block，那么会将这个Block copy到堆上分配，这样就不再受栈的限制，可以随意使用啦。例如：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef void (^TestBlock)();
+</span><span class='line'> 
+</span><span class='line'>TestBlock getBlock() {
+</span><span class='line'>  char e = 'E';
+</span><span class='line'>  void (^returnedBlock)() = ^{
+</span><span class='line'>    printf("%c\n", e);
+</span><span class='line'>  };
+</span><span class='line'>  return returnedBlock;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>void example() {
+</span><span class='line'>  TestBlock block = getBlock();
+</span><span class='line'>  block();
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>函数getBlock中声明并赋值的returnedBlock，一开始是在栈上分配的，属于NSStackBlock，如果是non-ARC情况下return这个NSStackBlock，那么其实已经被销毁了，在函数中example()使用时就会crash。如果是ARC情况下，getBlock返回的block会自动copy到堆上，那么block的类型就是NSMallocBlock，可以在example()中继续使用。要在Non-ARC情况下正常运行，那么就应该修改为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>TestBlock getBlock() {
+</span><span class='line'>  char e = 'E';
+</span><span class='line'>  void (^returnedBlock)() = ^{
+</span><span class='line'>    printf("%c\n", e);
+</span><span class='line'>  };
+</span><span class='line'>  return [[returnedBlock copy] autorelease];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Block中的循环引用问题</h2>
+
+<p>引自：<a href="http://www.hrchen.com/2013/06/retain-cycle-in-block/">Block的引用循环问题 (ARC &amp; non-ARC)</a></p>
+
+<p>扯了这么多，回到Block的循环引用问题，由于我们很多行为会导致Block的copy，而当Block被copy时，会对block中用到的对象产生强引用(ARC下)或者引用计数加一(non-ARC下)。
+如果遇到这种情况：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@property(nonatomic, readwrite, copy) completionBlock completionBlock;
+</span><span class='line'>
+</span><span class='line'>//========================================
+</span><span class='line'>self.completionBlock = ^ {
+</span><span class='line'>        if (self.success) {
+</span><span class='line'>            self.success(self.responseData);
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对象有一个Block属性，然而这个Block属性中又引用了对象的其他成员变量，那么就会对这个变量本身产生强应用，那么变量本身和他自己的Block属性就形成了循环引用。在ARC下需要修改成这样：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@property(nonatomic, readwrite, copy) completionBlock completionBlock;
+</span><span class='line'>
+</span><span class='line'>//========================================
+</span><span class='line'>__weak typeof(self) weakSelf = self;
+</span><span class='line'>self.completionBlock = ^ {
+</span><span class='line'>    if (weakSelf.success) {
+</span><span class='line'>        weakSelf.success(weakSelf.responseData);
+</span><span class='line'>    }
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>也就是生成一个对自身对象的弱引用，如果是倒霉催的项目还需要支持iOS4.3，就用<strong>unsafe_unretained替代</strong>weak。如果是non-ARC环境下就将<strong>weak替换为</strong>block即可。non-ARC情况下，<strong>block变量的含义是在Block中引入一个新的结构体成员变量指向这个</strong>block变量，那么__block typeof(self) weakSelf = self;就表示Block别再对self对象retain啦，这就打破了循环引用。</p>
+
+<h2>Block为什么不能捕获C语言数组的值</h2>
+
+<p>引自：<a href="http://billwang1990.github.io/blog/2014/02/06/block-cant-capture-c-array/">#iOS# Block为什么不能捕获C语言数组的值</a></p>
+
+<p>众所周知，在iOS的block中，我们可以截获自动变量，但是为什么如下截获C语言数组的代码却不行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const char text[]  = “关注我得博客billwang1990.github.io”；
+</span><span class='line'>
+</span><span class='line'>void (^block)(void) = ^{
+</span><span class='line'>     printf(“%c\n”, text[2]);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>要弄清楚这个问题，就必须明白block是怎样实现的。</p>
+
+<p>简单来说，所谓的“截获自动变量”意味着在执行Block语法时，Block语法表达式所使用的自动变量的值被被保存到Block结构体实例(即Block自身)中。</p>
+
+<p>之所以C数组不能截获，就类似下面的代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void func(char a[10])
+</span><span class='line'>{
+</span><span class='line'>   char b[10] = a ;
+</span><span class='line'>   printf(“%d\n”, b[0]);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>int main()
+</span><span class='line'>{
+</span><span class='line'>     char a[10] = {2};
+</span><span class='line'>     func(a);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这段代码是不能通过编译的，这也解释了为什么Block不能截获C数组。</p>
+
+<p>再分享一篇讲的比较好的文章：<a href="http://blog.csdn.net/jasonblog/article/details/7756763">iOS中block实现的探究</a></p>
+</div>
+
+
+  <footer class="post-footer">
+    <div class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+ and 
+      File under 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+ with 
+
+<span class="tags">
+  
+    <a class='tag' href='/tags/obj-c/'>Obj-C</a>, <a class='tag' href='/tags/ios/'>iOS</a>
+  
+</span>
+
+ Tag
+    </div>
+    
+      <div class="sharing">
+  <div>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shjborage.github.io/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/" data-via="eric_shj" data-counturl="http://shjborage.github.io/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  </div>
+
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <h5> <br> </h5>
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/" title="Previous Post: 编译iOS上的libevent库、openssl库">&laquo; 编译iOS上的libevent库、openssl库</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/04/08/revealcha-jian-jian-jie/" title="Next Post: Reveal插件简介">Reveal插件简介 &raquo;</a>
+      
+    </div>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h3>Comments</h3>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+  </div>
+</div>
+
+  <aside id="secondary">
+  
+    <section class="widget">
+    <form id="search" action="http://google.com/search" method="get">
+    	<input type="hidden" name="q" value="site:shjborage.github.io"/>
+    	<input type="text" name="q" results="0" class="text" placeholder="Google搜索"/>
+    </form>
+</section>
+
+<section class="widget">
+	<h2 class="widget-title">最新文章</h2>
+	<ul class="widget-list">
+		
+     	<li>
+      	  <a href="/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/">为 PHP 做单元测试（UnitTest）</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/12/linux-kai-fa-bei-wang/">Linux 开发备忘</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/10/apple-ats-wen-ti/">Apple ATS 问题</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/">npm install 本地安装与全局安装</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/">Python - virtualenv 基础使用</a>
+      	</li>
+    	
+	</ul>
+</section>
+<section class="widget">
+  <h2 class="widget-title">Categories</h2>
+  <ul class="widget-list">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/c/'>C (4)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (6)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javascript/'>JavaScript (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (9)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (4)</a></li>
+<li class='category'><a href='/blog/categories/translate/'>Translate (1)</a></li>
+<li class='category'><a href='/blog/categories/web/'>Web (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (82)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (15)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (10)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h2 class="widget">Tags</h2>
+  <div>
+    <a style="font-size: 90%" href="/tags/ats/">ATS</a>
+<a style="font-size: 108%" href="/tags/android/">Android</a>
+<a style="font-size: 108%" href="/tags/appstore/">AppStore</a>
+<a style="font-size: 90%" href="/tags/appletv/">AppleTV</a>
+<a style="font-size: 90%" href="/tags/applewatch/">AppleWatch</a>
+<a style="font-size: 118%" href="/tags/autolayout/">AutoLayout</a>
+<a style="font-size: 108%" href="/tags/backend/">BackEnd</a>
+<a style="font-size: 118%" href="/tags/c/">C</a>
+<a style="font-size: 90%" href="/tags/css/">CSS</a>
+<a style="font-size: 125%" href="/tags/cocoapods/">CocoaPods</a>
+<a style="font-size: 131%" href="/tags/crash/">Crash</a>
+<a style="font-size: 108%" href="/tags/database/">DataBase</a>
+<a style="font-size: 118%" href="/tags/database/">Database</a>
+<a style="font-size: 90%" href="/tags/debug/">Debug</a>
+<a style="font-size: 90%" href="/tags/django/">Django</a>
+<a style="font-size: 90%" href="/tags/fe/">FE</a>
+<a style="font-size: 90%" href="/tags/game/">Game</a>
+<a style="font-size: 125%" href="/tags/git/">Git</a>
+<a style="font-size: 90%" href="/tags/github/">Github</a>
+<a style="font-size: 90%" href="/tags/https/">HTTPS</a>
+<a style="font-size: 90%" href="/tags/hybirdapp/">HybirdApp</a>
+<a style="font-size: 90%" href="/tags/interview/">Interview</a>
+<a style="font-size: 90%" href="/tags/js/">JS</a>
+<a style="font-size: 118%" href="/tags/java/">Java</a>
+<a style="font-size: 118%" href="/tags/javascript/">JavaScript</a>
+<a style="font-size: 108%" href="/tags/linux/">Linux</a>
+<a style="font-size: 148%" href="/tags/mac/">Mac</a>
+<a style="font-size: 90%" href="/tags/markdown/">Markdown</a>
+<a style="font-size: 125%" href="/tags/network/">Network</a>
+<a style="font-size: 180%" href="/tags/obj-c/">Obj-C</a>
+<a style="font-size: 108%" href="/tags/opensource/">OpenSource</a>
+<a style="font-size: 90%" href="/tags/php/">PHP</a>
+<a style="font-size: 118%" href="/tags/product/">Product</a>
+<a style="font-size: 90%" href="/tags/push/">Push</a>
+<a style="font-size: 90%" href="/tags/svn/">SVN</a>
+<a style="font-size: 90%" href="/tags/script/">Script</a>
+<a style="font-size: 90%" href="/tags/sharesdk/">ShareSDK</a>
+<a style="font-size: 118%" href="/tags/sourcecontrol/">SourceControl</a>
+<a style="font-size: 151%" href="/tags/tools/">Tools</a>
+<a style="font-size: 90%" href="/tags/translate/">Translate</a>
+<a style="font-size: 157%" href="/tags/ui/">UI</a>
+<a style="font-size: 90%" href="/tags/watch/">Watch</a>
+<a style="font-size: 125%" href="/tags/web/">Web</a>
+<a style="font-size: 90%" href="/tags/xcode/">XCode</a>
+<a style="font-size: 90%" href="/tags/basic/">basic</a>
+<a style="font-size: 90%" href="/tags/env/">env</a>
+<a style="font-size: 90%" href="/tags/icloud/">iCloud</a>
+<a style="font-size: 200%" href="/tags/ios/">iOS</a>
+<a style="font-size: 90%" href="/tags/ios10/">iOS10</a>
+<a style="font-size: 90%" href="/tags/ios5/">iOS5</a>
+<a style="font-size: 131%" href="/tags/ios7/">iOS7</a>
+<a style="font-size: 90%" href="/tags/ios9/">iOS9</a>
+<a style="font-size: 90%" href="/tags/ipa/">ipa</a>
+<a style="font-size: 90%" href="/tags/js/">js</a>
+<a style="font-size: 90%" href="/tags/keynote/">keynote</a>
+<a style="font-size: 90%" href="/tags/npm/">npm</a>
+<a style="font-size: 125%" href="/tags/octopress/">octopress</a>
+<a style="font-size: 143%" href="/tags/python/">python</a>
+<a style="font-size: 90%" href="/tags/redis/">redis</a>
+<a style="font-size: 90%" href="/tags/sae/">sae,</a>
+<a style="font-size: 90%" href="/tags/tools/">tools</a>
+<a style="font-size: 108%" href="/tags/you-hua/">优化</a>
+<a style="font-size: 90%" href="/tags/fen-xiang/">分享</a>
+<a style="font-size: 108%" href="/tags/dan-yuan-ce-shi/">单元测试</a>
+<a style="font-size: 90%" href="/tags/hou-duan/">后端</a>
+<a style="font-size: 90%" href="/tags/keng/">坑</a>
+<a style="font-size: 90%" href="/tags/bei-wang/">备忘</a>
+<a style="font-size: 118%" href="/tags/duo-xian-cheng/">多线程</a>
+<a style="font-size: 90%" href="/tags/an-quan/">安全</a>
+<a style="font-size: 155%" href="/tags/di-ceng/">底层</a>
+<a style="font-size: 90%" href="/tags/wei-xin/">微信</a>
+<a style="font-size: 90%" href="/tags/tui-jian-gong-ju/">推荐工具</a>
+<a style="font-size: 90%" href="/tags/jia-gou-she-ji/">架构设计</a>
+<a style="font-size: 90%" href="/tags/ce-shi/">测试</a>
+<a style="font-size: 90%" href="/tags/yi-dong-duan/">移动端</a>
+<a style="font-size: 108%" href="/tags/di-san-fang-ku/">第三方库</a>
+<a style="font-size: 90%" href="/tags/chun-ji-zhu/">纯技术</a>
+<a style="font-size: 90%" href="/tags/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/tags/diao-shi/">调试</a>
+<a style="font-size: 108%" href="/tags/sui-bian/">随便</a>
+
+  </div>
+</section>
+<section>
+  <h2 class="widget">(AD)广告位空缺中,招租</h2>
+</section>
+
+
+<section>
+  <h2 class="widget">新浪微博</h2>
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+</section>
+
+  
+</aside>
+
+
+      	</div>
+    </div>
+  </div>
+  <footer id="footer">
+  	<div class="container">
+	Copyright &copy; 2018 - Eric Shi -
+  <span class="credit">Powered by <a rel="nofollow" href="http://octopress.org">Octopress</a> on <a rel="nofollow" href="http://pages.github.com/">GitHubPages</a>
+  </span>
+  - <span class="credit">Theme by <a rel="nofollow" href="http://pagecho.com">Cho</a></span>
+
+
+</div>
+
+  </footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shjborage.github.io/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/';
+        var disqus_url = 'http://shjborage.github.io/blog/2014/04/01/blockshi-xian-yuan-li-yan-jiu-yu-shi-yong-xu-yao-zhu-yi-de-wen-ti/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

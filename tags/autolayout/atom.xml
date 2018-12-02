@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: AutoLayout | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/autolayout/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[关于 AutoLayout 的想法与学习记录]]></title>
+    <link href="http://shjborage.github.io/blog/2014/07/08/guan-yu-autolayout-de-xiang-fa-yu-xue-xi-ji-lu/"/>
+    <updated>2014-07-08T00:11:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/07/08/guan-yu-autolayout-de-xiang-fa-yu-xue-xi-ji-lu</id>
+    <content type="html"><![CDATA[<p>有日子没写博客了，忙着在北京奔波，房子、工作。。。总之各种事
+突然在 <a href="https://www.linkedin.com">LinkedIn</a> 上面看到我的博客，点进去才发现上次更新日期是June 10th，哎。That&rsquo;s so bad.<br/>
+可能是受一些圈子里面的人影响，看着同仁们写着各种分享，都不太好意思老是在那里转来转去了。但有时实在自己没太多可写的，还是属于笔记那种，记也就记了吧，至少给自己看咯。</p>
+
+<p>费话一堆，略过。。</p>
+
+<h3>AutoLayout</h3>
+
+<p>这玩意出来有年头了，iOS6 开始有，但苦于国内的环境，实际在开发中，从<code>iOS3.2</code>、到<code>iOS4</code>，再到在暴风时的<code>iOS5</code>，不断在升级，但可惜还是没升到iOS6。这个情况不知道 <code>iOS8</code> 正式发布后会不会有大的变动。总之期待吧，也希望大厂能带动一下国内<code>iOS</code>的版本（虽然他们不会这么做）</p>
+
+<p>关于iOS，想必大家也都知道，而且在Xcode6 Beta中，也给人必须用<code>AutoLayout</code>的这种感觉。整个布局变得"不太可控"，当然了，这应该也是正确的方向，因为如果用过<code>AutoLayout</code>的同学应该都知道IB中操作，真是会有很多默认的“坑”，这个应该也是<code>Apple</code>在这几年准备过程中比较重要的步骤吧。</p>
+
+<h3>实用教程</h3>
+
+<p>关于这东西的使用，我真的也是新手，分享不了太多，给大家指个路即可。
+希望能对大家有所帮助！</p>
+
+<!-- more -->
+
+
+<h2>WWDC</h2>
+
+<p>这些都讲的比较基础，也很实用。
+其中<code>Introduction to Auto Layout for iOS and OS X</code>是我完整的看过，很有帮助。另外 <code>Auto Layout by Example</code> 这个我是看过官方的文档，对于什么情况下使用，以及如何用给出<code>Example</code>，非常实用（我在后来的iOS7开始支持的项目中确实用了）</p>
+
+<p><a href="https://developer.apple.com/videos/wwdc/2012/#202">Introduction to Auto Layout for iOS and OS X</a><br/>
+<a href="https://developer.apple.com/videos/wwdc/2013/#406">Taking Control of Auto Layout in Xcode 5</a><br/>
+<a href="https://developer.apple.com/videos/wwdc/2012/?include=228#228">Best Practices for Mastering Auto Layout</a><br/>
+<a href="https://developer.apple.com/videos/wwdc/2012/?include=232#232">Auto Layout by Example</a></p>
+
+<h2>小伙伴分享</h2>
+
+<p>另外也有一些不错的小伙伴关于<code>AutoLayout</code>的分享，也都是看过的，感觉不错，有收获的，不直接转了，大家还是直接去他们那儿看吧。
+其中前两个我都看过，VFL那个讲的真是不错呢，看了好久，也是从那时开始用。
+最后一篇的话是小伙伴翻译的，来自<a href="http://objc.io">objc.io</a>，我还没看，不过整个网站质量很高，也希望大家关注中文版<a href="http://objccn.io">objccn.io</a>，我也贡献过一点点力，嘿嘿。</p>
+
+<p><a href="http://studentdeng.github.io/blog/2014/06/13/auto-layout/">AutoLayout 相关概念介绍和动画demo</a><br/>
+<a href="http://blog.csdn.net/mozixiong/article/details/14165391">一篇厚道的Autolayout及VFL经验分享</a>这个我也转了<a href="http://blog.saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/">http://blog.saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/</a> <br/>
+<a href="http://objccn.io/issue-3-5/">先进的自动布局工具箱 from objc.io</a></p>
+
+<h3>总结</h3>
+
+<p>大概就这吧，希望大家能学的顺利！</p>
+
+<h3>后记</h3>
+
+<p>看了一眼，以前也写、转过<code>AutoLayout</code>的东西，不过自己都没想起来 &ndash; -。<br/>
+<a href="http://blog.saick.net/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Auto Layout by Example]]></title>
+    <link href="http://shjborage.github.io/blog/2014/01/18/auto-layout-by-example/"/>
+    <updated>2014-01-18T16:21:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/01/18/auto-layout-by-example</id>
+    <content type="html"><![CDATA[<p>Autolayout 博大精深，以前转过一篇，可是用的时候还是不会用。没办法只能看苹果官方的文档，发现除了讲基本的使用（XCode5中的一些操作已不太一样）外，还有这么个例子，主要解决了屏幕大小不同适配的问题，真是不错。摘录下来，希望对大家有用。</p>
+
+<p>如果某个地方看不明白可以留言给我，我翻译并给大家讲。</p>
+
+<p>ScrollView这块我暂时没有用，没细看，下面Size适配那个我试了，并且写了Demo，大家感兴趣下文下载研究。</p>
+
+<p>Auto Layout makes it easy to solve many complex layout problems automatically, without the need for manual view manipulation. By creating the right combination of constraints, you can create layouts that are traditionally difficult to manage in code, such as equally spaced views that adjust to changes in orientation or size, elements inside scroll views that affect the size of the scrolling content, or elements inside scroll views that don’t scroll with the rest of the contents.</p>
+
+<!-- more -->
+
+
+<h3>Using Scroll Views with Auto Layout</h3>
+
+<p>When you are creating an app using Auto Layout, scroll views can present a unique challenge. The size of the scrolling content must be set correctly so that the user can scroll through all of the available content, for example, and if you need to lock a contextual view in place on top of a scroll view, such as the scale and legend for a map, it’s difficult to ensure that the element doesn’t scroll with the rest of the content.</p>
+
+<h4>Controlling Scroll View Content Size</h4>
+
+<p>The size of the content inside of a scroll view is determined by the constraints of its descendants.</p>
+
+<p><em>To set the size of a scroll view</em></p>
+
+<ul>
+<li>Create the scroll view.</li>
+<li>Place the UI element inside it.</li>
+<li>Create constraints that fully define the width and height of the scroll view content.</li>
+</ul>
+
+
+<p>You must make sure you create constraints for all the subviews inside a scroll view. For example, when defining the constraints for a view that doesn’t have an intrinsic content size, you’ll need more than just a leading edge constraint—you must also create trailing edge, width, and height constraints. There cannot be any missing constraints, starting from one edge of the scroll view to the other.</p>
+
+<h4>Creating Anchored Views Inside a Scroll View</h4>
+
+<p>You may find you want to create an area inside a scroll view that doesn’t move when a user scrolls the contents of the scroll view. You accomplish this by using a separate <strong>container view</strong>.</p>
+
+<p><em>To lock a view inside a scroll view</em>
+*   Create a container view to hold the scroll view.
+*   Create the scroll view and place it in the container view with all edges equal to zero points.
+*   Create and place a subview inside of the scroll view.
+*   Create constraints from the subview to the container view.</p>
+
+<p>The following example uses the steps in the above task to show how to position a text view inside of a scroll view. In this example, the text view stays at the bottom of the scroll view and doesn’t move when the scroll view contents are moved.</p>
+
+<p>First, create the container view that will contain the scroll view. Set the size of the container view equal to the desired size of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008276023/player/b1ddbeff09" height="500" width="291"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After the container view is created, create a scroll view and place it inside of the container view. Resize the scroll view so that all of the edges are flush with the container view’s edges, by setting the distance to 0.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810786/player/1202126aa8" height="500" width="290"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create another view and place it inside of the scroll view. In this example, a text view is placed inside of the scroll view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999315/player/ddc38c3ea6" height="500" width="288"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>After placing the text view, create constraints from the text view to the container view. Creating constraints that anchor the text view to the container view (skipping the scroll view) anchors the text view relative to the container view, which ensures that the scroll view won’t scroll the text view.</p>
+
+<p>To create a constraint that crosses multiple views in the view hierarchy, it is generally easier to Control-drag from the view to the container view in the Interface Builder outline view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810736/player/e32e620ff4" height="298" width="270"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In the constraint overlay that appears, set the required constraints for the view.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275923/player/194c48615c" height="273" width="158"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>In this example, constraints are created from the leading, trailing, and bottom edges of the text view to the container view. The height of the text view is also constrained.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008810686/player/bdc0cae834" height="500" width="287"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>The following two figures show the app in iOS Simulator, both in normal and landscape positions. The text view is constrained at the bottom of the scroll view and doesn’t move as the scroll view is moved.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999185/player/a051895080" height="296" width="495"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12007999135/player/4f87b36fa7" height="495" width="296"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<h3>Spacing and Wrapping</h3>
+
+<p>Auto Layout provides several techniques for automatically spacing views and resizing items based on their content. The following sections describe how to create constraints that keep visible views proportionally spaced based on the orientation of the device.</p>
+
+<h4>Creating Equal Spacing Between Views</h4>
+
+<p>To lay out several views that are proportionally spaced based on the orientation of a device, create spacer views between the visible views. Set the constraints of these spacer views correctly to ensure that the visible views are able to stay spaced apart based on the orientation of the device.</p>
+
+<p><em>To space views proportionally</em>
+*   Create the visible views.
+*   Create the spacer views equal to the number of visible views plus one.
+*   Alternate placing your views, starting with a spacer view.</p>
+
+<pre><code>To space two visible views, place all of the views in the following pattern, starting from the left side of the screen and moving right:
+</code></pre>
+
+<p><code>spacer1 | view1 | spacer2 | view2 | spacer3.</code></p>
+
+<ul>
+<li>Constrain the spacer views so that their lengths are equal to each other.</li>
+</ul>
+
+
+<p><code>
+Note: The height of the spacer views can be any value, including 0. However, you must create constraints for the height of the views—don’t leave the height ambiguous.
+Create a leading constraint from the first spacer view to the container view.
+</code></p>
+
+<ul>
+<li>Create a trailing constraint from the last spacer view to the container view.</li>
+<li>Create constraints between the spacer views and the visible views.</li>
+</ul>
+
+
+<p><code>
+Note: When spacing views vertically, start from the top of the screen and place each view below the previous view. Set the heights of the spacer views equal to each other.
+The following example uses the steps in the above task to show how to position two views proportionally spaced. The spacer views are annotated for the example, but are normally left empty with no background. First, create the two views and place them in the storyboard.
+</code></p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351964/player/6cff17637e" height="310" width="236"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Add the three spacer views—one to the left of the leftmost view, one between the two views, and one to the right of the rightmost view. The spacer views don’t have to be the same size at this time because their size will be set through constraints.</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275823/player/bdda53d7d0" height="310" width="235"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>Create the following constraints for the spacer views:</p>
+
+<ul>
+<li>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1.</li>
+<li>Constrain the width of spacer view 1 to be greater than or equal to the minimum desired width.</li>
+<li>Create a Leading Space to Container constraint from spacer view 1 to the container.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 1 to view 1. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create Horizontal Spacing constraints from spacer view 2 to view 1 and view 2. Set these constraints to be a less-than-or-equal-to constraint with a priority of 999.</li>
+<li>Create a Horizontal Spacing constraint from spacer view 3 to view 2. Set this constraint to be a less-than-or-equal-to constraint with a priority of 1000.</li>
+<li>Create a Trailing Space to Container constraint from spacer view 3 to the container.</li>
+</ul>
+
+
+<p>These constraints create two visible views and three invisible views (spacer views). These spacer views automatically resize as the orientation of the device changes, keeping the visible views proportionally spaced, as shown in the following two figures:</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008275833/player/7290ca4711" height="337" width="261"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+
+
+<iframe src="https://www.flickr.com/photos/shjborage/12008351904/player/a2b7a82a10" height="261" width="337"  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p><a href="https://www.dropbox.com/s/23vrbep9khfyvb6/AutoLayoutDemo.zip">Demo</a></p>
+
+<h3>Animating Changes Made by Auto Layout</h3>
+
+<p>If you need full control over animating changes made by Auto Layout, you must make your constraint changes programmatically. The basic concept is the same for both iOS and OS X, but there are a few minor differences.</p>
+
+<p>In an iOS app, your code would look something like the following:</p>
+
+<p>```
+[containerView layoutSubtreeIfNeeded]; // Ensures that all pending layout operations have been completed
+[UIView animateWithDuration:1.0 animations:^{</p>
+
+<pre><code> // Make all constraint changes here
+ [containerView layoutSubtreeIfNeeded]; // Forces the layout of the subtree animation block and then captures all of the frame changes
+</code></pre>
+
+<p>}];
+```</p>
+
+<p>In OS X, use the following code when using layer-backed animations:</p>
+
+<p>```
+[containterView layoutIfNeeded];
+NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {</p>
+
+<pre><code> [context setAllowsImplicitAnimation: YES];
+ // Make all constraint changes here
+ [containerView layoutIfNeeded];
+</code></pre>
+
+<p>}];
+```</p>
+
+<p>When you aren’t using layer-backed animations, you must animate the constant using the constraint’s animator:</p>
+
+<p><code>
+[[constraint animator] setConstant:42];
+</code></p>
+
+<h3>个人总结</h3>
+
+<ol>
+<li>所有相关Contraints都加好后再自动让XCode补全，或者干脆在没问题的时候忽略警告</li>
+<li><code>Constrain the width of spacer view 2 and spacer view 3 to be equal to the width of spacer view 1</code>. 这意思是让三个视频的width相等，并不是给他们三个都加上width的Contraints。</li>
+<li>最后是在3.5寸屏幕下开发，再适应4寸，这样直接拉开。（在开发时，点那个大小切换那个可能会带来Contraints警告，要小心。不行就Commond+Z）</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Autolayout及VFL经验分享]]></title>
+    <link href="http://shjborage.github.io/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/"/>
+    <updated>2013-11-23T17:53:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang</id>
+    <content type="html"><![CDATA[<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1108/7322.html">Origin</a></p>
+
+<p>这篇不是什么教程, Cocoa autolayout出来蛮久了。以前多次想去深入研究一下，每次都很蛋疼无序。这东西是在有些搞。尤其习惯了code写布局的。看到Visual format language，简直要掀桌子。搜教程，满世界都是，没有一个讲得透彻的。例子空洞。你们就只会３个控件横向布局对法？浑浑噩噩看了多篇。有了点总结。槽不多吐了。简单讲讲。</p>
+
+<!--more-->
+
+
+<h3>Autolayout，开始于iOS6.0</h3>
+
+<h4>一.什么时候用autolayout比较适合</h4>
+
+<ul>
+<li>１.不负责任的骑墙派说法：apple的设备越来越多了，你的应用应该都使用al。（并且用sb）</li>
+<li>２.要看应用内容决定。如果你的内容是信息众多，同时需要展示的类别也很多，尺寸动态不定，甚至这些是在列表中的。（如社交应用）。Al能给于很大的帮助。</li>
+<li>３.Mac os的应用。现在都做iOS了。mac app的窗口，会有大小变化。al比较合适。</li>
+<li>４.支持多向转屏的iPad应用。（有需要支持多方向iphone场景么？那么长，脑残了？）</li>
+<li>５.其他业务不复杂,页面较少的应用，其实，cocoa程序员写了多年code都有自己的ui编程习惯，这些习惯对于他们来说是很高效的。就算是第一项所说，布局的坐标都是相对的。</li>
+</ul>
+
+
+<p>如果是习惯于code写布局的，建议可以继续沿用，同时也要学习al。自我感觉al和传统布局写法，工作量不会相差太多。但是VFL用熟练了以后会有很大的改善。</p>
+
+<h4>二.autolayout的基础理论</h4>
+
+<p>al的核心出发点是</p>
+
+<ul>
+<li>1.view具有自我计算尺寸，布局的能力。通过它自身的内容，能够得到尺寸。</li>
+<li>2.view的布局位置，确定于它与superview及其他view的关系。</li>
+<li>3.与传统的autoresizingmask自适应相比，al更精确，能绝对的确定view的布局。</li>
+<li>4.view不一定需要一个初始的rect。al中，view如果有足够的constraint，便可以确定自己的尺寸和位置，并且知道自己和其他view的关系。即，想确定view的布局，就给它（们）添加constraint。</li>
+</ul>
+
+
+<h4>三.xib下的autolayout</h4>
+
+<p>似乎al和xib布局模式生来就是要搞在一起的。用xib加al，view布局非常简单容易。编程工作立刻变成了美工的连线拼图游戏。</p>
+
+<p>开启xib或者sb后，选择需要view(s)。选择menu的Editor，选择Pin。子菜单的项目就是可用的constraints。</p>
+
+<p>Width:固定自身宽度</p>
+
+<p>Height:。。。</p>
+
+<p>H- Spacing: 固定两个view的水平间距</p>
+
+<p>V- Spacing:。。。</p>
+
+<p>下面４个分别是view相对于superview的左、右、上、下的间距</p>
+
+<p>Widths Equally:两个view保持宽度相同</p>
+
+<p>Heights Equally:。。。</p>
+
+<p>xib界面右下角工具条也有可以编辑constraint的方式：</p>
+
+<p>每个constraint添加后都是可以编辑的。选中某个constraint后开启右边栏选inspector。可以修改数值。（这个数值是view间的偏移量）和优先级。</p>
+
+<p>自己慢慢拖着玩去。这不是傻瓜教程。点到位，自己研究。</p>
+
+<p>xib下的al比较直观。可以基本看到效果和误差值。还有不正确的constraint的提示。少了constraint编译器会补，多了会提示报错。（不过都会引起界面布局不对，自己慢慢调吧，哥现在还是满篇alert，没有让编译器感觉矛盾费解的constraint，都是可以work的。）</p>
+
+<p>还有resolve的方式解决constraint的问题，抱歉，我不会。</p>
+
+<h4>四.编码方式使用autolayout</h4>
+
+<p>对于页面不多，的普通应用。xib/sb加al。拖拖拽拽。娱乐中就可以完成UI的工作。al的确给于了不少方便。</p>
+
+<p>不过多年的强迫症程序猿怎么会忍受这种很逊的方式。（拖积木？不敲代码？好像一天没做事。）</p>
+
+<p>1.Visual format language　（应该不算语言）
+Apple的工程师很有爱，发明了这种哭笑不得的象形文字。感觉它就是种解析方式。</p>
+
+<p>Apple的官方文档给出了少之又少的文档和坑爹的例子。（视频我没看，不知道怎么样）网上的同学们也写了点不痛不痒的几句代码。你这是学了１＋１就让人搞微积分的节奏么？要写不写清楚，不如不写。</p>
+
+<p>从厚道的老外那看了几篇。自己体会了些，分享给大家。只是个基本水平吧，会了这些，代码写al应该没有问题了。深入的我也还不会，希望遇到更有爱的牛人分享。</p>
+
+<p>VFL在程序中由支持：</p>
+
+<p><code>
++ (NSArray *)constraintsWithVisualFormat:(NSString *)format options:(NSLayoutFormatOptions)opts metrics:(NSDictionary *)metrics views:(NSDictionary *)views;   
+</code></p>
+
+<ul>
+<li>它返回一组constraint.</li>
+<li>format是你的VFL字串，等下讲。</li>
+<li>opts自己点去头文件看。有些情况会用，等下有例子。</li>
+<li>metrics是一个奇妙的字典，是你自己定义的。这个字典里面的key可以写在format字串中。编译器解析时，自动替换为metrics字典中的value。等下有例子。</li>
+<li>views是需要constraint关系的所有view.(也可以是一个)</li>
+</ul>
+
+
+<p>2.VFL例子</p>
+
+<p>写vfl字串的时候，脑海里要想象出画面的合理性。不合理的constraint会导致程序运行时报错或者直接崩溃。</p>
+
+<p>随便写几个</p>
+
+<p><code>
+NSDictionary *dict1 = NSDictionaryOfVariableBindings(_boxV,_headerL,_imageV,_backBtn,_doneBtn);   
+NSDictionary *metrics = @{@"hPadding":@5,@"vPadding":@5,@"imageEdge":@150.0};   
+NSString *vfl = @"|-hPadding-[_boxV]-hPadding-|";   
+NSString *vfl0 = @"V:|-25-[_boxV]";   
+NSString *vfl3 = @"V:|-vPadding-[_headerL]-vPadding-[_imageV(imageEdge)]-vPadding-[_backBtn]-vPadding-|";   
+</code></p>
+
+<p>dict1就是api 中需要的最后一个参数views。由上述宏来完成。</p>
+
+<p>metrics定义了一些vfl中要用的参数。
+下面有些vfl字串，一看便知如何使用metrics。</p>
+
+<p>看到：</p>
+
+<p>1) &ldquo;|"表示superview. |-间距-[view1对象名]&ndash;(>=20)&ndash;[view2对象名] 不写H/V就表示横向，间距可以写固定值也可写>/&lt;。形象化的理解，&rdquo;|&ldquo;是用来确定view上、下、左、右关系的。 想要确定从上到下的关系，就加V:|。那么这个vfl字串就可以描述从上到下的view们的关系。</p>
+
+<p>2) 看到vfl3里面，方括号表示view，圆括号表示尺寸数值。支持大小等于。或者另一个view　|&ndash;[view1(view2)]，v１的宽度等于v２。</p>
+
+<p>3) 优先级用＠表示。如V:|-50@750-[view(55)]，或者写到metrics里面更好。 具体定义查看UILayoutPriority。有几个固定的数值。1000表示必须支持。</p>
+
+<p>4) options，这个要看具体需要。如果是竖排V布局，可以添加NSLayoutFormatAlignAllLeft，让他们对齐。根据需要也可以添加按位或NSLayoutFormatAlignAllLeft | NSLayoutFormatAlignAllRight。（鬼知道什么需要，自己看经验吧）</p>
+
+<p>5) 写好以后一般把constraint添加给superview：</p>
+
+<p><code>
+NSString *vfl1 = @"|-hPadding-[_headerL]-hPadding-|";   
+[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:vfl1 options:0 metrics:metrics views:dict1]];   
+</code></p>
+
+<p>6)还有一个api用于生成单个constaint</p>
+
+<p><code>
++(id)constraintWithItem:(id)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;  
+</code></p>
+
+<p>对于参数，记得，view1.attr1 = view2.attr2 * multiplier + constant就好。
+这个是不用VFL的，好理解，但是不方便。如果用这个写。工作两不会比传统布局少多少。</p>
+
+<h4>五.实际操作中的问题</h4>
+
+<p>上面都是理论，世界操作会有些奇怪的问题要注意。这节才是重点。</p>
+
+<p>xib模式，没啥要注意的，xib里报warning就报吧，我也不知道怎么弄，一切正常就好。</p>
+
+<p><strong>编码模式中，注意</strong></p>
+
+<ul>
+<li>1.addConstraint(s)前，view应该去部被addSubView上去了。</li>
+<li>2.不必给views写frame</li>
+<li>3.给必要的view关掉AutoresizeingMask。[_aView setTranslatesAutoresizingMaskIntoConstraints:NO];</li>
+<li>4.UILabel换行要写linebreakMode,要写numberOfLines(iOS7.0默认好像是1，坑爹了)</li>
+<li>5.UILabel要想换行，一定要添加preferredMaxLayoutWidth。否则没法初始化宽度。</li>
+</ul>
+
+
+<p>编码模式感受到的最大方便。label换行不用写行高计算了。完全自动适应。label所在的superview也会自动计算rect。这才是al的精华。</p>
+
+<p>所以，可以不用写这些了：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/*&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>if([[UIDevice currentDevice].systemVersion floatValue]&lt;7.0){  
+</span><span class='line'>    CGSize titleS = [title sizeWithFont:[_headerL font]  
+</span><span class='line'>                       constrainedToSize:CGSizeMake(270.0, CGFLOAT_MAX)  
+</span><span class='line'>                           lineBreakMode:NSLineBreakByWordWrapping];  
+</span><span class='line'>
+</span><span class='line'>    _headerL.frame = CGRectMake(_headerL.frame.origin.x, _headerL.frame.origin.y,  
+</span><span class='line'>                                _headerL.frame.size.width, titleS.height);  
+</span><span class='line'>}else{  
+</span><span class='line'>    CGRect titleR = [title boundingRectWithSize:CGSizeMake(270.0, CGFLOAT_MAX)  
+</span><span class='line'>                                        options:NSStringDrawingUsesLineFragmentOrigin  
+</span><span class='line'>                                     attributes:nil  
+</span><span class='line'>                                        context:nil];  
+</span><span class='line'>    headerL.frame = CGRectMake(_headerL.frame.origin.x, _headerL.frame.origin.y,  
+</span><span class='line'>                               _headerL.frame.size.width, titleR.size.height);  
+</span><span class='line'>}  
+</span><span class='line'>*/
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>我遇到了些问题，至今没有解决：</p>
+
+<p>纯代码写的Viewcontroller 无法正常显示al布局。用空白的xib做了vc后，其余再用code写，就正常了。怀疑自己写的self.view，还需要针对autolayout做什么处理。至此，al，基本功能已经可以为你服务了。的确方便很多，建议还是使用VFL代码模式，熟练后能够提高很多效率。</p>
+
+<p>引用别的同学的评论：</p>
+
+<p><em>最后一个问题：可以试一下self.view=自定义的视图； 不要用[self.view addSubview:&hellip;];</em></p>
+
+<p><a href="https://www.dropbox.com/s/vizq53ig4e1z7io/20131123_AutoLayoutTest.zip">demo</a></p>
+]]></content>
+  </entry>
+  
+</feed>

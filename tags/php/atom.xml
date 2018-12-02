@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: PHP | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/php/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[为 PHP 做单元测试（UnitTest）]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/"/>
+    <updated>2017-03-12T11:16:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest</id>
+    <content type="html"><![CDATA[<p>随便用 Google 百度一下就可以找到这个： <a href="https://phpunit.de/">PHPUnit – The PHP Testing Framework</a></p>
+
+<p>貌似也还有别的类似框架或者自己写 PHP 脚本来完成，但这个就不在我们今天的讨论范围啦。</p>
+
+<h2>Getting Started with PHPUnit</h2>
+
+<h3>Download</h3>
+
+<p>We distribute a <a href="http://php.net/phar">PHP Archive (PHAR)</a> that contains everything you need in order to use PHPUnit. Simply download it from here, make it executable, and put it into your <code>$PATH</code>, for instance:</p>
+
+<p><code>
+wget https://phar.phpunit.de/phpunit.phar
+chmod +x phpunit.phar
+sudo mv phpunit.phar /usr/local/bin/phpunit
+phpunit --version
+</code></p>
+
+<h3>Code</h3>
+
+<p>```
+&lt;?php
+class Money {</p>
+
+<pre><code>private $amount;
+
+public function __construct($amount) {
+    $this-&gt;amount = $amount;
+}
+
+public function getAmount() {
+    return $this-&gt;amount;
+}
+
+public function negate() {
+    return new Money(-1 * $this-&gt;amount);
+}
+
+// ...
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h3>TestCode</h3>
+
+<p>```
+&lt;?php
+use PHPUnit\Framework\TestCase;</p>
+
+<p>class MoneyTest extends TestCase {</p>
+
+<pre><code>public function testCanBeNegated() {
+    // Arrange
+    $a = new Money(1);
+
+    // Act
+    $b = $a-&gt;negate();
+
+    // Assert
+    $this-&gt;assertEquals(-1, $b-&gt;getAmount());
+}
+
+// ...
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h3>Run</h3>
+
+<p>```
+➜  PHPUnitExample git:(master) ✗ phpunit &mdash;bootstrap src/Monkey.php tests/MonkeyTest.php
+PHPUnit 5.7.5 by Sebastian Bergmann and contributors.</p>
+
+<p>.                                                                   1 / 1 (100%)</p>
+
+<p>Time: 95 ms, Memory: 8.00MB</p>
+
+<p>OK (1 test, 1 assertion)
+```</p>
+
+<p>比较好理解，加载一个类，然后执行相应的单元测试。
+<a href="https://github.com/shjborage/PHPUnitExample">PHPUnit 完整例子</a></p>
+
+<p>还要看相应的文档，了解一下高级用法。</p>
+
+<h2>高级用法(TODO)</h2>
+
+<h2>Refs</h2>
+
+<p><a href="https://phpunit.de/getting-started.html">Getting Started with PHPUnit</a></p>
+]]></content>
+  </entry>
+  
+</feed>

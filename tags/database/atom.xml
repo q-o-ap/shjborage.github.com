@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: DataBase | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/database/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[SQLite(FMDB) 线程安全 - 多线程处理]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li/"/>
+    <updated>2013-12-12T11:25:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/12/sqlite-xian-cheng-an-quan-duo-xian-cheng-chu-li</id>
+    <content type="html"><![CDATA[<p>在iOS开发中，经常用到SQLite，CoreData也不错，但很多时候还是自己写sql，使用FMDB来处理。当然了，也可以不用FMDB，直接写处理，这个不解释。</p>
+
+<p>但是，我们在数据库操作的时候，经常遇到多线程访问数据库的状况，常见的有几种处理方法：</p>
+
+<ul>
+<li>1, NSLock或类似方法加锁</li>
+<li>2, FMDatabaseQueue</li>
+<li>3, SQLITE_CONFIG_SERIALIZED</li>
+</ul>
+
+
+<p>下面我们来仔细看一下出现的问题以及相关的解决方案</p>
+
+<!-- more -->
+
+
+<h3>常见问题</h3>
+
+<p>以使用FMDB为例：</p>
+
+<p>The debugger says that the error occurs at [FMResultSet next] at the line, has <code>EXC_BAD_ACCESS</code></p>
+
+<p><code>
+rc = sqlite3_step(statement.statement);
+</code></p>
+
+<p>多线程访问的时候，会在这里报错。</p>
+
+<p>如何解决呢？</p>
+
+<h4>1. NSLock加锁（NSMutex）</h4>
+
+<p>详见苹果官方文档：
+<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Multithreading/ThreadSafety/ThreadSafety.html">Threading Programming Guide</a></p>
+
+<h4>2. FMDatabaseQueue</h4>
+
+<p>这个是我在某项目中用到的，所有查询都走这里。
+可能因为项目较复杂，用了这个还是会时候有问题，但稳定很多。可以有一些别的地方调用，没查清楚。</p>
+
+<p>```
+// 相关引用
+_fmQueue = [FMDatabaseQueue databaseQueueWithPath:sqlitePath];</p>
+
+<p>// 查询数据
+&ndash; (FMResultSet <em>)executeQueryWithSQL:(NSString </em>)sql
+{
+  BFLogVerbose(@&ldquo;executeQuery: %@&rdquo;, sql);</p>
+
+<p>  <strong>block FMResultSet *rs = nil;
+  </strong>block dispatch_semaphore_t sem = dispatch_semaphore_create(0);</p>
+
+<p>  [_fmQueue inDatabase:^(FMDatabase *fmdb){</p>
+
+<pre><code>FMResultSet *tmpRs = [fmdb executeQuery:sql];
+rs = [FMResultSet resultSetWithStatement:tmpRs.statement usingParentDatabase:fmdb];
+[tmpRs close];
+dispatch_semaphore_signal(sem);
+</code></pre>
+
+<p>  }];</p>
+
+<p>  dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+  dispatch_release(sem);</p>
+
+<p>  return rs;
+}
+```</p>
+
+<h3>3. SQLITE_CONFIG_SERIALIZED</h3>
+
+<p>SQLite provides a much simpler serialization. By just setting the sqlite_config() option SQLITE_CONFIG_SERIALIZED you will probably avoid most of these kinds of headaches. I discovered this the hard way after fighting with threading issues for a long while.</p>
+
+<p>```
+if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_ERROR) {</p>
+
+<pre><code>    NSLog(@"couldn't set serialized mode");
+</code></pre>
+
+<p>}
+```</p>
+
+<p>参考：
+<a href="http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0">http://stackoverflow.com/questions/3144700/exc-bad-access-when-using-sqlite-fmdb-and-threads-on-ios-4-0</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python MySQLdb安装以及问题汇总]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong/"/>
+    <updated>2013-10-30T23:17:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/30/python-mysqldban-zhuang-yi-ji-wen-ti-hui-zong</id>
+    <content type="html"><![CDATA[<p>自已备注一些, 斜体</p>
+
+<p>转自：<a href="http://blog.chinaunix.net/uid-8487640-id-3183185.html">http://blog.chinaunix.net/uid-8487640-id-3183185.html</a></p>
+
+<p>MySQLdb是Python连接MySQL的模块，下面介绍一下源码方式安装MySQLdb：</p>
+
+<p>首先要下载下载：请到官方网站<a href="http://sourceforge.net/projects/mysql-python/">http://sourceforge.net/projects/mysql-python/</a> 或者 <a href="http://downloads.sourceforge.net/project/mysql-python/mysql-python-test/1.2.3c1/MySQL-python-1.2.3c1.tar.gz?use_mirror=nchc">点击链接下载</a></p>
+
+<!-- more -->
+
+
+<p>解压：tar zxvf MySQL-python*</p>
+
+<p>进入文件目录，运行以下命令：
+<code>
+python setup.py install
+</code></p>
+
+<p>安装完成，到你的python安装目录下的site-packages目录里检查以下文件是否存在，如果存在即代表安装成功了</p>
+
+<p>Linux：MySQL_python-1.2.3c1-py2.6-linux-i686.egg
+Mac OS X：MySQL_python-1.2.3c1-py2.6-macosx-10.4-x86_64.egg</p>
+
+<h4>注：如果碰到mysql_config not found的问题，有两种方法解决：<em>可能两个方法要合一起</em></h4>
+
+<p>1）ln -s /usr/local/mysql/bin/mysql_config /usr/local/bin/mysql_config
+将mysql_confi从你的安装目录链接到/usr/local/bin目录下，这样就可以在任意目录下访问了（也可以放到/usr/bin）</p>
+
+<p>2）编辑源码文件夹的site.cfg文件，去掉#mysql_config = /usr/local/bin/mysql_config前的注释＃，修改后面的路径为你的mysql_config真正的目录就可以了。（如果不知道mysql_config在哪里，运行命令：whereis mysql_config）</p>
+
+<h4>注:如果碰到import error: libmysqlclient.so.18: cannot open shared object file: No such file or directory</h4>
+
+<p>解决方法:</p>
+
+<p>locate or find libmysqlclient.so.18
+link path/libmysqlclient.so.18 /usr/lib/libmysqlclient.so.18
+vi /etc/ld.so.conf    //加入libmysqlclient.so.18 所在的目录
+插入: /usr/lib/</p>
+
+<p>保存退出后执行/sbin/ldconfig生效</p>
+
+<h4><em>后部安装：需要进行一个软连接链接不然会提示报错。</em></h4>
+
+<p>问题如下：</p>
+
+<p>```</p>
+
+<blockquote><blockquote><blockquote><p>from django.db import connection
+cursor = connection.cursor()
+Traceback (most recent call last):
+  File &ldquo;<console>&rdquo;, line 1, in <module>
+  File &ldquo;/Library/Python/2.7/site-packages/django/db/<strong>init</strong>.py&rdquo;, line 39, in <strong>getattr</strong></p>
+
+<pre><code>return getattr(connections[DEFAULT_DB_ALIAS], item)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 193, in <strong>getitem</strong></p>
+
+<pre><code>backend = load_backend(db['ENGINE'])
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/utils.py&rdquo;, line 108, in load_backend</p>
+
+<pre><code>return import_module('%s.base' % backend_name)
+</code></pre>
+
+<p>  File &ldquo;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/<strong>init</strong>.py&rdquo;, line 37, in import_module</p>
+
+<pre><code>__import__(name)
+</code></pre>
+
+<p>  File &ldquo;/Library/Python/2.7/site-packages/django/db/backends/mysql/base.py&rdquo;, line 17, in <module></p>
+
+<pre><code>raise ImproperlyConfigured("Error loading MySQLdb module: %s" % e)
+</code></pre>
+
+<p>ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/<em>mysql.so, 2): Library not loaded: libmysqlclient.18.dylib
+  Referenced from: /Library/Python/2.7/site-packages/MySQL_python-1.2.4b4-py2.7-macosx-10.9-intel.egg/</em>mysql.so
+  Reason: image not found</p>
+
+<p>```</p></blockquote></blockquote></blockquote>
+
+<p>解决方案：</p>
+
+<p><code>
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: JavaScript | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/javascript/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[npm install 本地安装与全局安装]]></title>
+    <link href="http://shjborage.github.io/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/"/>
+    <updated>2017-01-03T17:30:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang</id>
+    <content type="html"><![CDATA[<p>研究 <code>node.js</code> 时，发现使用 <code>javascript</code> 也可以写 <code>shell</code> 脚本，用到了下面这个命令：</p>
+
+<p><code>
+npm install shelljs --save-dev
+</code></p>
+
+<p>顺带研究了一下 <code>npm install</code> 的使用，如果不带 <code>-g</code> 的话，是保存在当前目录下的【本地安装】，否则是全局安装。</p>
+
+<p><code>--save</code> 与 <code>--save-dev</code> 这个适用于有 <code>package.json</code> 的情况。
+保存在 <code>dependencies</code> 或 <code>devDependencies</code>中。</p>
+
+<h2>Ref</h2>
+
+<p><a href="https://yq.aliyun.com/articles/36217">npm install —— 从一个简单例子，看本地安装与全局安装的区别</a><br/>
+<a href="http://cnodejs.org/topic/54d33df497be414b68dcf503">请问 npm install &mdash;save 与 npm install &mdash;save-dev 的区别</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Study FE Skills with FreeCodeCamp]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/28/study-fe-skills-with-freecodecamp/"/>
+    <updated>2016-02-28T20:35:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/28/study-fe-skills-with-freecodecamp</id>
+    <content type="html"><![CDATA[<p>偶然的机会，让我结识了 <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp</a> 这个在 <code>JavaScript</code> 语言中 Star 数排名第一的项目。<br/>
+这是一个很好的学习前端技能的平台，<strong>Free</strong>。</p>
+
+<p>不管是否有基础，想学一些编程，都可以从前端开始学起，很好的网站。目前我已经用了有空的两天时间断断续续的学习了一些课程，大概总共用了3-4个小时左右，我更了解<code>Html</code>与<code>CSS</code>的一些东西。<br/>
+在这里可以学到以下东西：</p>
+
+<ul>
+<li>前端技能</li>
+<li>数据处理相关</li>
+<li>后端技能</li>
+<li>开源项目（公益）</li>
+</ul>
+
+
+<p>这是我的学习主页，大家有兴趣可以一起学～～<br/>
+<a href="http://www.freecodecamp.com/shjborage">http://www.freecodecamp.com/shjborage</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript ==与===区别（两个等号与三个等号）]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/19/js-equals-equals-yu-equals-equals-equals-qu-bie/"/>
+    <updated>2016-02-19T10:59:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/19/js-equals-equals-yu-equals-equals-equals-qu-bie</id>
+    <content type="html"><![CDATA[<h3>对于 string, number 等基础类型，== 和 === 是有区别的</h3>
+
+<ul>
+<li>不同类型间比较，== 之比较“转化成同一类型后的值”看“值”是否相等，===如果类型不同，其结果就是不等</li>
+<li>同类型比较，直接进行“值”比较，两者结果一样</li>
+</ul>
+
+
+<h3>对于 Array, Object 等高级类型，== 和 === 是没有区别的</h3>
+
+<ul>
+<li>进行“指针地址”比较</li>
+</ul>
+
+
+<h3>基础类型与高级类型，== 和 === 是有区别的</h3>
+
+<ul>
+<li>对于==，将高级转化为基础类型，进行“值”比较</li>
+<li>因为类型不同，===结果为false</li>
+</ul>
+
+
+<blockquote><p>20160912 update</p></blockquote>
+
+<h3>对于 null 与 undefined, == 和 === 是有区别的</h3>
+
+<ul>
+<li>如使用 <code>==</code> 的话，<code>undefined</code> 会被转换成 <code>null</code>，所以很多判断是否为 <code>null</code> 可以使用 <code>==</code>.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

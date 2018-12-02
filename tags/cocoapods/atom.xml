@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: CocoaPods | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/cocoapods/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CocoaPods使用注意事项-编译时不编译Pods时面的静态库]]></title>
+    <link href="http://shjborage.github.io/blog/2014/04/10/cocoapodsshi-yong-zhu-yi-shi-xiang-bian-yi-shi-bu-bian-yi-podsshi-mian-de-jing-tai-ku/"/>
+    <updated>2014-04-10T21:59:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/04/10/cocoapodsshi-yong-zhu-yi-shi-xiang-bian-yi-shi-bu-bian-yi-podsshi-mian-de-jing-tai-ku</id>
+    <content type="html"><![CDATA[<p>自从决定开始用CocoaPods以后，肯定就是根本停不下来的节奏。但是由于CocoaPods本身也是处于不断的开发与改进中的，自然也免不了各种问题。当然了，如果懂Ruby可以为社区贡献一份力量，如果不懂的话呢，就只能先总结总结，给自己减少一些犯错的“机会”吧。</p>
+
+<!-- more -->
+
+
+<p><em>进入正题</em><br/>
+升级Xcode5.1后，默认必须支持arm64，这个对于很多项目来说有一些问题，尤其是对于一些第三方库，比如<code>友盟统计</code>、<code>ShareSDK</code>等。 这些库很多都没有做好为64bit升级的准备，所以很多时候我们还不能支持64bit。
+因为本文不是讲64bit的支持，所以这里就不多说这个了，教程与使用方法应该也有很多。 <br/>
+这里列举一种在<code>Podfile</code>中让CocoaPods指定编译方式的方法</p>
+
+<p>```</p>
+
+<h1>Remove 64-bit build architecture from Pods targets</h1>
+
+<p>post_install do |installer|
+  installer.project.targets.each do |target|</p>
+
+<pre><code>target.build_configurations.each do |configuration|
+  target.build_settings(configuration.name)['ARCHS'] = '$(ARCHS_STANDARD_32_BIT)'
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h4>切入</h4>
+
+<p>下图中的配置一定要与<code>Pods</code>工程中一致否则就会导致编译时不编译Pods时面的静态库的问题，很奇怪的问题，也很难发现。
+问题的来源可能就是<strong><em>随便一点</em></strong>，可能在试的时候，忘了改回来，悲剧就发生了。<br/>
+图中是正确配置，默认配置如此。</p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/13759792423/player/" width="500" height="244" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS库添加CocoaPods支持]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi/"/>
+    <updated>2013-10-17T15:30:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/17/iosku-tian-jia-cocoapodszhi-chi</id>
+    <content type="html"><![CDATA[<p>现在CocoaPods如此方便（虽然可能也有它的缺点），但是很多开源库，自己写的库并没有对它进行支持，特研究了一下，分享给大家。</p>
+
+<h3>准备好库代码（GitHub上）</h3>
+
+<p>将代码Checkout下来，打开命令行，cd到代码根目录</p>
+
+<h3>创建XXXX.podspec</h3>
+
+<p><code>
+pod spec create XXXX
+</code></p>
+
+<!-- more -->
+
+
+<h3>编辑XXXX.podspec</h3>
+
+<p>创建好的文件里有很多指引，这步很简单。 实在不明白，再看看GitHub上别的库的spec文件怎么写的。</p>
+
+<h3>验证合法性</h3>
+
+<p><code>
+pod spec lint XXXX.podspec
+</code></p>
+
+<p>完成后即可把这个文件提交到<a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>中。</p>
+
+<p>When you&rsquo;re done you can also fork the <a href="https://github.com/CocoaPods/Specs">CocoaPods specs</a>  GitHub repository and send a pull request. We really love contributions and will help ensure it&rsquo;s perfect!</p>
+
+<h3>详细提交步骤</h3>
+
+<p>From：<a href="http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html">http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html</a></p>
+
+<h3>Contributing to the master repo</h3>
+
+<p>The master repo contains specifications of open-source Objective-C libraries.</p>
+
+<h4>Details</h4>
+
+<ul>
+<li> installation path: ~/.cocoapods/master</li>
+<li> home: <a href="https://github.com/CocoaPods/Specs">https://github.com/CocoaPods/Specs</a></li>
+</ul>
+
+
+<h4>Contributing</h4>
+
+<p>To ensure a high quality, reliable collection of Pods, the master repo is strict about the acceptable specifications. The CocoaPods linter (see the pod spec lint command) is used to validate specifications, and no errors or warnings are accepted.
+The highest priority of the master repo is to guarantee the integrity of existing CocoaPods installations.
+In general this means that:</p>
+
+<ul>
+<li> A specification cannot be deleted.</li>
+<li> Specifications can be updated only if they don’t affect existing installations.</li>
+<li><ul>
+<li>Broken specifications can be updated.</li>
+<li>Subspecs can be added as they are included by the parent specification by default.</li>
+</ul>
+</li>
+<li> Only authoritative version numbers are accepted.</li>
+</ul>
+
+
+<p>CocoaPods uses a versioning scheme known as Semantic Versioning, necessary for cross resolution of dependencies.</p>
+
+<h4>Unversioned libraries</h4>
+
+<p>One of the CocoaPods goals is to promote the discovery of open-source software, for this reason new Pods for libraries which are not versioned are accepted in the master repo. The specifications of those pods should carry the version 0.0.1 under the assumption that, if the author starts versioning, she/he is unlikely to pick 0.0.1. This is the only exception for authoritative version numbers.
+If you add an unversioned Pod it is your responsibility to ask the author of the library to tag versions, luckily we have a template for this.
+To prevent collisions with possible future versions, unversioned libraries can’t be updated until the author starts to tag them.
+If you need to update an unversioned library you can:</p>
+
+<ul>
+<li> Ask the author to version the library.</li>
+<li> Maintain a fork which is versioned. This fork should be clearly namespaced from the original library according the NAME@USERconvention (e.g. Reachability@irrationalfab). It should also mention in the summary that it is a versioned fork.</li>
+<li> Create a podspec and use it in a private repo.</li>
+</ul>
+
+
+<h4>Creating podspecs</h4>
+
+<p>Creating a podspec is very easy as we provide templates full of examples.
+You can use the following command:</p>
+
+<p><code>
+$ pod spec create Bananas
+</code></p>
+
+<p>If the library is hosted on GitHub you can pass the url so CocoaPods can precompile the template:</p>
+
+<p><code>
+$ pod spec create https://github.com/Bananas/Bananas
+</code></p>
+
+<p>A this point you need edit compile the template (a pod specification is a Ruby source file):</p>
+
+<p><code>
+$ pod spec lint Bananas.podspec --verboseSharing podspecs
+</code></p>
+
+<h4>Sharing podspecs</h4>
+
+<p>When a podspec lints you can submit it to the master repo.</p>
+
+<h4>Without push access</h4>
+
+<p>You need to fork the master repo on github, then you need to:</p>
+
+<p><code>
+$ cd ~/.cocoapods/master
+$ git checkout -b fork
+$ git remote add myfork https://github.com/YOUR_USER_NAME/Specs.git
+$ cp ~/Bananas.podspec ~/.cocoapods/master/Bananas/VERSION/
+$ git push myfork
+$ git checkout master
+</code></p>
+
+<p>Once you push your changes, you can make a pull request on CocoaPods/Specs.
+With push access</p>
+
+<p><code>
+$ pod push Bananas.podspec
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用CocoaPods进行iOS程序的开源库依懒管理]]></title>
+    <link href="http://shjborage.github.io/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li/"/>
+    <updated>2013-09-03T11:49:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/09/03/shi-yong-cocoapodsjin-xing-ioscheng-xu-de-kai-yuan-ku-yi-lan-guan-li</id>
+    <content type="html"><![CDATA[<h3>前言</h3>
+
+<p>每种语言发展到一个阶段，就会出现相应的依赖管理工具, 或者是中央代码仓库。比如</p>
+
+<ul>
+<li>Java: maven，Ivy</li>
+<li>Ruby: gems</li>
+<li>Python: pip, easy_install</li>
+<li>Nodejs: npm</li>
+</ul>
+
+
+<p>随着iOS开发者的增多，业界也出现了为iOS程序提供依赖管理的工具，这个工具叫：CocoaPods。</p>
+
+<!-- more -->
+
+
+<h3>CocoaPods简介</h3>
+
+<p>CocoaPods是一个负责管理iOS项目中第三方开源代码的工具。CocoaPods项目的源码在Github上管理。该项目开始于2011年8月12日，经过一年多的发展，现在已经超过1000次提交，并且持续保持活跃更新。开发iOS项目不可避免地要使用第三方开源库，CocoaPods的出现使得我们可以节省设置和更新第三方开源库的时间。</p>
+
+<p>拿我之前开发的粉笔网iPhone客户端为例，其使用了14个第三方开源库。在没有使用CocoaPods以前，我需要：</p>
+
+<p>把这些第三方开源库的相关文件复制到项目中，或者设置成git的submodule，然后这些开源库通常需要依赖系统的一些framework，我需要手工地将这些framework一一增加到项目依赖中，比如ASI网络库就需要增加以下framework: CFNetwork, SystemConfiguration, MobileCoreServices, CoreGraphics and zlib。</p>
+
+<p>对于RegexKitLite这个正则表达式库，我还需要设置-licucore的编译参数
+手工管理这些依赖包的更新。</p>
+
+<p>这些体力活虽然简单，但毫无技术含量并且浪费时间。在使用CocoaPods之后，我只需要将用到的第三方开源库放到一个名为Podfile的文件中，然后执行pod install。CocoaPods就会自动将这些第三方开源库的源码下载下来，并且为我的工程设置好相应的系统依赖和编译参数。</p>
+
+<h3>CocoaPods的安装和使用介绍</h3>
+
+<h4>安装</h4>
+
+<p>安装方式异常简单, Mac下都自带ruby，使用ruby的gem命令即可下载安装：
+<code>
+$ gem install cocoapods
+$ pod setup
+</code></p>
+
+<h4>使用</h4>
+
+<p>使用时需要新建一个名为Podfile的文件，以如下格式，将依赖的库名字依次列在文件中即可</p>
+
+<p><code>
+platform :ios,'5.0'
+pod 'JSONKit',       '~&gt; 1.4'
+pod 'ASIHTTPRequest'
+pod 'RegexKitLite'
+</code></p>
+
+<p>然后你将编辑好的Podfile文件放到你的项目根目录中，执行如下命令即可：</p>
+
+<p><code>
+cd "your project home"
+pod install
+</code></p>
+
+<p>现在，你的所有第三方库都已经下载完成并且设置好了编译参数和依赖，你只需要记住如下2点即可：</p>
+
+<p>使用CocoaPods生成的 .xcworkspace 文件来打开工程，而不是以前的 .xcodeproj 文件。
+每次更改了Podfile文件，你需要重新执行一次pod install命令。</p>
+
+<h4>查找第三方库</h4>
+
+<p>你如果不知道cocoaPods管理的库中，是否有你想要的库，那么你可以通过pod search命令进行查找，以下是我用pod search json查找到的所有可用的库：
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod search json&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>&ndash;> AnyJSON (0.0.1)
+</span><span class='line'>   Encode / Decode JSON by any means possible.
+</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/mattt/AnyJSON">https://github.com/mattt/AnyJSON&lt;/a>
+</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/mattt/AnyJSON.git">https://github.com/mattt/AnyJSON.git&lt;/a>
+</span><span class='line'>   &ndash; Versions: 0.0.1 [master repo]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>&ndash;> JSONKit (1.5pre)
+</span><span class='line'>   A Very High Performance Objective-C JSON Library.
+</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/johnezang/JSONKit">https://github.com/johnezang/JSONKit&lt;/a>
+</span><span class='line'>   &ndash; Source:   git://github.com/johnezang/JSONKit.git
+</span><span class='line'>   &ndash; Versions: 1.5pre, 1.4 [master repo]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>&ndash;> MTJSONDictionary (0.0.4)
+</span><span class='line'>   An NSDictionary category for when you&rsquo;re working with it converting to/from JSON. DEPRECATED, use MTJSONUtils
+</span><span class='line'>   instead.
+</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/mysterioustrousers/MTJSONDictionary.git">https://github.com/mysterioustrousers/MTJSONDictionary.git&lt;/a>
+</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/mysterioustrousers/MTJSONDictionary.git">https://github.com/mysterioustrousers/MTJSONDictionary.git&lt;/a>
+</span><span class='line'>   &ndash; Versions: 0.0.4, 0.0.3, 0.0.2 [master repo]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>&ndash;> MTJSONUtils (0.1.0)
+</span><span class='line'>   An NSObject category for working with JSON.
+</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/mysterioustrousers/MTJSONUtils.git">https://github.com/mysterioustrousers/MTJSONUtils.git&lt;/a>
+</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/mysterioustrousers/MTJSONUtils.git">https://github.com/mysterioustrousers/MTJSONUtils.git&lt;/a>
+</span><span class='line'>   &ndash; Versions: 0.1.0, 0.0.1 [master repo]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>&ndash;> SBJson (3.1.1)
+</span><span class='line'>   This library implements strict JSON parsing and generation in Objective-C.
+</span><span class='line'>   &ndash; Homepage: &lt;a href="http://stig.github.com/json-framework/">http://stig.github.com/json-framework/&lt;/a>
+</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/stig/json-framework.git">https://github.com/stig/json-framework.git&lt;/a>
+</span><span class='line'>   &ndash; Versions: 3.1.1, 3.1, 3.0.4, 2.2.3 [master repo]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>&ndash;> TouchJSON (1.0)
+</span><span class='line'>   TouchJSON is an Objective-C based parser and generator for JSON encoded data.
+</span><span class='line'>   &ndash; Homepage: &lt;a href="https://github.com/TouchCode/TouchJSON">https://github.com/TouchCode/TouchJSON&lt;/a>
+</span><span class='line'>   &ndash; Source:   &lt;a href="https://github.com/TouchCode/TouchJSON.git">https://github.com/TouchCode/TouchJSON.git&lt;/a>
+</span><span class='line'>   &ndash; Versions: 1.0 [master repo]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>生成第三方库的帮助文档</p>
+
+<p>如果你想让CococaPods帮你生成第三方库的帮助文档，并集成到XCode中，那么用brew安装appledoc即可：</p>
+
+<p><code>
+brew install appledoc
+</code></p>
+
+<p>关于appledoc，我在今年初的另一篇博客《使用Objective-C的文档生成工具:appledoc》中有专门介绍。它最大的优点是可以将帮助文档集成到XCode中，这样你在敲代码的时候，按住opt键单击类名或方法名，就可以显示出相应的帮助文档。</p>
+
+<h3>原理</h3>
+
+<p>大概研究了一下CocoaPods的原理，它是将所有的依赖库都放到另一个名为Pods项目中，然后让主项目依赖Pods项目，这样，源码管理工作都从主项目移到了Pods项目中。发现的一些技术细节有：</p>
+
+<p>Pods项目最终会编译成一个名为libPods.a的文件，主项目只需要依赖这个.a文件即可。
+对于资源文件，CocoaPods提供了一个名为Pods-resources.sh的bash脚本，该脚本在每次项目编译的时候都会执行，将第三方库的各种资源文件复制到目标目录中。
+CocoaPods通过一个名为Pods.xcconfig的文件来在编译时设置所有的依赖和参数。
+Have fun!</p>
+
+<p>转自：
+Posted by 唐巧 Dec 2nd, 2012   iOS
+自由转载-非商用-非衍生-保持署名 | Creative Commons BY-NC-ND 3.0</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CocoaPods本身版本的更新]]></title>
+    <link href="http://shjborage.github.io/blog/2013/09/02/cocoapodsde-shi-yong/"/>
+    <updated>2013-09-02T11:00:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/09/02/cocoapodsde-shi-yong</id>
+    <content type="html"><![CDATA[<p>CocoaPods本身也不断在更新，在项目进行中不建议进行更新。但是不得已时也得为之。
+具体方法如下：</p>
+
+<p><code>
+gem update --system
+gem install cocoapods
+pod setup
+</code></p>
+
+<p>和安装其实一样的，注意版本的变化</p>
+
+<p><code>
+pod --version
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

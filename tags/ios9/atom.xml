@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: iOS9 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/ios9/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[App Transport Security support aka apps on iOS 9 don't work]]></title>
+    <link href="http://shjborage.github.io/blog/2015/06/25/app-transport-security-support-aka-apps-on-ios-9-dont-work/"/>
+    <updated>2015-06-25T10:12:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/06/25/app-transport-security-support-aka-apps-on-ios-9-dont-work</id>
+    <content type="html"><![CDATA[<p>虽然不想说，但还是很久没更新了。<br>
+最近被El caption折腾了，虽然是有史以来最好用的beta版，但第二个beta被害了。</p>
+
+<p>几个重要的点 <br/>
+1. Cornerstone 罢工（2.7.10） <br/>
+2. iStat Menus 5（正版最新）罢工 <br/>
+3. beta2上Xcode 6.3.2 直接也不让用了 &ndash; -！</p>
+
+<p>这些。。有些不能接受</p>
+
+<p>不过我是这样解决的  <br/>
+1. svn 直接命令行  <br/>
+2. iStat Menus 放弃，反馈给官方等更新（把系统设置又改了一圈）  <br/>
+3. Xcode直接使用beta版凑合用（要上线就找同事咯～）</p>
+
+<p>不过问题总是会找上门来：</p>
+
+<p><strong><em>iOS9的模拟器一直上不了网，但模拟器里的Safari是可以联网的</em></strong>  <br/>
+我勒个去啊</p>
+
+<p>查了好久却一直没啥进展，可能是对网络安全了解较少，最好发现是协议升级，需要在app上进行一些配置才可以。原文如下：</p>
+
+<blockquote><p>iOS 9 (may) force developers to use App Transport Security exclusively. I overheard this somewhere randomly so I don&rsquo;t know whether this is true myself. But I suspect it and have come to this conclusion:</p>
+
+<p>The app running on iOS 9 will (maybe) no longer connect to a Meteor server without SSL.</p>
+
+<p>This means running meteor run ios or meteor run ios-device will (probably?) no longer work.</p>
+
+<p>In the app&rsquo;s info.plist, NSAppTransportSecurity [Dictionary] needs to have a key NSAllowsArbitraryLoads [Boolean] to be set to YES or Meteor needs to use https for its localhost server soon. (From Page 26 <a href="http://devstreaming.apple.com/videos/wwdc/2015/711y6zlz0ll/711/711_networking_with_nsurlsession.pdf?dl=1">http://devstreaming.apple.com/videos/wwdc/2015/711y6zlz0ll/711/711_networking_with_nsurlsession.pdf?dl=1</a>)</p>
+
+<p>This is what an error may look like. Of course this is at best, a guess:</p>
+
+<p>The resource could not be loaded because the App Transport Security policy requires the use of a secure connection.
+The best possible fix is to get Meteor to use a SSL server in dev mode.</p>
+
+<p>Oh the hassle! Also again, I overheard this from a loud third party.</p></blockquote>
+
+<p>引用：<a href="https://github.com/meteor/meteor/issues/4560">https://github.com/meteor/meteor/issues/4560</a></p>
+
+<p>附：真机调试也还有问题，是部分库造成的，这个还需要研究下。</p>
+]]></content>
+  </entry>
+  
+</feed>

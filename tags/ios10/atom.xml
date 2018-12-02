@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: iOS10 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/ios10/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 10 OTA Beta Profile 使用]]></title>
+    <link href="http://shjborage.github.io/blog/2016/09/13/ios-10-ota-beta-profile-shi-yong/"/>
+    <updated>2016-09-13T11:50:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/09/13/ios-10-ota-beta-profile-shi-yong</id>
+    <content type="html"><![CDATA[<p>每一年的 iOS 系统更新，都可以通过开发者账户进行下载试用。不过下载更新前，还是建议先将手机备份一下，使用 iTunes 备份即可。然后开发者的话，还是同时下载最新 Xcode 8 Beta，以免手机更新了不能调试~
+<img src="http://shjborage-public.qiniudn.com/2016-09-13-14737402351929.jpg" alt="" /></p>
+
+<p>今年的 iOS10 （也许之前也有，只是我不知道而已）推荐使用配置文件的方式进行，见下图：</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-09-13-14737388492924.jpg" alt="" /></p>
+
+<p>具体操作如下：<br/>
+1. 在 iOS 设备上直接打开这个界面，下载配置；或在 Mac 上下载配置，通过 AirDrop 或者其它工具将配置下载到 iOS 设备上<br/>
+2. 按提示操作，安装配置文件<br/>
+3. 安装完成后系统重启<br/>
+4. 进入<code>系统-设备-通用-软件更新</code>， 这时就可以看到 iOS10 的更新信息了，像正式版一样安装更新即可。</p>
+
+<blockquote><p>注：<br/>
+1. 如果一直卡在『正在验证』，请耐心等待，我等了十几分钟还不行，重启N次后还是等才解决问题。当然也有同学说，把 Sim卡 弹出，再插入解决了问题；<br/>
+2. 如果系统空间不足，按提示信息确认应用稍后下载即可，这个为苹果点赞，方便！目测这些应用还是你不太常用的 App。</p>
+
+<p><img class="<a" src="href="http://shjborage-public.qiniudn.com/2016-09-13-14737563036536.jpg">http://shjborage-public.qiniudn.com/2016-09-13-14737563036536.jpg</a>" width="375"></p></blockquote>
+
+<p>希望能对更新 iOS Beta 软件的同学有点帮助~</p>
+]]></content>
+  </entry>
+  
+</feed>

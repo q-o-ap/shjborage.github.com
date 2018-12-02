@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: OpenSource | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/opensource/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Reveal插件简介]]></title>
+    <link href="http://shjborage.github.io/blog/2014/04/08/revealcha-jian-jian-jie/"/>
+    <updated>2014-04-08T16:24:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/04/08/revealcha-jian-jian-jie</id>
+    <content type="html"><![CDATA[<p>Reveal 自己没有这种插件，可以修改工程使用，就自己做个吧。<br/>
+做的时候参考了Spark Inspector。</p>
+
+<p><a href="https://github.com/shjborage/Reveal-Plugin-for-XCode">https://github.com/shjborage/Reveal-Plugin-for-XCode</a></p>
+
+<!-- more -->
+
+
+<p>Plugin for Xcode to integrate the Reveal App to your project automatic(Without any modifications to your project).</p>
+
+<h2>Introduction</h2>
+
+<p><strong>The Reveal Plugin works just like Instruments.</strong></p>
+
+<p>The Spark Inspector integrates directly into Xcode, so you don&rsquo;t need to add frameworks or modify your project to inspect your app in the iOS Simulator.</p>
+
+<p>If you&rsquo;re in the middle of a debug session and something unexpected happens, you can attach the Spark Inspector to see what&rsquo;s going on. No restarting your app, no changing your project. All from inside Xcode.</p>
+
+<h2>Install</h2>
+
+<h3>Via Alcatraz</h3>
+
+<p>Reveal-Plugin-for-XCode is available through the <a href="http://alcatraz.io/">Alcatraz</a> Xcode plugin management system.</p>
+
+<p>From source</p>
+
+<p>Simply build the Xcode project and restart Xcode. The plugin will automatically install to <code>~/Library/Application Support/Developer/Shared/Xcode/Plug-ins</code>.</p>
+
+<h2>Uninstall</h2>
+
+<p>To uninstall, just remove the plugin from the above directory, and restart Xcode:</p>
+
+<p><code>
+rm -rf ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins/RevealPlugin.xcplugin
+</code></p>
+
+<p>Tested on Xcode 5.1 and Mac OS X 10.9.2.</p>
+
+<h2>Contributors</h2>
+
+<p>Welcome to fork and PullRequest to do this better.
+We use issues to manage bugs and enhanced features.</p>
+
+<h2>Thanks</h2>
+
+<ul>
+<li><a href="http://blog.ittybittyapps.com/blog/2013/11/07/integrating-reveal-without-modifying-your-xcode-project/">Integrating Reveal without modifying your Xcode project</a></li>
+<li><a href="http://onevcat.com/2013/02/xcode-plugin">Xcode 4 插件制作入门</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Flashlight(PowerSaving) 简介]]></title>
+    <link href="http://shjborage.github.io/blog/2013/05/28/flashlight-powersaving-jian-jie/"/>
+    <updated>2013-05-28T16:46:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/05/28/flashlight-powersaving-jian-jie</id>
+    <content type="html"><![CDATA[<h2>OpenSource</h2>
+
+<p>此项目已开源 <a href="https://bitbucket.org/Saick/flashlight">https://bitbucket.org/Saick/flashlight</a></p>
+
+<p>The best flashlight app to save you power and then protect you battery.</p>
+
+<p>Do you encounter such a situation: When you using the flashlight to show something, the iPhone is locked.
+PowerSaving Flashlight also solve this issue.</p>
+
+<!-- more -->
+
+
+<p>Details:
+1.Saving you battery power automatic, and you can change it from settings(both in app setting and system setting)
+2.Stop using you torch when battery level is low
+3.Disable the system Auto-Lock
+4.Turn on the flashlight when app startup(You can set it to &ldquo;NO&rdquo;
+5.Fullscreen control, but you can only turn it off by press the button.
+6.Share the famous app to you friends.</p>
+
+<p>No matter what problem you have, just contact us by email or visit the develop&rsquo;s blog.</p>
+
+<p>史上最懂你的省电手电筒</p>
+
+<p>还在为找不到好用的手电筒发愁么？
+还在为那些“大而全”的工具启动慢、难用发愁么？
+还在为手电筒用着用着就黑了发愁么？
+还在为手电筒用着太费电发愁么？</p>
+
+<ol>
+<li>自动为你的手机省电</li>
+<li>当电池电量过低，自动切换到“白屏”模式</li>
+<li>可选择禁用系统锁屏功能</li>
+<li>启动可选择默认打开手电筒</li>
+<li>全屏控制功能，按任意位置打开，关闭按开关</li>
+<li>分享手电筒给好友</li>
+</ol>
+
+
+<p>如果您遇到问题或者有好的建议，请直接与我们联系或者在程序中提交反馈，谢谢。</p>
+
+<p>无奈AppStore不让上，做的再好都不让上，哎！</p>
+
+<h4>91：</h4>
+
+<p><a href="http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788">http://app.91.com/Soft/Detail.aspx?Platform=iPhone&amp;f_id=1577788</a></p>
+
+<h4>同步推：</h4>
+
+<p><a href="http://app.tongbu.com/10001483_flashlight.html">http://app.tongbu.com/10001483_flashlight.html</a></p>
+
+<h5>欢迎留言反馈！</h5>
+]]></content>
+  </entry>
+  
+</feed>

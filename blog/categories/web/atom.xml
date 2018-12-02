@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Web | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[为 PHP 做单元测试（UnitTest）]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/"/>
+    <updated>2017-03-12T11:16:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest</id>
+    <content type="html"><![CDATA[<p>随便用 Google 百度一下就可以找到这个： <a href="https://phpunit.de/">PHPUnit – The PHP Testing Framework</a></p>
+
+<p>貌似也还有别的类似框架或者自己写 PHP 脚本来完成，但这个就不在我们今天的讨论范围啦。</p>
+
+<h2>Getting Started with PHPUnit</h2>
+
+<h3>Download</h3>
+
+<p>We distribute a <a href="http://php.net/phar">PHP Archive (PHAR)</a> that contains everything you need in order to use PHPUnit. Simply download it from here, make it executable, and put it into your <code>$PATH</code>, for instance:</p>
+
+<p><code>
+wget https://phar.phpunit.de/phpunit.phar
+chmod +x phpunit.phar
+sudo mv phpunit.phar /usr/local/bin/phpunit
+phpunit --version
+</code></p>
+
+<h3>Code</h3>
+
+<p>```
+&lt;?php
+class Money {</p>
+
+<pre><code>private $amount;
+
+public function __construct($amount) {
+    $this-&gt;amount = $amount;
+}
+
+public function getAmount() {
+    return $this-&gt;amount;
+}
+
+public function negate() {
+    return new Money(-1 * $this-&gt;amount);
+}
+
+// ...
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h3>TestCode</h3>
+
+<p>```
+&lt;?php
+use PHPUnit\Framework\TestCase;</p>
+
+<p>class MoneyTest extends TestCase {</p>
+
+<pre><code>public function testCanBeNegated() {
+    // Arrange
+    $a = new Money(1);
+
+    // Act
+    $b = $a-&gt;negate();
+
+    // Assert
+    $this-&gt;assertEquals(-1, $b-&gt;getAmount());
+}
+
+// ...
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h3>Run</h3>
+
+<p>```
+➜  PHPUnitExample git:(master) ✗ phpunit &mdash;bootstrap src/Monkey.php tests/MonkeyTest.php
+PHPUnit 5.7.5 by Sebastian Bergmann and contributors.</p>
+
+<p>.                                                                   1 / 1 (100%)</p>
+
+<p>Time: 95 ms, Memory: 8.00MB</p>
+
+<p>OK (1 test, 1 assertion)
+```</p>
+
+<p>比较好理解，加载一个类，然后执行相应的单元测试。
+<a href="https://github.com/shjborage/PHPUnitExample">PHPUnit 完整例子</a></p>
+
+<p>还要看相应的文档，了解一下高级用法。</p>
+
+<h2>高级用法(TODO)</h2>
+
+<h2>Refs</h2>
+
+<p><a href="https://phpunit.de/getting-started.html">Getting Started with PHPUnit</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Linux 开发备忘]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang/"/>
+    <updated>2017-03-12T11:00:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang</id>
+    <content type="html"><![CDATA[<h2>Terminal 使用相关（Mac 下测试通过）</h2>
+
+<h3><a href="http://blog.csdn.net/kai27ks/article/details/7449610">.bash_profile生效方法</a></h3>
+
+<p><code>
+source .bash_profile
+exec bash --login
+</code></p>
+
+<h3>获取当前时间的unix时间戳</h3>
+
+<p>from: <a href="http://www.jb51.net/LINUXjishu/227114.html">http://www.jb51.net/LINUXjishu/227114.html</a></p>
+
+<p><code>
+date +%s
+</code></p>
+
+<h3>awk 命令</h3>
+
+<p><a href="http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html">http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html</a></p>
+
+<h3>grep 查询日志</h3>
+
+<p><a href="http://www.cnblogs.com/end/archive/2012/02/21/2360965.html">linux grep命令</a></p>
+
+<p><code>
+grep -n "xxx" log/xxx.2016xxxxx*
+</code></p>
+
+<h3>压缩解压</h3>
+
+<p>```
+// unzip
+tar -zxvf xxx.gz</p>
+
+<p>// zip a dir
+tar -zcvf xxx.gz dirName
+```</p>
+
+<h3>Terminal 光标移动</h3>
+
+<p><a href="http://blog.csdn.net/teng_ontheway/article/details/50159891">http://blog.csdn.net/teng_ontheway/article/details/50159891</a></p>
+
+<p><code>
+Ctrl + a    // 回行首
+Ctrl + e    // 回行尾
+</code></p>
+
+<!-- more -->
+
+
+<h3>端口占用查询</h3>
+
+<p>命令 <code>lsof -i tcp:port</code>（port替换成端口号，比如 6379）可以查看该端口被什么程序占用，并显示PID，方便KILL</p>
+
+<h2>Vim 相关</h2>
+
+<p>控制鼠标模式，目前还是比较适应纯键盘输入。</p>
+
+<p><code>
+set mouse=v
+</code></p>
+
+<h3>Vim插件体系管理系统</h3>
+
+<p><a href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a>
+<a href="https://github.com/szw/vim-tags">https://github.com/szw/vim-tags</a>
+快捷键 <code>Ctrl+]</code></p>
+
+<p>这个插件体系也可以完全不用的~~</p>
+
+<h4>ctags</h4>
+
+<p>其实是个索引文件，需要创建，并且在当前目录打开才可以使用的。</p>
+
+<p>```
+// 创建tags文件
+cd /your work path
+ctags -R *</p>
+
+<p>// vim 中跳转与返回
+Ctrl + ]
+Ctrl + T
+```</p>
+
+<h5>ctags 更好的支持 php</h5>
+
+<p>在 <code>~/.ctags</code> 中添加这段，更好的创建 php 文件的 tags 文件。</p>
+
+<p><code>
+--regex-php=/^[ \t]*[(private|protected|public|static)( \t)]*function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/f, function, functions/
+--regex-php=/^[ \t]*[(private|protected|public|static)]+[ \t]+\$([A-Za-z0-9_]+)[ \t]*/\1/p, property, properties/
+--regex-php=/^[ \t]*(const)[ \t]+([A-Za-z0-9_]+)[ \t]*/\2/d, const, constants/
+</code></p>
+
+<h4>taglist</h4>
+
+<h4>WinManager</h4>
+
+<h4>phpcomplete</h4>
+
+<h4>supertab</h4>
+
+<p>```
+&ldquo;phpcomplete
+filetype plugin on
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP</p>
+
+<p>&ldquo; taglist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1</p>
+
+<p>&ldquo; wm
+let g:winManagerWindowLayout=&lsquo;FileExplorer|TagList&rsquo;
+"nmap wm :WMToggle<cr></p>
+
+<p>&ldquo; 设置winmanager
+&rdquo; 设置界面分割
+&ldquo;let g:winManagerWindowLayout = "TagList|FileExplorer&rdquo;
+&ldquo;设置winmanager的宽度，默认为25
+let g:winManagerWidth = 30
+"定义打开关闭winmanager快捷键为F8 => 改为普通模式的 wm
+nmap wm :WMToggle<cr>
+"在进入vim时自动打开winmanager
+let g:AutoOpenWinManager = 1</p>
+
+<p>&ldquo; supertab
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType=&rdquo;&lt;C-X>&lt;C-O>&ldquo;
+```</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2017-03-12-14776418022718.jpg" alt="" /></p>
+
+<h5>代码自动补全升级</h5>
+
+<p><a href="http://blog.csdn.net/arcsinsin/article/details/39436043">VIM代码补全提示功能</a></p>
+
+<p>插件是这个：<a href="http://www.vim.org/scripts/script.PHP?script_id=1879">autocomplpop</a>
+安装后，在 <code>.vimrc</code> 中添加配置，支持 php 的 <code>::</code>, <code>-&gt;</code>, <code>$</code>：</p>
+
+<p><code>
+if !exists('g:AutoComplPop_Behavior')
+let g:AutoComplPop_Behavior = {}
+let g:AutoComplPop_Behavior['php'] = []
+call add(g:AutoComplPop_Behavior['php'], {
+\ 'command' : "",
+\ 'pattern' : printf('−&gt;|::|$\k\{『百分号』d,}$', 0),
+\ 'repeat' : 0,
+\})
+endif
+</code></p>
+
+<h4>NERDTree</h4>
+
+<p><code>
+ 114 "NERDTree
+ 115 let g:NERDTree_title="[NERDTree]"
+ 116 let g:winManagerWindowLayout="NERDTree|TagList"
+ 117
+ 118 function! NERDTree_Start()
+ 119     exec 'NERDTree'
+ 120 endfunction
+ 121
+ 122 function! NERDTree_IsValid()
+ 123     return 1
+ 124 endfunction
+</code></p>
+
+<p><a href="http://blog.csdn.net/bokee/article/details/6633193">http://blog.csdn.net/bokee/article/details/6633193</a></p>
+
+<p>这个版本的Winmanager好像有个小bug，你在打开Winmanager界面时，会同时打开一个空的文件。这会影响后续使用，所以我们要在打开Winmanager时关掉这个空文件。在~/.vim/plugin目录下的winmanager.vim文件中找到以下函数定义并在第5行下添加第6行的内容：</p>
+
+<p>```
+function! <SID>ToggleWindowsManager()<br/>
+   if IsWinManagerVisible()</p>
+
+<pre><code>  call s:CloseWindowsManager()  
+</code></pre>
+
+<p>   else</p>
+
+<pre><code>  call s:StartWindowsManager()  
+  exe 'q'
+</code></pre>
+
+<p>   end<br/>
+endfunction
+```</p>
+
+<h3>Vim 打开多窗口、多文件之间的切换</h3>
+
+<p>打开多个文件：
+一、Vim 还没有启动的时候：``
+1.在终端里输入
+<code>
+vim file1 file2 ... filen便可以打开所有想要打开的文件
+</code>
+2.Vim已经启动
+输入
+<code>
+:e file
+</code></p>
+
+<p>可以再打开一个文件，并且此时vim里会显示出file文件的内容。</p>
+
+<p>3.同时显示多个文件：</p>
+
+<p><code>
+:sp         //水平切分窗口
+:vsplit     //垂直切分窗口(:vsp)
+</code></p>
+
+<p>二、在文件之间切换：
+1.文件间切换
+<code>
+Ctrl+6  //两文件间的切换
+:bn      //下一个文件
+:bp      //上一个文件
+:ls       //列出打开的文件，带编号
+:b1~n  //切换至第n个文件
+</code></p>
+
+<p>对于用 <code>(v)split</code> 在多个窗格中打开的文件，这种方法只会在当前窗格中切换不同的文件。</p>
+
+<p>2.在窗格间切换的方法</p>
+
+<p><code>
+Ctrl+w+方向键——切换到前／下／上／后一个窗格
+Ctrl+w+h/j/k/l ——同上
+Ctrl+ww——依次向后切换到下一个窗格中
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[redis-源码研究之-INCR]]></title>
+    <link href="http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr/"/>
+    <updated>2016-12-28T16:47:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr</id>
+    <content type="html"><![CDATA[<p>调用类似微博的关注 Feed 流的实现时，发现早在2009年，<a href="https://redis.io">redis</a> 官方就写过这样<a href="https://redis.io/topics/twitter-clone">一篇文章</a>：通过 <code>redis</code> 的各种 API 来做数据存储，方便的实现 Push 的关注流。</p>
+
+<p>简单研究了一下，最终改了一点点代码，详情见 <a href="https://github.com/shjborage/retwis">Github</a>。</p>
+
+<p>今天主要研究一下这个命令 <a href="https://redis.io/commands/incr">INCR</a> ，看 <code>redis</code> 是如何实现这个命令在多线程访问的。</p>
+
+<!-- more -->
+
+
+<h2>准备工作</h2>
+
+<ol>
+<li><code>redis</code> 源码 <a href="https://github.com/antirez/redis">https://github.com/antirez/redis</a></li>
+<li>当然还离不开官方的源码说明：<a href="https://github.com/antirez/redis#redis-internals">https://github.com/antirez/redis#redis-internals</a></li>
+<li><code>vim</code> + <code>ctags</code> 自行脑补看代码的流程吧~</li>
+</ol>
+
+
+<h2>main 入口</h2>
+
+<p>找到 <code>main</code> 函数，Server、Client 应该至少有两个：</p>
+
+<p>```
+find ./* | xargs grep -n &lsquo;main(&rsquo;</p>
+
+<p>// 重要结果
+./redis-cli.c:2552:int main(int argc, char <strong>argv) {
+./server.c:3566:int main(int argc, char </strong>argv) {
+```</p>
+
+<p>发现 <code>server.c</code>，在 <code>server.h</code> 中找到各种结构体的说明（官网也有讲）</p>
+
+<h3>server.h</h3>
+
+<p>```
+struct redisServer {</p>
+
+<pre><code>/* General */
+pid_t pid;                  /* Main process pid. */
+char *configfile;           /* Absolute config file path, or NULL */
+char *executable;           /* Absolute executable file path. */
+char **exec_argv;           /* Executable argv vector (copy). */
+int hz;                     /* serverCron() calls frequency in hertz */
+redisDb *db;
+dict *commands;             /* Command table */
+...
+list *clients;              /* List of active clients */
+...
+client *master;     /* Client that is master for this slave */
+...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>```
+typedef struct client {</p>
+
+<pre><code>int fd;
+sds querybuf;
+int argc;
+robj **argv;
+redisDb *db;
+int flags;
+list *reply;
+char buf[PROTO_REPLY_CHUNK_BYTES];
+... many other fields ...
+</code></pre>
+
+<p>} client;
+```</p>
+
+<p>```
+typedef struct redisObject {</p>
+
+<pre><code>unsigned type:4;
+unsigned encoding:4;
+unsigned lru:LRU_BITS; /* LRU time (relative to server.lruclock) or
+                        * LFU data (least significant 8 bits frequency
+                        * and most significant 16 bits decreas time). */
+int refcount;
+void *ptr;
+</code></pre>
+
+<p>} robj;
+```</p>
+
+<h3>server.c</h3>
+
+<p>重要初始化流程：</p>
+
+<p><code>
+initServerConfig() //setups the default values of the server structure.
+initServer() //allocates the data structures needed to operate, setup the listening socket, and so forth.
+aeMain() // starts the event loop which listens for new connections.
+</code></p>
+
+<p><code>call()</code> is used in order to call a given command in the context of a given client.</p>
+
+<p>这个就是我们要找的处理命令入口方法了。</p>
+
+<p>附上一个完整的 <code>Command</code> 说明:</p>
+
+<blockquote><p>The global variable <code>redisCommandTable</code> defines all the Redis commands, specifying the name of the command, the function implementing the command, the number of arguments required, and other properties of each command.</p></blockquote>
+
+<p>```
+struct redisCommand redisCommandTable[] = {</p>
+
+<pre><code>{"module",moduleCommand,-2,"as",0,NULL,1,1,1,0,0},
+{"get",getCommand,2,"rF",0,NULL,1,1,1,0,0},
+{"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0},
+...
+{"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+{"decr",decrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+...
+</code></pre>
+
+<p>```</p>
+
+<p>但我们发现， <code>call()</code> 是由 <code>processCommand()</code> 调用的，<code>processCommand()</code> 的调用在 <code>server.c</code> 中并没有。 还需努力。。。</p>
+
+<p>继续看官方文档（其实也在本地搜索了一下）</p>
+
+<p>```
+find ./* | xargs grep -n &lsquo;processCommand&rsquo;</p>
+
+<p>// 结果
+./cluster.c:5128:                 * not trapped earlier in processCommand(). Report the same
+grep: ./modules: Is a directory
+./networking.c:1299:            if (processCommand&copy; == C_OK)
+Binary file ./networking.o matches
+Binary file ./redis-check-rdb matches
+Binary file ./redis-sentinel matches
+Binary file ./redis-server matches
+./server.c:2226: * processCommand() execute the command or prepare the
+./server.c:2232:int processCommand(client <em>c) {
+./server.h:1547:int processCommand(client </em>c);
+Binary file ./server.o matches
+./tags:3304:processCommand  server.c    /^int processCommand(client *c) {$/;&ldquo;   f
+```</p>
+
+<p><code>server.h</code> 中已经暴露出了 API，提供给了 <code>networking.c</code>。所以继续下文。</p>
+
+<h2>networking.c</h2>
+
+<blockquote><p><code>createClient()</code> // allocates and initializes a new client.
+the <code>addReply*()</code> family of functions are used by commands implementations in order to append data to the client structure, that will be transmitted to the client as a reply for a given command executed.
+<code>writeToClient()</code> transmits the data pending in the output buffers to the client and is called by the writable event handler sendReplyToClient().
+<code>readQueryFromClient()</code> is the readable event handler and accumulates data from read from the client into the query buffer.
+<code>processInputBuffer()</code> is the entry point in order to parse the client query buffer according to the Redis protocol. Once commands are ready to be processed, it calls <code>processCommand()</code> which is defined inside server.c in order to actually execute the command.
+<code>freeClient()</code> deallocates, disconnects and removes a client.</p></blockquote>
+
+<p>基本上理完了整体的调用流程：</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824009373678.jpg" alt="" /></p>
+
+<p>其它细节待研究，我们重点看 <code>call()</code>。</p>
+
+<h2>call()</h2>
+
+<p>研究了一下 <code>callgraph</code>，把 C 代码的调用关系梳理了一下（比干巴巴的代码好些，当然还要结合代码去分析）：</p>
+
+<p><code>
+callgraph -b chrome -f call
+</code></p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824095565432.jpg" alt="" /></p>
+
+<p>找到 <strong><code>proc</code></strong> 这个重点函数</p>
+
+<p><code>
+ 2127     /* Call the command. */
+ 2128     dirty = server.dirty;
+ 2129     start = ustime();
+ 2130     c-&gt;cmd-&gt;proc(c);
+ 2131     duration = ustime()-start;
+ 2132     dirty = server.dirty-dirty;
+ 2133     if (dirty &lt; 0) dirty = 0;
+</code></p>
+
+<p>到 <code>client</code> 中了，需要看下这个 <code>cmd</code>（<code>redisCommand</code>） 下的 <code>proc</code> (<code>redisCommandProc</code>)</p>
+
+<p><code>
+typedef void redisCommandProc(client *c);
+</code></p>
+
+<p>需要找出这个 <code>callback</code> 在哪设置的，如何执行。</p>
+
+<p>我们的 <code>client</code> 里面主要是从客户端那拿解析到的命令，是通过 <code>argc</code> 和 <code>argv</code> 来表现的。
+在 <code>processCommand</code> 中通过 <code>lookupCommand</code> 来给 <code>cmd</code> 赋值，在 <code>server</code> 中有 <code>commands</code> 保存的命令列表。</p>
+
+<p><code>
+2243     /* Now lookup the command and check ASAP about trivial error conditions
+2244      * such as wrong arity, bad command name and so forth. */
+2245     c-&gt;cmd = c-&gt;lastcmd = lookupCommand(c-&gt;argv[0]-&gt;ptr);
+</code></p>
+
+<p><code>commands</code> 是在 <code>initServerConfig</code> 中初始化的，也是根据 <code>redisCommandTable</code> 进行的。</p>
+
+<p><code>
+{"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+</code></p>
+
+<p>如下代码进行了初始化：</p>
+
+<p>```
+int numcommands = sizeof(redisCommandTable)/sizeof(struct redisCommand);</p>
+
+<p>for (j = 0; j &lt; numcommands; j++) {</p>
+
+<pre><code>struct redisCommand *c = redisCommandTable+j;
+char *f = c-&gt;sflags;
+...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>redisCommand 定义：
+<code>
+ 1161 struct redisCommand {
+ 1162     char *name;
+ 1163     redisCommandProc *proc;
+ 1164     int arity;
+ 1165     char *sflags; /* Flags as string representation, one char per flag. */
+ 1166     int flags;    /* The actual flags, obtained from the 'sflags' field. */
+ 1167     /* Use a function to determine keys arguments in a command line.
+ 1168      * Used for Redis Cluster redirect. */
+ 1169     redisGetKeysProc *getkeys_proc;
+ 1170     /* What keys should be loaded in background when calling this command? */
+ 1171     int firstkey; /* The first argument that's a key (0 = no keys) */
+ 1172     int lastkey;  /* The last argument that's a key */
+ 1173     int keystep;  /* The step between first and last key */
+ 1174     long long microseconds, calls;
+ 1175 };
+</code></p>
+
+<p>所以每个命令都对应的 <code>proc</code>，就在 <code>redisCommandTable</code> 中。
+<code>incr</code> 对应的就是 <code>incrCommand</code>，在 <code>t_string.c</code> 中又中转到 <code>incrDecrCommand</code>。</p>
+
+<h2>incrDecrCommand(client *c, long long incr)</h2>
+
+<p>调用关系：</p>
+
+<p>```
+void incrCommand(client *c) {</p>
+
+<pre><code>incrDecrCommand(c,1);
+</code></pre>
+
+<p>}
+```</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14828945195167.jpg" alt="" /></p>
+
+<p>先来分析两个参数：</p>
+
+<p><code>
+client *c       // 客户端实例
+long long incr  // 操作数， incr命令时为 `1`
+</code></p>
+
+<p>看来半天，这里的结构也是基本的操作，除了 <code>server.dirty</code> 的操作外，貌似没有多线程相关的处理。</p>
+
+<p><code>
+ 341 void incrDecrCommand(client *c, long long incr) {
+ 342     long long value, oldvalue;
+ 343     robj *o, *new;
+ 344
+ 345     o = lookupKeyWrite(c-&gt;db,c-&gt;argv[1]);
+ 346     if (o != NULL &amp;&amp; checkType(c,o,OBJ_STRING)) return;
+ 347     if (getLongLongFromObjectOrReply(c,o,&amp;value,NULL) != C_OK) return;
+ 348
+ 349     oldvalue = value;
+ 350     if ((incr &lt; 0 &amp;&amp; oldvalue &lt; 0 &amp;&amp; incr &lt; (LLONG_MIN-oldvalue)) ||
+ 351         (incr &gt; 0 &amp;&amp; oldvalue &gt; 0 &amp;&amp; incr &gt; (LLONG_MAX-oldvalue))) {
+ 352         addReplyError(c,"increment or decrement would overflow");
+ 353         return;
+ 354     }
+ 355     value += incr;
+ 356
+ 357     if (o &amp;&amp; o-&gt;refcount == 1 &amp;&amp; o-&gt;encoding == OBJ_ENCODING_INT &amp;&amp;
+ 358         (value &lt; 0 || value &gt;= OBJ_SHARED_INTEGERS) &amp;&amp;
+ 359         value &gt;= LONG_MIN &amp;&amp; value &lt;= LONG_MAX)
+ 360     {
+ 361         new = o;
+ 362         o-&gt;ptr = (void*)((long)value);
+ 363     } else {
+ 364         new = createStringObjectFromLongLong(value);
+ 365         if (o) {
+ 366             dbOverwrite(c-&gt;db,c-&gt;argv[1],new);
+ 367         } else {
+ 368             dbAdd(c-&gt;db,c-&gt;argv[1],new);
+ 369         }
+ 370     }
+ 371     signalModifiedKey(c-&gt;db,c-&gt;argv[1]);
+ 372     notifyKeyspaceEvent(NOTIFY_STRING,"incrby",c-&gt;argv[1],c-&gt;db-&gt;id);
+ 373     server.dirty++;
+ 374     addReply(c,shared.colon);
+ 375     addReply(c,new);
+ 376     addReply(c,shared.crlf);
+ 377 }
+</code></p>
+
+<p>还是得回头看 <code>call()</code> 里面到底还有哪些多线程相关操作。</p>
+
+<p>```
+ 2127     /<em> Call the command. </em>/
+ 2128     dirty = server.dirty;
+ 2129     start = ustime();
+ 2130     c->cmd->proc&copy;;
+ 2131     duration = ustime()-start;
+ 2132     dirty = server.dirty-dirty;
+ 2133     if (dirty &lt; 0) dirty = 0;</p>
+
+<p> &hellip;</p>
+
+<p> 2169         /<em> Check if the command operated changes in the data set. If so
+ 2170          * set for replication / AOF propagation. </em>/
+ 2171         if (dirty) propagate_flags |= (PROPAGATE_AOF|PROPAGATE_REPL);
+```</p>
+
+<p>再来看看这个 <code>PROPAGATE_AOF</code> 是搞啥的</p>
+
+<h2>aof.c</h2>
+
+<p>官方说明： <a href="https://github.com/antirez/redis#aofc-and-rdbc">https://github.com/antirez/redis#aofc-and-rdbc</a></p>
+
+<blockquote><p>As you can guess from the names these files implement the RDB and AOF persistence for Redis. Redis uses a persistence model based on the fork() system call in order to create a thread with the same (shared) memory content of the main Redis thread. This secondary thread dumps the content of the memory on disk. This is used by rdb.c to create the snapshots on disk and by aof.c in order to perform the AOF rewrite when the append only file gets too big.</p>
+
+<p>The implementation inside aof.c has additional functions in order to implement an API that allows commands to append new commands into the AOF file as clients execute them.</p>
+
+<p>The call() function defined inside server.c is responsible to call the functions that in turn will write the commands into the AOF.</p></blockquote>
+
+<p>这个应该是主要原因了，一个通用的方案，因为时间关系，有时间再把这部分详细研究吧。</p>
+
+<h2>Refs</h2>
+
+<p><a href="http://www.tinylab.org/callgraph-draw-the-calltree-of-c-functions/?utm_source=tuicool&amp;utm_medium=referral">源码分析：静态分析 C 程序函数调用关系图</a><br/>
+<a href="https://zh.wikipedia.org/wiki/DOT%E8%AF%AD%E8%A8%80">DOT语言</a></p>
+
+<h2>Evernote</h2>
+
+<p><a href="https://www.evernote.com/l/AC5QDjLdH0ZN1K1zh9XY343jZaP1AWeYbS8">redis-结构-源码研究备忘</a><br/>
+<a href="https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM">https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dash：程序员的的好帮手]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou/"/>
+    <updated>2013-10-27T20:08:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/27/dashcheng-xu-yuan-de-de-hao-bang-shou</id>
+    <content type="html"><![CDATA[<p>现在最新版UI比以前好一些，不过总体差异不大。</p>
+
+<p>转自：<a href="http://blog.csdn.net/meegomeego/article/details/8798665">http://blog.csdn.net/meegomeego/article/details/8798665</a></p>
+
+<p>作为一Coder，每天最常见的动作就是查看各种API文档，你一定也有过同时打开N个窗口（HTML、PDF、CHM），不停的在编辑器与文档之间切换的感受吧？怎么说呢，其实我很讨厌这种枯燥无味的动作，那么如何才能提高效率，减少无用功呢？下面就给大家介绍一款非常好用的Mac小工具：<em>Dash</em>，相比这个英文名，我跟喜欢叫它“叮当猫”，嘿嘿。</p>
+
+<p><a href="http://itunes.apple.com/cn/app/dash-docs-snippets/id458034879?mt=12">点我直达AppStore介绍页面</a></p>
+
+<h3>功能简介</h3>
+
+<p>官方用一句话就概括了它的用途：Dash是一个API文档浏览器（ API Documentation Browser），以及代码片段管理工具（Code Snippet Manager）。你没看错，它就只有这两个功能，但确实是程序员（至少对于我来说）最为关心的特性，自己之前也用过了不少类似的工具，可以毫不夸张地说，Dash是它们之中做的最好的一个！</p>
+
+<!-- more -->
+
+
+<h4>强悍的API文档浏览、搜索功能</h4>
+
+<p>想必这个功能是大家最常用的了吧，每天要反复查看、搜索那么多的API细节，没有一个好工具，单靠自己的双手如何应付得来？窗口不停的切来切去，很烦啊！Dash采用集成单一窗口的方式，很好的解决了这个问题。看下面的截图：</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10511272486/" title="2013-10-27-1 by EricShj, on Flickr"><img src="http://farm4.staticflickr.com/3789/10511272486_dc57f954a1.jpg" width="500" height="300" alt="2013-10-27-1"></a></p>
+
+<p>上图便是Dash的API浏览器主界面：左侧边栏是各种编程语言以及框架（取决于你下载安装了多少文档集合）的导航大纲，点击某个节点，右边的内容区域就是文档的详细信息啦，非常直观。也可以在左上方的搜索框内通过输入关键字，查找相关的API文档，非常类似全文检索的实现方式，Dash的响应速度非常快！关键是可以同时查询不同的语言、框架内容，实在是太方便了。看到这里你也许要问了，这跟我们平常切换到特定的文档窗口（比如一个PDF或者一个CHM文件），再ctrl + f查找有什么区别，不是多此一举吗？其实你错了，Dash可以通过快捷键来显示、隐藏文档窗口，它提供了配置界面以便用户自行设置（我比较习惯alt+space，因为其他软件很少用到这个组合键）：</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10511306334/" title="2013-10-27-2 by EricShj, on Flickr"><img src="http://farm8.staticflickr.com/7356/10511306334_106b3b2151.jpg" width="423" height="234" alt="2013-10-27-2"></a></p>
+
+<h4>Dash自带了丰富的API文档，涉及各种主流的编程语言和框架，全列出来很吓人的：</h4>
+
+<p>ActionScript, Android, C++, Cappuccino, Cocos2D, Cocos3D, Corona, CSS, Django, Groovy, HTML, Java, JavaFX, JavaScript, jQuery, Kobold2D, Lua, MySQL, Node.js, Man Pages, Perl, PHP, Python, Ruby, Ruby on Rails, Scala, Sparrow, SQLite, Unity 3D, WordPress, XSLT, XUL</p>
+
+<p>而且它的文档库采用了docset格式，高级用户基于网站提供的教程，很容易就能自行添加其他的扩充文档，其实Dash在最初发布的时候，只支持很少的几个文档浏览，好像只有Java、HTML、CSS这些，是后来通过用户不断贡献，以及作者及时的反馈（Rails API就是我通过Email与作者联系，请求添加的，作者非常nice），逐步壮大，才具备了如此广泛的语言、框架支持。要添加API文档，打开软件配置界面，切换到Docset选项卡即可看到所有内置的文档列表，按需要自行下载即可（如果是自己制作的docset，双击即可导入Dash）：</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10511306294/" title="2013-10-27-3 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2845/10511306294_444ab45252.jpg" width="448" height="413" alt="2013-10-27-3"></a></p>
+
+<h3>牛逼、好用的代码片段管理功能</h3>
+
+<p>前面说完了Dash的文档查询功能，下面再来看一看它带给我们的另一个惊喜：代码片段管理。说到这里，之前的版本其实有个很不好的地方，就是如果不仔细琢磨一下，或者去看官方的帮助文档的话，用户是很难一眼就知道怎么用这个功能，新手引导做得确实不怎么样，不过最新版已经改善了这个问题，在主界面的导航边栏明确地给出了分类提示，创建或者修改代码片段都方便了许多。来看下面这个例子：</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10511306354/" title="2013-10-27-4 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2856/10511306354_5e64bc1f92.jpg" width="500" height="427" alt="2013-10-27-4"></a></p>
+
+<p>利用Dash的代码片段管理功能，我们可以把日常使用频繁（也就是你经常需要复制粘贴）的代码保存起来，然后为其设置一个独一无二的缩写，这样一来原本需要一遍又一遍的敲击键盘重复录入的繁琐工作，就可以交给Dash来帮你搞定啦。比如上面截图中的例子，就是ExtJS中发起Ajax请求的代码片段，哪怕是copy &amp; paste，时间长了也会很烦的，我给它设置了一个缩写（ajax），以后在需要编写这段代码的时候，就只需要敲击这几个字母，它就会魔法般的出现在光标所在位置啦！很神奇吧？嘿嘿，其实这种扩展缩写的功能，还有很多软件都能做到，比如TextExpander（这个我也买了，半价14刀的时候，但是现在已经打入冷宫了，比较后悔），不过就用户体验和各种细节，诸如界面UI，特别是扩展占位符的处理上，目前还没有哪一个能比得过Dash的（Dash is the best!）。来看看使用代码片段的截图吧：</p>
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10511306264/" title="2013-10-27-5 by EricShj, on Flickr"><img src="http://farm3.staticflickr.com/2885/10511306264_3e3709bce1.jpg" width="500" height="364" alt="2013-10-27-5"></a></p>
+
+<p>Dash的缩写扩展功能很强大，比方说上面那个例子，在保存代码片段的时候，你可以使用双下划线标明占位符，在执行扩展的时候就可以通过tab键来在各个占位符之间切换，根据需要输入实际的值，最后回车即可把片段粘贴到光标所在之处。除了占位符，它还支持下面这些变量符号：</p>
+
+<ul>
+<li> @clipboard 自动插入当前剪贴板中的内容</li>
+<li> @cursor 代码片段粘贴完毕之后，自动将光标定位到此处</li>
+<li> @date 自动插入当前日期</li>
+<li> @time 自动插入当前时间</li>
+</ul>
+
+
+<p>介绍到这里，各位看官，你应该已经深深滴爱上Dash了吧？每个苦逼的程序员，都应该有这么一只可爱贴心的叮当猫，您说是不是？其实个人不是很喜欢它的图标，实在是有点太诡异了，嘿嘿……</p>
+
+<p>最后再说一句，Dash在Mac App Store里面免费提供下载，不过作者包含了一个IAP（应用程序内购买）插件，作者挺幽默的，看介绍是说的Dash的双胞胎伙伴Pinky比较调皮，会时不时的跳出来打扰你一下，囧……反正我运行了一晚上，还没见到这只传说中的猫呢。其实这只不过是给你提供了赞助作者的机会，毕竟这么好的软件，如果经济条件允许，支持一下也无可厚非，同是软件开发者，其中的辛酸你我都懂的。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Eclipse将java的工程转换为web工程]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng/"/>
+    <updated>2013-10-14T15:30:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/14/eclipsejiang-javade-gong-cheng-zhuan-huan-wei-webgong-cheng</id>
+    <content type="html"><![CDATA[<p>很多时候，Java的项目并不像C++的项目那么“友好”，好多东西写在隐藏文件里，而且开发方法差异也比较大。比如很多用MyEclipse，有些人用Eclipse，这些工具创建出来的项目不太一样，在进行导入时会需要对工程进行转换，方法如下：</p>
+
+<p>转换步骤：</p>
+
+<ul>
+<li>1、进入项目目录，可看到.project文件，打开。</li>
+<li>2、找到<natures>&hellip;</natures>代码段。</li>
+<li>3、在第2步的代码段中加入如下标签内容并保存：</li>
+</ul>
+
+
+<!-- more -->
+
+
+<p><code>
+&lt;nature&gt;org.eclipse.wst.common.project.facet.core.nature&lt;/nature&gt;
+&lt;nature&gt;org.eclipse.wst.common.modulecore.ModuleCoreNature&lt;/nature&gt;
+&lt;nature&gt;org.eclipse.jem.workbench.JavaEMFNature&lt;/nature&gt;
+</code></p>
+
+<ul>
+<li>4、在eclipse的项目上点右键，刷新项目。</li>
+<li>5、在项目上点右键，进入属性（properties）</li>
+<li>6、在左侧列表项目中点击选择“Project Facets”，在右侧选择“Dynamic Web Module”和"Java"，点击OK保存即可</li>
+</ul>
+
+
+<p><a href="http://www.flickr.com/photos/105999540@N03/10374968933/" title="2013-10-14-3 by EricShj, on Flickr"><img src="http://farm6.staticflickr.com/5534/10374968933_dc5bb24365.jpg" width="500" height="346" alt="2013-10-14-3"></a></p>
+]]></content>
+  </entry>
+  
+</feed>

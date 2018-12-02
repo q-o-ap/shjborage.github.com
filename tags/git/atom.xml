@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: Git | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/git/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[SVN的大环境下使用Git管理]]></title>
+    <link href="http://shjborage.github.io/blog/2014/09/09/svnde-da-huan-jing-xia-shi-yong-gitguan-li-zi-ji/"/>
+    <updated>2014-09-09T22:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/09/09/svnde-da-huan-jing-xia-shi-yong-gitguan-li-zi-ji</id>
+    <content type="html"><![CDATA[<h2>写在前面</h2>
+
+<p>很多同学可能都了解<code>SVN</code>与<code>Git</code>的差异与优缺点，这部分我只是简单提一下我的观点，不是很全也不一定对，仅代表我的个人观点。如果大家对这个问题比较感兴趣的话呢，欢迎来<code>Google</code>百度一下。</p>
+
+<h3>Git与SVN简单对比</h3>
+
+<h4>SVN</h4>
+
+<ul>
+<li>优点
+
+<ul>
+<li>以SVN Server为中心</li>
+<li>便利的权限管理</li>
+</ul>
+</li>
+<li>缺点
+
+<ul>
+<li>完全依赖中心，连接到Server才可以正常提交代码</li>
+<li>分支管理较“重”，一般就学习<code>trunk</code>, <code>branches</code>, <code>tags</code>就够了。</li>
+</ul>
+</li>
+</ul>
+
+
+<h4>Git</h4>
+
+<ul>
+<li>优点
+
+<ul>
+<li>每个版本库都是中心</li>
+<li>非常方便的分支管理，甚至<a href="https://github.com/nvie/gitflow">git-flow</a></li>
+<li>离线管理</li>
+</ul>
+</li>
+<li>缺点
+
+<ul>
+<li>权限管理（非要说的话，这个我确实没用<code>Git</code>管理过。不过pull-request可以控制一些写权限吧，也不知道这个理解对不对）</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Let&rsquo;s do it!</h2>
+
+<p>很多团队，因为权限（扯淡的控制欲）还是使用SVN，各种申请权限。少吐槽，来干货。</p>
+
+<!-- more -->
+
+
+<h3><code>git-svn</code>环境</h3>
+
+<p><code>git-svn</code>是<code>git</code>的一部分，安装<code>git</code>1.5.3 版本以后的都支持。Mac安装Xcode后，安装<code>CommandLineTool</code>，即可。如果是beta的版本的Mac，相信你也有能力解决好安装的问题。<br>
+附上安装<code>CommandLineTool</code>的方法，在终端里执行以下命令
+<code>
+xcode-select --install
+</code>
+不确定自己行不行？在终端里执行以下命令：
+<code>
+git svn
+</code>
+如果得到以下结果，说明你OK的～<br></p>
+
+<iframe src="https://www.flickr.com/photos/shjborage/15210513791/in/set-72157639886815375/player/" width="500" height="90" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<h3><code>git</code>基本使用</h3>
+
+<p>分享一些使用经验，再基础的命令就不介绍了。<code>git</code>一下或者<code>git --help</code>再或者<code>man git</code>来解决吧～</p>
+
+<h4>干货-<code>git</code>分支管理策略<br></h4>
+
+<ul>
+<li><a href="https://github.com/nvie/gitflow">git-flow</a></li>
+<li><a href="http://nvie.com/posts/a-successful-git-branching-model/">http://nvie.com/posts/a-successful-git-branching-model/</a>(<code>git-flow</code>变种？)</li>
+</ul>
+
+
+<h4>干货-实用的log，来自<a href="http://coolshell.cn/articles/7755.html">这里</a></h4>
+
+<p><code>
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit --"
+</code></p>
+
+<h3>初始化代码库</h3>
+
+<p>首先用git-svn来初始化本地的代码库(repository)
+<code>
+git svn clone -s svn-repository-url
+</code>
+<code>svn-repository-url</code>部分使用svn代码库的url。如果要从trunk目录或者某个branch目录里check out，要把-s换成-T、-b等选项。具体参看<code>man git-svn</code>。这个命令时间比较长，因为需要同步所有的提交历史，还好只此一次，以后不会这么慢了。做完这一步，在本地就有了一个完整的代码库，包括所有commit的历史和log，已经可以开始用它来进行开发工作了。<br>
+不过，在开始开发之前，最好先做一次垃圾搜集：
+<code>
+git gc
+</code>
+它对代码库的信息进行垃圾搜集和压缩，最明显的作用就是减小磁盘占用空间。第一次做效果尤其明显。你可以检查一下代码库的状态：
+<code>
+git status
+</code>
+现在应该在一个叫”master”的分支(branch)上。用这个命令来显示出所有的分支(branch):
+<code>
+git branch -a
+</code>
+master前有一个*号，代表你现在所处的分支，另外还有一个分支叫trunk，它是一个远程分支(remote branch)，对应的是远程svn代码库。master实际上是trunk的一个本地分支。
+接下来，需要配置忽略文件，让git忽略一些目录中不希望加入代码库的文件，这部分直接参数<a href="https://github.com/github/gitignore">这个repo</a></p>
+
+<h3>开发流程（建议考虑<a href="https://github.com/nvie/gitflow">git-flow</a>）</h3>
+
+<p>这部分每个人的做法可能都有不同，全部<code>git</code>操作，上文也介绍一些，这部分如果有问题请使用Google百度一下。</p>
+
+<h4>提交到<code>svn</code></h4>
+
+<p><code>
+git svn dcommit
+</code>
+如果在git svn rebase时发生代码冲突，需要先手动解决冲突，然后用git add将修改加入索引，然后继续rebase
+<code>
+git svn rebase --continue
+</code></p>
+
+<h4>拉取<code>svn</code>更新</h4>
+
+<p><code>
+git svn fetch
+git svn rebase
+</code></p>
+
+<h3>使用经验</h3>
+
+<p>使用<code>git-svn</code>当然给我们<code>git</code>的用户带来了很多方便，顺手！</p>
+
+<ul>
+<li><code>git</code>提交到<code>svn</code>还是有点水土不服：比如分支合并等都不看不出来，甚至开始的时候，我还以为本地随便提交，提到到<code>svn</code>的时候才是只有一版；</li>
+<li><code>git svn fetch</code> 下来后，不 rebase 的话，走 merge 的话，感觉流程有点奇怪（有一次直接提交 merge 到<code>svn</code>，有几次<code>git</code>上的commit都没有体现在<code>svn</code>上）。所以还是直接使用 rebase，至少 rebase 与 merge 区别，可以参考<a href="http://www.cnblogs.com/iammatthew/archive/2011/12/06/2277383.html">这里</a>和<a href="http://my.oschina.net/AlexZhuang/blog/67681">这里</a>；</li>
+</ul>
+
+
+<h2>总结</h2>
+
+<p>这个<code>topic</code>我也是才开始用，可谓新手，对于<code>git</code>、<code>git-svn</code>。也在这方面摸索，如果大家有更好的方案或或者我这里提到的内容有问题，都可以跟我联系，谢谢。</p>
+
+<h2>参考</h2>
+
+<p><a href="http://www.robinlu.com/blog/archives/194">http://www.robinlu.com/blog/archives/194</a>
+<a href="http://www.cnblogs.com/ini_always/archive/2012/08/31/2666086.html">http://www.cnblogs.com/ini_always/archive/2012/08/31/2666086.html</a>
+<a href="http://www.jianshu.com/p/Gy1rTq">http://www.jianshu.com/p/Gy1rTq</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git fetch和Git pull的区别]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie/"/>
+    <updated>2013-10-19T01:47:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/19/git-fetchhe-git-pullde-qu-bie</id>
+    <content type="html"><![CDATA[<p>原文： <a href="http://www.tech126.com/git-fetch-pull/">http://www.tech126.com/git-fetch-pull/</a></p>
+
+<h3>Git中从远程的分支获取最新的版本到本地有这样2个命令：</h3>
+
+<h4>1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge</h4>
+
+<p><code>
+git fetch origin master
+git log -p master..origin/master
+git merge origin/master
+</code></p>
+
+<!-- more -->
+
+
+<p>以上命令的含义：<br/>
+首先从远程的origin的master主分支下载最新的版本到origin/master分支上,然后比较本地的master分支和origin/master分支的差别,最后进行合并.</p>
+
+<p>上述过程其实可以用以下更清晰的方式来进行：</p>
+
+<p><code>
+git fetch origin master:tmp
+git diff tmp
+git merge tmp
+</code></p>
+
+<p>从远程获取最新的版本到本地的test分支上,之后再进行比较合并</p>
+
+<h4>2. git pull：相当于是从远程获取最新版本并merge到本地</h4>
+
+<p><code>
+git pull origin master
+</code></p>
+
+<p>上述命令其实相当于git fetch 和 git merge</p>
+
+<p>在实际使用中，git fetch更安全一些</p>
+
+<p>因为在merge前，我们可以查看更新情况，然后再决定是否合并</p>
+
+<p>EOF</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git no branch 解决方案]]></title>
+    <link href="http://shjborage.github.io/blog/2013/06/07/git-no-branch-jie-jue-fang-an/"/>
+    <updated>2013-06-07T18:03:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/06/07/git-no-branch-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<p>Git在使用过程中，不断的Checkout，以及各种工具使用执行各种平时不太接触的命令，最后发现push不了。 仔细检查才发现原来木有在任何branch上面开发</p>
+
+<h5>事件经过：</h5>
+
+<ol>
+<li>正常开发，branch:master</li>
+<li>在Eclipse中，使用插件checkout某版本出来</li>
+<li>再checkout到最近一次提交的版本</li>
+<li>不断Commit多次，一直不能push，以为工具出了问题</li>
+<li>实在忍受不了就找问题，最后git branch发现 *(no branch).</li>
+</ol>
+
+
+<p>每次都提交，数据肯定不会丢，也没有担心。
+就找个问题的解决方案，果然有。</p>
+
+<!-- more -->
+
+
+<p><a href="http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes">http://serverfault.com/questions/56722/git-seemed-to-be-in-no-branch-and-then-lost-my-changes</a>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>if you have already checked out to master,&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>you won&rsquo;t know the commit-ish of your &ldquo;no branch&rdquo;:&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>git fsck &mdash;lost-found # (to find your &lt;commit-ish>)
+</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>if you are still on your &ldquo;no branch&rdquo; commit:&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>git log # (the commit-ish will be on the first line)
+</span><span class='line'>git checkout master
+</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>or&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>git log | head -n 1 | cut -d &lsquo; &rsquo; -f 2 | pbcopy
+</span><span class='line'>git checkout master
+</span><span class='line'>git merge &lt;commit-ish>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git基本使用与Dropbox配合使用]]></title>
+    <link href="http://shjborage.github.io/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong/"/>
+    <updated>2013-05-29T11:43:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/05/29/gitji-ben-shi-yong-yu-dropboxpei-he-shi-yong</id>
+    <content type="html"><![CDATA[<h3>Git基本使用</h3>
+
+<h4>1.取得项目的Git仓库</h4>
+
+<h5>1.1从当前目录初始化</h5>
+
+<p><code>
+$ git init
+</code></p>
+
+<p>然后可以进行git add .. 进行文件添加。<br/>
+以及编写.gitignore文件，对本地文件进行忽略</p>
+
+<!-- more -->
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>OBJ-C示例 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p> # Exclude the build directory
+</span><span class='line'> build/*&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p> # Exclude temp nibs and swap files
+</span><span class='line'> &lt;em>~.nib
+</span><span class='line'> &lt;/em>.swp
+</span><span class='line'> 18
+</span><span class='line'> # Exclude OS X folder attributes
+</span><span class='line'> .DS_Store&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p> # Exclude user-specific XCode 3 and 4 files
+</span><span class='line'> &lt;em>.mode1
+</span><span class='line'> &lt;/em>.mode1v3
+</span><span class='line'> &lt;em>.mode2v3
+</span><span class='line'> &lt;/em>.perspective
+</span><span class='line'> &lt;em>.perspectivev3
+</span><span class='line'> &lt;/em>.pbxuser
+</span><span class='line'> &lt;em>.xcworkspace
+</span><span class='line'> &lt;/em>.xcuserstate
+</span><span class='line'> xcuserdata&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h5>1.2 从现有仓库克隆</h5>
+
+<p><code>
+git clone git://github.com/aaaa/aa.git
+git clone file:::/Volumes/Data/xxx.git
+git clone /Volumes/Data/xxx.git
+git clone /Volumes/Data/xxx.git new_xxx_dir
+</code></p>
+
+<p>默认会创建xxx目录（xxx.git）,如果想指定目录的话用最后一种</p>
+
+<h5>1.3 其它常用</h5>
+
+<p><code>
+git commit
+git commit -a -m "asdf"
+git status
+git log
+git log -1
+git log -p
+</code></p>
+
+<p>注意看提示就好了。</p>
+
+<h4>2.远程仓库使用</h4>
+
+<h5>2.1 创建</h5>
+
+<p><code>
+git init --bare
+</code></p>
+
+<p>创建一个空的远程仓库（可在服务器上，也可在本地，也可以在Dropbox的目录中）</p>
+
+<h5>2.2 查看远程仓库</h5>
+
+<p>在本地执行以下命令
+<code>
+git remote -v
+</code></p>
+
+<h5>2.3 添加远程仓库</h5>
+
+<p><code>
+git remote add [shortanem] [url]
+</code></p>
+
+<h5>2.4 从远程抓取数据</h5>
+
+<p><code>
+git fetch [remote-name]
+</code></p>
+
+<h5>2.5 推送数据</h5>
+
+<p><code>
+git push [remote-name] [branchname]
+</code></p>
+
+<h5>2.6 其它</h5>
+
+<p><code>
+git remote show [remote-name]
+git remote rename old new
+git remote rm xxx
+</code></p>
+
+<h4>Dropbox 整合</h4>
+
+<p>把远程建在Dropbox上即可，哈哈</p>
+]]></content>
+  </entry>
+  
+</feed>

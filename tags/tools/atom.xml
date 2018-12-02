@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: tools | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/tools/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[各类工具合集-持续更新]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/16/ge-lei-gong-ju-he-ji-chi-xu-geng-xin/"/>
+    <updated>2016-02-16T17:35:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/16/ge-lei-gong-ju-he-ji-chi-xu-geng-xin</id>
+    <content type="html"><![CDATA[<h3>Web平台工具</h3>
+
+<ol>
+<li><p>Crowdin <a href="https://crowdin.com/">https://crowdin.com/</a><br/>
+翻译平台，建立项目或者找开放的项目进行翻译，可按句对比进行翻译，并且提供各单词直译的结果。</p></li>
+<li><p>Heroku <a href="https://www.heroku.com/">https://www.heroku.com/</a><br/>
+Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及（未记录在正式文件上）PHP和Perl的支持。基础操作系统是Debian，在最新的堆栈则是基于Debian的Ubuntu。</p></li>
+<li><p>51tools各类Web转换工具集合站 <a href="http://51tools.info/">http://51tools.info/</a><br/>
+您身边的在线工具: URLEncode、URLDecode、Html工具、JS工具、CSS工具、JSON工具、Unicode编码转换等</p></li>
+<li><p>Trello <a href="https://trello.com">https://trello.com</a><br/>
+免费好用的任务协作工具。运营和管理一家公司的最大的难点就是跟踪人们的工作内容。Trello 就是为了解决这个问题而开发的。</p></li>
+</ol>
+
+
+<h3>Apple平台工具</h3>
+
+<ol>
+<li><p>OmniFocus <a href="https://www.omnigroup.com/omnifocus/">https://www.omnigroup.com/omnifocus/</a>  <br/>
+GTD王者，适合各种人群，科学管理自己的时间，高效面对人生。详细的大家自行用Google百度一下，教程介绍多的是。这家伙使用简单，但有些地方需要些技巧，比如同步可以试试 坚果云 的 WebDAV，另外这个小而美的公司只做Apple平台。</p></li>
+<li><p>OmniPlan <a href="https://www.omnigroup.com/omniplan">https://www.omnigroup.com/omniplan</a><br/>
+Mac 下的 <code>Project</code> 甘特图～</p></li>
+<li><p>OmniGraffle <a href="https://www.omnigroup.com/omnigraffle">https://www.omnigroup.com/omnigraffle</a><br/>
+Mac 下的 <code>Visio</code> ～</p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

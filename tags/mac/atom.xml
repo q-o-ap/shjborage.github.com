@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: Mac | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/mac/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Linux、Mac上面ln命令使用说明]]></title>
+    <link href="http://shjborage.github.io/blog/2014/10/22/linux-macshang-mian-lnming-ling-shi-yong-shuo-ming/"/>
+    <updated>2014-10-22T22:25:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/10/22/linux-macshang-mian-lnming-ling-shi-yong-shuo-ming</id>
+    <content type="html"><![CDATA[<h3>引子</h3>
+
+<p>作为一个Mac使用者，曾经也是玩Linux的。遇到一些命令也一般能搞定，但就是有一些命令让你哭笑不得，还真得写下点什么才行。 So, Let&rsquo;s go.</p>
+
+<h3>正文</h3>
+
+<p>ln是linux中又一个非常重要命令，它的功能是为某一个文件在另外一个位置建立一个同不的链接，这个命令最常用的参数是 <code>-s</code>，具体用法是：<code>ln –s 源文件 目标文件</code>。<br><br>
+当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用<code>ln</code>命令链接（link）它就可以，不必重复的占用磁盘空间。例如：<code>ln –s /bin/less /usr/local/bin/less</code> <br>
+<em>-s 是代号（symbolic）的意思</em></p>
+
+<!-- more -->
+
+
+<p><strong>注意：</strong><br>
+第一，<code>ln</code>命令会保持每一处链接文件的同步性，也就是说，不论你改动了哪一处，其它的文件都会发生相同的变化；<br>
+第二，ln的链接又分软链接和硬链接两种，软链接就是<code>ln –s ** **</code>，它只会在你选定的位置上生成一个文件的镜像，不会占用磁盘空间，硬链接<code>ln ** **</code>，没有参数<code>-s</code>， 它会在你选定的位置上生成一个和源文件大小相同的文件，无论是软链接还是硬链接，文件都保持同步变化。
+　　</p>
+
+<p>如果你用<code>ls</code>查看一个目录时，发现有的文件后面有一个<em>@</em>的符号，那就是一个用<code>ln</code>命令生成的文件，用<code>ls –l</code>命令去察看，就可以看到显示的link的路径了。</p>
+
+<h4>指令详细说明(可自行<code>man ln</code>查看)</h4>
+
+<p><code>
+　　指令名称 : ln
+　　使用权限 : 所有使用者
+　　使用方式 : ln [options] source dist，其中 option 的格式为 :
+　　[-bdfinsvF] [-S backup-suffix] [-V {numbered,existing,simple}]
+　　[--help] [--version] [--]
+　　说明 : Linux/Unix 档案系统中，有所谓的连结(link)，我们可以将其视为档案的别名，而连结又可分为两种 : 硬连结(hard link)与软连结(symbolic link)，硬连结的意思是一个档案可以有多个名称，而软连结的方式则是产生一个特殊的档案，该档案的内容是指向另一个档案的位置。硬连结是存在同一个档 案系统中，而软连结却可以跨越不同的档案系统。
+　　ln source dist 是产生一个连结(dist)到 source，至于使用硬连结或软链结则由参数决定。
+　　不论是硬连结或软链结都不会将原本的档案复制一份，只会占用非常少量的磁碟空间。
+　　-f : 链结时先将与 dist 同档名的档案删除
+　　-d : 允许系统管理者硬链结自己的目录
+　　-i : 在删除与 dist 同档名的档案时先进行询问
+　　-n : 在进行软连结时，将 dist 视为一般的档案
+　　-s : 进行软链结(symbolic link)
+　　-v : 在连结之前显示其档名
+　　-b : 将在链结时会被覆写或删除的档案进行备份
+　　-S SUFFIX : 将备份的档案都加上 SUFFIX 的字尾
+　　-V METHOD : 指定备份的方式
+　　--help : 显示辅助说明
+　　--version : 显示版本
+　　范例 :
+　　将档案 yy 产生一个 symbolic link : zz
+　　ln -s yy zz
+　　将档案 yy 产生一个 hard link : zz
+　　ln yy xx﻿
+</code></p>
+
+<p>原文: <a href="http://www.cnblogs.com/joeblackzqq/archive/2011/03/20/1989625.html">http://www.cnblogs.com/joeblackzqq/archive/2011/03/20/1989625.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【翻译】Mac系统事件，Key Code 与 KeyStroke]]></title>
+    <link href="http://shjborage.github.io/blog/2014/10/15/macxi-tong-shi-jian-key-code-yu-keystroke/"/>
+    <updated>2014-10-15T10:11:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/10/15/macxi-tong-shi-jian-key-code-yu-keystroke</id>
+    <content type="html"><![CDATA[<h3>引子</h3>
+
+<p>业余时间写了一个 <a href="http://revealapp.com/">Reveal</a> 的<a href="https://github.com/shjborage/Reveal-Plugin-for-Xcode">插件</a>，其中涉及一些 MacOS 的开发以及 AppleScript 相关的东西，看到这个文章，比较受用，翻译出来分享给大家。
+做这个事一方面是为了方便大家使用相关的技术，同时也能锻炼自己的翻译、文笔等，大家共同进步嘛。</p>
+
+<h3>正文</h3>
+
+<h2>Mac 系统事件，Key Code 与 KeyStroke</h2>
+
+<p><strong>Key codes</strong> 指代码键盘上对应键位的数字编码。<strong>KeyStroke</strong> 是实际的可见的键值。你可以使用这些数字编码或键值在 AppleScipt 中通过 &ldquo;System Events&rdquo; 来模拟键盘上某个键被按下，该功能需要在系统偏好设置的 &ldquo;Accessibiliy&rdquo; 中选中 &ldquo;Enable acess for assistive devices&rdquo; 选项。</p>
+
+<p>你可以使用 <strong>key code</strong> 和 <strong>keystroke</strong> 在 AppleScript 中处理一些快捷键，这在很多时候比常规的脚本更有优势。事实上只要提到 iTunes, 如果不用 <strong>key code</strong> 和 <strong>keystroke</strong> 的话，部分快捷操作在 AppleScript 中是实现不了的。比如打开一个显示简介窗口或显示选项窗口。 接下来我们实验一下 <strong>key code</strong> 和 <strong>keystroke</strong> 命令在 AppleScript 中如何控制 iTunes.</p>
+
+<!-- more -->
+
+
+<h3>系统偏好设置</h3>
+
+<p>为了在 &ldquo;System Events&rdquo; 中使用 <strong>key code</strong> 与 <strong>keystroke</strong> 命令，你必须开启 Mac OSX 的系统偏好设置中开启 accessibility 权限。</p>
+
+<p><strong>Mavericks (10.9)和以后的系统.</strong> Accessibiliy的权限必须基于每个应用来设置。 看苹果的<a href="http://support.apple.com/kb/HT5914">支持文档</a>了解更多内容。</p>
+
+<p><strong>Mavericks (10.9)以前的系统</strong> : 点击系统偏好设置中的 &ldquo;Accessibility&rdquo; 模块(原来叫"Universal Access")。在底部左边获取选中"Enable access for assistive devices"。确保复选框被选中，关闭系统偏好设置。</p>
+
+<h3>实现 AppleScript</h3>
+
+<p>&ldquo;System Events&rdquo; 会发送 <strong>key code</strong> 或 <strong>keystroke</strong> 给当前在前台活动的程序。所以你要通过 <code>activate</code>命令来保证 iTunes 处理于前台活动状态。为了易于大家理解，下面给出一个简单的使用示例。它将选中当前播放的 iTunes 音乐使用 <strong>keystroke</strong> 命令：</p>
+
+<p>```
+tell application &ldquo;iTunes&rdquo;</p>
+
+<pre><code>activate
+if player state is not stopped then
+    tell application "System Events" to keystroke "l" using command down
+end if
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p>我已经模拟了一个键盘按下操作 &ldquo;Command-L&rdquo;(这个脚本确保 iTunes 不会被提前停止) 通过提供一个小写的"l"，就是正常你需要按下的键。 <strong>using</strong> 关键字代表这个 <strong>keystroke</strong> 这个命令是包含 Command 键按下的组合键。下面是使用 <strong>key code</strong> 的实现：</p>
+
+<p>```
+tell application &ldquo;iTunes&rdquo;</p>
+
+<pre><code>activate
+if player state is not stopped then
+    tell application "System Events" to key code 37 using command down
+end if
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p>在上面的例子中， <code>37</code>这个数字代表小写的"l"。<strong>using</strong> 关键字的作用与 <strong>keystroke</strong> 例子中的作用是一样的： 代表 Command 被同时按下的组合键。</p>
+
+<p>除此之外，你还可以使用 <strong>using</strong> 关键字包含多个键的组合。下面的脚本分别使用 <strong>key code</strong> 和 <strong>keystroke</strong> 两种方式实现在 iTunes 的浏览器中打开 iTunes Store (Command-Shift-H)的功能。 注意 <strong>using</strong> 关键字中多个键组合的使用：</p>
+
+<p><strong>keystroke</strong>:
+```
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+keystroke "h" using {command down, shift down}
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p><strong>key code</strong>:
+```
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 4 using {command down, shift down}
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p>数字<code>4</code>相当于"h"键。（想了解更多关于编写 <strong>keystroke</strong> 或 <strong>key code</strong> 命令的方法，在 AppleScript 编辑器中，Window > Library 中查看 &ldquo;System Events"的信息）</p>
+
+<h3>Go Nuts（让我们更进一步）</h3>
+
+<p>下面的脚本使用 <strong>key code</strong> 和 &ldquo;正常的&rdquo; AppleScript 语法来选择音乐库并且激活搜索框:</p>
+
+<p>```
+tell application &ldquo;iTunes&rdquo;</p>
+
+<pre><code>activate
+-- select the Music library
+reveal (some playlist whose special kind is Music)
+</code></pre>
+
+<p>end tell
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>-- bring focus to Search box - Command-Option-F
+key code 3 using {command down, option down}
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p>一个类似的版本，将剪贴板中的文字复制到搜索框中：</p>
+
+<p>```
+tell application &ldquo;iTunes&rdquo;</p>
+
+<pre><code>activate
+reveal (some playlist whose special kind is Music)
+</code></pre>
+
+<p>end tell
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>-- bring focus to Search box - Command-Option-F
+key code 3 using {command down, option down}
+-- paste the clipboard - Command-V
+key code 9 using command down
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p>选中播放列表中的所有音乐并且新建一个名叫 &ldquo;untitled&rdquo; 的播放列表包含所有音乐：</p>
+
+<p>```
+tell application &ldquo;iTunes&rdquo;</p>
+
+<pre><code>activate
+</code></pre>
+
+<p>end tell
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>-- select all tracks - Command-A
+key code 0 using command down
+--new playlist from selection- Command-Shift-N
+key code 45 using {command down, shift down}
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p>学会了么？</p>
+
+<p>当然了，上面的脚本都可以用"正常"的方式来解决。我不是使用图形脚本的深度使用者，但是有时这是 iTunes 中执行某些任务的唯一方案。</p>
+
+<p>你可能需要通过使用这些脚本来执行<a href="http://dougscripts.com/itunes/itinfo/shortcutkeys.php">快捷键</a>任务。比如， 我已经把 &ldquo;Music library &amp; search&rdquo; 映射到 Command-Option-S。</p>
+
+<h3>如何获得 <strong>Key Codes</strong></h3>
+
+<p>使用 <strong>keystroke</strong> 命令非常简单直接：直接使用键值字符即可。为了取得一个键按下对应的 <strong>key code</strong>，我使用 Denis Bajram 写的免费的程序 <a href="http://softwares.bajram.com/utilities/#Full_Key_Codes">Full Key Codes</a>，非常简单易用。它能显示键盘上某些键被按下时的数字、ASCII和十六进制数。</p>
+
+<h3>通用 <strong>key code</strong> 命令</h3>
+
+<p>```
+&mdash; select all tracks of front playlist &ndash; Command-A
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 0 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; toggle browse mode &ndash; Command-B
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 11 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; copy selection (or whatever) &ndash; Command-C
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 8 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; toggle Right Sidebar &ndash; Shift-Command-G
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 5 using {command down, shift down}
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; Get Info for selected track(s) &ndash; Command-I
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 34 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; open View options window &ndash; Command-J
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 38 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; select current track &ndash; Command-L
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 37 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; Show File of selected &ndash; Shift-Command-R
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 15 using {command down, shift down}
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; toggle Zoom of Main Browser &ndash; Control-Command-Z
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 6 using {command down, control down}
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; Close a window with &ldquo;Cancel&rdquo; &ndash; Escape key
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 53
+</code></pre>
+
+<p>end tell</p>
+
+<p>(<em>
+THE FOLLOWING ARE DELETE ACTIONS!
+USE CAREFULLY!!!
+</em>)
+&mdash; Delete the selected playlist from your Source list without confirming that you want to delete it &ndash; Command-Delete
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 51 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; Delete the selected playlist and all the songs it contains from your library
+&mdash; OR
+&mdash; Delete the selected song from your library and all playlists
+&mdash; Option-Delete
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 51 using option down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; Select the search field &ndash; Command-Option-F
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 3 using {command down, option down}
+-- and optionally, paste the clipboard - Command-V
+
+-- key code 9 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; playlist and folder</p>
+
+<p>&mdash; new playlist &ndash; Command-N
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 45 using {command down, shift down}
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; new playlist from selection &ndash; Command-Shift-N
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 45 using {command down, shift down}
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; new Smart Playlist &ndash; Command-Option-N
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 45 using {command down, option down}
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; new Playlist Folder &ndash; Command-Option-Shift-N
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 45 using {command down, option down, shift down}
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; toggle Show/Hide Main Browser window &ndash; Command-1
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 18 using command down
+</code></pre>
+
+<p>end tell</p>
+
+<p>&mdash; toggle Show/Hide Equalizer window &ndash; Command-2
+tell application &ldquo;System Events&rdquo;</p>
+
+<pre><code>tell application "iTunes" to activate
+key code 19 using command down
+</code></pre>
+
+<p>end tell
+```</p>
+
+<p>原文:<a href="http://dougscripts.com/itunes/itinfo/keycodes.php">http://dougscripts.com/itunes/itinfo/keycodes.php</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Synergy on Mavericks (OSX 10.9) and enable assistive devices]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices/"/>
+    <updated>2013-12-26T10:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/26/synergy-on-mavericks-osx-10-dot-9-and-enable-assistive-devices</id>
+    <content type="html"><![CDATA[<p><a href="http://superuser.com/questions/656912/synergy-on-mavericks-osx-10-9-and-enable-assistive-devices">Origin</a></p>
+
+<h3>Question</h3>
+
+<p>Mavericks handles accessibility on a per-application basis, so instead of enabling assistive devices (option does not even exist) carte-blanche, the app which makes the request shows up in a list in System Preferences > Security &amp; Privacy > Privacy where you can enable the access it&rsquo;s looking for.</p>
+
+<p>Synergy, however, makes a check for the old style of assistive devices setting and fails to start.</p>
+
+<!-- more -->
+
+
+<h3>Answer</h3>
+
+<p>From a terminal:</p>
+
+<p><code>
+sudo open /Applications/Synergy.app/Contents/MacOS/Synergy
+</code></p>
+
+<p>Then open OSX <em>System Preferences</em> and click <strong>Security and Privacy</strong>, then <strong>Accessibility</strong></p>
+
+<p>Check the checkbox on for <strong>Terminal</strong> and <strong>Synergy</strong>.</p>
+
+<p>You can then close Synergy and start it again in the background through the terminal:</p>
+
+<p><code>
+/Applications/Synergy.app/Contents/MacOS/Synergy &amp;
+</code></p>
+
+<p>I expect this will be fixed in the next release (1.4.16 Beta)</p>
+
+<p><a href="http://synergy-foss.org/osqa/questions/1999/error-1410-on-mac-1081">Source</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OSX Server - Message Server 研究与故障解决方案]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an/"/>
+    <updated>2013-12-21T00:50:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/21/osx-server-message-server-yan-jiu-yu-gu-zhang-jie-jue-fang-an</id>
+    <content type="html"><![CDATA[<p>OSX Server是个出色的小团队服务端解决方案，前两个月发邮件说这个可以让我使用兑换券免费下一个，一定不能错过的机会，平时可是会卖很贵的啊</p>
+
+<p>特分享一下使用的相关事项吧</p>
+
+<!-- more -->
+
+
+<h3>简介</h3>
+
+<p>详见<a href="http://www.apple.com/cn/osx/server/">官方介绍</a></p>
+
+<h3>使用过的服务</h3>
+
+<ul>
+<li>Message Server</li>
+<li>DNS</li>
+<li>FileShare</li>
+<li>WebServer</li>
+<li>Wiki</li>
+<li>。。。</li>
+</ul>
+
+
+<p>可以说每个都能解决我们的某些需求，但是这些东西呢，没有OSX Server我们一样能找到替代方案。 但是苹果就是能在易用性上能帮我们做一些事。比如这个Wiki就比较简单实用</p>
+
+<p>但是呢,有些也做的不是太好，比如Message Server</p>
+
+<h3>Message Server</h3>
+
+<h4>用户</h4>
+
+<p>最开始在10.8上面直接搞上了，但是不知道怎么建用户（第一次玩Jabber，XMPP）
+帮助文档不太好找，上链接，有写用户的使用。</p>
+
+<p><a href="https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7">https://help.apple.com/advancedserveradmin/mac/3.0/#apd447EC2A9-7F7E-49B1-AEDD-144C189926C7</a>
+见这段<em>Understand Messages screen names</em></p>
+
+<h4>登录</h4>
+
+<p>无论如何都登录不了，这个更是愁人。。。
+也在上面的帮助文档里有说明，见这段<em>Server-to-server federation</em></p>
+
+<p>需要在设置中把自己的域名也加进去（最好配置DNS，否则需要自己改hosts文件）</p>
+
+<h4>还是登录不了。。</h4>
+
+<p>自己的Mavericks（10.9）还是登录不了，可能是域名设来设去的吧，无论如何也搞不定，查Google也不太好找，找了一些检索词，最后还是放弃，自己搞。
+看文档，日志会写入<strong>system.log</strong>, 打开Console，看到报错如下:</p>
+
+<p><em>SASL callback for non-existing host"</em></p>
+
+<p>Google之，解决方案如下</p>
+
+<p><a href="https://discussions.apple.com/message/23948580#23948580">https://discussions.apple.com/message/23948580#23948580</a></p>
+
+<p>这里面说的两个文件的路径还不太对，在这个目录下找那俩文件修改相关域名即可</p>
+
+<p><code>
+/Library/Server/Messages/Config/jabberd
+</code></p>
+
+<h3>Message Server OK</h3>
+
+<p>可以使用Mac 上面的Message直接登录，团队其它直接使用Server的DNS，这样就不用绑hosts了，然后使用rooms聊天室，这样系统内置了Message，而且还会比较及时的通知到，非常方便。</p>
+
+<p><em>远离QQ吧。</em>  Good night!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mac OS X 改 hosts文件]]></title>
+    <link href="http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian/"/>
+    <updated>2013-11-12T22:34:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/11/12/mac-os-x-gai-hostswen-jian</id>
+    <content type="html"><![CDATA[<p>一名刚刚使用 Mac OS X Lion 系统的朋友问我怎么该系统下修改 Hosts 文件，说网上搜了很多办法都不管用，只要编辑 Hosts 文件就出现”你不是文件 hosts 的所有者，因此没有权限写到该文件”的提示，要解决这个权限问题又比较麻烦，对于刚刚使用 Mac 的用户来说并不容易整明白。因此，就有了这篇小贴士，下面我分享四种方法来修改 Mac OS X Lion 系统中的 Hosts 文件，这四种方法都不会出现权限提示，而且 Mac OS X Snow Leopard(10.6) 用户也完全可以使用这些方法。</p>
+
+<h3>1、通过 VI 编辑器修改</h3>
+
+<p>打开终端（应用程序——实用工具），运行：(<em>vim也行</em>)</p>
+
+<p><code>
+sudo vi /etc/hosts
+</code></p>
+
+<p>屏幕上会提示你输入密码（输入密码的时候不会有任何字符显示，甚至*都不会显示，输完之后按回车就是了），打开 hosts 文件之后按 i 键进入插入模式（可理解为编辑模式），然后按照你的需要对该文件进行编辑，编辑完成之后按 ESC 键退出插入模式，之后按 :wq+回车保存退出，记得英文的冒号也是要输入的哦。</p>
+
+<p>这是笔者一直都在使用的方法，VI 编辑器对于经常使用 Linux 的用户应该不会陌生，而且该编辑器是默认内置在 Mac 系统中的。但是，对于没有使用过 VI 的用户，还真得花一会儿功夫来学习其基本使用方法。另外VI编辑器是一个很好很强大的工具，想要玩好 Mac 的话，最好掌握这个工具的使用。</p>
+
+<!-- more -->
+
+
+<h3>2、使用 nano 编辑器修改</h3>
+
+<p>和上面的方法类似，这个编辑器相比 vi 更加简单易用，但是功能不强大，似乎也没有 vi 流行。方法同样是在终端中运行：</p>
+
+<p><code>
+sudo nano /etc/hosts
+</code></p>
+
+<p>同样是输入密码，打开 hosts 文件，按照你的需要对该文件进行编辑，编辑完毕之后按 ctrl+o 保存，出现 File Name to Write: /etc/hosts 的时候按回车确认，再按 ctrl+x 退出即可。</p>
+
+<h3>3、使用 cat 命令合并文件</h3>
+
+<p>这个方法比较适合当你想往 Hosts 文件中添加一些内容的情况，首先你需要把需要添加到 Hosts 文件中的内容保存为一个TXT文本文件（建议直接保存在你的用户目录），我这里拿保存在用户目录中的123.txt为例说明。</p>
+
+<p>同样是启动终端，然后运行下面两条命令：</p>
+
+<p><code>
+sudo -s
+cat ~/123.txt&gt;&gt;/etc/hosts
+</code></p>
+
+<p>顺便说一下，~ 符号在 Mac 甚至所有基于 Unix 和 Linux 的系统中都是代表当前用户的用户目录，.代表当前目录，这回你就应该明白上面的命令中为什么是 ~/123.txt 了吧。</p>
+
+<h3>4、直接在图形界面中修改</h3>
+
+<p>打开 Finder，然后点击菜单栏中的 前往——前往文件夹（或者快捷键 Shift+Command+G），在路径中输入 /private，进入之后在 etc 文件夹上点击右键——显示简介，在文件夹简介窗口的最下面找到“共享与权限”，将 everyone 的权限修改为“读与写”，如果你发现不能修改的话，将右下角的那把小锁解开就可以修改了。</p>
+
+<p>修改 etc 文件夹的权限之后，再进入 etc 文件夹下面，修改名为 hosts 文件的权限（同样是everyone读与写），修改完成之后，你就可以直接在 hosts 文件上点右键，通过“文本编辑”打开并编辑该文件了，不会出现没有权限的提示。修改并保存完成之后，记得将该文件和 etc 文件夹的权限还原。</p>
+
+<h3>最后的话</h3>
+
+<p>本文分享的这几种 Lion 系统下修改 Hosts 的方法都不会出现没有文件修改权限的提示，这个提示其实也是 Lion 安全性更高的表现，以上几种方法在 10.6 系统中都可以使用，至少算得上 Lion 系统下几个最简单修改 Hosts 文件的方法了。另外大家可以看到以上三种方法都需要在终端中操作，而对于刚刚使用 Mac，且没有玩过 Linux 的用户来说可能会觉得很麻烦，实际上终端很简单，莫非就是几个命令，并且功能非常强大，能够实现很多意想不到的功能。所以，对于刚刚用 Mac 的同学来说一定不要被终端这种命令行操作所吓倒，基本上你只需要复制命令，然后粘贴进去按回车就可以了，这有什么难的呢？</p>
+]]></content>
+  </entry>
+  
+</feed>

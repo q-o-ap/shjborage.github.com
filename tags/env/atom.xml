@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: env | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/env/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Python - virtualenv 基础使用]]></title>
+    <link href="http://shjborage.github.io/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/"/>
+    <updated>2017-01-03T16:28:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong</id>
+    <content type="html"><![CDATA[<p><code>python</code> 的环境折腾起来还是比较复杂，不说 macOS 下面有个默认 python，自己还需要装一个自己需要的版本（2.7或3.x）。然后不同的开发需求，可能就会使用 <code>pip</code> 安装不同的包，甚至不同的项目需要安装不同版本的包，这就麻烦了，需要 <code>virtualenv</code> 来协助了。</p>
+
+<h2>安装 <code>virtualenv</code></h2>
+
+<p><code>virtualenv</code> 不是 <code>python</code> 自带的，需要独立安装</p>
+
+<p><code>
+pip install virtualenv
+</code></p>
+
+<h2>创建一个指定 <code>python</code> 版本的环境</h2>
+
+<p><code>
+virtualenv -p /usr/bin/python2.7 ENV2.7
+</code></p>
+
+<h2>激活</h2>
+
+<p><code>
+source ./bin/active
+</code></p>
+
+<h2>关闭</h2>
+
+<p><code>
+deactive
+</code></p>
+
+<h2>Refs</h2>
+
+<p><a href="http://www.jianshu.com/p/08c657bd34f1">Python&mdash;Virtualenv简明教程</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 设计模式 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/she-ji-mo-shi/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[单例初始化代码中,一定不能出现对单例的引用]]></title>
+    <link href="http://shjborage.github.io/blog/2014/04/17/dan-li-chu-shi-hua-dai-ma-zhong-%2C%5B%3F%5D-ding-bu-neng-chu-xian-dui-dan-li-de-yin-yong/"/>
+    <updated>2014-04-17T23:03:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/04/17/dan-li-chu-shi-hua-dai-ma-zhong-,[?]-ding-bu-neng-chu-xian-dui-dan-li-de-yin-yong</id>
+    <content type="html"><![CDATA[<p>写了个测试的例子：</p>
+
+<p>一个单例类 SingletonClass 和 这个单例中用到的类 SomeClass</p>
+
+<p><strong>SingletonClass</strong></p>
+
+<p>```
+@implementation SingletonClass</p>
+
+<ul>
+<li><p>(id)sharedSingletonClass
+{
+  static SingletonClass* <em>singleton = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&amp;onceToken, ^{
+      </em>singleton = [[self alloc] init];
+  });
+  return _singleton;
+}</p></li>
+<li><p>(id)init
+{
+  self = [super init];
+  if (self)
+  {
+      self.number = 10;//一个属性
+      self.someClass = [[SomeClass alloc] init];//初始化SomeClass
+  }
+  return self;</p></li>
+</ul>
+
+
+<p>}</p>
+
+<p>@end
+```</p>
+
+<p><strong>SomeClass：</strong></p>
+
+<p>```
+@implementation SomeClass</p>
+
+<ul>
+<li>(id)init
+{
+  self = [super init];
+  if (self)
+  {
+      _number = [[SingletonClass sharedSingletonClass] number];//此处用到了单例中的number的值
+  }
+  return self;
+}</li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>当运行的时候发现
+```</p>
+
+<pre><code>NSLog(@"Hello, World!");
+NSLog(@"%@:", [SingletonClass sharedSingletonClass])
+NSLog(@"Hello, World!")
+</code></pre>
+
+<p>```</p>
+
+<p>第二个helloworld永远执行不到</p>
+
+<p>原因很简单，循环调用了，在单例初始化过程中，又调用了单例的初始化，以致于永远跳出不这个死循环。用dispatch_once的单例和之前常用的单例生成方法在这里没有区另。只是目测dispatch_once在发现被"dispatch_twice"之后就静止不动了，也不报错。之前的单例生成方法会执行死循环，追踪了下发现函数调用N多，一直卡着，但估计栈不久就会爆掉。</p>
+
+<p><strong>总结</strong>：<em>这问题这样写着一目了然，等类多了而且结构复杂了就不太能看出来了，而且debug很是费解，以后得留点心</em></p>
+
+<p><strong>在单例初始化时（包括初始化函数中深度遍历的所有的代码），一定不能出现对单例的引用。</strong></p>
+
+<p>引自:<a href="http://www.cnblogs.com/sunnyxx/archive/2012/11/09/2762861.html">http://www.cnblogs.com/sunnyxx/archive/2012/11/09/2762861.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

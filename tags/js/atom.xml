@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: js | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/js/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[npm install 本地安装与全局安装]]></title>
+    <link href="http://shjborage.github.io/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/"/>
+    <updated>2017-01-03T17:30:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang</id>
+    <content type="html"><![CDATA[<p>研究 <code>node.js</code> 时，发现使用 <code>javascript</code> 也可以写 <code>shell</code> 脚本，用到了下面这个命令：</p>
+
+<p><code>
+npm install shelljs --save-dev
+</code></p>
+
+<p>顺带研究了一下 <code>npm install</code> 的使用，如果不带 <code>-g</code> 的话，是保存在当前目录下的【本地安装】，否则是全局安装。</p>
+
+<p><code>--save</code> 与 <code>--save-dev</code> 这个适用于有 <code>package.json</code> 的情况。
+保存在 <code>dependencies</code> 或 <code>devDependencies</code>中。</p>
+
+<h2>Ref</h2>
+
+<p><a href="https://yq.aliyun.com/articles/36217">npm install —— 从一个简单例子，看本地安装与全局安装的区别</a><br/>
+<a href="http://cnodejs.org/topic/54d33df497be414b68dcf503">请问 npm install &mdash;save 与 npm install &mdash;save-dev 的区别</a></p>
+]]></content>
+  </entry>
+  
+</feed>

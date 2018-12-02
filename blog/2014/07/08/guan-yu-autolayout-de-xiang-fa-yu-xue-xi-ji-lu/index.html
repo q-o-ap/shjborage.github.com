@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>关于 AutoLayout 的想法与学习记录 - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+  <!--[if lt IE 9]>
+    <script src="http://x.papaapp.com/farm1/a571d2/8dda131d/html5shiv.js"></script>
+    <![endif]-->
+  
+  <meta name="description" content="关于 AutoLayout 的想法与学习记录 Jul 8th, 2014 | Comments 有日子没写博客了，忙着在北京奔波，房子、工作。。。总之各种事
+突然在 LinkedIn 上面看到我的博客，点进去才发现上次更新日期是June 10th，哎。That&rsquo;s so bad. &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shjborage.github.io/blog/2014/07/08/guan-yu-autolayout-de-xiang-fa-yu-xue-xi-ji-lu/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header id="header" class="clearfix">    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                <a id="logo" href="/">
+                   Saick Blog
+                </a>
+                <p class="description">技术博客，致力于全栈以及各方面修养。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="index-nav current" href="/">Blog</a>
+<a class="archives-nav" href="/blog/archives">Archives</a>
+<!-- <a class="friendlink-nav" href="/friendlylink.html">Links</a> -->
+<a class="about-nav" href="/about.html">About Me</a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+  <div id="body">
+    <div class="container">
+    	<div class="col-group">
+			<div class="col-8" id="main">
+  <div class="res-cons">
+  <article class="post clearfix">
+  
+  <header>
+    
+      <h1 class="post-title">关于 AutoLayout 的想法与学习记录</h1>
+    
+    
+      <p class="post-meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-08T00:11:00+08:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="post-content"><p>有日子没写博客了，忙着在北京奔波，房子、工作。。。总之各种事
+突然在 <a href="https://www.linkedin.com">LinkedIn</a> 上面看到我的博客，点进去才发现上次更新日期是June 10th，哎。That&rsquo;s so bad.<br/>
+可能是受一些圈子里面的人影响，看着同仁们写着各种分享，都不太好意思老是在那里转来转去了。但有时实在自己没太多可写的，还是属于笔记那种，记也就记了吧，至少给自己看咯。</p>
+
+<p>费话一堆，略过。。</p>
+
+<h3>AutoLayout</h3>
+
+<p>这玩意出来有年头了，iOS6 开始有，但苦于国内的环境，实际在开发中，从<code>iOS3.2</code>、到<code>iOS4</code>，再到在暴风时的<code>iOS5</code>，不断在升级，但可惜还是没升到iOS6。这个情况不知道 <code>iOS8</code> 正式发布后会不会有大的变动。总之期待吧，也希望大厂能带动一下国内<code>iOS</code>的版本（虽然他们不会这么做）</p>
+
+<p>关于iOS，想必大家也都知道，而且在Xcode6 Beta中，也给人必须用<code>AutoLayout</code>的这种感觉。整个布局变得&#8221;不太可控&#8221;，当然了，这应该也是正确的方向，因为如果用过<code>AutoLayout</code>的同学应该都知道IB中操作，真是会有很多默认的“坑”，这个应该也是<code>Apple</code>在这几年准备过程中比较重要的步骤吧。</p>
+
+<h3>实用教程</h3>
+
+<p>关于这东西的使用，我真的也是新手，分享不了太多，给大家指个路即可。
+希望能对大家有所帮助！</p>
+
+<!-- more -->
+
+
+<h2>WWDC</h2>
+
+<p>这些都讲的比较基础，也很实用。
+其中<code>Introduction to Auto Layout for iOS and OS X</code>是我完整的看过，很有帮助。另外 <code>Auto Layout by Example</code> 这个我是看过官方的文档，对于什么情况下使用，以及如何用给出<code>Example</code>，非常实用（我在后来的iOS7开始支持的项目中确实用了）</p>
+
+<p><a href="https://developer.apple.com/videos/wwdc/2012/#202">Introduction to Auto Layout for iOS and OS X</a><br/>
+<a href="https://developer.apple.com/videos/wwdc/2013/#406">Taking Control of Auto Layout in Xcode 5</a><br/>
+<a href="https://developer.apple.com/videos/wwdc/2012/?include=228#228">Best Practices for Mastering Auto Layout</a><br/>
+<a href="https://developer.apple.com/videos/wwdc/2012/?include=232#232">Auto Layout by Example</a></p>
+
+<h2>小伙伴分享</h2>
+
+<p>另外也有一些不错的小伙伴关于<code>AutoLayout</code>的分享，也都是看过的，感觉不错，有收获的，不直接转了，大家还是直接去他们那儿看吧。
+其中前两个我都看过，VFL那个讲的真是不错呢，看了好久，也是从那时开始用。
+最后一篇的话是小伙伴翻译的，来自<a href="http://objc.io">objc.io</a>，我还没看，不过整个网站质量很高，也希望大家关注中文版<a href="http://objccn.io">objccn.io</a>，我也贡献过一点点力，嘿嘿。</p>
+
+<p><a href="http://studentdeng.github.io/blog/2014/06/13/auto-layout/">AutoLayout 相关概念介绍和动画demo</a><br/>
+<a href="http://blog.csdn.net/mozixiong/article/details/14165391">一篇厚道的Autolayout及VFL经验分享</a>这个我也转了<a href="http://blog.saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/">http://blog.saick.net/blog/2013/11/23/autolayoutji-vfljing-yan-fen-xiang/</a> <br/>
+<a href="http://objccn.io/issue-3-5/">先进的自动布局工具箱 from objc.io</a></p>
+
+<h3>总结</h3>
+
+<p>大概就这吧，希望大家能学的顺利！</p>
+
+<h3>后记</h3>
+
+<p>看了一眼，以前也写、转过<code>AutoLayout</code>的东西，不过自己都没想起来 &ndash; -。<br/>
+<a href="http://blog.saick.net/blog/2014/01/18/auto-layout-by-example/">Auto Layout by Example</a></p>
+</div>
+
+
+  <footer class="post-footer">
+    <div class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+ and 
+      File under 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+ with 
+
+<span class="tags">
+  
+    <a class='tag' href='/tags/autolayout/'>AutoLayout</a>, <a class='tag' href='/tags/ios/'>iOS</a>
+  
+</span>
+
+ Tag
+    </div>
+    
+      <div class="sharing">
+  <div>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shjborage.github.io/blog/2014/07/08/guan-yu-autolayout-de-xiang-fa-yu-xue-xi-ji-lu/" data-via="eric_shj" data-counturl="http://shjborage.github.io/blog/2014/07/08/guan-yu-autolayout-de-xiang-fa-yu-xue-xi-ji-lu/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  </div>
+
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <h5> <br> </h5>
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/10/czhong-unionhe-structde-qu-bie-yu-nei-cun-da-xiao-duan-yan-jiu/" title="Previous Post: C中Union和Struct的区别与内存大小端研究">&laquo; C中Union和Struct的区别与内存大小端研究</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/09/markchang-jian-xiao-guo-shi-xian/" title="Next Post: Markdown中表格与它常见效果实现">Markdown中表格与它常见效果实现 &raquo;</a>
+      
+    </div>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h3>Comments</h3>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+  </div>
+</div>
+
+  <aside id="secondary">
+  
+    <section class="widget">
+    <form id="search" action="http://google.com/search" method="get">
+    	<input type="hidden" name="q" value="site:shjborage.github.io"/>
+    	<input type="text" name="q" results="0" class="text" placeholder="Google搜索"/>
+    </form>
+</section>
+
+<section class="widget">
+	<h2 class="widget-title">最新文章</h2>
+	<ul class="widget-list">
+		
+     	<li>
+      	  <a href="/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/">为 PHP 做单元测试（UnitTest）</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/12/linux-kai-fa-bei-wang/">Linux 开发备忘</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/10/apple-ats-wen-ti/">Apple ATS 问题</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/">npm install 本地安装与全局安装</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/">Python - virtualenv 基础使用</a>
+      	</li>
+    	
+	</ul>
+</section>
+<section class="widget">
+  <h2 class="widget-title">Categories</h2>
+  <ul class="widget-list">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/c/'>C (4)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (6)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javascript/'>JavaScript (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (9)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (4)</a></li>
+<li class='category'><a href='/blog/categories/translate/'>Translate (1)</a></li>
+<li class='category'><a href='/blog/categories/web/'>Web (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (82)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (15)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (10)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h2 class="widget">Tags</h2>
+  <div>
+    <a style="font-size: 90%" href="/tags/ats/">ATS</a>
+<a style="font-size: 108%" href="/tags/android/">Android</a>
+<a style="font-size: 108%" href="/tags/appstore/">AppStore</a>
+<a style="font-size: 90%" href="/tags/appletv/">AppleTV</a>
+<a style="font-size: 90%" href="/tags/applewatch/">AppleWatch</a>
+<a style="font-size: 118%" href="/tags/autolayout/">AutoLayout</a>
+<a style="font-size: 108%" href="/tags/backend/">BackEnd</a>
+<a style="font-size: 118%" href="/tags/c/">C</a>
+<a style="font-size: 90%" href="/tags/css/">CSS</a>
+<a style="font-size: 125%" href="/tags/cocoapods/">CocoaPods</a>
+<a style="font-size: 131%" href="/tags/crash/">Crash</a>
+<a style="font-size: 108%" href="/tags/database/">DataBase</a>
+<a style="font-size: 118%" href="/tags/database/">Database</a>
+<a style="font-size: 90%" href="/tags/debug/">Debug</a>
+<a style="font-size: 90%" href="/tags/django/">Django</a>
+<a style="font-size: 90%" href="/tags/fe/">FE</a>
+<a style="font-size: 90%" href="/tags/game/">Game</a>
+<a style="font-size: 125%" href="/tags/git/">Git</a>
+<a style="font-size: 90%" href="/tags/github/">Github</a>
+<a style="font-size: 90%" href="/tags/https/">HTTPS</a>
+<a style="font-size: 90%" href="/tags/hybirdapp/">HybirdApp</a>
+<a style="font-size: 90%" href="/tags/interview/">Interview</a>
+<a style="font-size: 90%" href="/tags/js/">JS</a>
+<a style="font-size: 118%" href="/tags/java/">Java</a>
+<a style="font-size: 118%" href="/tags/javascript/">JavaScript</a>
+<a style="font-size: 108%" href="/tags/linux/">Linux</a>
+<a style="font-size: 148%" href="/tags/mac/">Mac</a>
+<a style="font-size: 90%" href="/tags/markdown/">Markdown</a>
+<a style="font-size: 125%" href="/tags/network/">Network</a>
+<a style="font-size: 180%" href="/tags/obj-c/">Obj-C</a>
+<a style="font-size: 108%" href="/tags/opensource/">OpenSource</a>
+<a style="font-size: 90%" href="/tags/php/">PHP</a>
+<a style="font-size: 118%" href="/tags/product/">Product</a>
+<a style="font-size: 90%" href="/tags/push/">Push</a>
+<a style="font-size: 90%" href="/tags/svn/">SVN</a>
+<a style="font-size: 90%" href="/tags/script/">Script</a>
+<a style="font-size: 90%" href="/tags/sharesdk/">ShareSDK</a>
+<a style="font-size: 118%" href="/tags/sourcecontrol/">SourceControl</a>
+<a style="font-size: 151%" href="/tags/tools/">Tools</a>
+<a style="font-size: 90%" href="/tags/translate/">Translate</a>
+<a style="font-size: 157%" href="/tags/ui/">UI</a>
+<a style="font-size: 90%" href="/tags/watch/">Watch</a>
+<a style="font-size: 125%" href="/tags/web/">Web</a>
+<a style="font-size: 90%" href="/tags/xcode/">XCode</a>
+<a style="font-size: 90%" href="/tags/basic/">basic</a>
+<a style="font-size: 90%" href="/tags/env/">env</a>
+<a style="font-size: 90%" href="/tags/icloud/">iCloud</a>
+<a style="font-size: 200%" href="/tags/ios/">iOS</a>
+<a style="font-size: 90%" href="/tags/ios10/">iOS10</a>
+<a style="font-size: 90%" href="/tags/ios5/">iOS5</a>
+<a style="font-size: 131%" href="/tags/ios7/">iOS7</a>
+<a style="font-size: 90%" href="/tags/ios9/">iOS9</a>
+<a style="font-size: 90%" href="/tags/ipa/">ipa</a>
+<a style="font-size: 90%" href="/tags/js/">js</a>
+<a style="font-size: 90%" href="/tags/keynote/">keynote</a>
+<a style="font-size: 90%" href="/tags/npm/">npm</a>
+<a style="font-size: 125%" href="/tags/octopress/">octopress</a>
+<a style="font-size: 143%" href="/tags/python/">python</a>
+<a style="font-size: 90%" href="/tags/redis/">redis</a>
+<a style="font-size: 90%" href="/tags/sae/">sae,</a>
+<a style="font-size: 90%" href="/tags/tools/">tools</a>
+<a style="font-size: 108%" href="/tags/you-hua/">优化</a>
+<a style="font-size: 90%" href="/tags/fen-xiang/">分享</a>
+<a style="font-size: 108%" href="/tags/dan-yuan-ce-shi/">单元测试</a>
+<a style="font-size: 90%" href="/tags/hou-duan/">后端</a>
+<a style="font-size: 90%" href="/tags/keng/">坑</a>
+<a style="font-size: 90%" href="/tags/bei-wang/">备忘</a>
+<a style="font-size: 118%" href="/tags/duo-xian-cheng/">多线程</a>
+<a style="font-size: 90%" href="/tags/an-quan/">安全</a>
+<a style="font-size: 155%" href="/tags/di-ceng/">底层</a>
+<a style="font-size: 90%" href="/tags/wei-xin/">微信</a>
+<a style="font-size: 90%" href="/tags/tui-jian-gong-ju/">推荐工具</a>
+<a style="font-size: 90%" href="/tags/jia-gou-she-ji/">架构设计</a>
+<a style="font-size: 90%" href="/tags/ce-shi/">测试</a>
+<a style="font-size: 90%" href="/tags/yi-dong-duan/">移动端</a>
+<a style="font-size: 108%" href="/tags/di-san-fang-ku/">第三方库</a>
+<a style="font-size: 90%" href="/tags/chun-ji-zhu/">纯技术</a>
+<a style="font-size: 90%" href="/tags/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/tags/diao-shi/">调试</a>
+<a style="font-size: 108%" href="/tags/sui-bian/">随便</a>
+
+  </div>
+</section>
+<section>
+  <h2 class="widget">(AD)广告位空缺中,招租</h2>
+</section>
+
+
+<section>
+  <h2 class="widget">新浪微博</h2>
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+</section>
+
+  
+</aside>
+
+
+      	</div>
+    </div>
+  </div>
+  <footer id="footer">
+  	<div class="container">
+	Copyright &copy; 2018 - Eric Shi -
+  <span class="credit">Powered by <a rel="nofollow" href="http://octopress.org">Octopress</a> on <a rel="nofollow" href="http://pages.github.com/">GitHubPages</a>
+  </span>
+  - <span class="credit">Theme by <a rel="nofollow" href="http://pagecho.com">Cho</a></span>
+
+
+</div>
+
+  </footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shjborage.github.io/blog/2014/07/08/guan-yu-autolayout-de-xiang-fa-yu-xue-xi-ji-lu/';
+        var disqus_url = 'http://shjborage.github.io/blog/2014/07/08/guan-yu-autolayout-de-xiang-fa-yu-xue-xi-ji-lu/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

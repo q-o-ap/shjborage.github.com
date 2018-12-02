@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: iOS | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/ios/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Apple ATS 问题]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/10/apple-ats-wen-ti/"/>
+    <updated>2017-03-10T22:20:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/10/apple-ats-wen-ti</id>
+    <content type="html"><![CDATA[<p>苹果 ATS 的标准是 LTSv1.2 且 AES256 的 RSA.</p>
+
+<p>有问题的两个URL：<br/>
+1. 不可以在 App 中正常获取数据
+<code>
+https://ss0.bdstatic.com/9bA1vGba2gU2pMbfm9GUKT-w/timg?nuomina&amp;size=w9999&amp;quality=100&amp;sec=1418745600&amp;di=b0c7531995ca2ccad8b63d5ad53a1fff&amp;src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fbainuo%2Fcrop%253D0%252C1%252C979%252C592%253Bw%253D230%253Bq%253D79%2Fsign%3De9a35c7a3012b31bd3239769bb281a4b%2Ff11f3a292df5e0fe030b493c556034a85edf72f8.jpg
+</code><br/>
+2. 可以在 App 中正常获取数据
+<code>
+https://gss0.baidu.com/7LsWdDW5_xN3otqbppnN2DJv/bainuo/pic/item/64380cd7912397dd597ec13f5e82b2b7d0a28782.jpg
+</code></p>
+
+<p>这两个 URL 都符合标准，而且都可以使用苹果开发者论坛里面给出的方案来校验通过：<a href="https://forums.developer.apple.com/thread/14816">https://forums.developer.apple.com/thread/14816</a></p>
+
+<p><code>
+nscurl --ats-diagnostics https://www.example.com
+</code></p>
+
+<h2>解决方案</h2>
+
+<p><code>NSURLConnection</code> 在iOS10上面会出现这个 9802，并不是服务器的问题。
+需要切换为 <code>NSURLSession</code> 来解决这个问题。
+后续的网络请求应该都不再使用 <code>NSURLConnection</code>，应该是苹果 SDK 的 bug，但因为这部分已经是不再维护的了，也别为难苹果了，使用最新的 API 吧。</p>
+
+<h2>Refs</h2>
+
+<ul>
+<li><a href="https://onevcat.com/2016/06/ios-10-ats/">关于 iOS 10 中 ATS 的问题</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[端性能测试之连拍王]]></title>
+    <link href="http://shjborage.github.io/blog/2016/09/12/duan-xing-neng-ce-shi-zhi-lian-pai-wang/"/>
+    <updated>2016-09-12T15:51:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/09/12/duan-xing-neng-ce-shi-zhi-lian-pai-wang</id>
+    <content type="html"><![CDATA[<p>iOS 性能测试，有很多种技术手段。  <br/>
+1. 打点<br/>
+2. Instruments 检测</p>
+
+<p>但这两个常用的办法，有时也不能给出非常合理的数据。比如最近在研究 <code>ReactNative</code>，它在渲染时真实消耗的时间就不太好搞（如果有误请帮忙指证）。  <br/>
+&ndash;   打点的话，都是一些内部时机，想找到渲染成功的点，还需要在 <code>RN</code> Native 部分源码打点才行吧。<br/>
+&ndash;   Instruments 跑了一下，看到了各种 JS 与 OC 交互的耗时，并没找到渲染结果的时间。。</p>
+
+<p>最后实在没办法，跟 QA 聊了下，使用『极速连拍王』拍照分析时间消耗。<br/>
+1. 在 AppStore 搜索『极速连拍王』或 <a href="http://url.cn/2E3D8Cj">点此链接</a>；<br/>
+2. 打开进行拍照授权；<br/>
+3. 然后就直接开拍啦。。。</p>
+
+<p><img class="<a" src="href="http://shjborage-public.qiniudn.com/2016-09-13-14737616847207.jpg">http://shjborage-public.qiniudn.com/2016-09-13-14737616847207.jpg</a>" width="375"></p>
+
+<p>默认设置是30张/秒，具体耗时就数多少张照片即可。<br/>
+另外这个 App 的稳定性不太好，查看图片部分并不太好用，全部删除照片的话，要长按某张照片，然后全部选中，点删除（滑动到下面长按不容易Crash）。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[App Transport Security support aka apps on iOS 9 don't work]]></title>
+    <link href="http://shjborage.github.io/blog/2015/06/25/app-transport-security-support-aka-apps-on-ios-9-dont-work/"/>
+    <updated>2015-06-25T10:12:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/06/25/app-transport-security-support-aka-apps-on-ios-9-dont-work</id>
+    <content type="html"><![CDATA[<p>虽然不想说，但还是很久没更新了。<br>
+最近被El caption折腾了，虽然是有史以来最好用的beta版，但第二个beta被害了。</p>
+
+<p>几个重要的点 <br/>
+1. Cornerstone 罢工（2.7.10） <br/>
+2. iStat Menus 5（正版最新）罢工 <br/>
+3. beta2上Xcode 6.3.2 直接也不让用了 &ndash; -！</p>
+
+<p>这些。。有些不能接受</p>
+
+<p>不过我是这样解决的  <br/>
+1. svn 直接命令行  <br/>
+2. iStat Menus 放弃，反馈给官方等更新（把系统设置又改了一圈）  <br/>
+3. Xcode直接使用beta版凑合用（要上线就找同事咯～）</p>
+
+<p>不过问题总是会找上门来：</p>
+
+<p><strong><em>iOS9的模拟器一直上不了网，但模拟器里的Safari是可以联网的</em></strong>  <br/>
+我勒个去啊</p>
+
+<p>查了好久却一直没啥进展，可能是对网络安全了解较少，最好发现是协议升级，需要在app上进行一些配置才可以。原文如下：</p>
+
+<blockquote><p>iOS 9 (may) force developers to use App Transport Security exclusively. I overheard this somewhere randomly so I don&rsquo;t know whether this is true myself. But I suspect it and have come to this conclusion:</p>
+
+<p>The app running on iOS 9 will (maybe) no longer connect to a Meteor server without SSL.</p>
+
+<p>This means running meteor run ios or meteor run ios-device will (probably?) no longer work.</p>
+
+<p>In the app&rsquo;s info.plist, NSAppTransportSecurity [Dictionary] needs to have a key NSAllowsArbitraryLoads [Boolean] to be set to YES or Meteor needs to use https for its localhost server soon. (From Page 26 <a href="http://devstreaming.apple.com/videos/wwdc/2015/711y6zlz0ll/711/711_networking_with_nsurlsession.pdf?dl=1">http://devstreaming.apple.com/videos/wwdc/2015/711y6zlz0ll/711/711_networking_with_nsurlsession.pdf?dl=1</a>)</p>
+
+<p>This is what an error may look like. Of course this is at best, a guess:</p>
+
+<p>The resource could not be loaded because the App Transport Security policy requires the use of a secure connection.
+The best possible fix is to get Meteor to use a SSL server in dev mode.</p>
+
+<p>Oh the hassle! Also again, I overheard this from a loud third party.</p></blockquote>
+
+<p>引用：<a href="https://github.com/meteor/meteor/issues/4560">https://github.com/meteor/meteor/issues/4560</a></p>
+
+<p>附：真机调试也还有问题，是部分库造成的，这个还需要研究下。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 序列化与反序列化]]></title>
+    <link href="http://shjborage.github.io/blog/2015/04/16/ios-xu-lie-hua-yu-fan-xu-lie-hua/"/>
+    <updated>2015-04-16T15:38:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/04/16/ios-xu-lie-hua-yu-fan-xu-lie-hua</id>
+    <content type="html"><![CDATA[<p>很久以前的文章，发现还比较有用，从<a href="http://blog.sina.com.cn/s/blog_8732f193010164j7.html">新浪博客</a>转过来。</p>
+
+<p>序列化的问题，在以前做VC的时候就听说过，但实际用的不多。大概意思呢，就是把一个对象（一些数据或者定义的对象）序列化成文件（一般是XML文件），永久的保存起来。需要用的时候再通过反序列化恢复原有的数据。</p>
+
+<p>在iOS（OC）中，像标准的集合以及字典(NSArray, NSDictionary)，都有直接序列化的方法，wirteToFile&hellip;，但这些只适合用于集合中只有标准数据类型，如果有自定义的类，那么就会报错，写入失败了。</p>
+
+<h3>标准反序列化</h3>
+
+<p>```
+   // NSMutableArray <em>_arDataSource;
+   NSString </em>strCaches = [NSString stringWithFormat:@&ldquo;%@/tmp/%@&rdquo;,</p>
+
+<pre><code>                    NSHomeDirectory(), kCachedFileName];
+</code></pre>
+
+<p>   BOOL bWriteSuccess = [_arDataSource writeToFile:strCaches atomically:YES];
+   if (bWriteSuccess == NO) {
+//            NSLog(@&ldquo;Wirte file error, unkown error occurred&rdquo;);
+   } // end of if (bWriteSuccess == NO) {
+```</p>
+
+<p>标准反序列化
+<code>
+   _arDataSource = [[NSMutableArray arrayWithContentsOfFile:strCaches] retain];
+</code></p>
+
+<!-- more -->
+
+
+<p>如果有自定义的类，应该在类中实现NSCoding协议，NSCopying是可选的吧，放在这儿写copy时可以参考下</p>
+
+<p>```
+//
+//  item_info.h
+//  BitCar_Shopping
+//
+//  Created by Eric on 9/24/12.
+//  Copyright &copy; 2012 Safe&amp;Quick. All rights reserved.
+//</p>
+
+<h1>import &lt;Foundation/Foundation.h></h1>
+
+<h1>define kClass      @&ldquo;BC_Class&rdquo;</h1>
+
+<h1>define kSubClass   @&ldquo;BC_SubClass&rdquo;</h1>
+
+<h1>define kName       @&ldquo;BC_Name&rdquo;</h1>
+
+<h1>define kPrice      @&ldquo;BC_Price&rdquo;</h1>
+
+<h1>define kSelected   @&ldquo;BC_Selected&rdquo;</h1>
+
+<p>@interface item_info : NSObject
+&lt;
+NSCoding,
+NSCopying</p>
+
+<blockquote><p>{</p>
+
+<pre><code>NSString *_strClass;
+NSString *_strSubClass;
+</code></pre></blockquote>
+
+<pre><code>NSString *_strName;
+NSString *_strPrice;
+
+BOOL _bSelected;
+</code></pre>
+
+<p>}</p>
+
+<p>@property (nonatomic, copy) NSString <em>strClass;
+@property (nonatomic, copy) NSString </em>strSubClass;</p>
+
+<p>@property (nonatomic, copy) NSString <em>strName;
+@property (nonatomic, copy) NSString </em>strPrice;</p>
+
+<p>@property (nonatomic, assign) BOOL bSelected;</p>
+
+<p>@end</p>
+
+<p>//
+//  item_info.m
+//  BitCar_Shopping
+//
+//  Created by Eric on 9/24/12.
+//  Copyright &copy; 2012 Safe&amp;Quick. All rights reserved.
+//</p>
+
+<h1>import &ldquo;item_info.h&rdquo;</h1>
+
+<p>@implementation item_info</p>
+
+<p>@synthesize strClass = <em>strClass;
+@synthesize strSubClass = </em>strSubClass;</p>
+
+<p>@synthesize strName = <em>strName;
+@synthesize strPrice = </em>strPrice;</p>
+
+<p>@synthesize bSelected = _bSelected;</p>
+
+<ul>
+<li><p>(void)dealloc
+{
+  [<em>strClassrelease];
+  [</em>strSubClassrelease];</p>
+
+<p>  [<em>strPricerelease];
+  [</em>strName release];</p>
+
+<p>  [super dealloc];
+}</p></li>
+<li><p>(void)encodeWithCoder:(NSCoder *)aCoder
+{
+  [aCoder encodeObject:<em>strClassforKey:kClass];
+  [aCoder encodeObject:</em>strSubClassforKey:kSubClass];
+  [aCoder encodeObject:<em>strNameforKey:kName];
+  [aCoder encodeObject:</em>strPriceforKey:kPrice];
+  [aCoder encodeBool:_bSelected forKey:kSelected];
+}</p></li>
+<li><p>(id)initWithCoder:(NSCoder *)aDecoder
+{
+  if (self = [super init]) {
+      <em>strClass   = [[aDecoder decodeObjectForKey:kClass] copy];
+      </em>strSubClass= [[aDecoder decodeObjectForKey:kSubClass] copy];
+      <em>strName    = [[aDecoder decodeObjectForKey:kName] copy];
+      </em>strPrice   = [[aDecoder decodeObjectForKey:kPrice] copy];
+      _bSelected  = [aDecoder decodeBoolForKey:kSelected];
+  }
+  returnself;
+}</p></li>
+<li><p>(id)copyWithZone:(NSZone <em>)zone
+{
+  item_info </em>item = [[[self class] allocWithZone:zone] init];
+  item.strClass   = [[self.strClass copyWithZone:zone] autorelease];
+  item.strSubClass= [[self.strSubClass copyWithZone:zone] autorelease];
+  item.strName    = [[self.strName copyWithZone:zone] autorelease];
+  item.strPrice   = [[self.strPrice copyWithZone:zone] autorelease];</p>
+
+<p>  return item;
+}</p></li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<h4>使用实例：</h4>
+
+<p>序列化：
+```</p>
+
+<pre><code>        // KeyedArchiver
+        NSMutableData *data = [[NSMutableData alloc] init];
+        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+        [archiver encodeObject:_arDataSource forKey:kDataKey];
+        [archiver finishEncoding];
+        bWriteSuccess = [data writeToFile:strCaches atomically:YES];
+        [data release];
+        [archiver release];
+</code></pre>
+
+<p>```</p>
+
+<p>反序列化：
+```</p>
+
+<pre><code>    NSData *data = [[NSMutableData alloc] initWithContentsOfFile:strCaches];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+
+    _arDataSource = [[unarchiver decodeObjectForKey:kDataKey] retain];
+    [unarchiver finishDecoding];
+
+    [unarchiver release];
+    [data release];
+</code></pre>
+
+<p>```</p>
+
+<p>另附数据源构造核心代码，虽然结果可能设计不太合理，希望大家提出宝贵意见：</p>
+
+<p>```
+&ndash; (void)initDataSource
+{</p>
+
+<pre><code>NSString *strCaches = [NSString stringWithFormat:@"%@/tmp/%@",
+                       NSHomeDirectory(), kCachedFileName];
+if ([[NSFileManagerdefaultManager] fileExistsAtPath:strCaches]) {
+</code></pre>
+
+<p>//        _arDataSource = [[NSMutableArray arrayWithContentsOfFile:strCaches] retain];</p>
+
+<pre><code>    NSData *data = [[NSMutableData alloc] initWithContentsOfFile:strCaches];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+
+    _arDataSource = [[unarchiver decodeObjectForKey:kDataKey] retain];
+    [unarchiver finishDecoding];
+
+    [unarchiver release];
+    [data release];
+    return;
+}
+
+if (_arDataSource == nil)
+    self.arDataSource = [NSMutableArray array];
+else
+    [_arDataSourceremoveAllObjects];
+
+NSString *strFilePath = [[NSBundlemainBundle] pathForResource:kShoppingListFileNameofType:@"xml"];
+if ([[NSFileManager defaultManager] fileExistsAtPath:strFilePath]) {
+    NSString *strXml = [NSStringstringWithContentsOfFile:strFilePath encoding:NSUTF8StringEncodingerror:nil];
+    if ([strXml length] == 0)
+        return;
+
+    GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithXMLString:strXml options:0 error:nil];
+    if (doc == nil)
+        return;
+
+    NSArray *arRootChilds = [doc.rootElement children];
+    for (GDataXMLElement *element in arRootChilds) {
+        NSMutableArray *arTmp = [[NSMutableArray alloc] init];
+
+        NSString *strClass = [[element attributeForName:@"name"] stringValue];
+        NSArray *arClassChilds = [element children];
+        for (GDataXMLElement *element_sub in arClassChilds) {
+            NSMutableArray *arTmpSub = [[NSMutableArray alloc] init];
+
+            NSString *strSubClass = [[element_sub attributeForName:@"name"] stringValue];
+
+            NSArray *arSubClassChilds = [element_sub children];
+            for (GDataXMLElement *element_item in arSubClassChilds) {
+                NSString *strName = [[element_item attributeForName:@"name"] stringValue];
+                NSString *strPrice = [[element_item attributeForName:@"price"] stringValue];
+
+                item_info *item = [[item_info alloc] init];
+                item.strClass = strClass;
+                item.strSubClass = strSubClass;
+                item.strName = strName;
+                item.strPrice = strPrice;
+                item.bSelected = NO;
+
+                [arTmpSub addObject:item];
+                [item release];
+            }
+
+            [arTmp addObject:arTmpSub];
+            [arTmpSub release];
+        }
+
+        [_arDataSource addObject:arTmp];
+        [arTmp release];
+    }
+
+    [doc release];
+} // end of fileExists
+</code></pre>
+
+<p>}
+```</p>
+
+<p>kShoppingListFileName：
+<code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;shoping&gt;
+&lt;class name="图书" &gt;
+&lt;subclass name="计算机"&gt;
+&lt;item name="《C＃入门》"price=" 60.00"/&gt;
+&lt;item name="《ios入门》"price="24.00"/&gt;
+&lt;item name="《架构设计》"price="33.00"/&gt;
+&lt;item name="《敏捷实战》"price="55.00"/&gt;
+&lt;item name="《ASP.net从入门到精通》"price="56.00"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="外语"&gt;
+&lt;item name="《商务口语》"price="9.00"/&gt;
+&lt;item name="《朗讯辞典》"price="99.00"/&gt;
+&lt;item name="《1天1句》"price="8.0"/&gt;
+&lt;item name="《我爱背单词》"price="7.6"/&gt;
+&lt;item name="《看图说话》"price="7.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="教材"&gt;
+&lt;item name="《大学语文》"price="32.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="小说"&gt;
+&lt;item name="《美人》"price="37.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="励志"&gt;
+&lt;item name="《学会说NO》"price="98.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="动漫"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="《??》"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;/class&gt;
+&lt;class name="家具"&gt;
+&lt;subclass name="床"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="国王大床"price="39898.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="桌"&gt;
+&lt;item name="小圆桌"price="98.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="椅"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="太师椅"price="32.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="灯具"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="熊猫台灯"price="983.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="门窗"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="玻璃门"price="983.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="地板"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="楠木地板"price="9333333.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;/class&gt;
+&lt;class name="电子设备"&gt;
+&lt;subclass name="电脑"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="DELL"price="3000.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="手机"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="iphone"price="3000.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="摄影摄像"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="DELL"price="3000.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;subclass name="打印扫描"&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HP"price="3000.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;item name="HAHAH"price="3.0"/&gt;
+&lt;/subclass&gt;
+&lt;/class&gt;
+&lt;/shoping&gt;
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS调试方法定位Crash以及静态库调试]]></title>
+    <link href="http://shjborage.github.io/blog/2015/02/07/iosdiao-shi-fang-fa-ding-wei-crashyi-ji-jing-tai-ku-diao-shi/"/>
+    <updated>2015-02-07T23:56:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/02/07/iosdiao-shi-fang-fa-ding-wei-crashyi-ji-jing-tai-ku-diao-shi</id>
+    <content type="html"><![CDATA[<h2>引子</h2>
+
+<p>在iOS开发中常会遇到Crash，有时Xcode并不能很好的提示我们出错的原因是什么，具体是哪行代码出了问题。<br>
+比如 <a href="http://blog.objcc.com/unrecognized-selector-sent-to-instance/">UNRECOGNIZED SELECTOR SENT TO INSTANCE 问题快速定位的方法</a> 文中提到的定位处理不了的消息发送。</p>
+
+<h2>Symbolic Breakpoint</h2>
+
+<p>在调试时，我们经常需要使用到断点，Xcode支持几种断点：</p>
+
+<ul>
+<li>普通断点</li>
+<li>Exception Breakpoint</li>
+<li>Symbolic Breakpoint</li>
+<li>。。。</li>
+</ul>
+
+
+<p>我们可能比较熟悉普通断点，主要来介绍一下 <code>Exception Breakpoint</code> 和 <code>Symbolic Breakpoint</code>.</p>
+
+<p><strong><em>Exception Breakpoint</em></strong><br>
+全局异常断点，傻瓜式的使用，在任意的代码处有异常抛出没有捕获即可“被断住”。<br>
+<em>注：如果使用了C、C++开发的话，有些signal可能会被这种断点触发，但并不会引发Crash</em></p>
+
+<p><strong><em>Symbolic Breakpoint</em></strong><br>
+通过类名以及方法名来添加断点的一种方式。例如：
+<code>
+-[NSObject(NSObject) doesNotRecognizeSelector:]
+</code></p>
+
+<h3>包含静态库的整体调试</h3>
+
+<p>如果想测试在某个静态库中某个方法是否执行，可以在知道类名跟方法名的情况下使用 <code>Symbolic Breakpoint</code> 来确认这个情况</p>
+
+<h4>送个命令～</h4>
+
+<p>可以在某个静态库或可执行文件中查找 symbol。 需要详细的使用方法，请自行<code>man nm</code>
+<code>
+// nm - display name list (symbol table)
+nm xxx.a | grep xxSymbol
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

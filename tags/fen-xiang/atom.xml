@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 分享 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/fen-xiang/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[微信小程序初步调研]]></title>
+    <link href="http://shjborage.github.io/blog/2016/10/20/wei-xin-xiao-cheng-xu-chu-bu-diao-yan/"/>
+    <updated>2016-10-20T16:38:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/10/20/wei-xin-xiao-cheng-xu-chu-bu-diao-yan</id>
+    <content type="html"><![CDATA[<p>先做下说明，本文基于各路网友的观点做了下总结，给大家分享，都有相关的转载链接，如有遗漏请大家联系我添加。</p>
+
+<h2>什么是小程序</h2>
+
+<blockquote><p>  小程序是一种不需要下载安装即可使用的应用，它实现了应用“触手可及”的梦想，用户扫一扫或者搜一下即可打开应用。也体现了“用完即走”的理念，用户不用关心是否安装太多应用的问题。应用将无处不在，随时可用，但又无需安装卸载。&mdash; Allen Zhang</p></blockquote>
+
+<p>张大大在年初发布<code>应用号</code>时也说过一些定位：</p>
+
+<blockquote><p>  1.关于给谁做：很多服务和功能用户需要的频次很低，还会在手机上有推送，其实没必要。开发一个APP的成本很高，很多小的商户或者企业承担不起，也没必要。<br/>
+  2.关于做成什么样子：应用会静静的呆在那里，你需要的时候就去用。<br/>
+  3.关于放在哪：公众号之中也可以插入服务之类的，但是体验不好，用户也不好找。</p></blockquote>
+
+<p>这几句话也不是很清晰，但应该也可以理解一些。整体来说，小程序还是会比较符合微信价值观：<strong>好产品应该是用完即走，微信应该是给用户提供便利，而非浪费时间。希望用户在微信里看到的都是自己愿意看到的东西，也希望用户能够留出来更多的时间去做其他的事情。</strong> 所以微信正在尝试做减法，为微信用户提供一个类似APP模式的账号一样，不主动推出骚扰用户，用户需要的时候在去找这个应用号。</p>
+
+<h3>可能会有哪些入口呢？</h3>
+
+<p>小程序入口在哪里？用户怎么实现触手可及，随时随地可用，用完即走的体验？目前透露的方式是通过搜一搜、扫一扫。可能的方式很多种&hellip;</p>
+
+<!-- more -->
+
+
+<h4>任何搜索相关</h4>
+
+<p>在任何地方搜索时，不仅出现聊天记录列表、朋友圈、公众号、文章，还可出现应用。找到后点击即可使用。凡是使用过的应用都进入用户的微信列表，可能是单个形态出现，也可能是聚合在小程序集合中。</p>
+
+<h4>通讯录添加小程序入口</h4>
+
+<p>在通讯录下，增加一个“小程序”与“公众号”并列，作为曾经使用过的或者收藏的小程序入口。</p>
+
+<h4>发现</h4>
+
+<p>“发现”TAB里面增加一个“小程序”入口，点击小程序会出现一个搜索框？还是其他？通过搜索推荐应用，点击应用即可使用，使用完之后进入微信列表及通讯录的“小程序”集合中？好处容易找到，不利的地方是路径略长。<br/>
+比如要订机票，点击发现TAB，然后点击“小程序”，再搜索“订机票”，然后再出来应用，再点击打开。如果“发现”TAB不仅有“搜索框”，还有应用的分类和汇总，这个貌似不符合微信的理念。按照微信的一贯的做法，它不会去做一个类似于app store一样的市场，不做中心化的聚合，而是让用户自发去传播。</p>
+
+<h4>聊天、朋友圈分享</h4>
+
+<p>聊天的话，这个应该会类似苹果iMessage。比如点评已经在iMessage里面做了一个拼饭、拼电影票的功能。<br/>
+入口无处不在，让开发者和忠实用户去推荐和传播？这符合微信的惯常做法。微信更可能通过聊天、朋友圈等去中心化等方式，让小程序可以在它需要出现的时候出现，通过用户自传播的方式去流通，当然也可通过搜一搜和扫一扫的方式主动获取。</p>
+
+<h4>第五个Tab</h4>
+
+<p>可能会有新的Tab出现，解决现在公众号入口较深的问题。</p>
+
+<h3>感受一下</h3>
+
+<p>贴两张网友们的图：</p>
+
+<p><img class="<a" src="href="http://shjborage-public.qiniudn.com/2016-10-20-14769307858608.jpg">http://shjborage-public.qiniudn.com/2016-10-20-14769307858608.jpg</a>" width="375"></p>
+
+<p><img class="<a" src="href="http://shjborage-public.qiniudn.com/2016-10-20-14769307968981.jpg">http://shjborage-public.qiniudn.com/2016-10-20-14769307968981.jpg</a>" width="375"></p>
+
+<p><em>我个人认为，这个图是P的</em></p>
+
+<p>还有这两条视频资料：  <br/>
+&ndash;   <a href="http://v.qq.com/x/cover/c1fnf9wd4oh0w8b.html?vid=e0021i43oqc">http://v.qq.com/x/cover/c1fnf9wd4oh0w8b.html?vid=e0021i43oqc</a><br/>
+&ndash;   <a href="http://v.youku.com/v_show/id_XMTczMzk4NTgwOA==.html?from=s1.8-1-1.2&amp;spm=0.0.0.0.NpXwQU">http://v.youku.com/v_show/id_XMTczMzk4NTgwOA==.html?from=s1.8-1-1.2&amp;spm=0.0.0.0.NpXwQU</a></p>
+
+<p><strong>大家应该了解小程序大概是什么了吧？</strong></p>
+
+<h2>可行性分析</h2>
+
+<h3>App市场现状</h3>
+
+<p>传统APP发展到今天已经过于笨重，作为一个独立的APP产品来说或许感受不到这点，而作为用户来说，APP之间的重叠区域越来越重。不同的APP除了能够提供自己独有的特色服务外，基本的能力都差不多，支付功能，消息推送，语音，扫码&hellip;</p>
+
+<p>微信应用号的推出会一定程度上降低APP的推广成本，使APP和微信用户互通，获得稳固的用户和流量。（当然了，微信小程序后续的爆光也可能是这个问题，参考现在的公众号情况）</p>
+
+<h3>竞品对比</h3>
+
+<ul>
+<li>Qplus</li>
+<li>Chrome App</li>
+<li>百度轻应用</li>
+<li>UC轻应用</li>
+</ul>
+
+
+<p>我们来看一下曾经做过类似的事的。。竞品</p>
+
+<p>其实小程序不是腾讯的第一次尝试，Qplus，Q+ 才是。
+早些年在PC市场上，就做过智能桌面的产品，那是想在Windows的基础上做这套东西，但并没有做成。</p>
+
+<p>Chrome也有类似的Chrome App以及Chrome AppStore，不过运营的也不是太好。</p>
+
+<p>然后百度和UC，大家可能也都比较了解了。。此处省略200字。</p>
+
+<p>结论就是这些都做的不太理想。。</p>
+
+<p>有WebApp与Native App之争的原因，因为体验较差。再有就是平台能力，比如支付能力、账户体系。
+而有微信的条件是够好的——几乎全中国的主要人群都有，平均打开次数和使用时长不可超越。</p>
+
+<h3>微信的『资本』</h3>
+
+<blockquote><p>  根据第三方机构 Trustdata 的统计，2015 年用户平均每天打开微信超过 19 次，比淘宝多出了3倍之多，微信实际已经成为了目前用户基础最大并且活跃度最高的应用。</p></blockquote>
+
+<h3>技术方案</h3>
+
+<p><em>先来听两个问题：</em></p>
+
+<h4>小程序真的是用 H5 开发吗?</h4>
+
+<p>显然不是，理由如下：</p>
+
+<ul>
+<li>无dom</li>
+<li>不使用html，而是xml</li>
+<li>页面跳转无网络请求</li>
+</ul>
+
+
+<h4>苹果能否审核通过？</h4>
+
+<p>之前微信小程序叫做“应用号”，现在改名叫“小程序”。有消息说是苹果不通过“应用号”的审核，不管是真是假，最终应该是苹果可以接受的。<br/>
+与AppStore是竞争关系么？应该不会，微信应该不会做类似的东西。理由很简单，从用户的角度出发，用户并不需要在微信内有一个应用宝。</p>
+
+<p>所以这个问题不用担心，微信会把握这个平衡。</p>
+
+<h4>技术方案</h4>
+
+<p>微信提供整套的开发工具，微信Web开发者工具，功能完善IDE。从工程项目管理、编辑开发、运行调试、打包部署，一应具全。</p>
+
+<p>小程序平台提供众多Native能力：重力加速、绘图、WebSocket、地图位置、本地文件等。</p>
+
+<p>微信算是自创了一套开发体系，基于 RN Vue 等 开源方案的先进思想。  但但但。。。这只能开发微信小程序 &ndash; -！</p>
+
+<h4>个人评价</h4>
+
+<ul>
+<li>易开发：小程序比APP的开发难度降低至少一半，还能跨平台，且接近原生的体验，大幅减少了应用开发的人力。</li>
+<li>易更新：小程序基于Web，可以热更新（需要微信审核），有效加速产品的迭代。</li>
+<li>微信生态健康发展，顺势赢取大量用户。</li>
+<li>Anrdoid：系统更加流畅，广告不在乱飘，提高续航时间。</li>
+</ul>
+
+
+<h4>一个有趣的思路</h4>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-10-20-14769506740557.jpg" alt="" /></p>
+
+<p><em>解读一下：</em></p>
+
+<ul>
+<li>微信应该会确保小程序给用户带来的价值</li>
+<li>小程序不能引导用户下载App</li>
+</ul>
+
+
+<p><em>引申：</em>
+过度依赖微信，纵然有入口以及开发、推广成本低的优势，但微信服务也有不稳定的时候，过度依赖总是不好的。<br/>
+因为未来微信也在面对小程序的不确定性，大家可能都会做小程序版，但有些微信不想看到的，那些微信认为损伤微信用户体验的，估计只能被下架了。</p>
+
+<h4>技术方案结论</h4>
+
+<p><strong>很好，可以一试</strong></p>
+
+<h2>如何开发</h2>
+
+<p>这里不给大家再重复写教程了，这两个很好了：</p>
+
+<p> <a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1474632113_xQVCl&amp;token=&amp;lang=zh_CN">微信小程序官方文档</a></p>
+
+<p><a href="https://my.oschina.net/wwnick/blog/750055?from=timeline&amp;isappinstalled=0">全球首个微信小程序（应用号）开发教程！通宵吐血赶稿，每日更新！</a></p>
+
+<h2>适用场景</h2>
+
+<p>个人觉得，场景类似公众号。</p>
+
+<ul>
+<li><p>小型商户、机构企业——做不起APP，也没必要做一个APP</p>
+
+<blockquote><p>  比如很多微信公众号对于粉丝的服务在微信公众平台上没办法很好的实现，比如粉丝管理、内容管理、支付消息等等；比如高中初中和学生/家长之间的沟通管理，有一个APP或许能更好的解决问题；比如某个咖啡店或者地区商超对于用户的积分管理等没有特别好的办法；比如某个地区的电视台或者电台？
+  每一个APP的属性都是可以借助互联网跨越地区获取用户并且提供服务，而很多事情局限在某个地区，他们要向用户提供服务，就可以使用微信小程序了。</p></blockquote></li>
+<li><p>部分传统行业——和用户之间的联系目前处于中断状态</p>
+
+<blockquote><p>  比如奔驰汽车公司，用户在购买以后和汽车公司之间的联系大都通过4s店。如果为了售后服务等开发一个APP显得多余，成本高，而且还得考虑用户是否会下载。而有了微信小程序，奔驰汽车可以直接和所有的用户联系起来，在线上提供更好的服务，用户只需要像关注一个微信公众号一样关注它。</p></blockquote></li>
+<li><p>特定场景类：O2O到店系列、便于线下推广</p>
+
+<ul>
+<li>火车站微信扫码拼车，</li>
+<li>去医院挂号交费</li>
+<li>糯米到店系列，线下推广不再依赖必须下载app</li>
+<li>图书馆扫一下二维码就能进他们的微信小程序查书，也不用额外下载程序</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>开发Demo流水账</h2>
+
+<ul>
+<li>整个app的入口界面是由 <code>app.json</code> 这个配置文件来决定的，如果不使用 <code>tabBar</code> 的话，<code>pages</code> 中的第一个 page 即为第一个页面。</li>
+<li>使用 <code>tabBar</code> 如果并没有生效，要查下对应的 <code>list</code> 中 page 是否配置正确。</li>
+<li>需要注意 console 的输出，警告和错误都是很有帮助的。比如在 <code>tabBar</code> 中使用了某个 page，但又未在 <code>pages</code> 中进行声明，就会有警告。</li>
+<li>屏幕适配使用 <code>rpx</code>，规定屏幕宽度为 <strong>750rpx</strong>。</li>
+</ul>
+
+
+<blockquote><p>  rpx（responsive pixel）: 可以根据屏幕宽度进行自适应。规定屏幕宽为750rpx。如在 iPhone6 上，屏幕宽度为375px，共有750个物理像素，则750rpx = 375px = 750物理像素，1rpx = 0.5px = 1物理像素。</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-10-20-14750518770562.jpg" alt="" /></p></blockquote>
+
+<ul>
+<li><code>&lt;image&gt;</code> 并不支持 <code>&lt;view&gt;</code> 那种的嵌套使用，如果要拿 <code>&lt;image&gt;</code> 当做背景会比较麻烦，可通过设置 <code>margin-top</code> 为负值实现层次效果。</li>
+<li>只支持打开5个页面，避免多级跳转问题，需要在当前页使用重定向接口： <code>wx.redirectTo</code></li>
+</ul>
+
+
+<h2>Ref</h2>
+
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4NTQwNDcyMA==&amp;mid=2650662266&amp;idx=1&amp;sn=2afa03d2c1e547ad470d86e1d8bccd08&amp;chksm=87d13825b0a6b13316cbfda6cff3b6df9ffbb65170fdb687b5aeefb1d3460a06dc9cd158f91f&amp;scene=21#wechat_redirect">微信小程序 有哪些冲击与机会</a></li>
+<li><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1474632113_xQVCl&amp;token=&amp;lang=zh_CN">微信小程序官方文档</a></li>
+<li><a href="http://tech2ipo.com/10032614">我们真的需要微信「小程序」么？</a></li>
+<li><a href="http://www.cnblogs.com/luozhihao/p/5906813.html?hmsr=toutiao.io">通过微信小程序看前端</a></li>
+<li><a href="https://www.sdk.cn/news/5207?hmsr=toutiao.io">微信正式开放内测“小程序”，不开发APP的日子真的来了？</a></li>
+<li><a href="https://my.oschina.net/wwnick/blog/750055?from=timeline&amp;isappinstalled=0">全球首个微信小程序（应用号）开发教程！通宵吐血赶稿，每日更新！</a></li>
+<li><a href="https://www.zhihu.com/question/50874500/answer/123393375">如何评价 9 月 21 日开始内测的「微信小程序」？ &ndash; 郭超市的回答</a></li>
+<li><a href="https://www.zhihu.com/question/50874500/answer/123947782">https://www.zhihu.com/question/50874500/answer/123947782</a></li>
+<li><a href="https://www.zhihu.com/question/50875544/answer/123393440">https://www.zhihu.com/question/50875544/answer/123393440</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

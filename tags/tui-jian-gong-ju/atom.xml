@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 推荐工具 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/tui-jian-gong-ju/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[近期随想]]></title>
+    <link href="http://shjborage.github.io/blog/2014/12/21/jin-qi-sui-xiang/"/>
+    <updated>2014-12-21T17:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/12/21/jin-qi-sui-xiang</id>
+    <content type="html"><![CDATA[<p>好久没更新了，好些东西要写。但又不知道写哪个～
+主要问题在于：<strong>好些东西不想再直接写个结论上去，不想直接拿别人的结果。</strong>
+这方面也总结过了，今天写点别的吧。</p>
+
+<br>
+
+
+<p>推荐个工具 <em>Omni Focus</em>。GTD王者，适合各种人群，科学管理自己的时间，高效面对人生。<br>
+详细的大家自动用Google百度一下，教程介绍多的是。这家伙使用简单，但有些地方需要些技巧，比如同步可以试试 <em>坚果云</em> 的 WebDAV，另外Android平台没有手机app。</p>
+
+<br>
+
+
+<p>后续在技术上的分享可能会少一些，可能会从自己的感悟上面多写写，希望大家多多支持。</p>
+
+<br><br>
+
+
+<p>有时在想，技术、人、沟通、公司、项目、产品、用户、上线、事故。。。等等这些事，到底是如何影响着我们。想这些写一些，又不知道从哪写起。语言不及格啊～～～</p>
+
+<br>
+
+
+<p>先放些关键字，再有体会时一个一个写吧，加油！</p>
+]]></content>
+  </entry>
+  
+</feed>

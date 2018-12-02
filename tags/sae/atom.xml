@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: sae, | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/sae/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[SAE python 输出log 的方法]]></title>
+    <link href="http://shjborage.github.io/blog/2014/08/14/sae-python-shu-chu-log-de-fang-fa/"/>
+    <updated>2014-08-14T22:02:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/08/14/sae-python-shu-chu-log-de-fang-fa</id>
+    <content type="html"><![CDATA[<h3>背景</h3>
+
+<p><a href="http://sae.sina.com.cn">SAE</a>真是很方便，可以免费做一些简单的<code>Server</code>自己来研究用。<br>
+但是学了一点<code>python</code>后，想在<code>SAE</code>里面玩一玩，发现在里面调试有点难。因为习惯了别的平台的<code>Debug</code>，一下子还是想研究，可是试了各种方案（包含<code>SAE</code>自己的<code>ShellMiddleware</code>），都没办法在<code>SAE</code>的环境中进行调试。在本地倒是研究好了<code>pdb</code>的相关使用，虽然使用起来还很初级。<br>
+最后只能使用Log的方式了。</p>
+
+<h3>解决方案</h3>
+
+<p>```
+print (&ldquo;xxxx %s %d&rdquo; % (&ldquo;asdf&rdquo;, 5))</p>
+
+<h1>或</h1>
+
+<p>logging.debug(&ldquo;debug log xxxxx&rdquo;)
+<code>``
+这个Log大家应该都很熟悉啦（我还不熟悉~)，但是在</code>SAE`后台中如何查看呢？<br></p>
+
+<p>日志内容在 <strong><code>应用»日志中心»HTTP</code></strong> 中查看，类别为<em><code>debug</code></em></p>
+
+<p>可能老版本的SAE可能不支持吧，至少现在是有的。<br>
+希望能对大家有所帮助。</p>
+
+<p>另外，关于<code>logging</code>的使用，我也写了一个<code>module</code>，封装了一些东西。等对<code>python</code>的模块的规范熟悉一些后，会把这部分开源如来（虽然大家可能都有自己的）。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 移动端 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/yi-dong-duan/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[端性能测试之连拍王]]></title>
+    <link href="http://shjborage.github.io/blog/2016/09/12/duan-xing-neng-ce-shi-zhi-lian-pai-wang/"/>
+    <updated>2016-09-12T15:51:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/09/12/duan-xing-neng-ce-shi-zhi-lian-pai-wang</id>
+    <content type="html"><![CDATA[<p>iOS 性能测试，有很多种技术手段。  <br/>
+1. 打点<br/>
+2. Instruments 检测</p>
+
+<p>但这两个常用的办法，有时也不能给出非常合理的数据。比如最近在研究 <code>ReactNative</code>，它在渲染时真实消耗的时间就不太好搞（如果有误请帮忙指证）。  <br/>
+&ndash;   打点的话，都是一些内部时机，想找到渲染成功的点，还需要在 <code>RN</code> Native 部分源码打点才行吧。<br/>
+&ndash;   Instruments 跑了一下，看到了各种 JS 与 OC 交互的耗时，并没找到渲染结果的时间。。</p>
+
+<p>最后实在没办法，跟 QA 聊了下，使用『极速连拍王』拍照分析时间消耗。<br/>
+1. 在 AppStore 搜索『极速连拍王』或 <a href="http://url.cn/2E3D8Cj">点此链接</a>；<br/>
+2. 打开进行拍照授权；<br/>
+3. 然后就直接开拍啦。。。</p>
+
+<p><img class="<a" src="href="http://shjborage-public.qiniudn.com/2016-09-13-14737616847207.jpg">http://shjborage-public.qiniudn.com/2016-09-13-14737616847207.jpg</a>" width="375"></p>
+
+<p>默认设置是30张/秒，具体耗时就数多少张照片即可。<br/>
+另外这个 App 的稳定性不太好，查看图片部分并不太好用，全部删除照片的话，要长按某张照片，然后全部选中，点删除（滑动到下面长按不容易Crash）。</p>
+]]></content>
+  </entry>
+  
+</feed>

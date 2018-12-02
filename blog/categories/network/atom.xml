@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Network | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/blog/categories/network/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[IP地址，0.0.0.0 监听，所有地址]]></title>
+    <link href="http://shjborage.github.io/blog/2013/10/25/ipdi-zhi-%2C0-dot-0-0-dot-0-jian-ting-%2Csuo-you-di-zhi/"/>
+    <updated>2013-10-25T01:07:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/10/25/ipdi-zhi-,0-dot-0-0-dot-0-jian-ting-,suo-you-di-zhi</id>
+    <content type="html"><![CDATA[<p>曾经在使用PonyDebugger时出现，socket连接老是被拒绝的情况。
+PD可以自动连接，使用Boujour进行发现，很是方便。但是解析到了IP地址后，因为Server的监听有问题，老是connection refused. 笨笨的我还是没想到用<strong>0.0.0.0</strong>这个来监听所有IP地址，解决这个问题。</p>
+
+<p>不能再出现同样的问题了，不用怕被别人笑话，哈哈</p>
+]]></content>
+  </entry>
+  
+</feed>

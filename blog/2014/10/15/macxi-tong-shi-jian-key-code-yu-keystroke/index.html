@@ -1,0 +1,836 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>【翻译】Mac系统事件，Key Code 与 KeyStroke - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+  <!--[if lt IE 9]>
+    <script src="http://x.papaapp.com/farm1/a571d2/8dda131d/html5shiv.js"></script>
+    <![endif]-->
+  
+  <meta name="description" content="【翻译】Mac系统事件，Key Code 与 KeyStroke Oct 15th, 2014 | Comments 引子 业余时间写了一个 Reveal 的插件，其中涉及一些 MacOS 的开发以及 AppleScript 相关的东西，看到这个文章，比较受用，翻译出来分享给大家。 &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shjborage.github.io/blog/2014/10/15/macxi-tong-shi-jian-key-code-yu-keystroke/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header id="header" class="clearfix">    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                <a id="logo" href="/">
+                   Saick Blog
+                </a>
+                <p class="description">技术博客，致力于全栈以及各方面修养。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="index-nav current" href="/">Blog</a>
+<a class="archives-nav" href="/blog/archives">Archives</a>
+<!-- <a class="friendlink-nav" href="/friendlylink.html">Links</a> -->
+<a class="about-nav" href="/about.html">About Me</a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+  <div id="body">
+    <div class="container">
+    	<div class="col-group">
+			<div class="col-8" id="main">
+  <div class="res-cons">
+  <article class="post clearfix">
+  
+  <header>
+    
+      <h1 class="post-title">【翻译】Mac系统事件，Key Code 与 KeyStroke</h1>
+    
+    
+      <p class="post-meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-15T10:11:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="post-content"><h3>引子</h3>
+
+<p>业余时间写了一个 <a href="http://revealapp.com/">Reveal</a> 的<a href="https://github.com/shjborage/Reveal-Plugin-for-Xcode">插件</a>，其中涉及一些 MacOS 的开发以及 AppleScript 相关的东西，看到这个文章，比较受用，翻译出来分享给大家。
+做这个事一方面是为了方便大家使用相关的技术，同时也能锻炼自己的翻译、文笔等，大家共同进步嘛。</p>
+
+<h3>正文</h3>
+
+<h2>Mac 系统事件，Key Code 与 KeyStroke</h2>
+
+<p><strong>Key codes</strong> 指代码键盘上对应键位的数字编码。<strong>KeyStroke</strong> 是实际的可见的键值。你可以使用这些数字编码或键值在 AppleScipt 中通过 &ldquo;System Events&rdquo; 来模拟键盘上某个键被按下，该功能需要在系统偏好设置的 &ldquo;Accessibiliy&rdquo; 中选中 &ldquo;Enable acess for assistive devices&rdquo; 选项。</p>
+
+<p>你可以使用 <strong>key code</strong> 和 <strong>keystroke</strong> 在 AppleScript 中处理一些快捷键，这在很多时候比常规的脚本更有优势。事实上只要提到 iTunes, 如果不用 <strong>key code</strong> 和 <strong>keystroke</strong> 的话，部分快捷操作在 AppleScript 中是实现不了的。比如打开一个显示简介窗口或显示选项窗口。 接下来我们实验一下 <strong>key code</strong> 和 <strong>keystroke</strong> 命令在 AppleScript 中如何控制 iTunes.</p>
+
+<!-- more -->
+
+
+<h3>系统偏好设置</h3>
+
+<p>为了在 &ldquo;System Events&rdquo; 中使用 <strong>key code</strong> 与 <strong>keystroke</strong> 命令，你必须开启 Mac OSX 的系统偏好设置中开启 accessibility 权限。</p>
+
+<p><strong>Mavericks (10.9)和以后的系统.</strong> Accessibiliy的权限必须基于每个应用来设置。 看苹果的<a href="http://support.apple.com/kb/HT5914">支持文档</a>了解更多内容。</p>
+
+<p><strong>Mavericks (10.9)以前的系统</strong> : 点击系统偏好设置中的 &ldquo;Accessibility&rdquo; 模块(原来叫&#8221;Universal Access&#8221;)。在底部左边获取选中&#8221;Enable access for assistive devices&#8221;。确保复选框被选中，关闭系统偏好设置。</p>
+
+<h3>实现 AppleScript</h3>
+
+<p>&ldquo;System Events&rdquo; 会发送 <strong>key code</strong> 或 <strong>keystroke</strong> 给当前在前台活动的程序。所以你要通过 <code>activate</code>命令来保证 iTunes 处理于前台活动状态。为了易于大家理解，下面给出一个简单的使用示例。它将选中当前播放的 iTunes 音乐使用 <strong>keystroke</strong> 命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tell application "iTunes"
+</span><span class='line'>    activate
+</span><span class='line'>    if player state is not stopped then
+</span><span class='line'>        tell application "System Events" to keystroke "l" using command down
+</span><span class='line'>    end if
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我已经模拟了一个键盘按下操作 &ldquo;Command-L&rdquo;(这个脚本确保 iTunes 不会被提前停止) 通过提供一个小写的&#8221;l&#8221;，就是正常你需要按下的键。 <strong>using</strong> 关键字代表这个 <strong>keystroke</strong> 这个命令是包含 Command 键按下的组合键。下面是使用 <strong>key code</strong> 的实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tell application "iTunes"
+</span><span class='line'>    activate
+</span><span class='line'>    if player state is not stopped then
+</span><span class='line'>        tell application "System Events" to key code 37 using command down
+</span><span class='line'>    end if
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的例子中， <code>37</code>这个数字代表小写的&#8221;l&#8221;。<strong>using</strong> 关键字的作用与 <strong>keystroke</strong> 例子中的作用是一样的： 代表 Command 被同时按下的组合键。</p>
+
+<p>除此之外，你还可以使用 <strong>using</strong> 关键字包含多个键的组合。下面的脚本分别使用 <strong>key code</strong> 和 <strong>keystroke</strong> 两种方式实现在 iTunes 的浏览器中打开 iTunes Store (Command-Shift-H)的功能。 注意 <strong>using</strong> 关键字中多个键组合的使用：</p>
+
+<p><strong>keystroke</strong>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    keystroke "h" using {command down, shift down}
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>key code</strong>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 4 using {command down, shift down}
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p>数字<code>4</code>相当于&#8221;h&#8221;键。（想了解更多关于编写 <strong>keystroke</strong> 或 <strong>key code</strong> 命令的方法，在 AppleScript 编辑器中，Window > Library 中查看 &ldquo;System Events&#8221;的信息）</p>
+
+<h3>Go Nuts（让我们更进一步）</h3>
+
+<p>下面的脚本使用 <strong>key code</strong> 和 &ldquo;正常的&rdquo; AppleScript 语法来选择音乐库并且激活搜索框:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tell application "iTunes"
+</span><span class='line'>    activate
+</span><span class='line'>    -- select the Music library
+</span><span class='line'>    reveal (some playlist whose special kind is Music)
+</span><span class='line'>end tell
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    -- bring focus to Search box - Command-Option-F
+</span><span class='line'>    key code 3 using {command down, option down}
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个类似的版本，将剪贴板中的文字复制到搜索框中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tell application "iTunes"
+</span><span class='line'>    activate
+</span><span class='line'>    reveal (some playlist whose special kind is Music)
+</span><span class='line'>end tell
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    -- bring focus to Search box - Command-Option-F
+</span><span class='line'>    key code 3 using {command down, option down}
+</span><span class='line'>    -- paste the clipboard - Command-V
+</span><span class='line'>    key code 9 using command down
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p>选中播放列表中的所有音乐并且新建一个名叫 &ldquo;untitled&rdquo; 的播放列表包含所有音乐：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tell application "iTunes"
+</span><span class='line'>    activate
+</span><span class='line'>end tell
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    -- select all tracks - Command-A
+</span><span class='line'>    key code 0 using command down
+</span><span class='line'>    --new playlist from selection- Command-Shift-N
+</span><span class='line'>    key code 45 using {command down, shift down}
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p>学会了么？</p>
+
+<p>当然了，上面的脚本都可以用&#8221;正常&#8221;的方式来解决。我不是使用图形脚本的深度使用者，但是有时这是 iTunes 中执行某些任务的唯一方案。</p>
+
+<p>你可能需要通过使用这些脚本来执行<a href="http://dougscripts.com/itunes/itinfo/shortcutkeys.php">快捷键</a>任务。比如， 我已经把 &ldquo;Music library &amp; search&rdquo; 映射到 Command-Option-S。</p>
+
+<h3>如何获得 <strong>Key Codes</strong></h3>
+
+<p>使用 <strong>keystroke</strong> 命令非常简单直接：直接使用键值字符即可。为了取得一个键按下对应的 <strong>key code</strong>，我使用 Denis Bajram 写的免费的程序 <a href="http://softwares.bajram.com/utilities/#Full_Key_Codes">Full Key Codes</a>，非常简单易用。它能显示键盘上某些键被按下时的数字、ASCII和十六进制数。</p>
+
+<h3>通用 <strong>key code</strong> 命令</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-- select all tracks of front playlist - Command-A
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 0 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- toggle browse mode - Command-B
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 11 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- copy selection (or whatever) - Command-C
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 8 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- toggle Right Sidebar - Shift-Command-G
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 5 using {command down, shift down}
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- Get Info for selected track(s) - Command-I
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 34 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- open View options window - Command-J
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 38 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- select current track - Command-L
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 37 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- Show File of selected - Shift-Command-R
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 15 using {command down, shift down}
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- toggle Zoom of Main Browser - Control-Command-Z
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 6 using {command down, control down}
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- Close a window with "Cancel" - Escape key
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 53
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>(* 
+</span><span class='line'>THE FOLLOWING ARE DELETE ACTIONS!
+</span><span class='line'>USE CAREFULLY!!!
+</span><span class='line'>*)
+</span><span class='line'>-- Delete the selected playlist from your Source list without confirming that you want to delete it - Command-Delete
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 51 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- Delete the selected playlist and all the songs it contains from your library 
+</span><span class='line'>-- OR
+</span><span class='line'>-- Delete the selected song from your library and all playlists
+</span><span class='line'>-- Option-Delete
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 51 using option down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- Select the search field - Command-Option-F
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 3 using {command down, option down}
+</span><span class='line'>    -- and optionally, paste the clipboard - Command-V
+</span><span class='line'>    
+</span><span class='line'>    -- key code 9 using command down
+</span><span class='line'>    
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>-- playlist and folder
+</span><span class='line'>
+</span><span class='line'>-- new playlist - Command-N
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 45 using {command down, shift down}
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- new playlist from selection - Command-Shift-N
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 45 using {command down, shift down}
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- new Smart Playlist - Command-Option-N
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 45 using {command down, option down}
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- new Playlist Folder - Command-Option-Shift-N
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 45 using {command down, option down, shift down}
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- toggle Show/Hide Main Browser window - Command-1
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 18 using command down
+</span><span class='line'>end tell
+</span><span class='line'>
+</span><span class='line'>-- toggle Show/Hide Equalizer window - Command-2
+</span><span class='line'>tell application "System Events"
+</span><span class='line'>    tell application "iTunes" to activate
+</span><span class='line'>    key code 19 using command down
+</span><span class='line'>end tell</span></code></pre></td></tr></table></div></figure>
+
+
+<p>原文:<a href="http://dougscripts.com/itunes/itinfo/keycodes.php">http://dougscripts.com/itunes/itinfo/keycodes.php</a></p>
+</div>
+
+
+  <footer class="post-footer">
+    <div class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+ and 
+      File under 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/translate/'>Translate</a>
+  
+</span>
+
+ with 
+
+<span class="tags">
+  
+    <a class='tag' href='/tags/mac/'>Mac</a>, <a class='tag' href='/tags/script/'>Script</a>, <a class='tag' href='/tags/translate/'>Translate</a>
+  
+</span>
+
+ Tag
+    </div>
+    
+      <div class="sharing">
+  <div>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shjborage.github.io/blog/2014/10/15/macxi-tong-shi-jian-key-code-yu-keystroke/" data-via="eric_shj" data-counturl="http://shjborage.github.io/blog/2014/10/15/macxi-tong-shi-jian-key-code-yu-keystroke/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  </div>
+
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <h5> <br> </h5>
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/09/09/svnde-da-huan-jing-xia-shi-yong-gitguan-li-zi-ji/" title="Previous Post: SVN的大环境下使用Git管理">&laquo; SVN的大环境下使用Git管理</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/10/22/linux-macshang-mian-lnming-ling-shi-yong-shuo-ming/" title="Next Post: Linux、Mac上面ln命令使用说明">Linux、Mac上面ln命令使用说明 &raquo;</a>
+      
+    </div>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h3>Comments</h3>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+  </div>
+</div>
+
+  <aside id="secondary">
+  
+    <section class="widget">
+    <form id="search" action="http://google.com/search" method="get">
+    	<input type="hidden" name="q" value="site:shjborage.github.io"/>
+    	<input type="text" name="q" results="0" class="text" placeholder="Google搜索"/>
+    </form>
+</section>
+
+<section class="widget">
+	<h2 class="widget-title">最新文章</h2>
+	<ul class="widget-list">
+		
+     	<li>
+      	  <a href="/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/">为 PHP 做单元测试（UnitTest）</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/12/linux-kai-fa-bei-wang/">Linux 开发备忘</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/10/apple-ats-wen-ti/">Apple ATS 问题</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/">npm install 本地安装与全局安装</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/">Python - virtualenv 基础使用</a>
+      	</li>
+    	
+	</ul>
+</section>
+<section class="widget">
+  <h2 class="widget-title">Categories</h2>
+  <ul class="widget-list">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/c/'>C (4)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (6)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javascript/'>JavaScript (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (9)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (4)</a></li>
+<li class='category'><a href='/blog/categories/translate/'>Translate (1)</a></li>
+<li class='category'><a href='/blog/categories/web/'>Web (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (82)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (15)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (10)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h2 class="widget">Tags</h2>
+  <div>
+    <a style="font-size: 90%" href="/tags/ats/">ATS</a>
+<a style="font-size: 108%" href="/tags/android/">Android</a>
+<a style="font-size: 108%" href="/tags/appstore/">AppStore</a>
+<a style="font-size: 90%" href="/tags/appletv/">AppleTV</a>
+<a style="font-size: 90%" href="/tags/applewatch/">AppleWatch</a>
+<a style="font-size: 118%" href="/tags/autolayout/">AutoLayout</a>
+<a style="font-size: 108%" href="/tags/backend/">BackEnd</a>
+<a style="font-size: 118%" href="/tags/c/">C</a>
+<a style="font-size: 90%" href="/tags/css/">CSS</a>
+<a style="font-size: 125%" href="/tags/cocoapods/">CocoaPods</a>
+<a style="font-size: 131%" href="/tags/crash/">Crash</a>
+<a style="font-size: 108%" href="/tags/database/">DataBase</a>
+<a style="font-size: 118%" href="/tags/database/">Database</a>
+<a style="font-size: 90%" href="/tags/debug/">Debug</a>
+<a style="font-size: 90%" href="/tags/django/">Django</a>
+<a style="font-size: 90%" href="/tags/fe/">FE</a>
+<a style="font-size: 90%" href="/tags/game/">Game</a>
+<a style="font-size: 125%" href="/tags/git/">Git</a>
+<a style="font-size: 90%" href="/tags/github/">Github</a>
+<a style="font-size: 90%" href="/tags/https/">HTTPS</a>
+<a style="font-size: 90%" href="/tags/hybirdapp/">HybirdApp</a>
+<a style="font-size: 90%" href="/tags/interview/">Interview</a>
+<a style="font-size: 90%" href="/tags/js/">JS</a>
+<a style="font-size: 118%" href="/tags/java/">Java</a>
+<a style="font-size: 118%" href="/tags/javascript/">JavaScript</a>
+<a style="font-size: 108%" href="/tags/linux/">Linux</a>
+<a style="font-size: 148%" href="/tags/mac/">Mac</a>
+<a style="font-size: 90%" href="/tags/markdown/">Markdown</a>
+<a style="font-size: 125%" href="/tags/network/">Network</a>
+<a style="font-size: 180%" href="/tags/obj-c/">Obj-C</a>
+<a style="font-size: 108%" href="/tags/opensource/">OpenSource</a>
+<a style="font-size: 90%" href="/tags/php/">PHP</a>
+<a style="font-size: 118%" href="/tags/product/">Product</a>
+<a style="font-size: 90%" href="/tags/push/">Push</a>
+<a style="font-size: 90%" href="/tags/svn/">SVN</a>
+<a style="font-size: 90%" href="/tags/script/">Script</a>
+<a style="font-size: 90%" href="/tags/sharesdk/">ShareSDK</a>
+<a style="font-size: 118%" href="/tags/sourcecontrol/">SourceControl</a>
+<a style="font-size: 151%" href="/tags/tools/">Tools</a>
+<a style="font-size: 90%" href="/tags/translate/">Translate</a>
+<a style="font-size: 157%" href="/tags/ui/">UI</a>
+<a style="font-size: 90%" href="/tags/watch/">Watch</a>
+<a style="font-size: 125%" href="/tags/web/">Web</a>
+<a style="font-size: 90%" href="/tags/xcode/">XCode</a>
+<a style="font-size: 90%" href="/tags/basic/">basic</a>
+<a style="font-size: 90%" href="/tags/env/">env</a>
+<a style="font-size: 90%" href="/tags/icloud/">iCloud</a>
+<a style="font-size: 200%" href="/tags/ios/">iOS</a>
+<a style="font-size: 90%" href="/tags/ios10/">iOS10</a>
+<a style="font-size: 90%" href="/tags/ios5/">iOS5</a>
+<a style="font-size: 131%" href="/tags/ios7/">iOS7</a>
+<a style="font-size: 90%" href="/tags/ios9/">iOS9</a>
+<a style="font-size: 90%" href="/tags/ipa/">ipa</a>
+<a style="font-size: 90%" href="/tags/js/">js</a>
+<a style="font-size: 90%" href="/tags/keynote/">keynote</a>
+<a style="font-size: 90%" href="/tags/npm/">npm</a>
+<a style="font-size: 125%" href="/tags/octopress/">octopress</a>
+<a style="font-size: 143%" href="/tags/python/">python</a>
+<a style="font-size: 90%" href="/tags/redis/">redis</a>
+<a style="font-size: 90%" href="/tags/sae/">sae,</a>
+<a style="font-size: 90%" href="/tags/tools/">tools</a>
+<a style="font-size: 108%" href="/tags/you-hua/">优化</a>
+<a style="font-size: 90%" href="/tags/fen-xiang/">分享</a>
+<a style="font-size: 108%" href="/tags/dan-yuan-ce-shi/">单元测试</a>
+<a style="font-size: 90%" href="/tags/hou-duan/">后端</a>
+<a style="font-size: 90%" href="/tags/keng/">坑</a>
+<a style="font-size: 90%" href="/tags/bei-wang/">备忘</a>
+<a style="font-size: 118%" href="/tags/duo-xian-cheng/">多线程</a>
+<a style="font-size: 90%" href="/tags/an-quan/">安全</a>
+<a style="font-size: 155%" href="/tags/di-ceng/">底层</a>
+<a style="font-size: 90%" href="/tags/wei-xin/">微信</a>
+<a style="font-size: 90%" href="/tags/tui-jian-gong-ju/">推荐工具</a>
+<a style="font-size: 90%" href="/tags/jia-gou-she-ji/">架构设计</a>
+<a style="font-size: 90%" href="/tags/ce-shi/">测试</a>
+<a style="font-size: 90%" href="/tags/yi-dong-duan/">移动端</a>
+<a style="font-size: 108%" href="/tags/di-san-fang-ku/">第三方库</a>
+<a style="font-size: 90%" href="/tags/chun-ji-zhu/">纯技术</a>
+<a style="font-size: 90%" href="/tags/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/tags/diao-shi/">调试</a>
+<a style="font-size: 108%" href="/tags/sui-bian/">随便</a>
+
+  </div>
+</section>
+<section>
+  <h2 class="widget">(AD)广告位空缺中,招租</h2>
+</section>
+
+
+<section>
+  <h2 class="widget">新浪微博</h2>
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+</section>
+
+  
+</aside>
+
+
+      	</div>
+    </div>
+  </div>
+  <footer id="footer">
+  	<div class="container">
+	Copyright &copy; 2018 - Eric Shi -
+  <span class="credit">Powered by <a rel="nofollow" href="http://octopress.org">Octopress</a> on <a rel="nofollow" href="http://pages.github.com/">GitHubPages</a>
+  </span>
+  - <span class="credit">Theme by <a rel="nofollow" href="http://pagecho.com">Cho</a></span>
+
+
+</div>
+
+  </footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shjborage.github.io/blog/2014/10/15/macxi-tong-shi-jian-key-code-yu-keystroke/';
+        var disqus_url = 'http://shjborage.github.io/blog/2014/10/15/macxi-tong-shi-jian-key-code-yu-keystroke/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>

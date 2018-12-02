@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: C | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/blog/categories/c/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[redis-源码研究之-INCR]]></title>
+    <link href="http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr/"/>
+    <updated>2016-12-28T16:47:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr</id>
+    <content type="html"><![CDATA[<p>调用类似微博的关注 Feed 流的实现时，发现早在2009年，<a href="https://redis.io">redis</a> 官方就写过这样<a href="https://redis.io/topics/twitter-clone">一篇文章</a>：通过 <code>redis</code> 的各种 API 来做数据存储，方便的实现 Push 的关注流。</p>
+
+<p>简单研究了一下，最终改了一点点代码，详情见 <a href="https://github.com/shjborage/retwis">Github</a>。</p>
+
+<p>今天主要研究一下这个命令 <a href="https://redis.io/commands/incr">INCR</a> ，看 <code>redis</code> 是如何实现这个命令在多线程访问的。</p>
+
+<!-- more -->
+
+
+<h2>准备工作</h2>
+
+<ol>
+<li><code>redis</code> 源码 <a href="https://github.com/antirez/redis">https://github.com/antirez/redis</a></li>
+<li>当然还离不开官方的源码说明：<a href="https://github.com/antirez/redis#redis-internals">https://github.com/antirez/redis#redis-internals</a></li>
+<li><code>vim</code> + <code>ctags</code> 自行脑补看代码的流程吧~</li>
+</ol>
+
+
+<h2>main 入口</h2>
+
+<p>找到 <code>main</code> 函数，Server、Client 应该至少有两个：</p>
+
+<p>```
+find ./* | xargs grep -n &lsquo;main(&rsquo;</p>
+
+<p>// 重要结果
+./redis-cli.c:2552:int main(int argc, char <strong>argv) {
+./server.c:3566:int main(int argc, char </strong>argv) {
+```</p>
+
+<p>发现 <code>server.c</code>，在 <code>server.h</code> 中找到各种结构体的说明（官网也有讲）</p>
+
+<h3>server.h</h3>
+
+<p>```
+struct redisServer {</p>
+
+<pre><code>/* General */
+pid_t pid;                  /* Main process pid. */
+char *configfile;           /* Absolute config file path, or NULL */
+char *executable;           /* Absolute executable file path. */
+char **exec_argv;           /* Executable argv vector (copy). */
+int hz;                     /* serverCron() calls frequency in hertz */
+redisDb *db;
+dict *commands;             /* Command table */
+...
+list *clients;              /* List of active clients */
+...
+client *master;     /* Client that is master for this slave */
+...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>```
+typedef struct client {</p>
+
+<pre><code>int fd;
+sds querybuf;
+int argc;
+robj **argv;
+redisDb *db;
+int flags;
+list *reply;
+char buf[PROTO_REPLY_CHUNK_BYTES];
+... many other fields ...
+</code></pre>
+
+<p>} client;
+```</p>
+
+<p>```
+typedef struct redisObject {</p>
+
+<pre><code>unsigned type:4;
+unsigned encoding:4;
+unsigned lru:LRU_BITS; /* LRU time (relative to server.lruclock) or
+                        * LFU data (least significant 8 bits frequency
+                        * and most significant 16 bits decreas time). */
+int refcount;
+void *ptr;
+</code></pre>
+
+<p>} robj;
+```</p>
+
+<h3>server.c</h3>
+
+<p>重要初始化流程：</p>
+
+<p><code>
+initServerConfig() //setups the default values of the server structure.
+initServer() //allocates the data structures needed to operate, setup the listening socket, and so forth.
+aeMain() // starts the event loop which listens for new connections.
+</code></p>
+
+<p><code>call()</code> is used in order to call a given command in the context of a given client.</p>
+
+<p>这个就是我们要找的处理命令入口方法了。</p>
+
+<p>附上一个完整的 <code>Command</code> 说明:</p>
+
+<blockquote><p>The global variable <code>redisCommandTable</code> defines all the Redis commands, specifying the name of the command, the function implementing the command, the number of arguments required, and other properties of each command.</p></blockquote>
+
+<p>```
+struct redisCommand redisCommandTable[] = {</p>
+
+<pre><code>{"module",moduleCommand,-2,"as",0,NULL,1,1,1,0,0},
+{"get",getCommand,2,"rF",0,NULL,1,1,1,0,0},
+{"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0},
+...
+{"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+{"decr",decrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+...
+</code></pre>
+
+<p>```</p>
+
+<p>但我们发现， <code>call()</code> 是由 <code>processCommand()</code> 调用的，<code>processCommand()</code> 的调用在 <code>server.c</code> 中并没有。 还需努力。。。</p>
+
+<p>继续看官方文档（其实也在本地搜索了一下）</p>
+
+<p>```
+find ./* | xargs grep -n &lsquo;processCommand&rsquo;</p>
+
+<p>// 结果
+./cluster.c:5128:                 * not trapped earlier in processCommand(). Report the same
+grep: ./modules: Is a directory
+./networking.c:1299:            if (processCommand&copy; == C_OK)
+Binary file ./networking.o matches
+Binary file ./redis-check-rdb matches
+Binary file ./redis-sentinel matches
+Binary file ./redis-server matches
+./server.c:2226: * processCommand() execute the command or prepare the
+./server.c:2232:int processCommand(client <em>c) {
+./server.h:1547:int processCommand(client </em>c);
+Binary file ./server.o matches
+./tags:3304:processCommand  server.c    /^int processCommand(client *c) {$/;&ldquo;   f
+```</p>
+
+<p><code>server.h</code> 中已经暴露出了 API，提供给了 <code>networking.c</code>。所以继续下文。</p>
+
+<h2>networking.c</h2>
+
+<blockquote><p><code>createClient()</code> // allocates and initializes a new client.
+the <code>addReply*()</code> family of functions are used by commands implementations in order to append data to the client structure, that will be transmitted to the client as a reply for a given command executed.
+<code>writeToClient()</code> transmits the data pending in the output buffers to the client and is called by the writable event handler sendReplyToClient().
+<code>readQueryFromClient()</code> is the readable event handler and accumulates data from read from the client into the query buffer.
+<code>processInputBuffer()</code> is the entry point in order to parse the client query buffer according to the Redis protocol. Once commands are ready to be processed, it calls <code>processCommand()</code> which is defined inside server.c in order to actually execute the command.
+<code>freeClient()</code> deallocates, disconnects and removes a client.</p></blockquote>
+
+<p>基本上理完了整体的调用流程：</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824009373678.jpg" alt="" /></p>
+
+<p>其它细节待研究，我们重点看 <code>call()</code>。</p>
+
+<h2>call()</h2>
+
+<p>研究了一下 <code>callgraph</code>，把 C 代码的调用关系梳理了一下（比干巴巴的代码好些，当然还要结合代码去分析）：</p>
+
+<p><code>
+callgraph -b chrome -f call
+</code></p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824095565432.jpg" alt="" /></p>
+
+<p>找到 <strong><code>proc</code></strong> 这个重点函数</p>
+
+<p><code>
+ 2127     /* Call the command. */
+ 2128     dirty = server.dirty;
+ 2129     start = ustime();
+ 2130     c-&gt;cmd-&gt;proc(c);
+ 2131     duration = ustime()-start;
+ 2132     dirty = server.dirty-dirty;
+ 2133     if (dirty &lt; 0) dirty = 0;
+</code></p>
+
+<p>到 <code>client</code> 中了，需要看下这个 <code>cmd</code>（<code>redisCommand</code>） 下的 <code>proc</code> (<code>redisCommandProc</code>)</p>
+
+<p><code>
+typedef void redisCommandProc(client *c);
+</code></p>
+
+<p>需要找出这个 <code>callback</code> 在哪设置的，如何执行。</p>
+
+<p>我们的 <code>client</code> 里面主要是从客户端那拿解析到的命令，是通过 <code>argc</code> 和 <code>argv</code> 来表现的。
+在 <code>processCommand</code> 中通过 <code>lookupCommand</code> 来给 <code>cmd</code> 赋值，在 <code>server</code> 中有 <code>commands</code> 保存的命令列表。</p>
+
+<p><code>
+2243     /* Now lookup the command and check ASAP about trivial error conditions
+2244      * such as wrong arity, bad command name and so forth. */
+2245     c-&gt;cmd = c-&gt;lastcmd = lookupCommand(c-&gt;argv[0]-&gt;ptr);
+</code></p>
+
+<p><code>commands</code> 是在 <code>initServerConfig</code> 中初始化的，也是根据 <code>redisCommandTable</code> 进行的。</p>
+
+<p><code>
+{"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+</code></p>
+
+<p>如下代码进行了初始化：</p>
+
+<p>```
+int numcommands = sizeof(redisCommandTable)/sizeof(struct redisCommand);</p>
+
+<p>for (j = 0; j &lt; numcommands; j++) {</p>
+
+<pre><code>struct redisCommand *c = redisCommandTable+j;
+char *f = c-&gt;sflags;
+...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>redisCommand 定义：
+<code>
+ 1161 struct redisCommand {
+ 1162     char *name;
+ 1163     redisCommandProc *proc;
+ 1164     int arity;
+ 1165     char *sflags; /* Flags as string representation, one char per flag. */
+ 1166     int flags;    /* The actual flags, obtained from the 'sflags' field. */
+ 1167     /* Use a function to determine keys arguments in a command line.
+ 1168      * Used for Redis Cluster redirect. */
+ 1169     redisGetKeysProc *getkeys_proc;
+ 1170     /* What keys should be loaded in background when calling this command? */
+ 1171     int firstkey; /* The first argument that's a key (0 = no keys) */
+ 1172     int lastkey;  /* The last argument that's a key */
+ 1173     int keystep;  /* The step between first and last key */
+ 1174     long long microseconds, calls;
+ 1175 };
+</code></p>
+
+<p>所以每个命令都对应的 <code>proc</code>，就在 <code>redisCommandTable</code> 中。
+<code>incr</code> 对应的就是 <code>incrCommand</code>，在 <code>t_string.c</code> 中又中转到 <code>incrDecrCommand</code>。</p>
+
+<h2>incrDecrCommand(client *c, long long incr)</h2>
+
+<p>调用关系：</p>
+
+<p>```
+void incrCommand(client *c) {</p>
+
+<pre><code>incrDecrCommand(c,1);
+</code></pre>
+
+<p>}
+```</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14828945195167.jpg" alt="" /></p>
+
+<p>先来分析两个参数：</p>
+
+<p><code>
+client *c       // 客户端实例
+long long incr  // 操作数， incr命令时为 `1`
+</code></p>
+
+<p>看来半天，这里的结构也是基本的操作，除了 <code>server.dirty</code> 的操作外，貌似没有多线程相关的处理。</p>
+
+<p><code>
+ 341 void incrDecrCommand(client *c, long long incr) {
+ 342     long long value, oldvalue;
+ 343     robj *o, *new;
+ 344
+ 345     o = lookupKeyWrite(c-&gt;db,c-&gt;argv[1]);
+ 346     if (o != NULL &amp;&amp; checkType(c,o,OBJ_STRING)) return;
+ 347     if (getLongLongFromObjectOrReply(c,o,&amp;value,NULL) != C_OK) return;
+ 348
+ 349     oldvalue = value;
+ 350     if ((incr &lt; 0 &amp;&amp; oldvalue &lt; 0 &amp;&amp; incr &lt; (LLONG_MIN-oldvalue)) ||
+ 351         (incr &gt; 0 &amp;&amp; oldvalue &gt; 0 &amp;&amp; incr &gt; (LLONG_MAX-oldvalue))) {
+ 352         addReplyError(c,"increment or decrement would overflow");
+ 353         return;
+ 354     }
+ 355     value += incr;
+ 356
+ 357     if (o &amp;&amp; o-&gt;refcount == 1 &amp;&amp; o-&gt;encoding == OBJ_ENCODING_INT &amp;&amp;
+ 358         (value &lt; 0 || value &gt;= OBJ_SHARED_INTEGERS) &amp;&amp;
+ 359         value &gt;= LONG_MIN &amp;&amp; value &lt;= LONG_MAX)
+ 360     {
+ 361         new = o;
+ 362         o-&gt;ptr = (void*)((long)value);
+ 363     } else {
+ 364         new = createStringObjectFromLongLong(value);
+ 365         if (o) {
+ 366             dbOverwrite(c-&gt;db,c-&gt;argv[1],new);
+ 367         } else {
+ 368             dbAdd(c-&gt;db,c-&gt;argv[1],new);
+ 369         }
+ 370     }
+ 371     signalModifiedKey(c-&gt;db,c-&gt;argv[1]);
+ 372     notifyKeyspaceEvent(NOTIFY_STRING,"incrby",c-&gt;argv[1],c-&gt;db-&gt;id);
+ 373     server.dirty++;
+ 374     addReply(c,shared.colon);
+ 375     addReply(c,new);
+ 376     addReply(c,shared.crlf);
+ 377 }
+</code></p>
+
+<p>还是得回头看 <code>call()</code> 里面到底还有哪些多线程相关操作。</p>
+
+<p>```
+ 2127     /<em> Call the command. </em>/
+ 2128     dirty = server.dirty;
+ 2129     start = ustime();
+ 2130     c->cmd->proc&copy;;
+ 2131     duration = ustime()-start;
+ 2132     dirty = server.dirty-dirty;
+ 2133     if (dirty &lt; 0) dirty = 0;</p>
+
+<p> &hellip;</p>
+
+<p> 2169         /<em> Check if the command operated changes in the data set. If so
+ 2170          * set for replication / AOF propagation. </em>/
+ 2171         if (dirty) propagate_flags |= (PROPAGATE_AOF|PROPAGATE_REPL);
+```</p>
+
+<p>再来看看这个 <code>PROPAGATE_AOF</code> 是搞啥的</p>
+
+<h2>aof.c</h2>
+
+<p>官方说明： <a href="https://github.com/antirez/redis#aofc-and-rdbc">https://github.com/antirez/redis#aofc-and-rdbc</a></p>
+
+<blockquote><p>As you can guess from the names these files implement the RDB and AOF persistence for Redis. Redis uses a persistence model based on the fork() system call in order to create a thread with the same (shared) memory content of the main Redis thread. This secondary thread dumps the content of the memory on disk. This is used by rdb.c to create the snapshots on disk and by aof.c in order to perform the AOF rewrite when the append only file gets too big.</p>
+
+<p>The implementation inside aof.c has additional functions in order to implement an API that allows commands to append new commands into the AOF file as clients execute them.</p>
+
+<p>The call() function defined inside server.c is responsible to call the functions that in turn will write the commands into the AOF.</p></blockquote>
+
+<p>这个应该是主要原因了，一个通用的方案，因为时间关系，有时间再把这部分详细研究吧。</p>
+
+<h2>Refs</h2>
+
+<p><a href="http://www.tinylab.org/callgraph-draw-the-calltree-of-c-functions/?utm_source=tuicool&amp;utm_medium=referral">源码分析：静态分析 C 程序函数调用关系图</a><br/>
+<a href="https://zh.wikipedia.org/wiki/DOT%E8%AF%AD%E8%A8%80">DOT语言</a></p>
+
+<h2>Evernote</h2>
+
+<p><a href="https://www.evernote.com/l/AC5QDjLdH0ZN1K1zh9XY343jZaP1AWeYbS8">redis-结构-源码研究备忘</a><br/>
+<a href="https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM">https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[C与C++中static与const以及static const修饰变量作用相关]]></title>
+    <link href="http://shjborage.github.io/blog/2014/08/21/cyu-c-plus-plus-zhong-staticyu-constyi-ji-static-constxiu-shi-bian-liang-zuo-yong-xiang-guan/"/>
+    <updated>2014-08-21T23:19:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/08/21/cyu-c-plus-plus-zhong-staticyu-constyi-ji-static-constxiu-shi-bian-liang-zuo-yong-xiang-guan</id>
+    <content type="html"><![CDATA[<h3>最近感想</h3>
+
+<p>最近看池建强的<a href="http://www.duokan.com/book/40930">《MacTalk人生元编程》</a>，对程序员写作挺有感触的。 在以前在豆瓣上看到<code>2.99</code>这个价钱一直想买，支持一下池大。但各种原因吧（主要是看书太少，都只看纯技术类的），还是没买。最近真正玩起了微信，看池大的各种文章，再加上最近看一些其它人文的书，所以这本书就直接收入了。最大的感触就是：<em><code>以后再也不直接转别人的文章</code></em><br>
+虽然最近博客的更新也在这种方面有一些改善吧，但看到以前要写出来的知识点，还是想直接转一下，哎。努力做到<em>有自己的想法，让自己写的东西对别人来说有意义</em>。</p>
+
+<h2>正文</h2>
+
+<p>关于<code>static</code>, <code>const</code>, <code>static const</code>修饰符的作用，我想对于老程序员（老一辈的吧）或者C，C++很精通的人，可能这都不算什么。但我这C，C++一直没好好研究明白的，写了几年代码，这个东西也是老忘，真是羞愧啊！<br>
+所以特别对这块做一个整理，一方面是自己的理解，另一方面也是集成了自己看过的一些资料。希望能帮助对这方面不太了解的人吧，也希望自己能在这当中有所收获，最坏情况就当是个笔记好了。</p>
+
+<!--more-->
+
+
+<h3>内存分区介绍</h3>
+
+<ul>
+<li>代码区：存放CPU指令码。</li>
+<li>常量区：存放只读常量，该区只读，不可写。</li>
+<li>静态区：存放静态变量。该区在程序编译完成后就决定了其大小，程序运行期间该区的大小不会变。该区可读写。</li>
+<li>动态区：又分为堆区和栈区，程序运行期间其大小处于动态变化中。处于该区的变量也会时而被创建时而被销毁。</li>
+</ul>
+
+
+<h3>static</h3>
+
+<p>一般我们会认为被<code>static</code>修饰的变量是静态变量，如果是在C++中，被static修饰的方法（类中的函数）被会称为静态方法（类方法）。<br>
+<code>static</code>修饰的变量存在于内存中的<code>静态区</code>，在<code>main</code>函数执行前被加载。
+<code>static</code>修饰的变量，
++   局部变量：每次调用的初始值为上一次调用的值,调用结束后存储空间不释放;
++   全局变量：如果以文件划分作用域的话,此变量只在当前文件可见;对于static函数也是在当前模块内函数可见.</p>
+
+<h3>const</h3>
+
+<p><code>const</code>意为只读（常量）
+const修饰的变量是只读的，不能被修改。但可通过指针的方式来绕过。这部分平时最容易理解错，也常会出现在面试或笔试题中。我看了很多次相关的东西，还是记不住（太容易混，加上平时用的少），于是写了这样一段代码：</p>
+
+<p>```
+{</p>
+
+<pre><code>int val = 10;
+int another = 5;
+int * const p = &amp;val;
+const int * q = &amp;another;
+
+*p = 5;       // 上面const修饰指针(p)，p不能再指向其它地址
+q = &amp;val;     // 上面const修饰指针指向的值（*q const)，*q不能再进行赋值 但下面这样是可以的
+
+another = 6;
+int * q1 = q;
+*q1 = 7;
+</code></pre>
+
+<p>}
+```
+如果对这段代码不明白呢，可以看看参考中的博客。</p>
+
+<h3>static const</h3>
+
+<p><em>static const 和 const static 含义相同</em><br>
+二者的结合体：即是只读的，又限制了存储位置与作用域。</p>
+
+<p><code>const static</code>常量存在于内存的<code>常量区</code>，有操作系统加载程序时，加载到内存的常量区。所以可以对其取址，但是不能对该区的内存进行写操作，因为这个区从操作系统级进行了只读限定，任何对该内存区的写操作会导致程序崩溃。</p>
+
+<p><code>static const</code>作为预编译声明使用时，相当于C的<code>#define</code>(替换，它们本质不同)，但是需要编译器进行类型检查，保证了程序的健壮性。此时其只能用基本数据类型。<br>
+<code>static const</code>作为类的常量属性，因为常量区是在程序真正执行代码前进行初始化，所以其也必须是基本数据类型。</p>
+
+<p><code>static const</code>和<code>static</code>的区别是，<code>static</code>存在于静态区，该区可以进行写操作，其初始化的值也会存在常量区，程序启动后由操作系统从常量区取值赋值给<code>static</code>变量。</p>
+
+<p>参考:<br>
+<a href="http://blog.csdn.net/wison_wtj/article/details/23472445">http://blog.csdn.net/wison_wtj/article/details/23472445</a><br>
+<a href="http://zhidao.baidu.com/link?url=Lp5LzAP_sZHsvVeJkkOhKOnoAUbCgzkn4jN5CY7vg44uCvZahsx8mR9Bx2JyxCh1pcFbF4wk5PBPe_rLZOPbXa">http://zhidao.baidu.com/link?url=Lp5LzAP_sZHsvVeJkkOhKOnoAUbCgzkn4jN5CY7vg44uCvZahsx8mR9Bx2JyxCh1pcFbF4wk5PBPe_rLZOPbXa</a><br>
+<a href="http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html">http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[C中Union和Struct的区别与内存大小端研究]]></title>
+    <link href="http://shjborage.github.io/blog/2014/06/10/czhong-unionhe-structde-qu-bie-yu-nei-cun-da-xiao-duan-yan-jiu/"/>
+    <updated>2014-06-10T15:51:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/06/10/czhong-unionhe-structde-qu-bie-yu-nei-cun-da-xiao-duan-yan-jiu</id>
+    <content type="html"><![CDATA[<p>转自<a href="http://blog.csdn.net/lvyexiaozi/article/details/2621694">http://blog.csdn.net/lvyexiaozi/article/details/2621694</a></p>
+
+<p>首先看看union，在c++中，union可能没有多大用处，
+在c语言中，可能我们要借助其完成很多巧妙的设计，下面是其一个完整的定义：</p>
+
+<p>```
+union UTest {</p>
+
+<pre><code>double dlOne;              
+char   chOne;              
+byte   bArray[4];         
+};
+</code></pre>
+
+<p>```</p>
+
+<p>好了，看到上面的定义，很像struct的定义，但是对于union来说，有几点是值得注意的：</p>
+
+<ul>
+<li>不能直接对其进行初始化；</li>
+<li>某个时候只能使用其中的一个元素；</li>
+<li>最后一点也是最重要的一点就是内存共享，分配给<code>union</code>内存的<code>Size</code>是其中<code>Size</code>最大的那个元素的<code>Size</code>。</li>
+</ul>
+
+
+<p>说到这里，既然union最重要的是内存共享，那么我们做如下定义：<code>union UTest tEle;</code>然后赋值：<code>tEle.dlOne = 2.0f;</code>现在是<code>dlOne</code>可用，下一步：<code>tEle.chOne = 'A'；</code>到这里<code>dlOne</code>失去了其意义，<code>chOne</code>变得可用。</p>
+
+<p>然后，我们再来看看Struct，在struct中每一个元素都是分配内存的，而且都是有单独意义的，也就是说对一个变量的赋值并不影响其它变量的取值。到这里，各位应该明白这两者之间的区别了吧，事实上我个人认为，它们最主要的区别是在内存的分配和使用上。知道这一点，一切也就不难理解了。</p>
+
+<p>最后，在使用union的时候，可能有时候我们会来用其来对字节流进行分解和重组，这样使用的时候一定要注意各种内存对数据的存储，比如Intel是按高高低低的原则存储的，有些则是相反的。因此，这点因该值得注意，否则得到的可能和预期的结果不一样。</p>
+
+<h2>举例：使用union结构输出主机字节序</h2>
+
+<p>原理解析：使用short来存储数字，因为共享内存空间，使用char数组来看存储在顺序，来分析是大端还是小端。</p>
+
+<p>```
+// if need&hellip;</p>
+
+<h1>define CPU_VENDOR_OS &ldquo;MAC-X64&rdquo;</h1>
+
+<p>int main (void)
+{
+  union {</p>
+
+<pre><code>short s;
+char c[sizeof(short)];
+</code></pre>
+
+<p>  } un;</p>
+
+<p>  un.s = 0x0A0B;</p>
+
+<p>  printf ( &ldquo;%s:&rdquo;, CPU_VENDOR_OS);</p>
+
+<p>  if ( 2==sizeof(short)) {</p>
+
+<pre><code>if ( 0x0A==un.c[0] &amp;&amp; 0x0B==un.c[1]) {
+  printf ( "big-endian\n" );
+} else if ( 0x0B==un.c[0] &amp;&amp; 0x0A==un.c[1] ) {
+  printf ( "little-endian\n" );
+} else {
+  printf ( "unknown\n" );
+}
+</code></pre>
+
+<p>  } else {</p>
+
+<pre><code>printf ("sizeof(short) = %d\n", sizeof(short));
+</code></pre>
+
+<p>  }
+  return 0;
+}
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[C Objective-C 底层研究 常用方法]]></title>
+    <link href="http://shjborage.github.io/blog/2014/05/08/c-objective-c-di-ceng-yan-jiu-chang-yong-fang-fa/"/>
+    <updated>2014-05-08T10:15:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/05/08/c-objective-c-di-ceng-yan-jiu-chang-yong-fang-fa</id>
+    <content type="html"><![CDATA[<p>经常会遇到一些高级宏不知道什么意思，再或者搞iOS的时候，ARC、Block不知道实现的原理，怎么办？
+简单，看下文。</p>
+
+<!-- more -->
+
+
+<h2>预编译</h2>
+
+<p><em>查看宏替换后的结果，看编译前的样子</em></p>
+
+<p><strong><code>gcc -E xxx.c</code></strong></p>
+
+<p>源码:</p>
+
+<p>```</p>
+
+<h1>include &lt;stdio.h></h1>
+
+<h1>define MAX(x, y) (x) > (y) ? (x) : (y)</h1>
+
+<p>int main() {
+  int a = 5, b = 7;
+  int max = MAX(a, b);</p>
+
+<p>  printf(&ldquo;max of a,b is %d\n&rdquo;, max);
+  return 0;
+}
+```</p>
+
+<p>==></p>
+
+<p>```
+// 省略若干行，这里是stdio.h的头文件被包含进来了。。
+extern int __vsnprintf_chk (char * restrict, size_t, int, size_t,</p>
+
+<pre><code>   const char * restrict, va_list);
+</code></pre>
+
+<h1>491 &ldquo;/usr/include/stdio.h&rdquo; 2 3 4</h1>
+
+<h1>2 &ldquo;main.c&rdquo; 2</h1>
+
+<p>int main() {
+  int a = 5, b = 7;
+  int max = (a) > (b) ? (a) : (b);</p>
+
+<p>  printf(&ldquo;max of a,b is %d\n&rdquo;, max);
+  return 0;
+}
+```</p>
+
+<p>从上面转换完的代码可以发现，替换结果如此清晰。</p>
+
+<p>与这个类似的，还有<code>Objective-C</code>中的处理 <strong><code>clang -E xxx.m</code></strong>. 当然还有<code>clang -S xx.m</code> 转换成汇编。。</p>
+
+<h2>Objective-C代码转换为C代码</h2>
+
+<p><strong><code>clang -rewrite-objc xxx.m</code></strong> 这个在研究Block等时很实用，直接上代码</p>
+
+<p>```</p>
+
+<h1>include &lt;stdio.h></h1>
+
+<p>int main() {</p>
+
+<pre><code>const char *fmt = "val = %d\n";
+int val = 9;
+int tmp = 1024;
+
+void (^blk)() = ^{printf(fmt, val);};
+
+blk();
+
+return 0;
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>==></p>
+
+<p>```
+// 此处省略453行</p>
+
+<p>struct <strong>main_block_impl_0 {
+  struct </strong>block_impl impl;
+  struct <strong>main_block_desc_0<em> Desc;
+  const char </em>fmt;
+  int val;
+  </strong>main_block_impl_0(void <em>fp, struct __main_block_desc_0 </em>desc, const char *<em>fmt, int </em>val, int flags=0) : fmt(<em>fmt), val(</em>val) {</p>
+
+<pre><code>impl.isa = &amp;_NSConcreteStackBlock;
+impl.Flags = flags;
+impl.FuncPtr = fp;
+Desc = desc;
+</code></pre>
+
+<p>  }
+};
+static void <strong>main_block_func_0(struct </strong>main_block_impl_0 <em>__cself) {
+  const char </em>fmt = <strong>cself->fmt; // bound by copy
+  int val = </strong>cself->val; // bound by copy
+printf(fmt, val);}</p>
+
+<p>static struct <strong>main_block_desc_0 {
+  size_t reserved;
+  size_t Block_size;
+} </strong>main_block_desc_0_DATA = { 0, sizeof(struct __main_block_impl_0)};
+int main() {
+ const char *fmt = &ldquo;val = %d\n&rdquo;;
+ int val = 9;
+ int tmp = 1024;</p>
+
+<p> void (<em>blk)() = (void (</em>)())&amp;<strong>main_block_impl_0((void *)</strong>main_block_func_0, &amp;__main_block_desc_0_DATA, fmt, val);</p>
+
+<p> ((void (<em>)(__block_impl </em>))((<strong>block_impl *)blk)&ndash;>FuncPtr)((</strong>block_impl *)blk);</p>
+
+<p> return 0;
+}
+static struct IMAGE_INFO { unsigned version; unsigned flag; } _OBJC_IMAGE_INFO = { 0, 2 };
+```</p>
+
+<p>参考文献：Objective-C高级编程 iOS与OSX多线程和内存管理</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 第三方库 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/di-san-fang-ku/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[编译iOS上的libevent库、openssl库]]></title>
+    <link href="http://shjborage.github.io/blog/2014/03/25/bian-yi-iosshang-de-libeventku-%2C-opensslku/"/>
+    <updated>2014-03-25T00:05:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/03/25/bian-yi-iosshang-de-libeventku-,-opensslku</id>
+    <content type="html"><![CDATA[<p><a href="http://www.tuicool.com/articles/fmmQzq">http://www.tuicool.com/articles/fmmQzq</a></p>
+
+<p>附上自己使用的环境：</p>
+
+<p><a href="https://www.dropbox.com/s/809g8rhmk7c7pgo/libevent.zip">libevent</a>
+<a href="https://www.dropbox.com/s/t2xouoj5h4blwi2/openssl.zip">openssl</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 静态库不同平台合并 lipo命令使用]]></title>
+    <link href="http://shjborage.github.io/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong/"/>
+    <updated>2013-12-17T23:54:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2013/12/17/ios-jing-tai-ku-bu-tong-ping-tai-he-bing-lipoming-ling-shi-yong</id>
+    <content type="html"><![CDATA[<h3>Introduction</h3>
+
+<p>查看<em>lipo</em>详解</p>
+
+<p><code>
+man lipo
+</code></p>
+
+<p><strong>lipo &ndash; create or operate on universal files</strong></p>
+
+<!-- more -->
+
+
+<h3>Usage</h3>
+
+<h4>Simple</h4>
+
+<p><strong>lipo -create xxx_arm.a xxx_i386.a -output xxx_universal.a</strong></p>
+
+<p>Example:</p>
+
+<p><code>
+lipo -create /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphonesimulator/libPrint.a  /Users/pjk1129/Library/Developer/Xcode/DerivedData/Print-dgfkluumuexoxhcapzidtsmdgqcj/Build/Products/Release-iphoneos/libPrint.a  -output /Users/pjk1129/Desktop/libPrint.a
+</code></p>
+
+<h4>Shell</h4>
+
+<p><em>libevent.sh</em>
+```</p>
+
+<h1>! /bin/sh</h1>
+
+<p>mkdir universal
+lipo -create simulator/libevent.a device/libevent.a -o universal/libevent.a
+lipo -create simulator/libevent_extra.a device/libevent_extra.a -o universal/libevent_extra.a
+lipo -create simulator/libevent_core.a device/libevent_core.a -o universal/libevent_core.a
+lipo -create simulator/libevent_pthreads.a device/libevent_pthreads.a -o universal/libevent_pthreads.a
+```</p>
+
+<h3>Review Info</h3>
+
+<p><strong>lipo -info xxx_universal.a</strong></p>
+
+<p>Example:</p>
+
+<p><code>
+lipo -info /Users/pjk1129/Desktop/libPrint.a
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

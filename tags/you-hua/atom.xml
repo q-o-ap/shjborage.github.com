@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Tag: 优化 | Saick Blog]]></title>
+  <link href="http://shjborage.github.io/tags/you-hua/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[性能提升-是否缓存图片-imageNamed与imageWithContentsOfFile的区别]]></title>
+    <link href="http://shjborage.github.io/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie/"/>
+    <updated>2014-03-15T01:01:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/03/15/xing-neng-ti-sheng-shi-fou-huan-cun-tu-pian-imagenamedyu-imagewithcontentsoffilede-qu-bie</id>
+    <content type="html"><![CDATA[<p>常见的从bundle中加载图片的方式有两种，一个是用<code>imageNamed</code>，二是用<code>imageWithContentsOfFile</code>，第一种比较常见一点。</p>
+
+<p>既然有两种类似的方法来实现相同的目的，那么他们之间的差别是什么呢？</p>
+
+<p><code>imageNamed</code>的优点是当加载时会缓存图片。<code>imageNamed</code>的文档中这么说:
+这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象如果它存在的话。如果缓存中没有找到相应的图片，这个方法从指定的文档中加载然后缓存并返回这个对象。</p>
+
+<p>相反的，<code>imageWithContentsOfFile</code>仅加载图片。</p>
+
+<p>下面的代码说明了这两种方法的用法:</p>
+
+<p><code>
+UIImage *img = [UIImage imageNamed:@"myImage"];              // caching
+// or
+UIImage *img = [UIImage imageWithContentsOfFile:@"myImage"]; // no caching
+</code>
+那么我们应该如何选择呢？</p>
+
+<p>如果你要加载一个大图片而且是一次性使用，那么就没必要缓存这个图片，用<code>imageWithContentsOfFile</code>足矣，这样不会浪费内存来缓存它。</p>
+
+<p>然而，在图片反复重用的情况下<code>imageNamed</code>是一个好得多的选择。</p>
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[UITableView的常见优化方式总结]]></title>
+    <link href="http://shjborage.github.io/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie/"/>
+    <updated>2014-03-15T00:07:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/03/15/uitableviewde-chang-jian-you-hua-fang-shi-zong-jie</id>
+    <content type="html"><![CDATA[<p>众所周知，我们在iOS开发过程中与面试中，常见的问题就包括UITableView的滚动性能，足以见得这个功能的重要性。
+为了保证table view平滑滚动，确保你采取了以下的措施:</p>
+
+<ul>
+<li>正确使用<code>reuseIdentifier</code>来重用cells</li>
+<li>尽量使所有的view opaque，包括cell自身</li>
+<li>避免渐变，图片缩放，后台选人</li>
+<li>缓存行高</li>
+<li>如果cell内现实的内容来自web，使用异步加载，缓存请求结果</li>
+<li>使用<code>shadowPath</code>来画阴影</li>
+<li>减少subviews的数量</li>
+<li>尽量不适用<code>cellForRowAtIndexPath:</code>，如果你需要用到它，只用一次然后缓存结果</li>
+<li>使用正确的数据结构来存储数据</li>
+<li>使用<code>rowHeight</code>, <code>sectionFooterHeight</code> 和 <code>sectionHeaderHeight</code>来设定固定的高，不要请求delegate</li>
+</ul>
+
+
+<p>更多阅读：<a href="http://blog.jobbole.com/37984/">iOS应用性能调优的25个建议和技巧</a></p>
+]]></content>
+  </entry>
+  
+</feed>

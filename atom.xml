@@ -1,0 +1,2407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Saick Blog]]></title>
+  <link href="http://shjborage.github.io/atom.xml" rel="self"/>
+  <link href="http://shjborage.github.io/"/>
+  <updated>2018-12-02T20:48:20+08:00</updated>
+  <id>http://shjborage.github.io/</id>
+  <author>
+    <name><![CDATA[Eric Shi]]></name>
+    <email><![CDATA[shjborage@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[为 PHP 做单元测试（UnitTest）]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/"/>
+    <updated>2017-03-12T11:16:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest</id>
+    <content type="html"><![CDATA[<p>随便用 Google 百度一下就可以找到这个： <a href="https://phpunit.de/">PHPUnit – The PHP Testing Framework</a></p>
+
+<p>貌似也还有别的类似框架或者自己写 PHP 脚本来完成，但这个就不在我们今天的讨论范围啦。</p>
+
+<h2>Getting Started with PHPUnit</h2>
+
+<h3>Download</h3>
+
+<p>We distribute a <a href="http://php.net/phar">PHP Archive (PHAR)</a> that contains everything you need in order to use PHPUnit. Simply download it from here, make it executable, and put it into your <code>$PATH</code>, for instance:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget https://phar.phpunit.de/phpunit.phar
+</span><span class='line'>chmod +x phpunit.phar
+</span><span class='line'>sudo mv phpunit.phar /usr/local/bin/phpunit
+</span><span class='line'>phpunit --version</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Code</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>class Money {
+</span><span class='line'>    private $amount;
+</span><span class='line'>
+</span><span class='line'>    public function __construct($amount) {
+</span><span class='line'>        $this-&gt;amount = $amount;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    public function getAmount() {
+</span><span class='line'>        return $this-&gt;amount;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    public function negate() {
+</span><span class='line'>        return new Money(-1 * $this-&gt;amount);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    // ...
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>TestCode</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>use PHPUnit\Framework\TestCase;
+</span><span class='line'>
+</span><span class='line'>class MoneyTest extends TestCase {
+</span><span class='line'>    public function testCanBeNegated() {
+</span><span class='line'>        // Arrange
+</span><span class='line'>        $a = new Money(1);
+</span><span class='line'>
+</span><span class='line'>        // Act
+</span><span class='line'>        $b = $a-&gt;negate();
+</span><span class='line'>
+</span><span class='line'>        // Assert
+</span><span class='line'>        $this-&gt;assertEquals(-1, $b-&gt;getAmount());
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    // ...
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Run</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>➜  PHPUnitExample git:(master) ✗ phpunit --bootstrap src/Monkey.php tests/MonkeyTest.php
+</span><span class='line'>PHPUnit 5.7.5 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>.                                                                   1 / 1 (100%)
+</span><span class='line'>
+</span><span class='line'>Time: 95 ms, Memory: 8.00MB
+</span><span class='line'>
+</span><span class='line'>OK (1 test, 1 assertion)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>比较好理解，加载一个类，然后执行相应的单元测试。
+<a href="https://github.com/shjborage/PHPUnitExample">PHPUnit 完整例子</a></p>
+
+<p>还要看相应的文档，了解一下高级用法。</p>
+
+<h2>高级用法(TODO)</h2>
+
+<h2>Refs</h2>
+
+<p><a href="https://phpunit.de/getting-started.html">Getting Started with PHPUnit</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Linux 开发备忘]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang/"/>
+    <updated>2017-03-12T11:00:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/12/linux-kai-fa-bei-wang</id>
+    <content type="html"><![CDATA[<h2>Terminal 使用相关（Mac 下测试通过）</h2>
+
+<h3><a href="http://blog.csdn.net/kai27ks/article/details/7449610">.bash_profile生效方法</a></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source .bash_profile
+</span><span class='line'>exec bash --login</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>获取当前时间的unix时间戳</h3>
+
+<p>from: <a href="http://www.jb51.net/LINUXjishu/227114.html">http://www.jb51.net/LINUXjishu/227114.html</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>date +%s</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>awk 命令</h3>
+
+<p><a href="http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html">http://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html</a></p>
+
+<h3>grep 查询日志</h3>
+
+<p><a href="http://www.cnblogs.com/end/archive/2012/02/21/2360965.html">linux grep命令</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>grep -n "xxx" log/xxx.2016xxxxx* </span></code></pre></td></tr></table></div></figure>
+
+
+<h3>压缩解压</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// unzip
+</span><span class='line'>tar -zxvf xxx.gz
+</span><span class='line'>
+</span><span class='line'>// zip a dir
+</span><span class='line'>tar -zcvf xxx.gz dirName</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Terminal 光标移动</h3>
+
+<p><a href="http://blog.csdn.net/teng_ontheway/article/details/50159891">http://blog.csdn.net/teng_ontheway/article/details/50159891</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Ctrl + a    // 回行首
+</span><span class='line'>Ctrl + e    // 回行尾</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h3>端口占用查询</h3>
+
+<p>命令 <code>lsof -i tcp:port</code>（port替换成端口号，比如 6379）可以查看该端口被什么程序占用，并显示PID，方便KILL</p>
+
+<h2>Vim 相关</h2>
+
+<p>控制鼠标模式，目前还是比较适应纯键盘输入。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set mouse=v</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Vim插件体系管理系统</h3>
+
+<p><a href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a>
+<a href="https://github.com/szw/vim-tags">https://github.com/szw/vim-tags</a>
+快捷键 <code>Ctrl+]</code></p>
+
+<p>这个插件体系也可以完全不用的~~</p>
+
+<h4>ctags</h4>
+
+<p>其实是个索引文件，需要创建，并且在当前目录打开才可以使用的。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 创建tags文件
+</span><span class='line'>cd /your work path
+</span><span class='line'>ctags -R *
+</span><span class='line'>
+</span><span class='line'>// vim 中跳转与返回
+</span><span class='line'>Ctrl + ] 
+</span><span class='line'>Ctrl + T</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>ctags 更好的支持 php</h5>
+
+<p>在 <code>~/.ctags</code> 中添加这段，更好的创建 php 文件的 tags 文件。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>--regex-php=/^[ \t]*[(private|protected|public|static)( \t)]*function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/f, function, functions/
+</span><span class='line'>--regex-php=/^[ \t]*[(private|protected|public|static)]+[ \t]+\$([A-Za-z0-9_]+)[ \t]*/\1/p, property, properties/
+</span><span class='line'>--regex-php=/^[ \t]*(const)[ \t]+([A-Za-z0-9_]+)[ \t]*/\2/d, const, constants/</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>taglist</h4>
+
+<h4>WinManager</h4>
+
+<h4>phpcomplete</h4>
+
+<h4>supertab</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"phpcomplete
+</span><span class='line'>filetype plugin on
+</span><span class='line'>autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+</span><span class='line'>
+</span><span class='line'>" taglist
+</span><span class='line'>let Tlist_Show_One_File=1
+</span><span class='line'>let Tlist_Exit_OnlyWindow=1
+</span><span class='line'>
+</span><span class='line'>" wm
+</span><span class='line'>let g:winManagerWindowLayout='FileExplorer|TagList'
+</span><span class='line'>"nmap wm :WMToggle&lt;cr&gt;
+</span><span class='line'>
+</span><span class='line'>" 设置winmanager
+</span><span class='line'>" 设置界面分割
+</span><span class='line'>"let g:winManagerWindowLayout = "TagList|FileExplorer"
+</span><span class='line'>"设置winmanager的宽度，默认为25
+</span><span class='line'>let g:winManagerWidth = 30
+</span><span class='line'>"定义打开关闭winmanager快捷键为F8 =&gt; 改为普通模式的 wm
+</span><span class='line'>nmap wm :WMToggle&lt;cr&gt;
+</span><span class='line'>"在进入vim时自动打开winmanager
+</span><span class='line'>let g:AutoOpenWinManager = 1
+</span><span class='line'>
+</span><span class='line'>" supertab
+</span><span class='line'>let g:SuperTabRetainCompletionType=2
+</span><span class='line'>let g:SuperTabDefaultCompletionType="&lt;C-X&gt;&lt;C-O&gt;"</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://shjborage-public.qiniudn.com/2017-03-12-14776418022718.jpg" alt="" /></p>
+
+<h5>代码自动补全升级</h5>
+
+<p><a href="http://blog.csdn.net/arcsinsin/article/details/39436043">VIM代码补全提示功能</a></p>
+
+<p>插件是这个：<a href="http://www.vim.org/scripts/script.PHP?script_id=1879">autocomplpop</a>
+安装后，在 <code>.vimrc</code> 中添加配置，支持 php 的 <code>::</code>, <code>-&gt;</code>, <code>$</code>：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if !exists('g:AutoComplPop_Behavior')
+</span><span class='line'>let g:AutoComplPop_Behavior = {}
+</span><span class='line'>let g:AutoComplPop_Behavior['php'] = []
+</span><span class='line'>call add(g:AutoComplPop_Behavior['php'], {
+</span><span class='line'>\ 'command' : "",
+</span><span class='line'>\ 'pattern' : printf('−&gt;|::|$\k\{『百分号』d,}$', 0),
+</span><span class='line'>\ 'repeat' : 0,
+</span><span class='line'>\})
+</span><span class='line'>endif</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>NERDTree</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> 114 "NERDTree
+</span><span class='line'> 115 let g:NERDTree_title="[NERDTree]"
+</span><span class='line'> 116 let g:winManagerWindowLayout="NERDTree|TagList"
+</span><span class='line'> 117
+</span><span class='line'> 118 function! NERDTree_Start()
+</span><span class='line'> 119     exec 'NERDTree'
+</span><span class='line'> 120 endfunction
+</span><span class='line'> 121
+</span><span class='line'> 122 function! NERDTree_IsValid()
+</span><span class='line'> 123     return 1
+</span><span class='line'> 124 endfunction</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://blog.csdn.net/bokee/article/details/6633193">http://blog.csdn.net/bokee/article/details/6633193</a></p>
+
+<p>这个版本的Winmanager好像有个小bug，你在打开Winmanager界面时，会同时打开一个空的文件。这会影响后续使用，所以我们要在打开Winmanager时关掉这个空文件。在~/.vim/plugin目录下的winmanager.vim文件中找到以下函数定义并在第5行下添加第6行的内容：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function! &lt;SID&gt;ToggleWindowsManager()  
+</span><span class='line'>   if IsWinManagerVisible()  
+</span><span class='line'>      call s:CloseWindowsManager()  
+</span><span class='line'>   else  
+</span><span class='line'>      call s:StartWindowsManager()  
+</span><span class='line'>      exe 'q'
+</span><span class='line'>   end  
+</span><span class='line'>endfunction</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Vim 打开多窗口、多文件之间的切换</h3>
+
+<p>打开多个文件：
+一、Vim 还没有启动的时候：&#8220;
+1.在终端里输入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim file1 file2 ... filen便可以打开所有想要打开的文件</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2.Vim已经启动
+输入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:e file</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以再打开一个文件，并且此时vim里会显示出file文件的内容。</p>
+
+<p>3.同时显示多个文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:sp         //水平切分窗口
+</span><span class='line'>:vsplit     //垂直切分窗口(:vsp)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>二、在文件之间切换：
+1.文件间切换</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Ctrl+6  //两文件间的切换
+</span><span class='line'>:bn      //下一个文件
+</span><span class='line'>:bp      //上一个文件
+</span><span class='line'>:ls       //列出打开的文件，带编号
+</span><span class='line'>:b1~n  //切换至第n个文件</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对于用 <code>(v)split</code> 在多个窗格中打开的文件，这种方法只会在当前窗格中切换不同的文件。</p>
+
+<p>2.在窗格间切换的方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Ctrl+w+方向键——切换到前／下／上／后一个窗格
+</span><span class='line'>Ctrl+w+h/j/k/l ——同上
+</span><span class='line'>Ctrl+ww——依次向后切换到下一个窗格中</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apple ATS 问题]]></title>
+    <link href="http://shjborage.github.io/blog/2017/03/10/apple-ats-wen-ti/"/>
+    <updated>2017-03-10T22:20:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/03/10/apple-ats-wen-ti</id>
+    <content type="html"><![CDATA[<p>苹果 ATS 的标准是 LTSv1.2 且 AES256 的 RSA.</p>
+
+<p>有问题的两个URL：<br/>
+1. 不可以在 App 中正常获取数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>https://ss0.bdstatic.com/9bA1vGba2gU2pMbfm9GUKT-w/timg?nuomina&size=w9999&quality=100&sec=1418745600&di=b0c7531995ca2ccad8b63d5ad53a1fff&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fbainuo%2Fcrop%253D0%252C1%252C979%252C592%253Bw%253D230%253Bq%253D79%2Fsign%3De9a35c7a3012b31bd3239769bb281a4b%2Ff11f3a292df5e0fe030b493c556034a85edf72f8.jpg</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+2. 可以在 App 中正常获取数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>https://gss0.baidu.com/7LsWdDW5_xN3otqbppnN2DJv/bainuo/pic/item/64380cd7912397dd597ec13f5e82b2b7d0a28782.jpg</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这两个 URL 都符合标准，而且都可以使用苹果开发者论坛里面给出的方案来校验通过：<a href="https://forums.developer.apple.com/thread/14816">https://forums.developer.apple.com/thread/14816</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nscurl --ats-diagnostics https://www.example.com</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>解决方案</h2>
+
+<p><code>NSURLConnection</code> 在iOS10上面会出现这个 9802，并不是服务器的问题。
+需要切换为 <code>NSURLSession</code> 来解决这个问题。
+后续的网络请求应该都不再使用 <code>NSURLConnection</code>，应该是苹果 SDK 的 bug，但因为这部分已经是不再维护的了，也别为难苹果了，使用最新的 API 吧。</p>
+
+<h2>Refs</h2>
+
+<ul>
+<li><a href="https://onevcat.com/2016/06/ios-10-ats/">关于 iOS 10 中 ATS 的问题</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[npm install 本地安装与全局安装]]></title>
+    <link href="http://shjborage.github.io/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/"/>
+    <updated>2017-01-03T17:30:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang</id>
+    <content type="html"><![CDATA[<p>研究 <code>node.js</code> 时，发现使用 <code>javascript</code> 也可以写 <code>shell</code> 脚本，用到了下面这个命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install shelljs --save-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<p>顺带研究了一下 <code>npm install</code> 的使用，如果不带 <code>-g</code> 的话，是保存在当前目录下的【本地安装】，否则是全局安装。</p>
+
+<p><code>--save</code> 与 <code>--save-dev</code> 这个适用于有 <code>package.json</code> 的情况。
+保存在 <code>dependencies</code> 或 <code>devDependencies</code>中。</p>
+
+<h2>Ref</h2>
+
+<p><a href="https://yq.aliyun.com/articles/36217">npm install —— 从一个简单例子，看本地安装与全局安装的区别</a><br/>
+<a href="http://cnodejs.org/topic/54d33df497be414b68dcf503">请问 npm install &mdash;save 与 npm install &mdash;save-dev 的区别</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python - virtualenv 基础使用]]></title>
+    <link href="http://shjborage.github.io/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/"/>
+    <updated>2017-01-03T16:28:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong</id>
+    <content type="html"><![CDATA[<p><code>python</code> 的环境折腾起来还是比较复杂，不说 macOS 下面有个默认 python，自己还需要装一个自己需要的版本（2.7或3.x）。然后不同的开发需求，可能就会使用 <code>pip</code> 安装不同的包，甚至不同的项目需要安装不同版本的包，这就麻烦了，需要 <code>virtualenv</code> 来协助了。</p>
+
+<h2>安装 <code>virtualenv</code></h2>
+
+<p><code>virtualenv</code> 不是 <code>python</code> 自带的，需要独立安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pip install virtualenv</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>创建一个指定 <code>python</code> 版本的环境</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>virtualenv -p /usr/bin/python2.7 ENV2.7</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>激活</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source ./bin/active</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>关闭</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>deactive</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Refs</h2>
+
+<p><a href="http://www.jianshu.com/p/08c657bd34f1">Python&mdash;Virtualenv简明教程</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[redis-源码研究之-INCR]]></title>
+    <link href="http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr/"/>
+    <updated>2016-12-28T16:47:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/12/28/redis-yuan-ma-yan-jiu-zhi-incr</id>
+    <content type="html"><![CDATA[<p>调用类似微博的关注 Feed 流的实现时，发现早在2009年，<a href="https://redis.io">redis</a> 官方就写过这样<a href="https://redis.io/topics/twitter-clone">一篇文章</a>：通过 <code>redis</code> 的各种 API 来做数据存储，方便的实现 Push 的关注流。</p>
+
+<p>简单研究了一下，最终改了一点点代码，详情见 <a href="https://github.com/shjborage/retwis">Github</a>。</p>
+
+<p>今天主要研究一下这个命令 <a href="https://redis.io/commands/incr">INCR</a> ，看 <code>redis</code> 是如何实现这个命令在多线程访问的。</p>
+
+<!-- more -->
+
+
+<h2>准备工作</h2>
+
+<ol>
+<li><code>redis</code> 源码 <a href="https://github.com/antirez/redis">https://github.com/antirez/redis</a></li>
+<li>当然还离不开官方的源码说明：<a href="https://github.com/antirez/redis#redis-internals">https://github.com/antirez/redis#redis-internals</a></li>
+<li><code>vim</code> + <code>ctags</code> 自行脑补看代码的流程吧~</li>
+</ol>
+
+
+<h2>main 入口</h2>
+
+<p>找到 <code>main</code> 函数，Server、Client 应该至少有两个：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find ./* | xargs grep -n 'main('
+</span><span class='line'>
+</span><span class='line'>// 重要结果
+</span><span class='line'>./redis-cli.c:2552:int main(int argc, char **argv) {
+</span><span class='line'>./server.c:3566:int main(int argc, char **argv) {</span></code></pre></td></tr></table></div></figure>
+
+
+<p>发现 <code>server.c</code>，在 <code>server.h</code> 中找到各种结构体的说明（官网也有讲）</p>
+
+<h3>server.h</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct redisServer {
+</span><span class='line'>    /* General */
+</span><span class='line'>    pid_t pid;                  /* Main process pid. */
+</span><span class='line'>    char *configfile;           /* Absolute config file path, or NULL */
+</span><span class='line'>    char *executable;           /* Absolute executable file path. */
+</span><span class='line'>    char **exec_argv;           /* Executable argv vector (copy). */
+</span><span class='line'>    int hz;                     /* serverCron() calls frequency in hertz */
+</span><span class='line'>    redisDb *db;
+</span><span class='line'>    dict *commands;             /* Command table */
+</span><span class='line'>    ...
+</span><span class='line'>    list *clients;              /* List of active clients */
+</span><span class='line'>    ...
+</span><span class='line'>    client *master;     /* Client that is master for this slave */
+</span><span class='line'>    ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef struct client {
+</span><span class='line'>    int fd;
+</span><span class='line'>    sds querybuf;
+</span><span class='line'>    int argc;
+</span><span class='line'>    robj **argv;
+</span><span class='line'>    redisDb *db;
+</span><span class='line'>    int flags;
+</span><span class='line'>    list *reply;
+</span><span class='line'>    char buf[PROTO_REPLY_CHUNK_BYTES];
+</span><span class='line'>    ... many other fields ...
+</span><span class='line'>} client;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef struct redisObject {
+</span><span class='line'>    unsigned type:4;
+</span><span class='line'>    unsigned encoding:4;
+</span><span class='line'>    unsigned lru:LRU_BITS; /* LRU time (relative to server.lruclock) or
+</span><span class='line'>                            * LFU data (least significant 8 bits frequency
+</span><span class='line'>                            * and most significant 16 bits decreas time). */
+</span><span class='line'>    int refcount;
+</span><span class='line'>    void *ptr;
+</span><span class='line'>} robj;</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>server.c</h3>
+
+<p>重要初始化流程：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>initServerConfig() //setups the default values of the server structure.
+</span><span class='line'>initServer() //allocates the data structures needed to operate, setup the listening socket, and so forth.
+</span><span class='line'>aeMain() // starts the event loop which listens for new connections.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>call()</code> is used in order to call a given command in the context of a given client.</p>
+
+<p>这个就是我们要找的处理命令入口方法了。</p>
+
+<p>附上一个完整的 <code>Command</code> 说明:</p>
+
+<blockquote><p>The global variable <code>redisCommandTable</code> defines all the Redis commands, specifying the name of the command, the function implementing the command, the number of arguments required, and other properties of each command.</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct redisCommand redisCommandTable[] = {
+</span><span class='line'>    {"module",moduleCommand,-2,"as",0,NULL,1,1,1,0,0},
+</span><span class='line'>    {"get",getCommand,2,"rF",0,NULL,1,1,1,0,0},
+</span><span class='line'>    {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0},
+</span><span class='line'>    ...
+</span><span class='line'>    {"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+</span><span class='line'>    {"decr",decrCommand,2,"wmF",0,NULL,1,1,1,0,0},
+</span><span class='line'>    ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但我们发现， <code>call()</code> 是由 <code>processCommand()</code> 调用的，<code>processCommand()</code> 的调用在 <code>server.c</code> 中并没有。 还需努力。。。</p>
+
+<p>继续看官方文档（其实也在本地搜索了一下）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find ./* | xargs grep -n 'processCommand'
+</span><span class='line'>
+</span><span class='line'>// 结果
+</span><span class='line'>./cluster.c:5128:                 * not trapped earlier in processCommand(). Report the same
+</span><span class='line'>grep: ./modules: Is a directory
+</span><span class='line'>./networking.c:1299:            if (processCommand(c) == C_OK)
+</span><span class='line'>Binary file ./networking.o matches
+</span><span class='line'>Binary file ./redis-check-rdb matches
+</span><span class='line'>Binary file ./redis-sentinel matches
+</span><span class='line'>Binary file ./redis-server matches
+</span><span class='line'>./server.c:2226: * processCommand() execute the command or prepare the
+</span><span class='line'>./server.c:2232:int processCommand(client *c) {
+</span><span class='line'>./server.h:1547:int processCommand(client *c);
+</span><span class='line'>Binary file ./server.o matches
+</span><span class='line'>./tags:3304:processCommand    server.c    /^int processCommand(client *c) {$/;"   f</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>server.h</code> 中已经暴露出了 API，提供给了 <code>networking.c</code>。所以继续下文。</p>
+
+<h2>networking.c</h2>
+
+<blockquote><p><code>createClient()</code> // allocates and initializes a new client.
+the <code>addReply*()</code> family of functions are used by commands implementations in order to append data to the client structure, that will be transmitted to the client as a reply for a given command executed.
+<code>writeToClient()</code> transmits the data pending in the output buffers to the client and is called by the writable event handler sendReplyToClient().
+<code>readQueryFromClient()</code> is the readable event handler and accumulates data from read from the client into the query buffer.
+<code>processInputBuffer()</code> is the entry point in order to parse the client query buffer according to the Redis protocol. Once commands are ready to be processed, it calls <code>processCommand()</code> which is defined inside server.c in order to actually execute the command.
+<code>freeClient()</code> deallocates, disconnects and removes a client.</p></blockquote>
+
+<p>基本上理完了整体的调用流程：</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824009373678.jpg" alt="" /></p>
+
+<p>其它细节待研究，我们重点看 <code>call()</code>。</p>
+
+<h2>call()</h2>
+
+<p>研究了一下 <code>callgraph</code>，把 C 代码的调用关系梳理了一下（比干巴巴的代码好些，当然还要结合代码去分析）：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>callgraph -b chrome -f call</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14824095565432.jpg" alt="" /></p>
+
+<p>找到 <strong><code>proc</code></strong> 这个重点函数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> 2127     /* Call the command. */
+</span><span class='line'> 2128     dirty = server.dirty;
+</span><span class='line'> 2129     start = ustime();
+</span><span class='line'> 2130     c-&gt;cmd-&gt;proc(c);
+</span><span class='line'> 2131     duration = ustime()-start;
+</span><span class='line'> 2132     dirty = server.dirty-dirty;
+</span><span class='line'> 2133     if (dirty &lt; 0) dirty = 0;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>到 <code>client</code> 中了，需要看下这个 <code>cmd</code>（<code>redisCommand</code>） 下的 <code>proc</code> (<code>redisCommandProc</code>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>typedef void redisCommandProc(client *c);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要找出这个 <code>callback</code> 在哪设置的，如何执行。</p>
+
+<p>我们的 <code>client</code> 里面主要是从客户端那拿解析到的命令，是通过 <code>argc</code> 和 <code>argv</code> 来表现的。
+在 <code>processCommand</code> 中通过 <code>lookupCommand</code> 来给 <code>cmd</code> 赋值，在 <code>server</code> 中有 <code>commands</code> 保存的命令列表。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2243     /* Now lookup the command and check ASAP about trivial error conditions
+</span><span class='line'>2244      * such as wrong arity, bad command name and so forth. */
+</span><span class='line'>2245     c-&gt;cmd = c-&gt;lastcmd = lookupCommand(c-&gt;argv[0]-&gt;ptr);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>commands</code> 是在 <code>initServerConfig</code> 中初始化的，也是根据 <code>redisCommandTable</code> 进行的。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{"incr",incrCommand,2,"wmF",0,NULL,1,1,1,0,0},</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如下代码进行了初始化：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>int numcommands = sizeof(redisCommandTable)/sizeof(struct redisCommand);
+</span><span class='line'>
+</span><span class='line'>for (j = 0; j &lt; numcommands; j++) {
+</span><span class='line'>    struct redisCommand *c = redisCommandTable+j;
+</span><span class='line'>    char *f = c-&gt;sflags;
+</span><span class='line'>    ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>redisCommand 定义：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> 1161 struct redisCommand {
+</span><span class='line'> 1162     char *name;
+</span><span class='line'> 1163     redisCommandProc *proc;
+</span><span class='line'> 1164     int arity;
+</span><span class='line'> 1165     char *sflags; /* Flags as string representation, one char per flag. */
+</span><span class='line'> 1166     int flags;    /* The actual flags, obtained from the 'sflags' field. */
+</span><span class='line'> 1167     /* Use a function to determine keys arguments in a command line.
+</span><span class='line'> 1168      * Used for Redis Cluster redirect. */
+</span><span class='line'> 1169     redisGetKeysProc *getkeys_proc;
+</span><span class='line'> 1170     /* What keys should be loaded in background when calling this command? */
+</span><span class='line'> 1171     int firstkey; /* The first argument that's a key (0 = no keys) */
+</span><span class='line'> 1172     int lastkey;  /* The last argument that's a key */
+</span><span class='line'> 1173     int keystep;  /* The step between first and last key */
+</span><span class='line'> 1174     long long microseconds, calls;
+</span><span class='line'> 1175 };</span></code></pre></td></tr></table></div></figure>
+
+
+<p>所以每个命令都对应的 <code>proc</code>，就在 <code>redisCommandTable</code> 中。
+<code>incr</code> 对应的就是 <code>incrCommand</code>，在 <code>t_string.c</code> 中又中转到 <code>incrDecrCommand</code>。</p>
+
+<h2>incrDecrCommand(client *c, long long incr)</h2>
+
+<p>调用关系：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void incrCommand(client *c) {
+</span><span class='line'>    incrDecrCommand(c,1);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-12-28-14828945195167.jpg" alt="" /></p>
+
+<p>先来分析两个参数：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>client *c       // 客户端实例
+</span><span class='line'>long long incr  // 操作数， incr命令时为 `1`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看来半天，这里的结构也是基本的操作，除了 <code>server.dirty</code> 的操作外，貌似没有多线程相关的处理。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> 341 void incrDecrCommand(client *c, long long incr) {
+</span><span class='line'> 342     long long value, oldvalue;
+</span><span class='line'> 343     robj *o, *new;
+</span><span class='line'> 344
+</span><span class='line'> 345     o = lookupKeyWrite(c-&gt;db,c-&gt;argv[1]);
+</span><span class='line'> 346     if (o != NULL && checkType(c,o,OBJ_STRING)) return;
+</span><span class='line'> 347     if (getLongLongFromObjectOrReply(c,o,&value,NULL) != C_OK) return;
+</span><span class='line'> 348
+</span><span class='line'> 349     oldvalue = value;
+</span><span class='line'> 350     if ((incr &lt; 0 && oldvalue &lt; 0 && incr &lt; (LLONG_MIN-oldvalue)) ||
+</span><span class='line'> 351         (incr &gt; 0 && oldvalue &gt; 0 && incr &gt; (LLONG_MAX-oldvalue))) {
+</span><span class='line'> 352         addReplyError(c,"increment or decrement would overflow");
+</span><span class='line'> 353         return;
+</span><span class='line'> 354     }
+</span><span class='line'> 355     value += incr;
+</span><span class='line'> 356
+</span><span class='line'> 357     if (o && o-&gt;refcount == 1 && o-&gt;encoding == OBJ_ENCODING_INT &&
+</span><span class='line'> 358         (value &lt; 0 || value &gt;= OBJ_SHARED_INTEGERS) &&
+</span><span class='line'> 359         value &gt;= LONG_MIN && value &lt;= LONG_MAX)
+</span><span class='line'> 360     {
+</span><span class='line'> 361         new = o;
+</span><span class='line'> 362         o-&gt;ptr = (void*)((long)value);
+</span><span class='line'> 363     } else {
+</span><span class='line'> 364         new = createStringObjectFromLongLong(value);
+</span><span class='line'> 365         if (o) {
+</span><span class='line'> 366             dbOverwrite(c-&gt;db,c-&gt;argv[1],new);
+</span><span class='line'> 367         } else {
+</span><span class='line'> 368             dbAdd(c-&gt;db,c-&gt;argv[1],new);
+</span><span class='line'> 369         }
+</span><span class='line'> 370     }
+</span><span class='line'> 371     signalModifiedKey(c-&gt;db,c-&gt;argv[1]);
+</span><span class='line'> 372     notifyKeyspaceEvent(NOTIFY_STRING,"incrby",c-&gt;argv[1],c-&gt;db-&gt;id);
+</span><span class='line'> 373     server.dirty++;
+</span><span class='line'> 374     addReply(c,shared.colon);
+</span><span class='line'> 375     addReply(c,new);
+</span><span class='line'> 376     addReply(c,shared.crlf);
+</span><span class='line'> 377 }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>还是得回头看 <code>call()</code> 里面到底还有哪些多线程相关操作。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> 2127     /* Call the command. */
+</span><span class='line'> 2128     dirty = server.dirty;
+</span><span class='line'> 2129     start = ustime();
+</span><span class='line'> 2130     c-&gt;cmd-&gt;proc(c);
+</span><span class='line'> 2131     duration = ustime()-start;
+</span><span class='line'> 2132     dirty = server.dirty-dirty;
+</span><span class='line'> 2133     if (dirty &lt; 0) dirty = 0;
+</span><span class='line'>
+</span><span class='line'> ...
+</span><span class='line'>
+</span><span class='line'> 2169         /* Check if the command operated changes in the data set. If so
+</span><span class='line'> 2170          * set for replication / AOF propagation. */
+</span><span class='line'> 2171         if (dirty) propagate_flags |= (PROPAGATE_AOF|PROPAGATE_REPL);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再来看看这个 <code>PROPAGATE_AOF</code> 是搞啥的</p>
+
+<h2>aof.c</h2>
+
+<p>官方说明： <a href="https://github.com/antirez/redis#aofc-and-rdbc">https://github.com/antirez/redis#aofc-and-rdbc</a></p>
+
+<blockquote><p>As you can guess from the names these files implement the RDB and AOF persistence for Redis. Redis uses a persistence model based on the fork() system call in order to create a thread with the same (shared) memory content of the main Redis thread. This secondary thread dumps the content of the memory on disk. This is used by rdb.c to create the snapshots on disk and by aof.c in order to perform the AOF rewrite when the append only file gets too big.</p>
+
+<p>The implementation inside aof.c has additional functions in order to implement an API that allows commands to append new commands into the AOF file as clients execute them.</p>
+
+<p>The call() function defined inside server.c is responsible to call the functions that in turn will write the commands into the AOF.</p></blockquote>
+
+<p>这个应该是主要原因了，一个通用的方案，因为时间关系，有时间再把这部分详细研究吧。</p>
+
+<h2>Refs</h2>
+
+<p><a href="http://www.tinylab.org/callgraph-draw-the-calltree-of-c-functions/?utm_source=tuicool&amp;utm_medium=referral">源码分析：静态分析 C 程序函数调用关系图</a><br/>
+<a href="https://zh.wikipedia.org/wiki/DOT%E8%AF%AD%E8%A8%80">DOT语言</a></p>
+
+<h2>Evernote</h2>
+
+<p><a href="https://www.evernote.com/l/AC5QDjLdH0ZN1K1zh9XY343jZaP1AWeYbS8">redis-结构-源码研究备忘</a><br/>
+<a href="https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM">https://www.evernote.com/l/AC4hEMNhKUFMnZ-_t3tLAHM4W2IbQBXSyeM</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[微信小程序初步调研]]></title>
+    <link href="http://shjborage.github.io/blog/2016/10/20/wei-xin-xiao-cheng-xu-chu-bu-diao-yan/"/>
+    <updated>2016-10-20T16:38:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/10/20/wei-xin-xiao-cheng-xu-chu-bu-diao-yan</id>
+    <content type="html"><![CDATA[<p>先做下说明，本文基于各路网友的观点做了下总结，给大家分享，都有相关的转载链接，如有遗漏请大家联系我添加。</p>
+
+<h2>什么是小程序</h2>
+
+<blockquote><p>  小程序是一种不需要下载安装即可使用的应用，它实现了应用“触手可及”的梦想，用户扫一扫或者搜一下即可打开应用。也体现了“用完即走”的理念，用户不用关心是否安装太多应用的问题。应用将无处不在，随时可用，但又无需安装卸载。&mdash; Allen Zhang</p></blockquote>
+
+<p>张大大在年初发布<code>应用号</code>时也说过一些定位：</p>
+
+<blockquote><p>  1.关于给谁做：很多服务和功能用户需要的频次很低，还会在手机上有推送，其实没必要。开发一个APP的成本很高，很多小的商户或者企业承担不起，也没必要。<br/>
+  2.关于做成什么样子：应用会静静的呆在那里，你需要的时候就去用。<br/>
+  3.关于放在哪：公众号之中也可以插入服务之类的，但是体验不好，用户也不好找。</p></blockquote>
+
+<p>这几句话也不是很清晰，但应该也可以理解一些。整体来说，小程序还是会比较符合微信价值观：<strong>好产品应该是用完即走，微信应该是给用户提供便利，而非浪费时间。希望用户在微信里看到的都是自己愿意看到的东西，也希望用户能够留出来更多的时间去做其他的事情。</strong> 所以微信正在尝试做减法，为微信用户提供一个类似APP模式的账号一样，不主动推出骚扰用户，用户需要的时候在去找这个应用号。</p>
+
+<h3>可能会有哪些入口呢？</h3>
+
+<p>小程序入口在哪里？用户怎么实现触手可及，随时随地可用，用完即走的体验？目前透露的方式是通过搜一搜、扫一扫。可能的方式很多种&hellip;</p>
+
+<!-- more -->
+
+
+<h4>任何搜索相关</h4>
+
+<p>在任何地方搜索时，不仅出现聊天记录列表、朋友圈、公众号、文章，还可出现应用。找到后点击即可使用。凡是使用过的应用都进入用户的微信列表，可能是单个形态出现，也可能是聚合在小程序集合中。</p>
+
+<h4>通讯录添加小程序入口</h4>
+
+<p>在通讯录下，增加一个“小程序”与“公众号”并列，作为曾经使用过的或者收藏的小程序入口。</p>
+
+<h4>发现</h4>
+
+<p>“发现”TAB里面增加一个“小程序”入口，点击小程序会出现一个搜索框？还是其他？通过搜索推荐应用，点击应用即可使用，使用完之后进入微信列表及通讯录的“小程序”集合中？好处容易找到，不利的地方是路径略长。<br/>
+比如要订机票，点击发现TAB，然后点击“小程序”，再搜索“订机票”，然后再出来应用，再点击打开。如果“发现”TAB不仅有“搜索框”，还有应用的分类和汇总，这个貌似不符合微信的理念。按照微信的一贯的做法，它不会去做一个类似于app store一样的市场，不做中心化的聚合，而是让用户自发去传播。</p>
+
+<h4>聊天、朋友圈分享</h4>
+
+<p>聊天的话，这个应该会类似苹果iMessage。比如点评已经在iMessage里面做了一个拼饭、拼电影票的功能。<br/>
+入口无处不在，让开发者和忠实用户去推荐和传播？这符合微信的惯常做法。微信更可能通过聊天、朋友圈等去中心化等方式，让小程序可以在它需要出现的时候出现，通过用户自传播的方式去流通，当然也可通过搜一搜和扫一扫的方式主动获取。</p>
+
+<h4>第五个Tab</h4>
+
+<p>可能会有新的Tab出现，解决现在公众号入口较深的问题。</p>
+
+<h3>感受一下</h3>
+
+<p>贴两张网友们的图：</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-10-20-14769307858608.jpg" width="375"></p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-10-20-14769307968981.jpg" width="375"></p>
+
+<p><em>我个人认为，这个图是P的</em></p>
+
+<p>还有这两条视频资料：  <br/>
+&ndash;   <a href="http://v.qq.com/x/cover/c1fnf9wd4oh0w8b.html?vid=e0021i43oqc">http://v.qq.com/x/cover/c1fnf9wd4oh0w8b.html?vid=e0021i43oqc</a><br/>
+&ndash;   <a href="http://v.youku.com/v_show/id_XMTczMzk4NTgwOA==.html?from=s1.8-1-1.2&amp;spm=0.0.0.0.NpXwQU">http://v.youku.com/v_show/id_XMTczMzk4NTgwOA==.html?from=s1.8-1-1.2&amp;spm=0.0.0.0.NpXwQU</a></p>
+
+<p><strong>大家应该了解小程序大概是什么了吧？</strong></p>
+
+<h2>可行性分析</h2>
+
+<h3>App市场现状</h3>
+
+<p>传统APP发展到今天已经过于笨重，作为一个独立的APP产品来说或许感受不到这点，而作为用户来说，APP之间的重叠区域越来越重。不同的APP除了能够提供自己独有的特色服务外，基本的能力都差不多，支付功能，消息推送，语音，扫码&hellip;</p>
+
+<p>微信应用号的推出会一定程度上降低APP的推广成本，使APP和微信用户互通，获得稳固的用户和流量。（当然了，微信小程序后续的爆光也可能是这个问题，参考现在的公众号情况）</p>
+
+<h3>竞品对比</h3>
+
+<ul>
+<li>Qplus</li>
+<li>Chrome App</li>
+<li>百度轻应用</li>
+<li>UC轻应用</li>
+</ul>
+
+
+<p>我们来看一下曾经做过类似的事的。。竞品</p>
+
+<p>其实小程序不是腾讯的第一次尝试，Qplus，Q+ 才是。
+早些年在PC市场上，就做过智能桌面的产品，那是想在Windows的基础上做这套东西，但并没有做成。</p>
+
+<p>Chrome也有类似的Chrome App以及Chrome AppStore，不过运营的也不是太好。</p>
+
+<p>然后百度和UC，大家可能也都比较了解了。。此处省略200字。</p>
+
+<p>结论就是这些都做的不太理想。。</p>
+
+<p>有WebApp与Native App之争的原因，因为体验较差。再有就是平台能力，比如支付能力、账户体系。
+而有微信的条件是够好的——几乎全中国的主要人群都有，平均打开次数和使用时长不可超越。</p>
+
+<h3>微信的『资本』</h3>
+
+<blockquote><p>  根据第三方机构 Trustdata 的统计，2015 年用户平均每天打开微信超过 19 次，比淘宝多出了3倍之多，微信实际已经成为了目前用户基础最大并且活跃度最高的应用。</p></blockquote>
+
+<h3>技术方案</h3>
+
+<p><em>先来听两个问题：</em></p>
+
+<h4>小程序真的是用 H5 开发吗?</h4>
+
+<p>显然不是，理由如下：</p>
+
+<ul>
+<li>无dom</li>
+<li>不使用html，而是xml</li>
+<li>页面跳转无网络请求</li>
+</ul>
+
+
+<h4>苹果能否审核通过？</h4>
+
+<p>之前微信小程序叫做“应用号”，现在改名叫“小程序”。有消息说是苹果不通过“应用号”的审核，不管是真是假，最终应该是苹果可以接受的。<br/>
+与AppStore是竞争关系么？应该不会，微信应该不会做类似的东西。理由很简单，从用户的角度出发，用户并不需要在微信内有一个应用宝。</p>
+
+<p>所以这个问题不用担心，微信会把握这个平衡。</p>
+
+<h4>技术方案</h4>
+
+<p>微信提供整套的开发工具，微信Web开发者工具，功能完善IDE。从工程项目管理、编辑开发、运行调试、打包部署，一应具全。</p>
+
+<p>小程序平台提供众多Native能力：重力加速、绘图、WebSocket、地图位置、本地文件等。</p>
+
+<p>微信算是自创了一套开发体系，基于 RN Vue 等 开源方案的先进思想。  但但但。。。这只能开发微信小程序 &ndash; -！</p>
+
+<h4>个人评价</h4>
+
+<ul>
+<li>易开发：小程序比APP的开发难度降低至少一半，还能跨平台，且接近原生的体验，大幅减少了应用开发的人力。</li>
+<li>易更新：小程序基于Web，可以热更新（需要微信审核），有效加速产品的迭代。</li>
+<li>微信生态健康发展，顺势赢取大量用户。</li>
+<li>Anrdoid：系统更加流畅，广告不在乱飘，提高续航时间。</li>
+</ul>
+
+
+<h4>一个有趣的思路</h4>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-10-20-14769506740557.jpg" alt="" /></p>
+
+<p><em>解读一下：</em></p>
+
+<ul>
+<li>微信应该会确保小程序给用户带来的价值</li>
+<li>小程序不能引导用户下载App</li>
+</ul>
+
+
+<p><em>引申：</em>
+过度依赖微信，纵然有入口以及开发、推广成本低的优势，但微信服务也有不稳定的时候，过度依赖总是不好的。<br/>
+因为未来微信也在面对小程序的不确定性，大家可能都会做小程序版，但有些微信不想看到的，那些微信认为损伤微信用户体验的，估计只能被下架了。</p>
+
+<h4>技术方案结论</h4>
+
+<p><strong>很好，可以一试</strong></p>
+
+<h2>如何开发</h2>
+
+<p>这里不给大家再重复写教程了，这两个很好了：</p>
+
+<p> <a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1474632113_xQVCl&amp;token=&amp;lang=zh_CN">微信小程序官方文档</a></p>
+
+<p><a href="https://my.oschina.net/wwnick/blog/750055?from=timeline&amp;isappinstalled=0">全球首个微信小程序（应用号）开发教程！通宵吐血赶稿，每日更新！</a></p>
+
+<h2>适用场景</h2>
+
+<p>个人觉得，场景类似公众号。</p>
+
+<ul>
+<li><p>小型商户、机构企业——做不起APP，也没必要做一个APP</p>
+
+<blockquote><p>  比如很多微信公众号对于粉丝的服务在微信公众平台上没办法很好的实现，比如粉丝管理、内容管理、支付消息等等；比如高中初中和学生/家长之间的沟通管理，有一个APP或许能更好的解决问题；比如某个咖啡店或者地区商超对于用户的积分管理等没有特别好的办法；比如某个地区的电视台或者电台？
+  每一个APP的属性都是可以借助互联网跨越地区获取用户并且提供服务，而很多事情局限在某个地区，他们要向用户提供服务，就可以使用微信小程序了。</p></blockquote></li>
+<li><p>部分传统行业——和用户之间的联系目前处于中断状态</p>
+
+<blockquote><p>  比如奔驰汽车公司，用户在购买以后和汽车公司之间的联系大都通过4s店。如果为了售后服务等开发一个APP显得多余，成本高，而且还得考虑用户是否会下载。而有了微信小程序，奔驰汽车可以直接和所有的用户联系起来，在线上提供更好的服务，用户只需要像关注一个微信公众号一样关注它。</p></blockquote></li>
+<li><p>特定场景类：O2O到店系列、便于线下推广</p>
+
+<ul>
+<li>火车站微信扫码拼车，</li>
+<li>去医院挂号交费</li>
+<li>糯米到店系列，线下推广不再依赖必须下载app</li>
+<li>图书馆扫一下二维码就能进他们的微信小程序查书，也不用额外下载程序</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>开发Demo流水账</h2>
+
+<ul>
+<li>整个app的入口界面是由 <code>app.json</code> 这个配置文件来决定的，如果不使用 <code>tabBar</code> 的话，<code>pages</code> 中的第一个 page 即为第一个页面。</li>
+<li>使用 <code>tabBar</code> 如果并没有生效，要查下对应的 <code>list</code> 中 page 是否配置正确。</li>
+<li>需要注意 console 的输出，警告和错误都是很有帮助的。比如在 <code>tabBar</code> 中使用了某个 page，但又未在 <code>pages</code> 中进行声明，就会有警告。</li>
+<li>屏幕适配使用 <code>rpx</code>，规定屏幕宽度为 <strong>750rpx</strong>。</li>
+</ul>
+
+
+<blockquote><p>  rpx（responsive pixel）: 可以根据屏幕宽度进行自适应。规定屏幕宽为750rpx。如在 iPhone6 上，屏幕宽度为375px，共有750个物理像素，则750rpx = 375px = 750物理像素，1rpx = 0.5px = 1物理像素。</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-10-20-14750518770562.jpg" alt="" /></p></blockquote>
+
+<ul>
+<li><code>&lt;image&gt;</code> 并不支持 <code>&lt;view&gt;</code> 那种的嵌套使用，如果要拿 <code>&lt;image&gt;</code> 当做背景会比较麻烦，可通过设置 <code>margin-top</code> 为负值实现层次效果。</li>
+<li>只支持打开5个页面，避免多级跳转问题，需要在当前页使用重定向接口： <code>wx.redirectTo</code></li>
+</ul>
+
+
+<h2>Ref</h2>
+
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4NTQwNDcyMA==&amp;mid=2650662266&amp;idx=1&amp;sn=2afa03d2c1e547ad470d86e1d8bccd08&amp;chksm=87d13825b0a6b13316cbfda6cff3b6df9ffbb65170fdb687b5aeefb1d3460a06dc9cd158f91f&amp;scene=21#wechat_redirect">微信小程序 有哪些冲击与机会</a></li>
+<li><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1474632113_xQVCl&amp;token=&amp;lang=zh_CN">微信小程序官方文档</a></li>
+<li><a href="http://tech2ipo.com/10032614">我们真的需要微信「小程序」么？</a></li>
+<li><a href="http://www.cnblogs.com/luozhihao/p/5906813.html?hmsr=toutiao.io">通过微信小程序看前端</a></li>
+<li><a href="https://www.sdk.cn/news/5207?hmsr=toutiao.io">微信正式开放内测“小程序”，不开发APP的日子真的来了？</a></li>
+<li><a href="https://my.oschina.net/wwnick/blog/750055?from=timeline&amp;isappinstalled=0">全球首个微信小程序（应用号）开发教程！通宵吐血赶稿，每日更新！</a></li>
+<li><a href="https://www.zhihu.com/question/50874500/answer/123393375">如何评价 9 月 21 日开始内测的「微信小程序」？ &ndash; 郭超市的回答</a></li>
+<li><a href="https://www.zhihu.com/question/50874500/answer/123947782">https://www.zhihu.com/question/50874500/answer/123947782</a></li>
+<li><a href="https://www.zhihu.com/question/50875544/answer/123393440">https://www.zhihu.com/question/50875544/answer/123393440</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 10 OTA Beta Profile 使用]]></title>
+    <link href="http://shjborage.github.io/blog/2016/09/13/ios-10-ota-beta-profile-shi-yong/"/>
+    <updated>2016-09-13T11:50:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/09/13/ios-10-ota-beta-profile-shi-yong</id>
+    <content type="html"><![CDATA[<p>每一年的 iOS 系统更新，都可以通过开发者账户进行下载试用。不过下载更新前，还是建议先将手机备份一下，使用 iTunes 备份即可。然后开发者的话，还是同时下载最新 Xcode 8 Beta，以免手机更新了不能调试~
+<img src="http://shjborage-public.qiniudn.com/2016-09-13-14737402351929.jpg" alt="" /></p>
+
+<p>今年的 iOS10 （也许之前也有，只是我不知道而已）推荐使用配置文件的方式进行，见下图：</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-09-13-14737388492924.jpg" alt="" /></p>
+
+<p>具体操作如下：<br/>
+1. 在 iOS 设备上直接打开这个界面，下载配置；或在 Mac 上下载配置，通过 AirDrop 或者其它工具将配置下载到 iOS 设备上<br/>
+2. 按提示操作，安装配置文件<br/>
+3. 安装完成后系统重启<br/>
+4. 进入<code>系统-设备-通用-软件更新</code>， 这时就可以看到 iOS10 的更新信息了，像正式版一样安装更新即可。</p>
+
+<blockquote><p>注：<br/>
+1. 如果一直卡在『正在验证』，请耐心等待，我等了十几分钟还不行，重启N次后还是等才解决问题。当然也有同学说，把 Sim卡 弹出，再插入解决了问题；<br/>
+2. 如果系统空间不足，按提示信息确认应用稍后下载即可，这个为苹果点赞，方便！目测这些应用还是你不太常用的 App。</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-09-13-14737563036536.jpg" width="375"></p></blockquote>
+
+<p>希望能对更新 iOS Beta 软件的同学有点帮助~</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[端性能测试之连拍王]]></title>
+    <link href="http://shjborage.github.io/blog/2016/09/12/duan-xing-neng-ce-shi-zhi-lian-pai-wang/"/>
+    <updated>2016-09-12T15:51:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/09/12/duan-xing-neng-ce-shi-zhi-lian-pai-wang</id>
+    <content type="html"><![CDATA[<p>iOS 性能测试，有很多种技术手段。  <br/>
+1. 打点<br/>
+2. Instruments 检测</p>
+
+<p>但这两个常用的办法，有时也不能给出非常合理的数据。比如最近在研究 <code>ReactNative</code>，它在渲染时真实消耗的时间就不太好搞（如果有误请帮忙指证）。  <br/>
+&ndash;   打点的话，都是一些内部时机，想找到渲染成功的点，还需要在 <code>RN</code> Native 部分源码打点才行吧。<br/>
+&ndash;   Instruments 跑了一下，看到了各种 JS 与 OC 交互的耗时，并没找到渲染结果的时间。。</p>
+
+<p>最后实在没办法，跟 QA 聊了下，使用『极速连拍王』拍照分析时间消耗。<br/>
+1. 在 AppStore 搜索『极速连拍王』或 <a href="http://url.cn/2E3D8Cj">点此链接</a>；<br/>
+2. 打开进行拍照授权；<br/>
+3. 然后就直接开拍啦。。。</p>
+
+<p><img src="http://shjborage-public.qiniudn.com/2016-09-13-14737616847207.jpg" width="375"></p>
+
+<p>默认设置是30张/秒，具体耗时就数多少张照片即可。<br/>
+另外这个 App 的稳定性不太好，查看图片部分并不太好用，全部删除照片的话，要长按某张照片，然后全部选中，点删除（滑动到下面长按不容易Crash）。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Study FE Skills with FreeCodeCamp]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/28/study-fe-skills-with-freecodecamp/"/>
+    <updated>2016-02-28T20:35:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/28/study-fe-skills-with-freecodecamp</id>
+    <content type="html"><![CDATA[<p>偶然的机会，让我结识了 <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp</a> 这个在 <code>JavaScript</code> 语言中 Star 数排名第一的项目。<br/>
+这是一个很好的学习前端技能的平台，<strong>Free</strong>。</p>
+
+<p>不管是否有基础，想学一些编程，都可以从前端开始学起，很好的网站。目前我已经用了有空的两天时间断断续续的学习了一些课程，大概总共用了3-4个小时左右，我更了解<code>Html</code>与<code>CSS</code>的一些东西。<br/>
+在这里可以学到以下东西：</p>
+
+<ul>
+<li>前端技能</li>
+<li>数据处理相关</li>
+<li>后端技能</li>
+<li>开源项目（公益）</li>
+</ul>
+
+
+<p>这是我的学习主页，大家有兴趣可以一起学～～<br/>
+<a href="http://www.freecodecamp.com/shjborage">http://www.freecodecamp.com/shjborage</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Old Game Channel]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/21/old-game-channel/"/>
+    <updated>2016-02-21T12:10:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/21/old-game-channel</id>
+    <content type="html"><![CDATA[<!--
+#####游戏直播-一般都是和朋友打游戏，与其他朋友分享 哈哈
+
+仅支持Flash播放，如果提示链接错误就是当前无直播。 详情联系我哦～
+-->
+
+
+<h3>视频专辑</h3>
+
+<ul>
+<li>跑跑卡丁车        <a href="http://www.youku.com/playlist_show/id_17739109.html">http://www.youku.com/playlist_show/id_17739109.html</a></li>
+<li>NBA2K        <a href="http://www.youku.com/playlist_show/id_19511395.html">http://www.youku.com/playlist_show/id_19511395.html</a></li>
+</ul>
+
+
+<h3>经典战役</h3>
+
+<ul>
+<li><p>NBA2K 1v1 虐荡涛之WS</p>
+
+<p><embed src="http://player.youku.com/player.php/sid/XNTkwMjQ0ODYw/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed></p></li>
+<li><p>丿花语丶勇气退出跑跑</p>
+
+<p><embed src="http://player.youku.com/player.php/sid/XODYwMDU1NzY=/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript ==与===区别（两个等号与三个等号）]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/19/js-equals-equals-yu-equals-equals-equals-qu-bie/"/>
+    <updated>2016-02-19T10:59:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/19/js-equals-equals-yu-equals-equals-equals-qu-bie</id>
+    <content type="html"><![CDATA[<h3>对于 string, number 等基础类型，== 和 === 是有区别的</h3>
+
+<ul>
+<li>不同类型间比较，== 之比较“转化成同一类型后的值”看“值”是否相等，===如果类型不同，其结果就是不等</li>
+<li>同类型比较，直接进行“值”比较，两者结果一样</li>
+</ul>
+
+
+<h3>对于 Array, Object 等高级类型，== 和 === 是没有区别的</h3>
+
+<ul>
+<li>进行“指针地址”比较</li>
+</ul>
+
+
+<h3>基础类型与高级类型，== 和 === 是有区别的</h3>
+
+<ul>
+<li>对于==，将高级转化为基础类型，进行“值”比较</li>
+<li>因为类型不同，===结果为false</li>
+</ul>
+
+
+<blockquote><p>20160912 update</p></blockquote>
+
+<h3>对于 null 与 undefined, == 和 === 是有区别的</h3>
+
+<ul>
+<li>如使用 <code>==</code> 的话，<code>undefined</code> 会被转换成 <code>null</code>，所以很多判断是否为 <code>null</code> 可以使用 <code>==</code>.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[各类工具合集-持续更新]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/16/ge-lei-gong-ju-he-ji-chi-xu-geng-xin/"/>
+    <updated>2016-02-16T17:35:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/16/ge-lei-gong-ju-he-ji-chi-xu-geng-xin</id>
+    <content type="html"><![CDATA[<h3>Web平台工具</h3>
+
+<ol>
+<li><p>Crowdin <a href="https://crowdin.com/">https://crowdin.com/</a><br/>
+翻译平台，建立项目或者找开放的项目进行翻译，可按句对比进行翻译，并且提供各单词直译的结果。</p></li>
+<li><p>Heroku <a href="https://www.heroku.com/">https://www.heroku.com/</a><br/>
+Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及（未记录在正式文件上）PHP和Perl的支持。基础操作系统是Debian，在最新的堆栈则是基于Debian的Ubuntu。</p></li>
+<li><p>51tools各类Web转换工具集合站 <a href="http://51tools.info/">http://51tools.info/</a><br/>
+您身边的在线工具: URLEncode、URLDecode、Html工具、JS工具、CSS工具、JSON工具、Unicode编码转换等</p></li>
+<li><p>Trello <a href="https://trello.com">https://trello.com</a><br/>
+免费好用的任务协作工具。运营和管理一家公司的最大的难点就是跟踪人们的工作内容。Trello 就是为了解决这个问题而开发的。</p></li>
+</ol>
+
+
+<h3>Apple平台工具</h3>
+
+<ol>
+<li><p>OmniFocus <a href="https://www.omnigroup.com/omnifocus/">https://www.omnigroup.com/omnifocus/</a>  <br/>
+GTD王者，适合各种人群，科学管理自己的时间，高效面对人生。详细的大家自行用Google百度一下，教程介绍多的是。这家伙使用简单，但有些地方需要些技巧，比如同步可以试试 坚果云 的 WebDAV，另外这个小而美的公司只做Apple平台。</p></li>
+<li><p>OmniPlan <a href="https://www.omnigroup.com/omniplan">https://www.omnigroup.com/omniplan</a><br/>
+Mac 下的 <code>Project</code> 甘特图～</p></li>
+<li><p>OmniGraffle <a href="https://www.omnigroup.com/omnigraffle">https://www.omnigroup.com/omnigraffle</a><br/>
+Mac 下的 <code>Visio</code> ～</p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[近期随想]]></title>
+    <link href="http://shjborage.github.io/blog/2016/02/16/jin-qi-sui-xiang/"/>
+    <updated>2016-02-16T16:41:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2016/02/16/jin-qi-sui-xiang</id>
+    <content type="html"><![CDATA[<p>一年又一年, 不知不觉中自己老了&hellip;
+每一步的选择真的都意味着放弃,自己也都真切的能感受得到. 关键在于,不断的会有各种选择与放弃.一个人的时间 精力真的很有限,越是岁数大越是能清楚的明白这个事实.</p>
+
+<p>今年有好些事儿要做,当然去年也没闲着(只是blog一直没有更新,由于微信公众号流行,感觉blog也要过时了. 但又实在没时间搞开源甚至自己写点东西,想想也是醉了&hellip;). 去年我结婚了,搞定了几年大事&hellip;想说: <strong>今年继续</strong></p>
+
+<ul>
+<li>研究 <code>ReactNative</code> 并有所应用</li>
+<li>扩展除技术外的&#8221;技能&#8221;</li>
+<li>带baby出去继续玩</li>
+<li>看场演唱会, 暂定杰伦的</li>
+<li>其它&hellip;</li>
+</ul>
+
+
+<p>没了&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AppleWatch相关介绍 keynote]]></title>
+    <link href="http://shjborage.github.io/blog/2015/07/27/applewatchxiang-guan-jie-shao-keynote/"/>
+    <updated>2015-07-27T14:28:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/07/27/applewatchxiang-guan-jie-shao-keynote</id>
+    <content type="html"><![CDATA[<p>最近做了一次AppleWatch的分享，大家给指点一下<br/>
+有任何问题大家直接板聊～</p>
+
+<iframe width=600 height=400 frameborder=0 scrolling=auto src="http://blog.saick.net/HostedResources/AppleWatch-Preview/index.html"></iframe>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[App Transport Security support aka apps on iOS 9 don't work]]></title>
+    <link href="http://shjborage.github.io/blog/2015/06/25/app-transport-security-support-aka-apps-on-ios-9-dont-work/"/>
+    <updated>2015-06-25T10:12:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/06/25/app-transport-security-support-aka-apps-on-ios-9-dont-work</id>
+    <content type="html"><![CDATA[<p>虽然不想说，但还是很久没更新了。<br>
+最近被El caption折腾了，虽然是有史以来最好用的beta版，但第二个beta被害了。</p>
+
+<p>几个重要的点 <br/>
+1. Cornerstone 罢工（2.7.10） <br/>
+2. iStat Menus 5（正版最新）罢工 <br/>
+3. beta2上Xcode 6.3.2 直接也不让用了 &ndash; -！</p>
+
+<p>这些。。有些不能接受</p>
+
+<p>不过我是这样解决的  <br/>
+1. svn 直接命令行  <br/>
+2. iStat Menus 放弃，反馈给官方等更新（把系统设置又改了一圈）  <br/>
+3. Xcode直接使用beta版凑合用（要上线就找同事咯～）</p>
+
+<p>不过问题总是会找上门来：</p>
+
+<p><strong><em>iOS9的模拟器一直上不了网，但模拟器里的Safari是可以联网的</em></strong>  <br/>
+我勒个去啊</p>
+
+<p>查了好久却一直没啥进展，可能是对网络安全了解较少，最好发现是协议升级，需要在app上进行一些配置才可以。原文如下：</p>
+
+<blockquote><p>iOS 9 (may) force developers to use App Transport Security exclusively. I overheard this somewhere randomly so I don&rsquo;t know whether this is true myself. But I suspect it and have come to this conclusion:</p>
+
+<p>The app running on iOS 9 will (maybe) no longer connect to a Meteor server without SSL.</p>
+
+<p>This means running meteor run ios or meteor run ios-device will (probably?) no longer work.</p>
+
+<p>In the app&rsquo;s info.plist, NSAppTransportSecurity [Dictionary] needs to have a key NSAllowsArbitraryLoads [Boolean] to be set to YES or Meteor needs to use https for its localhost server soon. (From Page 26 <a href="http://devstreaming.apple.com/videos/wwdc/2015/711y6zlz0ll/711/711_networking_with_nsurlsession.pdf?dl=1">http://devstreaming.apple.com/videos/wwdc/2015/711y6zlz0ll/711/711_networking_with_nsurlsession.pdf?dl=1</a>)</p>
+
+<p>This is what an error may look like. Of course this is at best, a guess:</p>
+
+<p>The resource could not be loaded because the App Transport Security policy requires the use of a secure connection.
+The best possible fix is to get Meteor to use a SSL server in dev mode.</p>
+
+<p>Oh the hassle! Also again, I overheard this from a loud third party.</p></blockquote>
+
+<p>引用：<a href="https://github.com/meteor/meteor/issues/4560">https://github.com/meteor/meteor/issues/4560</a></p>
+
+<p>附：真机调试也还有问题，是部分库造成的，这个还需要研究下。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 序列化与反序列化]]></title>
+    <link href="http://shjborage.github.io/blog/2015/04/16/ios-xu-lie-hua-yu-fan-xu-lie-hua/"/>
+    <updated>2015-04-16T15:38:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/04/16/ios-xu-lie-hua-yu-fan-xu-lie-hua</id>
+    <content type="html"><![CDATA[<p>很久以前的文章，发现还比较有用，从<a href="http://blog.sina.com.cn/s/blog_8732f193010164j7.html">新浪博客</a>转过来。</p>
+
+<p>序列化的问题，在以前做VC的时候就听说过，但实际用的不多。大概意思呢，就是把一个对象（一些数据或者定义的对象）序列化成文件（一般是XML文件），永久的保存起来。需要用的时候再通过反序列化恢复原有的数据。</p>
+
+<p>在iOS（OC）中，像标准的集合以及字典(NSArray, NSDictionary)，都有直接序列化的方法，wirteToFile&hellip;，但这些只适合用于集合中只有标准数据类型，如果有自定义的类，那么就会报错，写入失败了。</p>
+
+<h3>标准反序列化</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>   // NSMutableArray *_arDataSource;
+</span><span class='line'>   NSString *strCaches = [NSString stringWithFormat:@"%@/tmp/%@",
+</span><span class='line'>                        NSHomeDirectory(), kCachedFileName];
+</span><span class='line'>   BOOL bWriteSuccess = [_arDataSource writeToFile:strCaches atomically:YES];
+</span><span class='line'>   if (bWriteSuccess == NO) {
+</span><span class='line'>//            NSLog(@"Wirte file error, unkown error occurred");
+</span><span class='line'>   } // end of if (bWriteSuccess == NO) {</span></code></pre></td></tr></table></div></figure>
+
+
+<p>标准反序列化</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>   _arDataSource = [[NSMutableArray arrayWithContentsOfFile:strCaches] retain];</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>如果有自定义的类，应该在类中实现NSCoding协议，NSCopying是可选的吧，放在这儿写copy时可以参考下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  item_info.h
+</span><span class='line'>//  BitCar_Shopping
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 9/24/12.
+</span><span class='line'>//  Copyright (c) 2012 Safe&Quick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'> 
+</span><span class='line'>#import &lt;Foundation/Foundation.h&gt;
+</span><span class='line'> 
+</span><span class='line'>#define kClass      @"BC_Class"
+</span><span class='line'>#define kSubClass   @"BC_SubClass"
+</span><span class='line'>#define kName       @"BC_Name"
+</span><span class='line'>#define kPrice      @"BC_Price"
+</span><span class='line'>#define kSelected   @"BC_Selected"
+</span><span class='line'> 
+</span><span class='line'>@interface item_info : NSObject
+</span><span class='line'>&lt;
+</span><span class='line'>NSCoding,
+</span><span class='line'>NSCopying
+</span><span class='line'>&gt;
+</span><span class='line'>{
+</span><span class='line'>    NSString *_strClass;
+</span><span class='line'>    NSString *_strSubClass;
+</span><span class='line'>    
+</span><span class='line'>    NSString *_strName;
+</span><span class='line'>    NSString *_strPrice;
+</span><span class='line'>    
+</span><span class='line'>    BOOL _bSelected;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>@property (nonatomic, copy) NSString *strClass;
+</span><span class='line'>@property (nonatomic, copy) NSString *strSubClass;
+</span><span class='line'> 
+</span><span class='line'>@property (nonatomic, copy) NSString *strName;
+</span><span class='line'>@property (nonatomic, copy) NSString *strPrice;
+</span><span class='line'> 
+</span><span class='line'>@property (nonatomic, assign) BOOL bSelected;
+</span><span class='line'> 
+</span><span class='line'>@end
+</span><span class='line'> 
+</span><span class='line'> 
+</span><span class='line'>//
+</span><span class='line'>//  item_info.m
+</span><span class='line'>//  BitCar_Shopping
+</span><span class='line'>//
+</span><span class='line'>//  Created by Eric on 9/24/12.
+</span><span class='line'>//  Copyright (c) 2012 Safe&Quick. All rights reserved.
+</span><span class='line'>//
+</span><span class='line'> 
+</span><span class='line'>#import "item_info.h"
+</span><span class='line'> 
+</span><span class='line'>@implementation item_info
+</span><span class='line'> 
+</span><span class='line'>@synthesize strClass = _strClass;
+</span><span class='line'>@synthesize strSubClass = _strSubClass;
+</span><span class='line'> 
+</span><span class='line'>@synthesize strName = _strName;
+</span><span class='line'>@synthesize strPrice = _strPrice;
+</span><span class='line'> 
+</span><span class='line'>@synthesize bSelected = _bSelected;
+</span><span class='line'> 
+</span><span class='line'>- (void)dealloc
+</span><span class='line'>{
+</span><span class='line'>    [_strClassrelease];
+</span><span class='line'>    [_strSubClassrelease];
+</span><span class='line'>    
+</span><span class='line'>    [_strPricerelease];
+</span><span class='line'>    [_strName release];
+</span><span class='line'>    
+</span><span class='line'>    [super dealloc];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (void)encodeWithCoder:(NSCoder *)aCoder
+</span><span class='line'>{
+</span><span class='line'>    [aCoder encodeObject:_strClassforKey:kClass];
+</span><span class='line'>    [aCoder encodeObject:_strSubClassforKey:kSubClass];
+</span><span class='line'>    [aCoder encodeObject:_strNameforKey:kName];
+</span><span class='line'>    [aCoder encodeObject:_strPriceforKey:kPrice];
+</span><span class='line'>    [aCoder encodeBool:_bSelected forKey:kSelected];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (id)initWithCoder:(NSCoder *)aDecoder
+</span><span class='line'>{
+</span><span class='line'>    if (self = [super init]) {
+</span><span class='line'>        _strClass   = [[aDecoder decodeObjectForKey:kClass] copy];
+</span><span class='line'>        _strSubClass= [[aDecoder decodeObjectForKey:kSubClass] copy];
+</span><span class='line'>        _strName    = [[aDecoder decodeObjectForKey:kName] copy];
+</span><span class='line'>        _strPrice   = [[aDecoder decodeObjectForKey:kPrice] copy];
+</span><span class='line'>        _bSelected  = [aDecoder decodeBoolForKey:kSelected];
+</span><span class='line'>    }
+</span><span class='line'>    returnself;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (id)copyWithZone:(NSZone *)zone
+</span><span class='line'>{
+</span><span class='line'>    item_info *item = [[[self class] allocWithZone:zone] init];
+</span><span class='line'>    item.strClass   = [[self.strClass copyWithZone:zone] autorelease];
+</span><span class='line'>    item.strSubClass= [[self.strSubClass copyWithZone:zone] autorelease];
+</span><span class='line'>    item.strName    = [[self.strName copyWithZone:zone] autorelease];
+</span><span class='line'>    item.strPrice   = [[self.strPrice copyWithZone:zone] autorelease];
+</span><span class='line'> 
+</span><span class='line'>    return item;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>使用实例：</h4>
+
+<p>序列化：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>        // KeyedArchiver
+</span><span class='line'>        NSMutableData *data = [[NSMutableData alloc] init];
+</span><span class='line'>        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+</span><span class='line'>        [archiver encodeObject:_arDataSource forKey:kDataKey];
+</span><span class='line'>        [archiver finishEncoding];
+</span><span class='line'>        bWriteSuccess = [data writeToFile:strCaches atomically:YES];
+</span><span class='line'>        [data release];
+</span><span class='line'>        [archiver release];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>反序列化：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>    NSData *data = [[NSMutableData alloc] initWithContentsOfFile:strCaches];
+</span><span class='line'>    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+</span><span class='line'>    
+</span><span class='line'>    _arDataSource = [[unarchiver decodeObjectForKey:kDataKey] retain];
+</span><span class='line'>    [unarchiver finishDecoding];
+</span><span class='line'>    
+</span><span class='line'>    [unarchiver release];
+</span><span class='line'>    [data release];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另附数据源构造核心代码，虽然结果可能设计不太合理，希望大家提出宝贵意见：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)initDataSource
+</span><span class='line'>{
+</span><span class='line'>    NSString *strCaches = [NSString stringWithFormat:@"%@/tmp/%@",
+</span><span class='line'>                           NSHomeDirectory(), kCachedFileName];
+</span><span class='line'>    if ([[NSFileManagerdefaultManager] fileExistsAtPath:strCaches]) {
+</span><span class='line'>//        _arDataSource = [[NSMutableArray arrayWithContentsOfFile:strCaches] retain];
+</span><span class='line'>        NSData *data = [[NSMutableData alloc] initWithContentsOfFile:strCaches];
+</span><span class='line'>        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+</span><span class='line'>        
+</span><span class='line'>        _arDataSource = [[unarchiver decodeObjectForKey:kDataKey] retain];
+</span><span class='line'>        [unarchiver finishDecoding];
+</span><span class='line'>        
+</span><span class='line'>        [unarchiver release];
+</span><span class='line'>        [data release];
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    if (_arDataSource == nil)
+</span><span class='line'>        self.arDataSource = [NSMutableArray array];
+</span><span class='line'>    else
+</span><span class='line'>        [_arDataSourceremoveAllObjects];
+</span><span class='line'>    
+</span><span class='line'>    NSString *strFilePath = [[NSBundlemainBundle] pathForResource:kShoppingListFileNameofType:@"xml"];
+</span><span class='line'>    if ([[NSFileManager defaultManager] fileExistsAtPath:strFilePath]) {
+</span><span class='line'>        NSString *strXml = [NSStringstringWithContentsOfFile:strFilePath encoding:NSUTF8StringEncodingerror:nil];
+</span><span class='line'>        if ([strXml length] == 0)
+</span><span class='line'>            return;
+</span><span class='line'>        
+</span><span class='line'>        GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithXMLString:strXml options:0 error:nil];
+</span><span class='line'>        if (doc == nil)
+</span><span class='line'>            return;
+</span><span class='line'>        
+</span><span class='line'>        NSArray *arRootChilds = [doc.rootElement children];
+</span><span class='line'>        for (GDataXMLElement *element in arRootChilds) {
+</span><span class='line'>            NSMutableArray *arTmp = [[NSMutableArray alloc] init];
+</span><span class='line'>            
+</span><span class='line'>            NSString *strClass = [[element attributeForName:@"name"] stringValue];
+</span><span class='line'>            NSArray *arClassChilds = [element children];
+</span><span class='line'>            for (GDataXMLElement *element_sub in arClassChilds) {
+</span><span class='line'>                NSMutableArray *arTmpSub = [[NSMutableArray alloc] init];
+</span><span class='line'>                
+</span><span class='line'>                NSString *strSubClass = [[element_sub attributeForName:@"name"] stringValue];
+</span><span class='line'>                
+</span><span class='line'>                NSArray *arSubClassChilds = [element_sub children];
+</span><span class='line'>                for (GDataXMLElement *element_item in arSubClassChilds) {
+</span><span class='line'>                    NSString *strName = [[element_item attributeForName:@"name"] stringValue];
+</span><span class='line'>                    NSString *strPrice = [[element_item attributeForName:@"price"] stringValue];
+</span><span class='line'>                    
+</span><span class='line'>                    item_info *item = [[item_info alloc] init];
+</span><span class='line'>                    item.strClass = strClass;
+</span><span class='line'>                    item.strSubClass = strSubClass;
+</span><span class='line'>                    item.strName = strName;
+</span><span class='line'>                    item.strPrice = strPrice;
+</span><span class='line'>                    item.bSelected = NO;
+</span><span class='line'>                    
+</span><span class='line'>                    [arTmpSub addObject:item];
+</span><span class='line'>                    [item release];
+</span><span class='line'>                }
+</span><span class='line'>                
+</span><span class='line'>                [arTmp addObject:arTmpSub];
+</span><span class='line'>                [arTmpSub release];
+</span><span class='line'>            }
+</span><span class='line'>            
+</span><span class='line'>            [_arDataSource addObject:arTmp];
+</span><span class='line'>            [arTmp release];
+</span><span class='line'>        }
+</span><span class='line'>        
+</span><span class='line'>        [doc release];
+</span><span class='line'>    } // end of fileExists
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>kShoppingListFileName：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+</span><span class='line'>&lt;shoping&gt;
+</span><span class='line'>&lt;class name="图书" &gt;
+</span><span class='line'>&lt;subclass name="计算机"&gt;
+</span><span class='line'>&lt;item name="《C＃入门》"price=" 60.00"/&gt;
+</span><span class='line'>&lt;item name="《ios入门》"price="24.00"/&gt;
+</span><span class='line'>&lt;item name="《架构设计》"price="33.00"/&gt;
+</span><span class='line'>&lt;item name="《敏捷实战》"price="55.00"/&gt;
+</span><span class='line'>&lt;item name="《ASP.net从入门到精通》"price="56.00"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="外语"&gt;
+</span><span class='line'>&lt;item name="《商务口语》"price="9.00"/&gt;
+</span><span class='line'>&lt;item name="《朗讯辞典》"price="99.00"/&gt;
+</span><span class='line'>&lt;item name="《1天1句》"price="8.0"/&gt;
+</span><span class='line'>&lt;item name="《我爱背单词》"price="7.6"/&gt;
+</span><span class='line'>&lt;item name="《看图说话》"price="7.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="教材"&gt;
+</span><span class='line'>&lt;item name="《大学语文》"price="32.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="小说"&gt;
+</span><span class='line'>&lt;item name="《美人》"price="37.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="励志"&gt;
+</span><span class='line'>&lt;item name="《学会说NO》"price="98.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="动漫"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="《??》"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;/class&gt;
+</span><span class='line'>&lt;class name="家具"&gt;
+</span><span class='line'>&lt;subclass name="床"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="国王大床"price="39898.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="桌"&gt;
+</span><span class='line'>&lt;item name="小圆桌"price="98.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="椅"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="太师椅"price="32.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="灯具"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="熊猫台灯"price="983.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="门窗"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="玻璃门"price="983.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="地板"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="楠木地板"price="9333333.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;/class&gt;
+</span><span class='line'>&lt;class name="电子设备"&gt;
+</span><span class='line'>&lt;subclass name="电脑"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="DELL"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="手机"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="iphone"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="摄影摄像"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="DELL"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;subclass name="打印扫描"&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HP"price="3000.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;item name="HAHAH"price="3.0"/&gt;
+</span><span class='line'>&lt;/subclass&gt;
+</span><span class='line'>&lt;/class&gt;
+</span><span class='line'>&lt;/shoping&gt;</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS调试方法定位Crash以及静态库调试]]></title>
+    <link href="http://shjborage.github.io/blog/2015/02/07/iosdiao-shi-fang-fa-ding-wei-crashyi-ji-jing-tai-ku-diao-shi/"/>
+    <updated>2015-02-07T23:56:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/02/07/iosdiao-shi-fang-fa-ding-wei-crashyi-ji-jing-tai-ku-diao-shi</id>
+    <content type="html"><![CDATA[<h2>引子</h2>
+
+<p>在iOS开发中常会遇到Crash，有时Xcode并不能很好的提示我们出错的原因是什么，具体是哪行代码出了问题。<br>
+比如 <a href="http://blog.objcc.com/unrecognized-selector-sent-to-instance/">UNRECOGNIZED SELECTOR SENT TO INSTANCE 问题快速定位的方法</a> 文中提到的定位处理不了的消息发送。</p>
+
+<h2>Symbolic Breakpoint</h2>
+
+<p>在调试时，我们经常需要使用到断点，Xcode支持几种断点：</p>
+
+<ul>
+<li>普通断点</li>
+<li>Exception Breakpoint</li>
+<li>Symbolic Breakpoint</li>
+<li>。。。</li>
+</ul>
+
+
+<p>我们可能比较熟悉普通断点，主要来介绍一下 <code>Exception Breakpoint</code> 和 <code>Symbolic Breakpoint</code>.</p>
+
+<p><strong><em>Exception Breakpoint</em></strong><br>
+全局异常断点，傻瓜式的使用，在任意的代码处有异常抛出没有捕获即可“被断住”。<br>
+<em>注：如果使用了C、C++开发的话，有些signal可能会被这种断点触发，但并不会引发Crash</em></p>
+
+<p><strong><em>Symbolic Breakpoint</em></strong><br>
+通过类名以及方法名来添加断点的一种方式。例如：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-[NSObject(NSObject) doesNotRecognizeSelector:]</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>包含静态库的整体调试</h3>
+
+<p>如果想测试在某个静态库中某个方法是否执行，可以在知道类名跟方法名的情况下使用 <code>Symbolic Breakpoint</code> 来确认这个情况</p>
+
+<h4>送个命令～</h4>
+
+<p>可以在某个静态库或可执行文件中查找 symbol。 需要详细的使用方法，请自行<code>man nm</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// nm - display name list (symbol table)
+</span><span class='line'>nm xxx.a | grep xxSymbol</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 获取当前正在显示的ViewController]]></title>
+    <link href="http://shjborage.github.io/blog/2015/01/05/ios-huo-qu-dang-qian-zheng-zai-xian-shi-de-viewcontroller/"/>
+    <updated>2015-01-05T23:07:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2015/01/05/ios-huo-qu-dang-qian-zheng-zai-xian-shi-de-viewcontroller</id>
+    <content type="html"><![CDATA[<h3>引子</h3>
+
+<p>在做 iOS 开发时，我们经常在一个 ViewController 中 presentModelViewController 另外一个 ViewController。看似简单，但在与 UIActionSheet 和 UIAlertView 结合起来使用时，很容易出现问题。问题如下： <a href="http://stackoverflow.com/questions/21158939/warning-attempt-to-present-uimodalitemspresentingviewcontroller-on-uimodalitema">http://stackoverflow.com/questions/21158939/warning-attempt-to-present-uimodalitemspresentingviewcontroller-on-uimodalitema</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"Warning: Attempt to present `&lt;_UIModalItemsPresentingViewController:&gt;  on 
+</span><span class='line'>&lt;_UIModalItemAppViewController:&gt; which is already presenting 
+</span><span class='line'>&lt;_UIModalItemsPresentingViewController:&gt;"`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>类似的问题是因为 UIAlertView 或 UIActionSheet 在系统级使用了 presentModelViewController，并且修改了 Application 中更换了 keyWindow，在 keyWindow 的 rootViewController 中 presentModelViewController，如果当前 present 还未完成时，再 present 别的界面，就会报这个错。</p>
+
+<h3>解决方案</h3>
+
+<p>在 present 时，不直接使用 keyWindow，使用如下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//获取当前屏幕显示的viewcontroller
+</span><span class='line'>- (UIViewController *)getCurrentVC
+</span><span class='line'>{
+</span><span class='line'>    UIViewController *result = nil;
+</span><span class='line'>    
+</span><span class='line'>    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+</span><span class='line'>    if (window.windowLevel != UIWindowLevelNormal)
+</span><span class='line'>    {
+</span><span class='line'>        NSArray *windows = [[UIApplication sharedApplication] windows];
+</span><span class='line'>        for(UIWindow * tmpWin in windows)
+</span><span class='line'>        {
+</span><span class='line'>            if (tmpWin.windowLevel == UIWindowLevelNormal)
+</span><span class='line'>            {
+</span><span class='line'>                window = tmpWin;
+</span><span class='line'>                break;
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    UIView *frontView = [[window subviews] objectAtIndex:0];
+</span><span class='line'>    id nextResponder = [frontView nextResponder];
+</span><span class='line'>    
+</span><span class='line'>    if ([nextResponder isKindOfClass:[UIViewController class]])
+</span><span class='line'>        result = nextResponder;
+</span><span class='line'>    else
+</span><span class='line'>        result = window.rootViewController;
+</span><span class='line'>    
+</span><span class='line'>    return result;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看更多：<a href="http://blog.csdn.net/worldzhy/article/details/42120929">http://blog.csdn.net/worldzhy/article/details/42120929</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[近期随想]]></title>
+    <link href="http://shjborage.github.io/blog/2014/12/21/jin-qi-sui-xiang/"/>
+    <updated>2014-12-21T17:42:00+08:00</updated>
+    <id>http://shjborage.github.io/blog/2014/12/21/jin-qi-sui-xiang</id>
+    <content type="html"><![CDATA[<p>好久没更新了，好些东西要写。但又不知道写哪个～
+主要问题在于：<strong>好些东西不想再直接写个结论上去，不想直接拿别人的结果。</strong>
+这方面也总结过了，今天写点别的吧。</p>
+
+<br>
+
+
+<p>推荐个工具 <em>Omni Focus</em>。GTD王者，适合各种人群，科学管理自己的时间，高效面对人生。<br>
+详细的大家自动用Google百度一下，教程介绍多的是。这家伙使用简单，但有些地方需要些技巧，比如同步可以试试 <em>坚果云</em> 的 WebDAV，另外Android平台没有手机app。</p>
+
+<br>
+
+
+<p>后续在技术上的分享可能会少一些，可能会从自己的感悟上面多写写，希望大家多多支持。</p>
+
+<br><br>
+
+
+<p>有时在想，技术、人、沟通、公司、项目、产品、用户、上线、事故。。。等等这些事，到底是如何影响着我们。想这些写一些，又不知道从哪写起。语言不及格啊～～～</p>
+
+<br>
+
+
+<p>先放些关键字，再有体会时一个一个写吧，加油！</p>
+]]></content>
+  </entry>
+  
+</feed>

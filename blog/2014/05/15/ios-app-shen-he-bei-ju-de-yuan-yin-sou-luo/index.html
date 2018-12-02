@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>iOS App 审核被拒的原因搜罗 - Saick Blog</title>
+  <meta name="author" content="Eric Shi">
+  <!--[if lt IE 9]>
+    <script src="http://x.papaapp.com/farm1/a571d2/8dda131d/html5shiv.js"></script>
+    <![endif]-->
+  
+  <meta name="description" content="iOS App 审核被拒的原因搜罗 May 15th, 2014 | Comments 1、程序有重大bug，程序不能启动，或者中途退出。 2、绕过苹果的付费渠道，我们之前游戏里的用兑换码兑换金币。
+3、游戏里有实物奖励的话，一定要说清楚，奖励由本公司负责，和苹果没有关系。
+4、用到苹果的标志 &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shjborage.github.io/blog/2014/05/15/ios-app-shen-he-bei-ju-de-yuan-yin-sou-luo/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Saick Blog" type="application/atom+xml">
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41243300-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header id="header" class="clearfix">    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                <a id="logo" href="/">
+                   Saick Blog
+                </a>
+                <p class="description">技术博客，致力于全栈以及各方面修养。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="index-nav current" href="/">Blog</a>
+<a class="archives-nav" href="/blog/archives">Archives</a>
+<!-- <a class="friendlink-nav" href="/friendlylink.html">Links</a> -->
+<a class="about-nav" href="/about.html">About Me</a>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+  <div id="body">
+    <div class="container">
+    	<div class="col-group">
+			<div class="col-8" id="main">
+  <div class="res-cons">
+  <article class="post clearfix">
+  
+  <header>
+    
+      <h1 class="post-title">iOS App 审核被拒的原因搜罗</h1>
+    
+    
+      <p class="post-meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-15T21:35:00+08:00" pubdate data-updated="true">May 15<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="post-content"><p>1、程序有重大bug，程序不能启动，或者中途退出。 <br/>
+2、绕过苹果的付费渠道，我们之前游戏里的用兑换码兑换金币。<br/>
+3、游戏里有实物奖励的话，一定要说清楚，奖励由本公司负责，和苹果没有关系。<br/>
+4、用到苹果的标志。（应用的设计和Apple的Logo风格太像了也会被拒）<br/>
+5、网络功能不能正常访问。  <br/>
+6、图标不能点击，不能点击的图标要置灰，或者直接隐藏。<br/>
+7、没有设置default页，启动画面为黑屏，有一定概率被拒绝。<br/>
+8、一个应用在线，但你想在发一个豪华版之类的，再开一个应用也会被拒绝。<br/>
+9、用了著名游戏的关键字，比如说“愤怒的小鸟”之类的。<br/>
+10、iPhone版不支持480×320分辨率被拒绝。<br/>
+11、娱乐分类App，拒绝理由：我们认为你的App不具有娱乐性。<br/>
+12、你的软件不符合中国法律，还打电话来跟我说。（奶奶的，中国哪个法律说不可以翻墙。）<br/>
+13、技术支持地址写的微博地址，于是被拒绝了。原因是：不能将需要登陆才能访问的网址作为技术支持地址。<br/>
+14、说我们的应用不该用App开发，应该用HTML5。（而且还很热心的给出了参考链接哦）<br/>
+15、调用截屏功能,当时没注意,是私有API,被拒.改成非私有API实现截屏功能就通过了.<br/>
+16、开放了文件document分享功能(Application supports iTunes file sharing),被退回,理由:不需要分享,为何开放了.回复邮件说明理由后上线.<br/>
+17、年龄设置太低,说是有成人内容,被拒.修改内容后上线.<br/>
+18、同一软件多个版本只是针对不同的国家和内置的语言不同.前面几个上线,后面几个被拒.让改成一个程序做程序内下载资源.<br/>
+19、程序有crash被拒.修改bug后上线.<br/>
+20、原因是我们的一个软件只允许联通用户验证真实身份并发布信息。apple要求要么放弃验证，要么允许移动和电信用户验证。</p>
+
+<!-- more -->
+
+
+<p>21、APP中出现了某本以乔布斯为封面的本集团出版物图片，遭拒。回复曰：Thank you for submitting your app commemorating Steve Jobs.We appreciate your efforts honoring Steve. However, we’ve decided to honor his life in other ways and we are not accepting these types of apps.<br/>
+22、原来做过一个显示假电池的App, 就是显示一个假的的电量, 这样别人找你借手机就可以以没电了为理由不借给他. 结果App Store说会迷惑用户, 让我改简介. 改为简介后苹果中国给我打电话说这个App不用再提交了, 不可能过, 会迷惑用户… 我了个去的 于是这个App就一直存在在我的iTunes Connect里.
+23、忘记提供测试账号。（如果你的APP有登录功能）<br/>
+24、软件有个vip功能，涉嫌应用内收费。<br/>
+25、拨打电话，涉嫌扣费。<br/>
+26、图片如果比较清凉的话需要设置软件级别。<br/>
+27、平板应用要支持最少2个翻转方向。<br/>
+28、程序内按钮设计成标准的iOS icon。<br/>
+29、内置付费的内容要明确告诉需要购买，购买前不能摆出来（这个属于运气不好，同样这么做的app很多）<br/>
+30、提交旗下一款新应用，为统一旗下各个产品的品牌识别，采取了与上一款产品相似的色调和logo结构。苹果拒绝理由是不知道这两款产品有什么区别（其实区别点进去就很明显，连UI布局都大相径庭）。<br/>
+31、应用内涉及到抽奖的运营活动，未声明与苹果官方无关。<br/>
+33、自认为第一版产品还不够完善，于是过度谦虚地在启动画面加上了“beta”字样。苹果的反馈是，不允许测试版产品上架。囧，后来翻了一下 Review Guideline 似乎是有提到这点的。<br/>
+34、链接堆砌，苹果建议用HTML5来做<br/>
+35、UIWebView 嵌页面片，苹果建议让用户通过浏览器访问，比如爱知乎，开始几个版本通过了，后面的更新一直没提交上去
+屏幕坏点检测应用，苹果说会误导用户，未上架<br/>
+36、登陆账号有两个字母写反了，改正后通过<br/>
+37、因远程服务器反应慢，苹果的人估计没耐心等，就说有bug给拒了，重新提交一份通过<br/>
+38、应用标题加了几个描述语句，苹果让在描述中写明达到此目的的操作流程，改正后通过<br/>
+39、一个第三方的应用，描述文字中有该网站的链接，进去网站后能找到付费链接，苹果说该网站有自己的支付方式，去除网址后通过<br/>
+40、应用请求使用地理位置的权限，但相关功能藏得比较深，Apple说没找到相关的功能。 — 回信说明后通过<br/>
+41、应用描述中提到了是全平台应用，可以和其他系统同步数据。因为提到了“Android”的字眼被拒。 — 修改描述后通过<br/>
+42、 App 的User Agreement中出现了 Beta、Preliminary 等字样。因为是发布第一个版本，产品带有一定的beta性质，但是确实是可发布产品了。按照公司LEGAL部门（外企，对User Agreement要求严格）的要求，必须有类似Beta的说明告知用户，而 Apple 是明确不允许有 Beta 性质的字样的。<br/>
+43、App 是一个机遇小区的社区工具，顺便做了房产广告，但是 apple 审核说是广告app，不允许发布。<br/>
+44、应用里有个去给我们打分的功能，被拒了。。（这是不是史上最坑爹的拒绝理由）<br/>
+45、网络工具软件，要求支持国外的电信运营商网络。<br/>
+46、曾经做一个 Chinajoy 美女图片 show 的，被认为不适合放在 App Store。<br/>
+47、iOS 5 的数据存储问题…网络下载的资源不能直接搞在Documents目录下。这个反复整了5次左右才通过审核。<br/>
+48、忘记提供测试账号……（审核的大爷们你们就不能自己弄个或者注册个账号么）<br/>
+49、还有一次被拒，我回复说你们所说的问题不存在……后来……通过审核了。-.-<br/>
+50、菜单中有一个文字包含测试，被打回，说不能上测试版本。<br/>
+51、App名字包含pad，被打回，说容易名字不能有pad，会被误解为苹果自己的应用，不过同名的iphone版本就通过了…<br/>
+52、upport地址在safari（仅仅是safari）下由于适配性问题打不开，结果就收到了apple的来信。<br/>
+53、app里做了次抽奖，奖品是iphone4s，结果他们必须要我们将奖品改成别的，同时申明此活动与苹果公司无关，才可以上架。。。<br/>
+54、app里做了次抽奖，奖品是iphone4s，结果他们必须要我们将奖品改成别的，同时申明此活动与苹果公司无关，才可以上架。。。<br/>
+55、在程序的说明信息中有“越狱”俩字，被拒，后来把这俩字去了，PASS。但是：如果我在程序运行中检测出手机越狱了，这结果报出来让不让过？<br/>
+56、使用GPS常驻后台服务，要我给出一个合适的理由，否则不往下审核，还好，解释一翻过去了。<br/>
+57、出现“给我们五星好评”之类的文字。<br/>
+58、应用内提到付费项目但木有通过苹果付费渠道（妄图不让苹果老大赚钱）<br/>
+59、问我服务是不是只在IOS平台，还是同时支持多平台（我当然拥护苹果老大的领导，木有其他平台，iPhone专属）<br/>
+60、地图应用，Google大神的LOGO没有显示。 <br/>
+61、google地图下面logo被一个UIView给遮挡了被拒。调整位置后ok<br/>
+62、对不存在普遍比较标准的几类人进行比较和评判。不比人比动物后ok<br/>
+63、上传通讯录没有通知。这个等了几个月，苹果的法律纠纷差不多了之后拒掉。然后加了提示后ok。<br/>
+64、我写的英文App介绍审核人员看不懂，被拒。后然直接用中文。唉。<br/>
+65、因为上行短信实现用户认证被拒<br/>
+66、果测试人员的手机号在国外，因为收不到国内短信，被拒<br/>
+67、他们打开我的一个APP测试，显示空白无内容，哈哈，因为他们相册里没有960*640的图，就说我该程序功能没开发完毕吧？然后我回了信，然后第二天就上架了。虽然这个小应用是极其简单的。<br/>
+68、最蛋疼的是，提供了测试用户帐号密码，被我们某个手贱的测试人员测试修改密码的时候给改掉了。。。于是苹果登录不进来，于是杯具  <br/>
+69、IAP价格不能超过99美金（其中有一个是99.99美元，你妹啊！！！！！！！你麻痹多出0.99美金啊！！人家游戏都可以有啊！！！！为什么我们就不行啊！！！）<br/>
+70、不能强迫用户注册（网络游戏啊亲！！你妹有直接登陆的按钮啊！！！不需要注册的啊！！试一下会shi啊！！！！）<br/>
+71、support URL无法访问<br/>
+72、没有生成Paid iOS合同（游戏内含IAP，好吧，这个是合作公司搞的乌龙，就不吐槽苹果了）<br/>
+73、某微博客户端，提供了测试账号，被拒的理由是「账号登录不进去」，还有截屏，我一看，这不把我们提供的测试账号的最后两个字母写反了么…赶紧反馈，之后三天才继续审核，这三天真是太赔了。<br/>
+74、某门户新闻客户端，免费应用，被拒的理由是「找不到in app purchase的项目对应的界面」，可是我们的应用跟本没有应用内支付，继续反馈…又等了三天…  <br/>
+75、iPhone Human Interface Guidelines中指出了基本UI控件应该如何正确地使用。我们应该按照它的要求来检查Tab Bar、Navigation Bar和Alert View等控件是否符合Apple的口味。<br/>
+76、确保应用不要模仿设备预装应用的样式和功能，如Music、iTunes Music Store和App Store等。这一条规则似乎是选择性实施的，因为许多浏览器和指南针类的应用都得到了批准。<br/>
+77、不要加入过多脏话、无理由的性爱场面和吸毒场面。<br/>
+78、不要对硬件按钮进行重新编程，赋予其它功能。例如，不要将音量按钮作为照相应用的快门键，不要将home键作为游戏中的开火键。</p>
+
+<p>原文：<a href="http://blog.csdn.net/luoya263547560/article/details/7999611">http://blog.csdn.net/luoya263547560/article/details/7999611</a></p>
+</div>
+
+
+  <footer class="post-footer">
+    <div class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Shi</span></span>
+ and 
+      File under 
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+ with 
+
+<span class="tags">
+  
+    <a class='tag' href='/tags/appstore/'>AppStore</a>, <a class='tag' href='/tags/product/'>Product</a>, <a class='tag' href='/tags/ios/'>iOS</a>
+  
+</span>
+
+ Tag
+    </div>
+    
+      <div class="sharing">
+  <div>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shjborage.github.io/blog/2014/05/15/ios-app-shen-he-bei-ju-de-yuan-yin-sou-luo/" data-via="eric_shj" data-counturl="http://shjborage.github.io/blog/2014/05/15/ios-app-shen-he-bei-ju-de-yuan-yin-sou-luo/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+  </div>
+
+  
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_googleplus">Google+</a>
+    <a class="jiathis_button_renren">人人网</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1334720487296344" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+
+</div>
+
+    
+    <h5> <br> </h5>
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/08/c-objective-c-di-ceng-yan-jiu-chang-yong-fang-fa/" title="Previous Post: C Objective-C 底层研究 常用方法">&laquo; C Objective-C 底层研究 常用方法</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/15/xcodeshi-yong-zhu-yi-zhi-librarysearchpathyu-framewroksearchpath/" title="Next Post: XCode使用注意之-LibrarySearchPath与FramewrokSearchPath">XCode使用注意之-LibrarySearchPath与FramewrokSearchPath &raquo;</a>
+      
+    </div>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h3>Comments</h3>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+  </div>
+</div>
+
+  <aside id="secondary">
+  
+    <section class="widget">
+    <form id="search" action="http://google.com/search" method="get">
+    	<input type="hidden" name="q" value="site:shjborage.github.io"/>
+    	<input type="text" name="q" results="0" class="text" placeholder="Google搜索"/>
+    </form>
+</section>
+
+<section class="widget">
+	<h2 class="widget-title">最新文章</h2>
+	<ul class="widget-list">
+		
+     	<li>
+      	  <a href="/blog/2017/03/12/wei-php-zuo-dan-yuan-ce-shi-unittest/">为 PHP 做单元测试（UnitTest）</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/12/linux-kai-fa-bei-wang/">Linux 开发备忘</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/03/10/apple-ats-wen-ti/">Apple ATS 问题</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/npm-install-ben-di-an-zhuang-yu-quan-ju-an-zhuang/">npm install 本地安装与全局安装</a>
+      	</li>
+    	
+     	<li>
+      	  <a href="/blog/2017/01/03/python-virtualenv-ji-chu-shi-yong/">Python - virtualenv 基础使用</a>
+      	</li>
+    	
+	</ul>
+</section>
+<section class="widget">
+  <h2 class="widget-title">Categories</h2>
+  <ul class="widget-list">
+    <li class='category'><a href='/blog/categories/android/'>Android (2)</a></li>
+<li class='category'><a href='/blog/categories/c/'>C (4)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (6)</a></li>
+<li class='category'><a href='/blog/categories/interview/'>Interview (1)</a></li>
+<li class='category'><a href='/blog/categories/javascript/'>JavaScript (4)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (9)</a></li>
+<li class='category'><a href='/blog/categories/network/'>Network (1)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+<li class='category'><a href='/blog/categories/sourcecontrol/'>SourceControl (4)</a></li>
+<li class='category'><a href='/blog/categories/translate/'>Translate (1)</a></li>
+<li class='category'><a href='/blog/categories/web/'>Web (7)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (82)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (15)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (10)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h2 class="widget">Tags</h2>
+  <div>
+    <a style="font-size: 90%" href="/tags/ats/">ATS</a>
+<a style="font-size: 108%" href="/tags/android/">Android</a>
+<a style="font-size: 108%" href="/tags/appstore/">AppStore</a>
+<a style="font-size: 90%" href="/tags/appletv/">AppleTV</a>
+<a style="font-size: 90%" href="/tags/applewatch/">AppleWatch</a>
+<a style="font-size: 118%" href="/tags/autolayout/">AutoLayout</a>
+<a style="font-size: 108%" href="/tags/backend/">BackEnd</a>
+<a style="font-size: 118%" href="/tags/c/">C</a>
+<a style="font-size: 90%" href="/tags/css/">CSS</a>
+<a style="font-size: 125%" href="/tags/cocoapods/">CocoaPods</a>
+<a style="font-size: 131%" href="/tags/crash/">Crash</a>
+<a style="font-size: 108%" href="/tags/database/">DataBase</a>
+<a style="font-size: 118%" href="/tags/database/">Database</a>
+<a style="font-size: 90%" href="/tags/debug/">Debug</a>
+<a style="font-size: 90%" href="/tags/django/">Django</a>
+<a style="font-size: 90%" href="/tags/fe/">FE</a>
+<a style="font-size: 90%" href="/tags/game/">Game</a>
+<a style="font-size: 125%" href="/tags/git/">Git</a>
+<a style="font-size: 90%" href="/tags/github/">Github</a>
+<a style="font-size: 90%" href="/tags/https/">HTTPS</a>
+<a style="font-size: 90%" href="/tags/hybirdapp/">HybirdApp</a>
+<a style="font-size: 90%" href="/tags/interview/">Interview</a>
+<a style="font-size: 90%" href="/tags/js/">JS</a>
+<a style="font-size: 118%" href="/tags/java/">Java</a>
+<a style="font-size: 118%" href="/tags/javascript/">JavaScript</a>
+<a style="font-size: 108%" href="/tags/linux/">Linux</a>
+<a style="font-size: 148%" href="/tags/mac/">Mac</a>
+<a style="font-size: 90%" href="/tags/markdown/">Markdown</a>
+<a style="font-size: 125%" href="/tags/network/">Network</a>
+<a style="font-size: 180%" href="/tags/obj-c/">Obj-C</a>
+<a style="font-size: 108%" href="/tags/opensource/">OpenSource</a>
+<a style="font-size: 90%" href="/tags/php/">PHP</a>
+<a style="font-size: 118%" href="/tags/product/">Product</a>
+<a style="font-size: 90%" href="/tags/push/">Push</a>
+<a style="font-size: 90%" href="/tags/svn/">SVN</a>
+<a style="font-size: 90%" href="/tags/script/">Script</a>
+<a style="font-size: 90%" href="/tags/sharesdk/">ShareSDK</a>
+<a style="font-size: 118%" href="/tags/sourcecontrol/">SourceControl</a>
+<a style="font-size: 151%" href="/tags/tools/">Tools</a>
+<a style="font-size: 90%" href="/tags/translate/">Translate</a>
+<a style="font-size: 157%" href="/tags/ui/">UI</a>
+<a style="font-size: 90%" href="/tags/watch/">Watch</a>
+<a style="font-size: 125%" href="/tags/web/">Web</a>
+<a style="font-size: 90%" href="/tags/xcode/">XCode</a>
+<a style="font-size: 90%" href="/tags/basic/">basic</a>
+<a style="font-size: 90%" href="/tags/env/">env</a>
+<a style="font-size: 90%" href="/tags/icloud/">iCloud</a>
+<a style="font-size: 200%" href="/tags/ios/">iOS</a>
+<a style="font-size: 90%" href="/tags/ios10/">iOS10</a>
+<a style="font-size: 90%" href="/tags/ios5/">iOS5</a>
+<a style="font-size: 131%" href="/tags/ios7/">iOS7</a>
+<a style="font-size: 90%" href="/tags/ios9/">iOS9</a>
+<a style="font-size: 90%" href="/tags/ipa/">ipa</a>
+<a style="font-size: 90%" href="/tags/js/">js</a>
+<a style="font-size: 90%" href="/tags/keynote/">keynote</a>
+<a style="font-size: 90%" href="/tags/npm/">npm</a>
+<a style="font-size: 125%" href="/tags/octopress/">octopress</a>
+<a style="font-size: 143%" href="/tags/python/">python</a>
+<a style="font-size: 90%" href="/tags/redis/">redis</a>
+<a style="font-size: 90%" href="/tags/sae/">sae,</a>
+<a style="font-size: 90%" href="/tags/tools/">tools</a>
+<a style="font-size: 108%" href="/tags/you-hua/">优化</a>
+<a style="font-size: 90%" href="/tags/fen-xiang/">分享</a>
+<a style="font-size: 108%" href="/tags/dan-yuan-ce-shi/">单元测试</a>
+<a style="font-size: 90%" href="/tags/hou-duan/">后端</a>
+<a style="font-size: 90%" href="/tags/keng/">坑</a>
+<a style="font-size: 90%" href="/tags/bei-wang/">备忘</a>
+<a style="font-size: 118%" href="/tags/duo-xian-cheng/">多线程</a>
+<a style="font-size: 90%" href="/tags/an-quan/">安全</a>
+<a style="font-size: 155%" href="/tags/di-ceng/">底层</a>
+<a style="font-size: 90%" href="/tags/wei-xin/">微信</a>
+<a style="font-size: 90%" href="/tags/tui-jian-gong-ju/">推荐工具</a>
+<a style="font-size: 90%" href="/tags/jia-gou-she-ji/">架构设计</a>
+<a style="font-size: 90%" href="/tags/ce-shi/">测试</a>
+<a style="font-size: 90%" href="/tags/yi-dong-duan/">移动端</a>
+<a style="font-size: 108%" href="/tags/di-san-fang-ku/">第三方库</a>
+<a style="font-size: 90%" href="/tags/chun-ji-zhu/">纯技术</a>
+<a style="font-size: 90%" href="/tags/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/tags/diao-shi/">调试</a>
+<a style="font-size: 108%" href="/tags/sui-bian/">随便</a>
+
+  </div>
+</section>
+<section>
+  <h2 class="widget">(AD)广告位空缺中,招租</h2>
+</section>
+
+
+<section>
+  <h2 class="widget">新浪微博</h2>
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2268262803&verifier=fadc7baa&dpc=1"></iframe>
+</section>
+
+  
+</aside>
+
+
+      	</div>
+    </div>
+  </div>
+  <footer id="footer">
+  	<div class="container">
+	Copyright &copy; 2018 - Eric Shi -
+  <span class="credit">Powered by <a rel="nofollow" href="http://octopress.org">Octopress</a> on <a rel="nofollow" href="http://pages.github.com/">GitHubPages</a>
+  </span>
+  - <span class="credit">Theme by <a rel="nofollow" href="http://pagecho.com">Cho</a></span>
+
+
+</div>
+
+  </footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'saick';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shjborage.github.io/blog/2014/05/15/ios-app-shen-he-bei-ju-de-yuan-yin-sou-luo/';
+        var disqus_url = 'http://shjborage.github.io/blog/2014/05/15/ios-app-shen-he-bei-ju-de-yuan-yin-sou-luo/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2dcb22ff8c7638f5c6c14c29e43c49aa' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+</body>
+</html>
