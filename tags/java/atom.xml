@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Tag: Java | Saick Blog]]></title>
+  <title><![CDATA[Tag: Java | Eric's 后花园]]></title>
   <link href="http://shjborage.github.io/tags/java/atom.xml" rel="self"/>
   <link href="http://shjborage.github.io/"/>
-  <updated>2018-12-02T20:48:20+08:00</updated>
+  <updated>2018-12-02T20:54:07+08:00</updated>
   <id>http://shjborage.github.io/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
-    <email><![CDATA[shjborage@gmail.com]]></email>
+    <email><![CDATA[shjborage@163.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
