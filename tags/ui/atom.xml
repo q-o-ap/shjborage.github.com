@@ -4,7 +4,7 @@
   <title><![CDATA[Tag: UI | Eric's 后花园]]></title>
   <link href="http://shjborage.github.io/tags/ui/atom.xml" rel="self"/>
   <link href="http://shjborage.github.io/"/>
-  <updated>2018-12-02T21:00:40+08:00</updated>
+  <updated>2018-12-02T21:02:49+08:00</updated>
   <id>http://shjborage.github.io/</id>
   <author>
     <name><![CDATA[Eric Shi]]></name>
@@ -381,7 +381,7 @@ NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {</p>
     <link href="http://shjborage.github.io/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font/"/>
     <updated>2013-12-11T21:42:00+08:00</updated>
     <id>http://shjborage.github.io/blog/2013/12/11/zai-ioszhong-shi-yong-icon-font</id>
-    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x61;&#64;&#50;&#120;&#46;&#x70;&#110;&#x67;">&#x61;&#64;&#x32;&#x78;&#46;&#x70;&#110;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
+    <content type="html"><![CDATA[<p>在开发阿里数据iOS版客户端的时候，由于项目进度很紧，项目里的所有图标都是用最平常的背景图片方案来实现。而为了要兼容普通屏与Retina屏的设备，苹果要求每个背景图都要以两种尺寸存(a.png和<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x61;&#x40;&#x32;&#x78;&#46;&#112;&#110;&#103;">&#x61;&#x40;&#x32;&#120;&#x2e;&#x70;&#x6e;&#x67;</a>)，这让设计师们增加了成本，因为他们每次都得出两份背景图标。</p>
 
 <p>现在在web开发上，icon font技术的应用很广泛，它不仅在解决多分辨率显示问题上很有成效，而且在使用它的时候还能降低不少设计和开发成本。</p>
 
